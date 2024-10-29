@@ -361,45 +361,45 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
             , MR_arr_KIDS = KIDS['Kmag_abs'][z_KIDS]
             , topdir = validation_dir_Kband
                     )
-    #
-    # log N log R
-    #
-    os.system('mkdir -p ' + os.path.join( validation_dir_Rband, z_dir ))
-    fig_out = os.path.join(validation_dir_Rband, z_dir, LC_dir+'_logNlogR_galaxies_replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']) +'.png' )
-    plt.figure(1, (5., 5.))
-    #plt.plot(Mk_m_5logh_z0 - 5 * np.log10(h), 10**log10_phi_h3_Mpcm3_magm1 * 0.7**3, lw=3 , label='Driver 2012, z=0') # +5*np.log10(h)
-    #
-    # literature DATA
-    # COSMOS
-    if z_mean<4 and z_mean>0.5:
-        plt.hist(magr_arr_COSMOS, lw=1, weights=np.ones_like(magr_arr_COSMOS) / (  area_COSMOS * completeness_COSMOS ) ,
-                 bins = rbins, histtype = 'step', rasterized = True, label = 'COSMOS data', cumulative = True)
-    # GAMA G09
-    if z_mean<0.4:
-        plt.hist(magr_arr_GAMA, lw=1, weights=np.ones_like(magr_arr_GAMA) / (  area_GAMA * completeness_GAMA ) ,
-                 bins = rbins, histtype = 'step', rasterized = True, label = 'GAMA data', cumulative = True)
-    # KIDS
-    if z_mean<0.6 and z_mean>0.1:
-        plt.hist(magr_arr_KIDS, lw=1, weights=np.ones_like(magr_arr_KIDS) / (  area_KIDS * completeness_KIDS ) ,
-                 bins = rbins, histtype = 'step', rasterized = True, label = 'KIDS data', cumulative = True)
-    # SDSS
-    #if z_mean<0.25:
-        #plt.hist(magr_arr_SDSS, lw=1, weights=np.ones_like(magr_arr_SDSS) / ( area_SDSS * completeness_SDSS ) ,
-                 #bins = mbins, histtype = 'step', rasterized = True, label = 'SDSS data', cumulative = True)
-    # Mock catalog
-    plt.hist(MAG['r_GP'], lw=2, weights=np.ones_like(MAG['r_GP']) / (  meta['mean_area'] ) ,
-            bins = rbins, histtype = 'step', rasterized = True, label = 'Mock', color='grey', cumulative = True)
+    ##
+    ## log N log R
+    ##
+    #os.system('mkdir -p ' + os.path.join( validation_dir_Rband, z_dir ))
+    #fig_out = os.path.join(validation_dir_Rband, z_dir, LC_dir+'_logNlogR_galaxies_replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']) +'.png' )
+    #plt.figure(1, (5., 5.))
+    ##plt.plot(Mk_m_5logh_z0 - 5 * np.log10(h), 10**log10_phi_h3_Mpcm3_magm1 * 0.7**3, lw=3 , label='Driver 2012, z=0') # +5*np.log10(h)
+    ##
+    ## literature DATA
+    ## COSMOS
+    #if z_mean<4 and z_mean>0.5:
+        #plt.hist(magr_arr_COSMOS, lw=1, weights=np.ones_like(magr_arr_COSMOS) / (  area_COSMOS * completeness_COSMOS ) ,
+                 #bins = rbins, histtype = 'step', rasterized = True, label = 'COSMOS data', cumulative = True)
+    ## GAMA G09
+    #if z_mean<0.4:
+        #plt.hist(magr_arr_GAMA, lw=1, weights=np.ones_like(magr_arr_GAMA) / (  area_GAMA * completeness_GAMA ) ,
+                 #bins = rbins, histtype = 'step', rasterized = True, label = 'GAMA data', cumulative = True)
+    ## KIDS
+    #if z_mean<0.6 and z_mean>0.1:
+        #plt.hist(magr_arr_KIDS, lw=1, weights=np.ones_like(magr_arr_KIDS) / (  area_KIDS * completeness_KIDS ) ,
+                 #bins = rbins, histtype = 'step', rasterized = True, label = 'KIDS data', cumulative = True)
+    ## SDSS
+    ##if z_mean<0.25:
+        ##plt.hist(magr_arr_SDSS, lw=1, weights=np.ones_like(magr_arr_SDSS) / ( area_SDSS * completeness_SDSS ) ,
+                 ##bins = mbins, histtype = 'step', rasterized = True, label = 'SDSS data', cumulative = True)
+    ## Mock catalog
+    #plt.hist(MAG['r_GP'], lw=2, weights=np.ones_like(MAG['r_GP']) / (  meta['mean_area'] ) ,
+            #bins = rbins, histtype = 'step', rasterized = True, label = 'Mock', color='grey', cumulative = True)
 
-    #
-    plt.title(r'$\bar{z}$=' + str(np.round(z_mean, 3)))
-    plt.ylabel(r'$N(>m)\; deg^{-2}$')
-    plt.xlabel('Observed magnitude R')
-    plt.yscale('log')
-    plt.xlim(( 12, 26 ))
-    #plt.ylim((1e-6, 0.005))
-    plt.legend(loc=0, fontsize=12)#, frameon=False)
-    plt.tight_layout()
-    plt.savefig(fig_out)
-    plt.clf()
-    print(fig_out, 'written')
+    ##
+    #plt.title(r'$\bar{z}$=' + str(np.round(z_mean, 3)))
+    #plt.ylabel(r'$N(>m)\; deg^{-2}$')
+    #plt.xlabel('Observed magnitude R')
+    #plt.yscale('log')
+    #plt.xlim(( 12, 26 ))
+    ##plt.ylim((1e-6, 0.005))
+    #plt.legend(loc=0, fontsize=12)#, frameon=False)
+    #plt.tight_layout()
+    #plt.savefig(fig_out)
+    #plt.clf()
+    #print(fig_out, 'written')
 
