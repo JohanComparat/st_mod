@@ -100,9 +100,9 @@ GAMA['Kmag_abs'] = kmag_abs
 GAMA['Rmag_abs'] = rmag_abs
 
 ##
-SDSS = Table.read(C_GAL.path_2_SDSS)
-area_SDSS = 8030.
-completeness_SDSS = 0.95
+#SDSS = Table.read(C_GAL.path_2_SDSS)
+#area_SDSS = 8030.
+#completeness_SDSS = 0.95
 
 ##
 t_KIDS = Table.read(C_GAL.path_2_KIDS)
@@ -219,10 +219,10 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     MR_arr_GAMA = GAMA['Rmag_abs'][z_GAMA]
     magr_arr_GAMA = 8.9 - 2.5*np.log10(GAMA['flux_rt'][z_GAMA])
     #
-    z_SDSS = (SDSS['Z']>z_min) & (SDSS['Z']<z_max)
-    volume_SDSS =  (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * area_SDSS * np.pi / 129600.).value
-    SM_arr_SDSS = SDSS['log10M_star'][z_SDSS]
-    MR_arr_SDSS = SDSS['Mag_r'][z_SDSS]
+    #z_SDSS = (SDSS['Z']>z_min) & (SDSS['Z']<z_max)
+    #volume_SDSS =  (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * area_SDSS * np.pi / 129600.).value
+    #SM_arr_SDSS = SDSS['log10M_star'][z_SDSS]
+    #MR_arr_SDSS = SDSS['Mag_r'][z_SDSS]
     #
     z_KIDS = (KIDS['z_peak']>z_min) & (KIDS['z_peak']<z_max)
     volume_KIDS =  (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * area_KIDS * np.pi / 129600.).value
