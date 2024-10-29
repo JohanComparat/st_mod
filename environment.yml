@@ -1,0 +1,32 @@
+name: stmod
+channels:
+  - conda-forge
+  - http://ssb.stsci.edu/astroconda
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - matplotlib
+  - astropy
+  - healpy
+  - pandas
+  - pip
+  - setuptools
+  - yaml
+  - future
+  - pyyaml
+  - h5py
+  - pyccl
+  - pip:
+    - dustmaps
+    - extinction
+    - pymangle
+    - scikit-learn
+    - dsigma
+    - colossus
+    - emcee
+    - ultranest
+    - ipython
+    - tqdm
+prefix: /home/comparat/anaconda2023/envs/stmod

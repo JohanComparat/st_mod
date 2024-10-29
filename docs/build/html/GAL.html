@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Galaxy model &#8212; xray_stack_models 1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Gas model" href="GAS.html" />
+    <link rel="prev" title="Welcome to the documentation of X-ray stack models" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-GAL">
+<span id="galaxy-model"></span><h1>Galaxy model<a class="headerlink" href="#module-GAL" title="Link to this heading">¶</a></h1>
+<p>Model to paint a galaxy light cone with observed broad band photometry spectral energy distributions (SED) on the Uchuu UniverseMachine lightcone</p>
+<p>Developped initially to create 4MOST mock catalogues with the collaboration of N. Taylor, C. Haines, A. Variu, J. Richard, A. Finoguenov.</p>
+<dl class="simple">
+<dt>input :</dt><dd><ul class="simple">
+<li><p>z_dir : name of the redshift slice (to retrieve the list of simulated galaxies, glist.fits files). Accessible via the UCHUU environment variable.</p></li>
+<li><p>GAMA+KIDS+VIKING+LSDR9+RedMapper observed catalogue</p></li>
+<li><p>COSMOS observed catalogue</p></li>
+</ul>
+</dd>
+<dt>output :</dt><dd><ul class="simple">
+<li><p>Kmatch_mags.fits : file containing SEDs corresponding to its glist.fits equivalent in the light cone (galaxy list)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="GAL.GAL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GAL.</span></span><span class="sig-name descname"><span class="pre">GAL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LC_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'FullSky'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GAL.html#GAL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GAL.GAL" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="GAL.GAL.add_kmag">
+<span class="sig-name descname"><span class="pre">add_kmag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_sim_gal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_redshift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'redshift_S'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_stellar_mass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'obs_sm'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GAL.html#GAL.add_kmag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GAL.GAL.add_kmag" title="Link to this definition">¶</a></dt>
+<dd><p>Adds absolute magnitude in the K-band to a catalogue containing redshift and stellar mass.</p>
+<p>input :</p>
+<ul class="simple">
+<li><p>t_sim_gal : table containing a list of galaxies. Requires at least two columns redshift and stellar mass</p></li>
+</ul>
+<p>return :</p>
+<ul class="simple">
+<li><p>the same table with a new column (‘K_mag_abs’) populated with absolute K-band magnitude</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GAL.GAL.add_magnitudes_direct_match_K">
+<span class="sig-name descname"><span class="pre">add_magnitudes_direct_match_K</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_sim_gal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_redshift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'redshift_S'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_stellar_mass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'obs_sm'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GAL.html#GAL.add_magnitudes_direct_match_K"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GAL.GAL.add_magnitudes_direct_match_K" title="Link to this definition">¶</a></dt>
+<dd><p>Direct match using (redshift, K_mag_abs) between the observed catalogue and the simulated catalogue.</p>
+<p>input :</p>
+<ul class="simple">
+<li><p>t_sim_gal : table containing a list of galaxies. Requires at least two columns redshift and stellar mass</p></li>
+</ul>
+<p>return :</p>
+<ul class="simple">
+<li><p>a table with : line number of the input table (ID_glist), redshift, log10(stellar mass), absolute magnitude in the K-band, six observed magnitude columns (umag, gmag, rmag, imag, zmag, kmag), the distance in the matching procedure ‘distance_match’.</p></li>
+</ul>
+<p>Next dev : split the populations into star foming and quiescent galaxies to assign SED.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GAL.GAL.construct_OBS_kdTree">
+<span class="sig-name descname"><span class="pre">construct_OBS_kdTree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GAL.html#GAL.construct_OBS_kdTree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GAL.GAL.construct_OBS_kdTree" title="Link to this definition">¶</a></dt>
+<dd><p>Constructs the kDTree with the observed redshift and stellar mass to match to.
+It creates the following attributes to the class :</p>
+<ul class="simple">
+<li><p>self.min_Z : rescaling min/max for the variables going in the tree</p></li>
+<li><p>self.max_Z : rescaling min/max for the variables going in the tree</p></li>
+<li><p>self.min_K : rescaling min/max for the variables going in the tree</p></li>
+<li><p>self.max_K : rescaling min/max for the variables going in the tree</p></li>
+<li><p>self.z_01  : rescaled values in the Tree</p></li>
+<li><p>self.k_01  : rescaled values in the Tree</p></li>
+<li><p>self.t_ref : catalogue used for matching</p></li>
+<li><p>self.Tree_Obs : tree created for the matching</p></li>
+</ul>
+<p>Next dev : split the populations into star foming and quiescent galaxies to assign SED.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">xray_stack_models</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Galaxy model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#GAL.GAL"><code class="docutils literal notranslate"><span class="pre">GAL</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#GAL.GAL.add_kmag"><code class="docutils literal notranslate"><span class="pre">GAL.add_kmag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#GAL.GAL.add_magnitudes_direct_match_K"><code class="docutils literal notranslate"><span class="pre">GAL.add_magnitudes_direct_match_K()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#GAL.GAL.construct_OBS_kdTree"><code class="docutils literal notranslate"><span class="pre">GAL.construct_OBS_kdTree()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="GAS.html">Gas model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AGN.html">AGN model</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to the documentation of X-ray stack models</a></li>
+      <li>Next: <a href="GAS.html" title="next chapter">Gas model</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Johan Comparat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/GAL.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

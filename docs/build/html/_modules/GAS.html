@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GAS &#8212; xray_stack_models 1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=cb25574f" />
+    <script src="../_static/documentation_options.js?v=29a6c3e3"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for GAS</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Model to paint a dark matter halo light cone with X-ray properties related to the virialized hot gas</span>
+
+<span class="sd">Follows the cluster model of Comparat et al. 2019 used and improved on by Liu et al. 2022 (eFEDs simulations), Seppi et al. 2022 (eRASS1 simulation going down to group scale)</span>
+
+<span class="sd">input :</span>
+<span class="sd"> - z_dir : name of the redshift slice (to retrieve the list of simulated galaxies, glist.fits files). Accessible via the UCHUU environment variable.</span>
+<span class="sd"> -</span>
+
+<span class="sd">output :</span>
+<span class="sd"> - Clusters.fits : file containing cluster properties</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">BallTree</span>
+<span class="kn">from</span> <span class="nn">astropy.cosmology</span> <span class="kn">import</span> <span class="n">FlatLambdaCDM</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">astropy.table</span> <span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">cosmoUCHUU</span> <span class="o">=</span> <span class="n">FlatLambdaCDM</span><span class="p">(</span><span class="n">H0</span><span class="o">=</span><span class="mf">67.74</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">Mpc</span><span class="p">,</span> <span class="n">Om0</span><span class="o">=</span><span class="mf">0.308900</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="mf">0.6774</span>
+<span class="n">cosmo</span> <span class="o">=</span> <span class="n">cosmoUCHUU</span>
+<span class="n">zs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0000001</span><span class="p">,</span> <span class="mf">7.1</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span>
+<span class="n">dm_itp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">zs</span><span class="p">,</span> <span class="n">cosmo</span><span class="o">.</span><span class="n">distmod</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">colossus.cosmology</span> <span class="kn">import</span> <span class="n">cosmology</span>
+<span class="n">cosmology</span><span class="o">.</span><span class="n">setCosmology</span><span class="p">(</span><span class="s1">&#39;planck18&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">colossus.halo</span> <span class="kn">import</span> <span class="n">mass_so</span>
+<span class="kn">from</span> <span class="nn">colossus.halo</span> <span class="kn">import</span> <span class="n">mass_defs</span>
+<span class="kn">from</span> <span class="nn">colossus.halo</span> <span class="kn">import</span> <span class="n">concentration</span>
+
+<div class="viewcode-block" id="GAS">
+<a class="viewcode-back" href="../GAS.html#GAS.GAS">[docs]</a>
+<span class="k">class</span> <span class="nc">GAS</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z_dir</span><span class="p">,</span> <span class="n">b_HS</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">logM500c_min</span><span class="o">=</span><span class="mf">11.</span><span class="p">,</span> <span class="n">logFX_min</span><span class="o">=-</span><span class="mi">18</span><span class="p">,</span> <span class="n">LC_dir</span><span class="o">=</span><span class="s1">&#39;FullSky&#39;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initiates a GAS class model&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_dir</span> <span class="o">=</span> <span class="n">z_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_z</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">z_dir</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="nb">int</span><span class="p">(</span><span class="n">z_dir</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span><span class="o">/</span><span class="mf">100.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LC_dir</span> <span class="o">=</span> <span class="n">LC_dir</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;directory:&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">z_dir</span><span class="p">,</span> <span class="s1">&#39;, mean redshift=&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_z</span><span class="p">)</span>
+        <span class="c1"># get halo + galaxy catalogues in the redshift slice of the light cone</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_2_catalogues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;UCHUU&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">LC_dir</span><span class="p">,</span> <span class="n">z_dir</span><span class="p">,</span> <span class="s1">&#39;replication_*_*_*&#39;</span><span class="p">,</span> <span class="s1">&#39;glist.fits&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_2_catalogues</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="c1"># meta data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LC_MetaData</span> <span class="o">=</span> <span class="n">Table</span><span class="o">.</span><span class="n">read</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;UCHUU&#39;</span><span class="p">],</span> <span class="s1">&#39;area_per_replica_&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">z_dir</span><span class="o">+</span><span class="s1">&#39;.fits&#39;</span><span class="p">)</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_HS</span> <span class="o">=</span> <span class="n">b_HS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logM500c_min</span> <span class="o">=</span> <span class="n">logM500c_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logFX_min</span> <span class="o">=</span> <span class="n">logFX_min</span>
+
+<div class="viewcode-block" id="GAS.prepare_halo_cat">
+<a class="viewcode-back" href="../GAS.html#GAS.GAS.prepare_halo_cat">[docs]</a>
+    <span class="k">def</span> <span class="nf">prepare_halo_cat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares the halo catalogue</span>
+
+<span class="sd">        input:</span>
+<span class="sd">            -   t1 : catalog of distince haloes</span>
+
+<span class="sd">        output stored in the class object :</span>
+<span class="sd">            -   self.CAT : catalogue of distinct haloes for which X-ray quantities will be computed</span>
+<span class="sd">                - adds converted masses to 500c, 200c and 200b using mass-concentration relation from Ishiyama 2021 (for consistency)</span>
+<span class="sd">            -   self.N_cat : number of haloes considered</span>
+<span class="sd">            -   self.zmin, self.zmax : minimum and maximum redshifts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Mvir</span> <span class="o">=</span> <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;Mvir&#39;</span><span class="p">]</span>
+        <span class="n">zzz</span> <span class="o">=</span> <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;redshift_R&#39;</span><span class="p">]</span>
+        <span class="n">cvir</span> <span class="o">=</span> <span class="n">concentration</span><span class="o">.</span><span class="n">concentration</span><span class="p">(</span><span class="n">Mvir</span><span class="p">,</span> <span class="s1">&#39;vir&#39;</span><span class="p">,</span> <span class="n">zzz</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;ishiyama21&#39;</span><span class="p">)</span>
+        <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;M200b&#39;</span><span class="p">],</span> <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;R200b&#39;</span><span class="p">],</span> <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c200b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mass_defs</span><span class="o">.</span><span class="n">changeMassDefinition</span><span class="p">(</span><span class="n">Mvir</span><span class="p">,</span> <span class="n">cvir</span><span class="p">,</span> <span class="n">zzz</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;vir&#39;</span><span class="p">,</span> <span class="s1">&#39;200m&#39;</span><span class="p">)</span>
+        <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;M200c&#39;</span><span class="p">],</span> <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;R200c&#39;</span><span class="p">],</span> <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c200c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mass_defs</span><span class="o">.</span><span class="n">changeMassDefinition</span><span class="p">(</span><span class="n">Mvir</span><span class="p">,</span> <span class="n">cvir</span><span class="p">,</span> <span class="n">zzz</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;vir&#39;</span><span class="p">,</span> <span class="s1">&#39;200c&#39;</span><span class="p">)</span>
+        <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;M500c&#39;</span><span class="p">],</span> <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;R500c&#39;</span><span class="p">],</span> <span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c500c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mass_defs</span><span class="o">.</span><span class="n">changeMassDefinition</span><span class="p">(</span><span class="n">Mvir</span><span class="p">,</span> <span class="n">cvir</span><span class="p">,</span> <span class="n">zzz</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;vir&#39;</span><span class="p">,</span> <span class="s1">&#39;500c&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span> <span class="o">=</span> <span class="n">t1</span><span class="p">[(</span><span class="n">t1</span><span class="p">[</span><span class="s1">&#39;M500c&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">10</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">logM500c_min</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">([</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;z&#39;</span><span class="p">,</span>
+                <span class="c1">#&#39;Mvir&#39;,</span>
+                <span class="s1">&#39;icl&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">,</span>
+                <span class="c1">#&#39;obs_sfr&#39;,</span>
+                <span class="c1">#&#39;obs_sm&#39;,</span>
+                <span class="s1">&#39;obs_uv&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;sfr&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;sm&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;upid&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;A_UV&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;Mpeak&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;Vmax_Mpeak&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;desc_id&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;vmax&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;vx&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;vy&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;vz&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;RA&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;DEC&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;g_lat&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;g_lon&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;ecl_lat&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;ecl_lon&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;redshift_R&#39;</span><span class="p">,</span>
+                <span class="c1">#&#39;redshift_S&#39;,</span>
+                <span class="s1">&#39;dL&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;nH&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;ebv&#39;</span><span class="p">])</span>
+        <span class="n">t1</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_cat</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CAT</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;redshift_S&#39;</span><span class="p">]</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;redshift_S&#39;</span><span class="p">]</span> <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="GAS.calc_lx">
+<a class="viewcode-back" href="../GAS.html#GAS.GAS.calc_lx">[docs]</a>
+    <span class="k">def</span> <span class="nf">calc_lx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prof</span><span class="p">,</span><span class="n">kt</span><span class="p">,</span><span class="n">m5</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the X-ray luminosity in the profile to be extended to 3x r500c.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            r_{500c} = \left(\\frac{3 M_{500c}}{ 4. \pi 500 \\rho_c(z)  }\\right)^{1/3} [ cm ].</span>
+
+
+<span class="sd">        * profile\_emission = profile x rescale_factor</span>
+<span class="sd">        * rescale\_factor = $\sqrt(kT/10.0) E^3(z)$</span>
+<span class="sd">        * CF(kT) = cooling function, show the curve</span>
+<span class="sd">        * L$_X(r)$ = $\Sigma_{&lt;r}$( profile_emission $r_{500c}^2 2 \pi x CF(kT)$ Mpc=3.0856776e+24 dx )</span>
+<span class="sd">        * L$_{500c}$ = L$_X$(1)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Mpc</span><span class="o">=</span><span class="mf">3.0856776e+24</span>
+        <span class="n">msun</span><span class="o">=</span><span class="mf">1.98892e33</span>
+        <span class="n">ez2</span> <span class="o">=</span> <span class="n">cosmo</span><span class="o">.</span><span class="n">efunc</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">rhoc</span> <span class="o">=</span> <span class="n">cosmo</span><span class="o">.</span><span class="n">critical_density</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">r500</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">m5</span><span class="o">*</span><span class="n">msun</span><span class="o">/</span><span class="mf">4.</span><span class="o">*</span><span class="mf">3.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">500.</span><span class="o">/</span><span class="n">rhoc</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span>
+        <span class="n">resfact</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kt</span><span class="o">/</span><span class="mf">10.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">ez2</span><span class="p">,</span><span class="mf">3.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="n">prof_em</span> <span class="o">=</span> <span class="n">prof</span> <span class="o">*</span> <span class="n">resfact</span> <span class="c1"># emission integral</span>
+        <span class="n">tlambda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">kt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">coolfunc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">coolfunc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># cooling function</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="p">))</span>
+        <span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dx</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="p">)]</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="p">)[:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1">#print(prof_em*self.xgrid_ext*r500**2*2.*np.pi*tlambda*Mpc*dx)</span>
+        <span class="n">lxcum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">prof_em</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="o">*</span><span class="n">r500</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">tlambda</span><span class="o">*</span><span class="n">Mpc</span><span class="o">*</span><span class="n">dx</span><span class="p">)</span> <span class="c1"># riemann integral</span>
+        <span class="n">lx_500</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">fraction</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="p">,</span><span class="n">lxcum</span><span class="p">)</span> <span class="c1"># evaluated at R500</span>
+        <span class="k">return</span> <span class="n">lx_500</span></div>
+
+
+
+<div class="viewcode-block" id="GAS.draw_simulated_values">
+<a class="viewcode-back" href="../GAS.html#GAS.GAS.draw_simulated_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw_simulated_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsim</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws simulated values from the covariance matrix of Comparat, Eckert et al. 2019</span>
+
+<span class="sd">        Adds as attribute to the class the covariance matrix and its dependencies</span>
+<span class="sd">            - self.path_2_cbp: path to the tabulated data</span>
+<span class="sd">            - self.covor     : covariance matric</span>
+<span class="sd">            - self.xgrid_ext : radial grid</span>
+<span class="sd">            - self.mean_log  : mean parameters</span>
+<span class="sd">            - self.coolfunc  : cooling function</span>
+
+<span class="sd">        Then draws nsim simulated vectors and adds them as attribute to the class</span>
+<span class="sd">            - self.allz      : redshifts</span>
+<span class="sd">            - self.allkt     : temperatures</span>
+<span class="sd">            - self.allm5     : M500c</span>
+<span class="sd">            - self.profiles  : profiles</span>
+<span class="sd">            - self.nsim2     : number of simulated vectros in the redshift range of interest</span>
+<span class="sd">            - self.frac_r200c = R200c/R500c</span>
+<span class="sd">            - self.frac_rVIR  = Rvir/R500c</span>
+<span class="sd">            - self.alllx       : integrated LX up to R500c</span>
+<span class="sd">            - self.alllx_R200c : integrated LX up to R200c</span>
+<span class="sd">            - self.alllx_Rvir  : integrated LX up to Rvir</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path_2_cbp</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;GIT_STMOD&#39;</span><span class="p">],</span> <span class="s1">&#39;data/models/model_GAS&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">covor</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_2_cbp</span><span class="p">,</span> <span class="s1">&#39;covmat_xxl_hiflugcs_xcop.txt&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_2_cbp</span><span class="p">,</span> <span class="s1">&#39;radial_binning.txt&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_log</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_2_cbp</span><span class="p">,</span> <span class="s1">&#39;mean_pars.txt&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coolfunc</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_2_cbp</span><span class="p">,</span> <span class="s1">&#39;coolfunc.dat&#39;</span><span class="p">))</span>
+
+        <span class="n">profs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_log</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">covor</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">nsim</span><span class="p">))</span>
+
+        <span class="n">allz_i</span>  <span class="o">=</span> <span class="n">profs</span><span class="p">[:,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_log</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">allkt_i</span> <span class="o">=</span> <span class="n">profs</span><span class="p">[:,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_log</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">allm5_i</span> <span class="o">=</span> <span class="n">profs</span><span class="p">[:,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_log</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">profiles_i</span> <span class="o">=</span> <span class="n">profs</span><span class="p">[:,:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xgrid_ext</span><span class="p">)]</span>
+        <span class="c1"># filters output to cover the relevant redshift range</span>
+        <span class="n">in_zbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">allz_i</span><span class="o">&lt;</span><span class="n">zmax</span><span class="o">+</span><span class="mf">0.01</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">allz_i</span><span class="o">&gt;</span><span class="n">zmin</span><span class="o">-</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">allz</span>     <span class="o">=</span> <span class="n">allz_i</span>    <span class="p">[</span><span class="n">in_zbin</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allkt</span>    <span class="o">=</span> <span class="n">allkt_i</span>   <span class="p">[</span><span class="n">in_zbin</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allm5</span>    <span class="o">=</span> <span class="n">allm5_i</span>   <span class="p">[</span><span class="n">in_zbin</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">profiles_i</span><span class="p">[</span><span class="n">in_zbin</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsim2</span>    <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">)</span>
+        <span class="n">c500c</span> <span class="o">=</span> <span class="n">concentration</span><span class="o">.</span><span class="n">concentration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">,</span> <span class="s1">&#39;500c&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;ishiyama21&#39;</span><span class="p">)</span>
+        <span class="n">Mvir</span> <span class="p">,</span> <span class="n">Rvir</span> <span class="p">,</span> <span class="n">cvir</span>  <span class="o">=</span> <span class="n">mass_defs</span><span class="o">.</span><span class="n">changeMassDefinition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">,</span> <span class="n">c500c</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">),</span> <span class="s1">&#39;500c&#39;</span><span class="p">,</span> <span class="s1">&#39;vir&#39;</span><span class="p">)</span>
+        <span class="n">M200c</span><span class="p">,</span> <span class="n">R200c</span><span class="p">,</span> <span class="n">c200c</span> <span class="o">=</span> <span class="n">mass_defs</span><span class="o">.</span><span class="n">changeMassDefinition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">,</span> <span class="n">c500c</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">),</span> <span class="s1">&#39;500c&#39;</span><span class="p">,</span> <span class="s1">&#39;200c&#39;</span><span class="p">)</span>
+        <span class="n">M500c</span><span class="p">,</span> <span class="n">R500c</span><span class="p">,</span> <span class="n">c500cBis</span> <span class="o">=</span> <span class="n">mass_defs</span><span class="o">.</span><span class="n">changeMassDefinition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">,</span> <span class="n">c500c</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">),</span> <span class="s1">&#39;500c&#39;</span><span class="p">,</span> <span class="s1">&#39;500c&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frac_r200c</span> <span class="o">=</span> <span class="n">R200c</span><span class="o">/</span><span class="n">R500c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frac_rVIR</span>  <span class="o">=</span> <span class="n">Rvir</span><span class="o">/</span><span class="n">R500c</span>
+
+        <span class="c1"># integrate to get LX within R500c, R200C, Rvir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alllx</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsim2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alllx_R200c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsim2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alllx_Rvir</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsim2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsim2</span><span class="p">):</span>
+            <span class="n">tprof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alllx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>         <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_lx</span><span class="p">(</span><span class="n">tprof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">allkt</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alllx_R200c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_lx</span><span class="p">(</span><span class="n">tprof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">allkt</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">frac_r200c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alllx_Rvir</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_lx</span><span class="p">(</span><span class="n">tprof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">allkt</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">frac_rVIR</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span></div>
+
+
+
+        <span class="c1">##if self.nsim2&lt;nsim/100.:</span>
+            <span class="c1">##profs=np.exp(np.random.multivariate_normal(self.mean_log,self.covor,size=nsim*10))</span>
+
+            <span class="c1">##allz_i  = profs[:,len(self.mean_log)-3]</span>
+            <span class="c1">##allkt_i = profs[:,len(self.mean_log)-1]</span>
+            <span class="c1">##allm5_i = profs[:,len(self.mean_log)-2]</span>
+
+            <span class="c1">##profiles_i = profs[:,:len(self.xgrid_ext)]</span>
+            <span class="c1">### filters output to cover the relevant redshift range</span>
+            <span class="c1">##in_zbin = (allz_i&lt;zmax+0.01)&amp;(allz_i&gt;zmin-0.01)</span>
+
+            <span class="c1">##self.allz     = allz_i    [in_zbin]</span>
+            <span class="c1">##self.allkt    = allkt_i   [in_zbin]</span>
+            <span class="c1">##self.allm5    = allm5_i   [in_zbin]</span>
+            <span class="c1">##self.profiles = profiles_i[in_zbin]</span>
+            <span class="c1">##self.nsim2 = len(self.allz)</span>
+
+<div class="viewcode-block" id="GAS.populate_cat">
+<a class="viewcode-back" href="../GAS.html#GAS.GAS.populate_cat">[docs]</a>
+    <span class="k">def</span> <span class="nf">populate_cat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assigns to each catalog entry a vector of quantities drawn by the draw_simulated_values function</span>
+<span class="sd">            - finds the nearest neighbour in redshift and M500c</span>
+
+<span class="sd">        Compared to previous incarnations of the algorithm, it ignores the halo dynamical state (Xoff). Indeed Xoff is not available in the Uchuu light cone.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Tree_profiles</span> <span class="o">=</span> <span class="n">BallTree</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">)]))</span>
+        <span class="n">DATA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;redshift_S&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;M500c&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_HS</span><span class="p">)])</span>
+        <span class="n">ids_out</span> <span class="o">=</span> <span class="n">Tree_profiles</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">DATA</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_distance</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">ids_out</span><span class="p">))</span>
+
+        <span class="c1"># LX_out 0.5-2 rest frame erg/s</span>
+        <span class="c1"># to convert to 0.5-2 observed frame</span>
+        <span class="n">LX_out</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alllx</span><span class="p">[</span><span class="n">ids</span><span class="p">]</span>
+        <span class="n">LX_out_R200c</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alllx_R200c</span><span class="p">[</span><span class="n">ids</span><span class="p">]</span>
+        <span class="n">LX_out_Rvir</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alllx_Rvir</span> <span class="p">[</span><span class="n">ids</span><span class="p">]</span>
+        <span class="n">KT_OUT</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">allkt</span><span class="p">[</span><span class="n">ids</span><span class="p">]</span>
+        <span class="n">CBP_redshift</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">allz</span><span class="p">[</span><span class="n">ids</span><span class="p">]</span>
+        <span class="n">CBP_M500c</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allm5</span><span class="p">)[</span><span class="n">ids</span><span class="p">]</span>
+
+        <span class="c1"># maximum kT for the k-correction</span>
+        <span class="n">KT_OUT</span><span class="p">[</span><span class="n">KT_OUT</span><span class="o">&gt;</span><span class="mf">19.4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">19.4</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CBP_CLUSTER_LX_soft_RF_R500c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="n">LX_out</span>       <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CBP_CLUSTER_LX_soft_RF_R200c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="n">LX_out_R200c</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CBP_CLUSTER_LX_soft_RF_Rvir&#39;</span> <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="n">LX_out_Rvir</span>  <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CBP_redshift&#39;</span> <span class="p">]</span> <span class="o">=</span> <span class="n">CBP_redshift</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CBP_M500c&#39;</span> <span class="p">]</span> <span class="o">=</span> <span class="n">CBP_M500c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CBP_kT&#39;</span> <span class="p">]</span> <span class="o">=</span> <span class="n">KT_OUT</span>
+
+
+        <span class="c1"># Correction to match Anderson et al. 2015</span>
+        <span class="c1"># scaling in Anderson 2015</span>
+        <span class="c1"># logLX_A15 = lambda logMs : 2.6 * logMs + 12.5</span>
+        <span class="c1"># logLX_A15 = lambda logMs : 2.7 * logMs + 11.35</span>
+        <span class="n">logLX_A15</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">logMs</span> <span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">logMs</span> <span class="o">+</span> <span class="mf">7.8</span>
+
+        <span class="n">MS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;obs_sm&#39;</span><span class="p">])</span>
+        <span class="n">dlogM</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="n">MS_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">MS</span><span class="p">)</span><span class="o">-</span><span class="mf">0.01</span>
+        <span class="n">MS_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">MS</span><span class="p">)</span>
+        <span class="n">MS_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span> <span class="n">MS_min</span> <span class="p">,</span> <span class="n">MS_max</span> <span class="o">+</span> <span class="n">dlogM</span><span class="p">,</span> <span class="n">dlogM</span> <span class="p">)</span>
+        <span class="n">mean_LX_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">MS_bins</span><span class="p">)</span>
+        <span class="n">std_LX_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">MS_bins</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">jj</span><span class="p">,</span> <span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span> <span class="nb">zip</span><span class="p">(</span> <span class="n">MS_bins</span><span class="p">,</span> <span class="n">MS_bins</span> <span class="o">+</span> <span class="n">dlogM</span> <span class="p">)</span> <span class="p">):</span>
+            <span class="n">s0</span> <span class="o">=</span> <span class="p">(</span> <span class="n">MS</span> <span class="o">&gt;=</span> <span class="n">m0</span> <span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span> <span class="n">MS</span> <span class="o">&lt;</span> <span class="n">m1</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">LX_out</span><span class="p">)[</span><span class="n">s0</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">mean_LX_values</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">LX_out</span><span class="p">)[</span><span class="n">s0</span><span class="p">])</span>
+                <span class="n">std_LX_values</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">LX_out</span><span class="p">)[</span><span class="n">s0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">LX_out</span><span class="p">)[</span><span class="n">s0</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">m0</span><span class="o">&gt;</span><span class="mf">11.0</span><span class="p">:</span>
+                <span class="n">mean_LX_values</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_LX_values</span><span class="p">[</span><span class="n">jj</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">std_LX_values</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">std_LX_values</span><span class="p">[</span><span class="n">jj</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span> <span class="p">:</span> <span class="c1"># len(np.log10(LX_out)[s0])==0 :</span>
+                <span class="n">mean_LX_values</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">logLX_A15</span><span class="p">(</span><span class="n">m0</span> <span class="o">+</span> <span class="n">dlogM</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+                <span class="n">std_LX_values</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="n">goal_mean</span> <span class="o">=</span> <span class="n">logLX_A15</span><span class="p">(</span><span class="n">MS_bins</span> <span class="o">+</span> <span class="n">dlogM</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="n">correction</span> <span class="o">=</span> <span class="n">goal_mean</span> <span class="o">-</span> <span class="n">mean_LX_values</span>
+
+        <span class="n">itp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span> <span class="n">MS_bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">dlogM</span><span class="p">,</span> <span class="n">MS_bins</span> <span class="o">+</span> <span class="n">dlogM</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="n">MS_bins</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span><span class="n">dlogM</span> <span class="p">)),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span> <span class="n">correction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">correction</span><span class="p">,</span> <span class="n">correction</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">))</span>
+            <span class="p">)</span>
+
+        <span class="n">GroupCorrection</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="n">itp</span><span class="p">(</span><span class="n">MS</span><span class="p">)</span>
+
+        <span class="n">Corr_LX_out</span>       <span class="o">=</span> <span class="n">GroupCorrection</span> <span class="o">*</span> <span class="n">LX_out</span>
+        <span class="n">Corr_LX_out_R200c</span> <span class="o">=</span> <span class="n">GroupCorrection</span> <span class="o">*</span> <span class="n">LX_out_R200c</span>
+        <span class="n">Corr_LX_out_Rvir</span>  <span class="o">=</span> <span class="n">GroupCorrection</span> <span class="o">*</span> <span class="n">LX_out_Rvir</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CLUSTER_LX_soft_RF_R500c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="n">Corr_LX_out</span>       <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CLUSTER_LX_soft_RF_R200c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="n">Corr_LX_out_R200c</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAT</span><span class="p">[</span><span class="s1">&#39;CLUSTER_LX_soft_RF_Rvir&#39;</span> <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="n">Corr_LX_out_Rvir</span>  <span class="p">)</span></div>
+</div>
+
+
+        <span class="c1"># attenuation grid should cover down to 0.05 keV</span>
+        <span class="c1">#itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ[&#39;GIT_AGN_MOCK&#39;], &quot;data&quot;, &quot;xray_k_correction&quot;, &quot;fraction_observed_clusters.txt&quot;), unpack=True )</span>
+
+
+
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xray_stack_models</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../GAL.html">Galaxy model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GAS.html">Gas model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AGN.html">AGN model</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Johan Comparat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

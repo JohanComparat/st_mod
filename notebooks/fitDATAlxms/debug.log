@@ -1,0 +1,14 @@
+16:13:36 [ultranest] [DEBUG] ReactiveNestedSampler: dims=5+0, resume=False, log_dir=fitDATAlxms, backend=hdf5, vectorized=False, nbootstraps=30, ndraw=128..65536
+16:13:36 [ultranest] [INFO] Sampling 400 live points from prior ...
+16:13:37 [ultranest] [DEBUG] Found plateau of 6/400 initial points at L=-inf. Avoid this by a continuously increasing loglikelihood towards good regions.
+16:13:37 [ultranest] [INFO] Widening roots to 405 live points (have 400 already) ...
+16:13:37 [ultranest] [INFO] Sampling 5 live points from prior ...
+16:13:37 [ultranest] [DEBUG] run_iter dlogz=0.5, dKL=0.5, frac_remain=0.01, Lepsilon=0.0010, min_ess=400
+16:13:37 [ultranest] [DEBUG] max_iters=-1, max_ncalls=-1, max_num_improvement_loops=-1, min_num_live_points=400, cluster_num_live_points=40
+16:13:37 [ultranest] [DEBUG] minimal_widths_sequence: [(-inf, 400.0), (inf, 400.0)]
+16:13:37 [ultranest] [DEBUG] Plateau detected at L=-inf, not replacing live point.
+16:13:37 [ultranest] [DEBUG] Plateau detected at L=-inf, not replacing live point.
+16:13:37 [ultranest] [DEBUG] Plateau detected at L=-inf, not replacing live point.
+16:13:37 [ultranest] [DEBUG] Plateau detected at L=-inf, not replacing live point.
+16:13:37 [ultranest] [DEBUG] Plateau detected at L=-inf, not replacing live point.
+16:13:37 [ultranest] [DEBUG] iteration=5, ncalls=406, regioncalls=40, ndraw=40, logz=-inf, remainder_fraction=100.0000%, Lmin=-inf, Lmax=-96.71

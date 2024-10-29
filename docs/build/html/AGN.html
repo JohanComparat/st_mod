@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AGN model &#8212; xray_stack_models 1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Gas model" href="GAS.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-AGN">
+<span id="agn-model"></span><h1>AGN model<a class="headerlink" href="#module-AGN" title="Link to this heading">¶</a></h1>
+<p>Model to paint a dark matter halo light cone with X-ray properties related to the Active Galactic Nuclei</p>
+<p>Follows the cluster model of Comparat et al. 2019 used and improved on by Liu et al. 2022 (eFEDs simulations, more accurate K-corrections).</p>
+<dl class="simple">
+<dt>input :</dt><dd><ul class="simple">
+<li><p>z_dir : name of the redshift slice (to retrieve the list of simulated galaxies, glist.fits files). Accessible via the UCHUU environment variable.</p></li>
+<li><p>LC_dir : directory of the light cone</p></li>
+<li><p>str_scatter_0 : scatter between hard LX and stellar mass</p></li>
+<li><p>str_fsat : satellite fraction</p></li>
+</ul>
+</dd>
+<dt>output :</dt><dd><ul class="simple">
+<li><p>AGN_list_sigma_’+str_scatter_0+’_fsat_’+str_fsat+’.fits : file containing AGN properties</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="AGN.AGN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">AGN.</span></span><span class="sig-name descname"><span class="pre">AGN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LC_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'FullSky'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scatter_0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_sat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AGN.html#AGN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AGN.AGN" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="AGN.AGN.abundance_matching">
+<span class="sig-name descname"><span class="pre">abundance_matching</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AGN.html#AGN.abundance_matching"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AGN.AGN.abundance_matching" title="Link to this definition">¶</a></dt>
+<dd><p>Matches LX hard and stellar mass after applying the scatter</p>
+<p>Adds the log_{10}(L_X^{2-10 keV}) ‘LX_hard’ and the realization of the scatter parameter (scatter_LX_Ms) to the self.AGN table</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AGN.AGN.compute_agn_type">
+<span class="sig-name descname"><span class="pre">compute_agn_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logNH</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AGN.html#AGN.compute_agn_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AGN.AGN.compute_agn_type" title="Link to this definition">¶</a></dt>
+<dd><p>Assigns a type to an AGN population</p>
+<p>parameters:
+- z: redshift
+- lx: hard X-ray luminosity (log10)
+- logNH: nH value (log10)</p>
+<p>return: array of AGN types</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AGN.AGN.compute_fluxes">
+<span class="sig-name descname"><span class="pre">compute_fluxes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AGN.html#AGN.compute_fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AGN.AGN.compute_fluxes" title="Link to this definition">¶</a></dt>
+<dd><p>Computes the fluxes in observed frame (K-corrections with obscuration in the 0.5-2 and 2-10 keV bands)</p>
+<p>Adds FX_hard, LX_soft, FX_soft, FX_soft_attenuated to the self.AGN table</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AGN.AGN.compute_r_mag">
+<span class="sig-name descname"><span class="pre">compute_r_mag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AGN.html#AGN.compute_r_mag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AGN.AGN.compute_r_mag" title="Link to this definition">¶</a></dt>
+<dd><p>Computes the observed r-band magnitude from X-ray using the alpha OX relation.
+Adds : self.AGN[‘SDSS_r_AB’] and self.AGN[‘SDSS_r_AB_attenuated’]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AGN.AGN.get_obscured_fractions">
+<span class="sig-name descname"><span class="pre">get_obscured_fractions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AGN.html#AGN.get_obscured_fractions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AGN.AGN.get_obscured_fractions" title="Link to this definition">¶</a></dt>
+<dd><p>Computes the obscured fraction model (equations 4-11, 12-15 of Comparat et al. 2019)</p>
+<p>Adds $log_{10}(n_H)$ values (‘logNH’) to the self.AGN table</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AGN.AGN.get_tabulated_AGN">
+<span class="sig-name descname"><span class="pre">get_tabulated_AGN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AGN.html#AGN.get_tabulated_AGN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AGN.AGN.get_tabulated_AGN" title="Link to this definition">¶</a></dt>
+<dd><p>Concatenates all tabulated AGN in the redshift shell of interest in a single table, saved as attribute self.AGN as well as the total number of tabulated AGN self.N_AGN_tabulated</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AGN.AGN.get_z_mass_id">
+<span class="sig-name descname"><span class="pre">get_z_mass_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_sim_gal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AGN.html#AGN.get_z_mass_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AGN.AGN.get_z_mass_id" title="Link to this definition">¶</a></dt>
+<dd><p>Downsamples to the f_sat parameter and applies the duty cycle</p>
+<dl class="simple">
+<dt>Saves the following attributes :</dt><dd><ul class="simple">
+<li><p>self.IDS the indexes of the galaxies with an AGN</p></li>
+<li><p>self.N_active : number of AGN</p></li>
+<li><p>self.AGN : glist catalog restricted to the active IDS</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">xray_stack_models</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GAL.html">Galaxy model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GAS.html">Gas model</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">AGN model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#AGN.AGN"><code class="docutils literal notranslate"><span class="pre">AGN</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#AGN.AGN.abundance_matching"><code class="docutils literal notranslate"><span class="pre">AGN.abundance_matching()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#AGN.AGN.compute_agn_type"><code class="docutils literal notranslate"><span class="pre">AGN.compute_agn_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#AGN.AGN.compute_fluxes"><code class="docutils literal notranslate"><span class="pre">AGN.compute_fluxes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#AGN.AGN.compute_r_mag"><code class="docutils literal notranslate"><span class="pre">AGN.compute_r_mag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#AGN.AGN.get_obscured_fractions"><code class="docutils literal notranslate"><span class="pre">AGN.get_obscured_fractions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#AGN.AGN.get_tabulated_AGN"><code class="docutils literal notranslate"><span class="pre">AGN.get_tabulated_AGN()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#AGN.AGN.get_z_mass_id"><code class="docutils literal notranslate"><span class="pre">AGN.get_z_mass_id()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="GAS.html" title="previous chapter">Gas model</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Johan Comparat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/AGN.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
