@@ -165,7 +165,7 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     p_2_catal_MAG = os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']), 'zMsSFRmatch_mags.fits')
     GAL = Table.read(p_2_catalogue)
     MAG = Table.read(p_2_catal_MAG)
-    z_min, z_max = np.min(GAL['redshift_S']), np.max(GAL['redshift_S'])
+    z_min, z_max = np.min(GAL['redshift_R']), np.max(GAL['redshift_R'])
     mock_area = meta['mean_area']
     if LC_dir =='LC1800':
         mock_area = 1800.
