@@ -166,8 +166,15 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     GAL = Table.read(p_2_catalogue)
     MAG = Table.read(p_2_catal_MAG)
     z_min, z_max = np.min(GAL['redshift_S']), np.max(GAL['redshift_S'])
-    print('z_min, z_max=', z_min, z_max, 'area=', meta['mean_area'] )
-    volume_mock = (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * meta['mean_area'] * np.pi / 129600.).value
+    mock_area = meta['mean_area']
+    if LC_dir =='LC1800':
+        mock_area = 1800.
+    if LC_dir =='LC0060':
+        mock_area = 60.
+    if LC_dir =='LC0002':
+        mock_area = 2.
+    print('z_min, z_max=', z_min, z_max, 'area=', mock_area )
+    volume_mock = (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * mock_area * np.pi / 129600.).value
     z_mean = np.mean(GAL['redshift_S'])
     #
     z_COSMOS = (COSMOS['photoz']>z_min) & (COSMOS['photoz']<z_max)

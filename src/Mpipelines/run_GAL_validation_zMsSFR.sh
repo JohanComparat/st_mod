@@ -47,4 +47,4 @@ python GAL_validation_zMsSFR.py z0p94 LC1800
 # rsync -avz comparat@ds43:/data56s/comparat/UCHUU/FullSky/z0p05/replication_0.0_0.0_0.0/zMsSFRmatch_mags.fits .
 
 cd $GIT_STMOD_DATA/data/validation/validation_GAL
-rsync -avz comparat@ds43:/home/comparat/st_mod_data/data/validation/validation_GAL/GP_RbandLuminosityFunction .
+rsync -avz comparat@ds43:/home/comparat/st_mod_data/data/validation/validation_GAL/* .
