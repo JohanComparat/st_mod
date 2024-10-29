@@ -74,7 +74,7 @@ z_dir = sys.argv[1]
 LC_dir=sys.argv[2] #'FullSky'
 C_GAS = GG.GAS(z_dir, b_HS=0.8, logM500c_min=11., logFX_min=-18, LC_dir=LC_dir)
 
-validation_dir       = os.path.join(os.environ['GIT_STMOD'], 'data', 'validation','validation_GAS')
+validation_dir       = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_GAS')
 validation_dir_SR = os.path.join(validation_dir, 'ScalingRelation', z_dir)
 validation_dir_XLF = os.path.join(validation_dir, 'XsoftLuminosityFunction', z_dir)
 #validation_dir_lNlS = os.path.join(validation_dir, 'logNlogS', z_dir)
@@ -93,7 +93,7 @@ os.system('mkdir -p ' + validation_dir_XLF )
 #
 # # #
 
-SR_dir = os.path.join(os.environ['GIT_STMOD'], 'data/validation/validation_GAS', 'scaling_relations')
+SR_dir = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS', 'scaling_relations')
 itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( SR_dir, "fraction_05_20_01_24_no_nH.txt"), unpack=True )
 
 nh_vals = 10**np.arange(-2,4+0.01,0.5)
@@ -190,8 +190,8 @@ lx_bins = np.arange(41.,50.,dlog10lx)
 lx_val = ( lx_bins[1:] + lx_bins[:-1] )/2.
 
 # CODEX Finoguenov 2019
-f19_LX, f19_n_up, f19_n_low = np.loadtxt(os.path.join(os.environ['GIT_STMOD'], 'data/validation/validation_GAS/luminosity_functions', 'finoguenov_2019.txt'), unpack=True)
-L_1e42, dndl, Err_percent = np.loadtxt(os.path.join(os.environ['GIT_STMOD'], 'data/validation/validation_GAS/luminosity_functions', 'pacaud_2015.txt'), unpack=True)
+f19_LX, f19_n_up, f19_n_low = np.loadtxt(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS/luminosity_functions', 'finoguenov_2019.txt'), unpack=True)
+L_1e42, dndl, Err_percent = np.loadtxt(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS/luminosity_functions', 'pacaud_2015.txt'), unpack=True)
 # REFLEX Boehringer 2002
 schechter_fun = lambda L, Lstar, alpha, n0 : n0 * np.e**(-L/Lstar) * (L/Lstar)**(-alpha) #/ Lstar
 schechter_mod = lambda L, Lstar, alpha, n0 : n0 * np.e**(-L/Lstar) * (L/Lstar)**(-alpha) * (1-(1+L/0.25)**(-1.7))#/ Lstar

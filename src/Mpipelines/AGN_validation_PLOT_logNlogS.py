@@ -22,7 +22,7 @@ import numpy as np
 print('plots logNlogS')
 print('------------------------------------------------')
 print('------------------------------------------------')
-validation_dir           = os.path.join(os.environ['GIT_STMOD'], 'data', 'validation','validation_AGN')
+validation_dir           = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_AGN')
 validation_dir_lNlS = os.path.join(validation_dir, 'XrayLogNlogS')
 os.system('mkdir -p ' + validation_dir_lNlS            )
 

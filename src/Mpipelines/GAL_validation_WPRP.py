@@ -55,7 +55,7 @@ def get_radec(xn, yn, zn):
 
 
 
-validation_dir       = os.path.join(os.environ['GIT_STMOD'], 'data', 'validation','validation_GAL')
+validation_dir       = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_GAL')
 validation_dir_WPRP = os.path.join(validation_dir, 'WPRP')
 os.system('mkdir -p ' + validation_dir_WPRP       )
 

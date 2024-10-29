@@ -74,7 +74,7 @@ z_dir = sys.argv[1]
 LC_dir='FullSky'
 C_GAS = GG.GAS(z_dir, b_HS=0.8, logM500c_min=11., logFX_min=-18, LC_dir=LC_dir)
 
-validation_dir       = os.path.join(os.environ['GIT_STMOD'], 'data', 'validation','validation_GAS')
+validation_dir       = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_GAS')
 validation_dir_SR = os.path.join(validation_dir, 'ScalingRelation', z_dir)
 validation_dir_XLF = os.path.join(validation_dir, 'XsoftLuminosityFunction', z_dir)
 validation_dir_lNlS = os.path.join(validation_dir, 'logNlogS', z_dir)
@@ -93,7 +93,7 @@ os.system('mkdir -p ' + validation_dir_lNlS )
 #
 # # #
 
-SR_dir = os.path.join(os.environ['GIT_STMOD'], 'data/validation/validation_GAS', 'scaling_relations')
+SR_dir = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS', 'scaling_relations')
 itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( SR_dir, "fraction_05_20_01_24_no_nH.txt"), unpack=True )
 
 nh_vals = 10**np.arange(-2,4+0.01,0.5)

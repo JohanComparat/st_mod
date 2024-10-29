@@ -57,7 +57,7 @@ C_AGN = GG.AGN(z_dir, LC_dir=LC_dir)
 
 ##
 
-validation_dir           = os.path.join(os.environ['GIT_STMOD'], 'data', 'validation','validation_AGN')
+validation_dir           = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_AGN')
 validation_dir_Stell     = os.path.join(validation_dir, 'StellarMassFunction', z_dir)
 validation_dir_XLF_hard  = os.path.join(validation_dir, 'XrayhardLuminosityFunction', z_dir)
 validation_dir_XLF_soft  = os.path.join(validation_dir, 'XraySoftLuminosityFunction', z_dir)

@@ -9,7 +9,7 @@ Z_SEL = 'Z3P'
 prof_dir = os.path.join( os.environ['GIT_STMOD'], 'figures', 'Ti20_SDSS_stacked_galaxy_profile', 'profiles_decomp_Mh' )
 os.system( 'mkdir -p ' + prof_dir )
 
-fit_dir = os.path.join( os.environ['GIT_STMOD'], 'data', 'results', 'Ti20_SDSS_stacked_galaxy_profile', 'profiles_decomp_Mh' )
+fit_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data', 'results', 'Ti20_SDSS_stacked_galaxy_profile', 'profiles_decomp_Mh' )
 os.system( 'mkdir -p ' + fit_dir )
 p2_file_fit_out = os.path.join(fit_dir, 'MhaloSel_ALL_SATfrac_params.fits')
 

@@ -17,7 +17,8 @@ Seven distinct model modules :
 
 In your bashrc, add two environment variables linking to where the code is stored (GIT_STMOD) and to where the data to interpret is stored (DATA_S4). In addition link to the Uchuu light cone repository (UCHUU)
 ```
-export GIT_STMOD='/home/${USERNAME}/software/stack_models'
+export GIT_STMOD='/home/${USERNAME}/software/st_mod'
+export GIT_STMOD_DATA='/home/${USERNAME}/software/st_mod_data'
 export DATA_S4='/home/${USERNAME}/data/data_s4'
 export UCHUU='/home/${USERNAME}/data/Uchuu'
 ```
@@ -94,9 +95,9 @@ The models are available in the directory :
   * BG.py     : class to handle the BG model
 
 Input files for the models are stored here :
- * $GIT_STMOD/data/models/model_AGN
- * $GIT_STMOD/data/models/model_GAS
- * $GIT_STMOD/data/models/model_GAL
+ * $GIT_STMOD_DATA/data/models/model_AGN
+ * $GIT_STMOD_DATA/data/models/model_GAS
+ * $GIT_STMOD_DATA/data/models/model_GAL
 
 Model Pipelines. The set of scripts to run the models on simulated data are here : $GIT_STMOD/src/Mpipelines
 
@@ -111,9 +112,9 @@ On the smaller lightcones and for a limited redshift reach the light cone can be
 
 The models' predictions need to agree with current measurements of the luminosity functions, logNlogS, etc
 The validation data (for comparison) are stored here :
- * $GIT_STMOD/data/validation/validation_AGN
- * $GIT_STMOD/data/validation/validation_GAS
- * $GIT_STMOD/data/validation/validation_GAL
+ * $GIT_STMOD_DATA/data/validation/validation_AGN
+ * $GIT_STMOD_DATA/data/validation/validation_GAS
+ * $GIT_STMOD_DATA/data/validation/validation_GAL
 
 
 # GAL model
@@ -121,7 +122,7 @@ The validation data (for comparison) are stored here :
 ### setup the GAL model
 Creates the look up table for the K mag absolute magnitude -- stellar mass -- redshift relation
 The setup creates input data for the model recorded here :
- * $GIT_STMOD/data/models/model_GAL
+ * $GIT_STMOD_DATA/data/models/model_GAL
 ```
 cd $GIT_STMOD/src/Mpipelines/
 python GAL_setup.py
@@ -135,7 +136,7 @@ sh run_GAL_pipelines.sh
 
 ### Validate the GAL model
 
-Creates a set of fiducial comparisons (figures) to validate the model computed. It currently outputs the stellar mass function and the K-band luminosity function. Output are here : $GIT_STMOD/data/validation/validation_GAL
+Creates a set of fiducial comparisons (figures) to validate the model computed. It currently outputs the stellar mass function and the K-band luminosity function. Output are here : $GIT_STMOD_DATA/data/validation/validation_GAL
 ```
 cd $GIT_STMOD/src/Mpipelines/
 nohup sh run_GAL_validation.sh > GAL_logs/run_GAL_validation.log &
@@ -152,7 +153,7 @@ Next dev :
 
 The GAS model is taken from Comparat, Eckert et al. 2019, then extended by Seppi, Comparat et al. 2022.
 External dependences are included in this package here :
- * $GIT_STMOD/data/models/model_GAS
+ * $GIT_STMOD_DATA/data/models/model_GAS
 
 New version of scaling relation sampling implemented to make catalogues.
 Todo : tabulate profiles and sets of images
@@ -186,7 +187,7 @@ It outputs per redshift slice :
 It should also output for a full light cone
  * logN logS
 
-Outputs are here : Output are here : $GIT_STMOD/data/validation/validation_GAS
+Outputs are here : Output are here : $GIT_STMOD_DATA/data/validation/validation_GAS
 
 ```
 cd $GIT_STMOD/src/Mpipelines/
@@ -260,7 +261,7 @@ They are purely analytical and based on Aird et al. (2017). They rely on our kno
 They can be applied directly to the data samples or to the simulated equivalent.
 
 Tables with parameters of the models are stored here :
- * $GIT_STMOD/data/models/model_XRB
+ * $GIT_STMOD_DATA/data/models/model_XRB
 
 # SE models
 

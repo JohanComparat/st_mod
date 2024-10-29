@@ -51,12 +51,12 @@ C_AGN = GG.AGN(z_dir, LC_dir=LC_dir)
 
 #str_scatter_0 = '0.8'
 #str_fsat = '8'
-agn_data_dir = os.path.join( os.environ['GIT_STMOD'], 'data', 'validation/validation_AGN/literature_data' )
+agn_data_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data', 'validation/validation_AGN/literature_data' )
 
 
 ##
 
-validation_dir           = os.path.join(os.environ['GIT_STMOD'], 'data', 'validation','validation_AGN')
+validation_dir           = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_AGN')
 validation_dir_Stell     = os.path.join(validation_dir, 'StellarMassFunction', z_dir)
 validation_dir_XLF_hard  = os.path.join(validation_dir, 'XrayhardLuminosityFunction', z_dir)
 validation_dir_XLF_soft  = os.path.join(validation_dir, 'XraySoftLuminosityFunction', z_dir)
@@ -353,7 +353,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         rmag = 8.9 - 2.5*np.log10(t_gama['flux_rt'])
         #imag = 8.9 - 2.5*np.log10(t_gama['flux_it'])
 
-        KCORR_DATA = np.loadtxt( os.path.join( os.environ['GIT_STMOD'], 'data/models/model_GAL/VISTA_Ks_kcorrections.txt'), unpack = True)
+        KCORR_DATA = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], 'data/models/model_GAL/VISTA_Ks_kcorrections.txt'), unpack = True)
         # redshift distmod bandpass kcorr_median kcorr_16pc kcorr_84pc
         #bandpass_itp = interp1d(KCORR_DATA[0], KCORR_DATA[2])
         kcorr_itp = interp1d(
@@ -438,7 +438,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                         label='COSMOS',
                         lw=2)
     if z_mean<0.5:
-        ngal, M, phi, Err = np.loadtxt(os.path.join(os.environ['GIT_STMOD'], 'data', 'validation/validation_GAL/GAMA/loveday_2015', 'LF_loveday_2015.txt'), unpack=True)
+        ngal, M, phi, Err = np.loadtxt(os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation/validation_GAL/GAMA/loveday_2015', 'LF_loveday_2015.txt'), unpack=True)
         plt.plot(M, phi, label='loveday 2015 z=0.1')
         rmagABS_galGAMA = t_gama['Rmag_abs']
         Rgal_GAMA = np.histogram(rmagABS_galGAMA, bins_rLF)[0] / volume_GAMA / dlogR

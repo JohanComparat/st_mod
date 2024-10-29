@@ -73,7 +73,7 @@ dm_itp = interp1d(zs, cosmo.distmod(zs).value)
 nh_vals = 10**n.arange(-2,4+0.01,0.5)#0.05)
 kT_vals = 10**n.arange(-2.09,1.8,0.01)
 z_vals = n.hstack((n.array([0.]), n.arange(0.001, 0.01, 0.001), 10**n.arange(n.log10(0.01), n.log10(6.1), 0.01)))
-dir_2_result = os.path.join(os.environ['GIT_STMOD'], 'data/models/model_GAS', 'xray_k_correction')
+dir_2_result = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'xray_k_correction')
 itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( dir_2_result "fraction_observed_clusters_no_nH.txt"), unpack=True )
 YY_z, ZZ_kt = np.meshgrid(z_vals, kT_vals)
 shape_i = YY_z.shape
@@ -82,7 +82,7 @@ from scipy.interpolate import RegularGridInterpolator
 attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
 
 LC_dir= sys.argv[1] #'LC0002'
-validation_dir       = os.path.join(os.environ['GIT_STMOD'], 'data', 'validation','validation_GAS')
+validation_dir       = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_GAS')
 validation_dir_lNlS = os.path.join(validation_dir, 'logNlogS' )
 os.system('mkdir -p ' + validation_dir       )
 os.system('mkdir -p ' + validation_dir_lNlS )
@@ -240,10 +240,10 @@ for p_2_cata in p_2_catal_GAS_b08[1:]:
 #p_2_header = os.path.join(os.environ['GIT_STMOD'],'logNlogS/spidersLogNLogS','lgnlgs_header.tbl')
 #  (1)              (2)        (3)      (4)
 #lg(flux) N>flux: 0.1<z<0.3 0.3<z<0.5 0.5<z<0.7
-spiders_om205s860 = np.loadtxt( os.path.join(os.environ['GIT_STMOD'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om205s860.tbl'), unpack = True )
-spiders_om270s792 = np.loadtxt( os.path.join(os.environ['GIT_STMOD'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om270s792.tbl'), unpack = True )
-spiders_om342s730 = np.loadtxt( os.path.join(os.environ['GIT_STMOD'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om342s730.tbl'), unpack = True )
-spiders_om307s823_i = np.loadtxt( os.path.join(os.environ['GIT_STMOD'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om307s823h67forecast_logz_con.tbl'), unpack = True )
+spiders_om205s860 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om205s860.tbl'), unpack = True )
+spiders_om270s792 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om270s792.tbl'), unpack = True )
+spiders_om342s730 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om342s730.tbl'), unpack = True )
+spiders_om307s823_i = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om307s823h67forecast_logz_con.tbl'), unpack = True )
 spiders_om307s823 = spiders_om307s823_i.T[4:].T
 
 #

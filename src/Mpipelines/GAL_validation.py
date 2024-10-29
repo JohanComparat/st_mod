@@ -37,7 +37,7 @@ nl = lambda sel : len(sel.nonzero()[0])
 zs = np.arange(0.0000001, 7.1, 0.001)
 dm_itp = interp1d(zs, cosmo.distmod(zs).value)
 
-validation_dir       = os.path.join(os.environ['GIT_STMOD'], 'data', 'validation','validation_GAL')
+validation_dir       = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_GAL')
 validation_dir_Stell = os.path.join(validation_dir, 'StellarMassFunction')
 validation_dir_Uband = os.path.join(validation_dir, 'UbandLuminosityFunction')
 validation_dir_Gband = os.path.join(validation_dir, 'GbandLuminosityFunction')
@@ -81,7 +81,7 @@ area_COSMOS = 2.
 completeness_COSMOS = 1.
 
 ##
-KCORR_DATA = np.loadtxt( os.path.join( os.environ['GIT_STMOD'], 'data', 'models','model_GAL', 'VISTA_Ks_kcorrections.txt'), unpack = True)
+KCORR_DATA = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], 'data', 'models','model_GAL', 'VISTA_Ks_kcorrections.txt'), unpack = True)
 kcorr_itp = interp1d(KCORR_DATA[0], KCORR_DATA[3])
 
 ##

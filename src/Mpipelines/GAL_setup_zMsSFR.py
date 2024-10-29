@@ -36,9 +36,9 @@ dm_itp = interp1d(zs, cosmo.distmod(zs).value)
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
 
-fig_dir = os.path.join(os.environ['GIT_STMOD'], 'data/models/model_GAL/GP_cal')
+fig_dir = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAL/GP_cal')
 os.system('mkdir -p '+fig_dir)
-model_dir = os.path.join(os.environ['GIT_STMOD'], 'data', 'models','model_GAL')
+model_dir = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'models','model_GAL')
 os.system('mkdir -p '+model_dir)
 print('figures are written here : ', fig_dir)
 print('model files are written here : ', model_dir)

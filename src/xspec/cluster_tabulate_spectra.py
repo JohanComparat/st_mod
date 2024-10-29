@@ -36,7 +36,7 @@ t0 = time.time()
 # import all pathes
 
 # initializes pathes to files
-dir_2_result = os.path.join(os.environ['GIT_STMOD'], 'data/models/model_GAS', 'xray_k_correction')
+dir_2_result = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'xray_k_correction')
 os.system('mkdir -p '+dir_2_result)
 
 cosmoUCHUU = FlatLambdaCDM(H0=67.74 * u.km / u.s / u.Mpc, Om0=0.308900)
