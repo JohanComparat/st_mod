@@ -206,22 +206,22 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
         # literature DATA
         # COSMOS
         if z_mean<4:
-            plt.hist(Mr_arr_COSMOS, lw=1, weights=np.ones_like(Mr_arr_COSMOS) / ( mdex * volume_COSMOS * completeness_COSMOS ) ,
+            plt.hist(Mr_arr_COSMOS, lw=1, weights=np.ones_like(Mr_arr_COSMOS) / ( kdex * volume_COSMOS * completeness_COSMOS ) ,
                     bins = kbins, histtype = 'step', rasterized = True, label = 'COSMOS data')
         # GAMA G09
         if z_mean<0.4:
-            plt.hist(MR_arr_GAMA, lw=1, weights=np.ones_like(MR_arr_GAMA) / ( mdex * volume_GAMA * completeness_GAMA ) ,
+            plt.hist(MR_arr_GAMA, lw=1, weights=np.ones_like(MR_arr_GAMA) / ( kdex * volume_GAMA * completeness_GAMA ) ,
                     bins = kbins, histtype = 'step', rasterized = True, label = 'GAMA data')
         # KIDS
         if z_mean<0.6 and z_mean>0.1:
-            plt.hist(MR_arr_KIDS, lw=1, weights=np.ones_like(MR_arr_KIDS) / ( mdex * volume_KIDS * completeness_KIDS ) ,
+            plt.hist(MR_arr_KIDS, lw=1, weights=np.ones_like(MR_arr_KIDS) / ( kdex * volume_KIDS * completeness_KIDS ) ,
                     bins = kbins, histtype = 'step', rasterized = True, label = 'KIDS data')
         # SDSS
         if z_mean<0.25:
-            plt.hist(MR_arr_SDSS, lw=1, weights=np.ones_like(MR_arr_SDSS) / ( mdex * volume_SDSS * completeness_SDSS ) ,
+            plt.hist(MR_arr_SDSS, lw=1, weights=np.ones_like(MR_arr_SDSS) / ( kdex * volume_SDSS * completeness_SDSS ) ,
                     bins = kbins, histtype = 'step', rasterized = True, label = 'SDSS data')
         # Mock catalog
-        plt.hist(mock_mag - dm_itp(GAL['redshift_S']), lw=2, weights=np.ones_like(mock_mag) / ( mdex * volume_mock ) ,
+        plt.hist(mock_mag - dm_itp(GAL['redshift_S']), lw=2, weights=np.ones_like(mock_mag) / ( kdex * volume_mock ) ,
                 bins = kbins, histtype = 'step', rasterized = True, label = 'Mock', color='grey')
 
         #
@@ -271,19 +271,19 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
         # literature DATA
         # COSMOS
         if z_mean<4:
-            plt.hist(Mr_arr_COSMOS, lw=1, weights=np.ones_like(Mr_arr_COSMOS) / ( mdex * volume_COSMOS * completeness_COSMOS ) ,
+            plt.hist(Mr_arr_COSMOS, lw=1, weights=np.ones_like(Mr_arr_COSMOS) / ( kdex * volume_COSMOS * completeness_COSMOS ) ,
                     bins = kbins, histtype = 'step', rasterized = True, label = 'COSMOS data')
         # GAMA G09
         if z_mean<0.4:
-            plt.hist(MR_arr_GAMA, lw=1, weights=np.ones_like(MR_arr_GAMA) / ( mdex * volume_GAMA * completeness_GAMA ) ,
+            plt.hist(MR_arr_GAMA, lw=1, weights=np.ones_like(MR_arr_GAMA) / ( kdex * volume_GAMA * completeness_GAMA ) ,
                     bins = kbins, histtype = 'step', rasterized = True, label = 'GAMA data')
         # KIDS
         if z_mean<0.6 and z_mean>0.1:
-            plt.hist(MR_arr_KIDS, lw=1, weights=np.ones_like(MR_arr_KIDS) / ( mdex * volume_KIDS * completeness_KIDS ) ,
+            plt.hist(MR_arr_KIDS, lw=1, weights=np.ones_like(MR_arr_KIDS) / ( kdex * volume_KIDS * completeness_KIDS ) ,
                     bins = kbins, histtype = 'step', rasterized = True, label = 'KIDS data')
 
         # Mock catalog
-        plt.hist(mock_mag - dm_itp(GAL['redshift_S']), lw=2, weights=np.ones_like(mock_mag) / ( mdex * volume_mock ) ,
+        plt.hist(mock_mag - dm_itp(GAL['redshift_S']), lw=2, weights=np.ones_like(mock_mag) / ( kdex * volume_mock ) ,
                 bins = kbins, histtype = 'step', rasterized = True, label = 'Mock', color='grey')
 
         #
