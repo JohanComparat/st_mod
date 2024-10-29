@@ -228,7 +228,7 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
             plt.hist(MR_arr_SDSS, lw=1, weights=np.ones_like(MR_arr_SDSS) / ( kdex * volume_SDSS * completeness_SDSS ) ,
                     bins = kbins, histtype = 'step', rasterized = True, label = 'SDSS data')
         # Mock catalog
-        plt.hist(mock_mag - dm_itp(GAL['redshift_S']), lw=2, weights=np.ones_like(mock_mag) / ( kdex * volume_mock ) ,
+        plt.hist(mock_mag , lw=2, weights=np.ones_like(mock_mag) / ( kdex * volume_mock ) ,
                 bins = kbins, histtype = 'step', rasterized = True, label = 'Mock', color='grey')
 
         #
@@ -290,7 +290,7 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
                     bins = kbins, histtype = 'step', rasterized = True, label = 'KIDS data')
 
         # Mock catalog
-        plt.hist(mock_mag - dm_itp(GAL['redshift_S']), lw=2, weights=np.ones_like(mock_mag) / ( kdex * volume_mock ) ,
+        plt.hist(mock_mag , lw=2, weights=np.ones_like(mock_mag) / ( kdex * volume_mock ) ,
                 bins = kbins, histtype = 'step', rasterized = True, label = 'Mock', color='grey')
 
         #
