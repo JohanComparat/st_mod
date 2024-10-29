@@ -62,9 +62,9 @@ sys.path.append( os.path.join(os.environ['GIT_STMOD'], 'src') )
 from models import GAL as GG
 
 z_dir = sys.argv[1]
-#LC_dir = sys.argv[2] # 'FullSky'
-C_GAL = GG.GAL(z_dir, LC_dir='FullSky')
-LC_dir='FullSky'
+LC_dir = sys.argv[2] # 'FullSky'
+C_GAL = GG.GAL(z_dir, LC_dir=LC_dir)
+#LC_dir='FullSky'
 
 ##
 #
@@ -100,9 +100,9 @@ GAMA['Kmag_abs'] = kmag_abs
 GAMA['Rmag_abs'] = rmag_abs
 
 ##
-#SDSS = Table.read(C_GAL.path_2_SDSS)
-#area_SDSS = 8030.
-#completeness_SDSS = 0.95
+SDSS = Table.read(C_GAL.path_2_SDSS)
+area_SDSS = 8030.
+completeness_SDSS = 0.95
 
 ##
 t_KIDS = Table.read(C_GAL.path_2_KIDS)
@@ -201,7 +201,7 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     GAL = Table.read(p_2_catalogue)
     MAG = Table.read(p_2_catal_MAG)
     z_min, z_max = np.min(GAL['redshift_S']), np.max(GAL['redshift_S'])
-    print('z_min, z_max=', z_min, z_max)
+    print('z_min, z_max=', z_min, z_max, 'area=', meta['mean_area'] )
     volume_mock = (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * meta['mean_area'] * np.pi / 129600.).value
     z_mean = np.mean(GAL['redshift_S'])
     #
@@ -219,10 +219,10 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     MR_arr_GAMA = GAMA['Rmag_abs'][z_GAMA]
     magr_arr_GAMA = 8.9 - 2.5*np.log10(GAMA['flux_rt'][z_GAMA])
     #
-    #z_SDSS = (SDSS['Z']>z_min) & (SDSS['Z']<z_max)
-    #volume_SDSS =  (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * area_SDSS * np.pi / 129600.).value
-    #SM_arr_SDSS = SDSS['log10M_star'][z_SDSS]
-    #MR_arr_SDSS = SDSS['Mag_r'][z_SDSS]
+    z_SDSS = (SDSS['Z']>z_min) & (SDSS['Z']<z_max)
+    volume_SDSS =  (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * area_SDSS * np.pi / 129600.).value
+    SM_arr_SDSS = SDSS['log10M_star'][z_SDSS]
+    MR_arr_SDSS = SDSS['Mag_r'][z_SDSS]
     #
     z_KIDS = (KIDS['z_peak']>z_min) & (KIDS['z_peak']<z_max)
     volume_KIDS =  (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * area_KIDS * np.pi / 129600.).value
@@ -244,20 +244,20 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
         plt.hist(Mr_arr_COSMOS, lw=1, weights=np.ones_like(Mr_arr_COSMOS) / ( mdex * volume_COSMOS * completeness_COSMOS ) ,
                  bins = kbins, histtype = 'step', rasterized = True, label = 'COSMOS data')
     # GAMA G09
-    if z_mean<0.6:
+    if z_mean<0.4:
         plt.hist(MR_arr_GAMA, lw=1, weights=np.ones_like(MR_arr_GAMA) / ( mdex * volume_GAMA * completeness_GAMA ) ,
                  bins = kbins, histtype = 'step', rasterized = True, label = 'GAMA data')
     # KIDS
-    if z_mean<0.6:
+    if z_mean<0.6 and z_mean>0.1:
         plt.hist(MR_arr_KIDS, lw=1, weights=np.ones_like(MR_arr_KIDS) / ( mdex * volume_KIDS * completeness_KIDS ) ,
                  bins = kbins, histtype = 'step', rasterized = True, label = 'KIDS data')
+    # SDSS
+    if z_mean<0.25:
+        plt.hist(MR_arr_SDSS, lw=1, weights=np.ones_like(MR_arr_SDSS) / ( mdex * volume_SDSS * completeness_SDSS ) ,
+                 bins = kbins, histtype = 'step', rasterized = True, label = 'SDSS data')
     # Mock catalog
     plt.hist(MAG['r_GP'] - dm_itp(GAL['redshift_S']), lw=2, weights=np.ones_like(MAG['r_GP']) / ( mdex * volume_mock ) ,
             bins = kbins, histtype = 'step', rasterized = True, label = 'Mock', color='grey')
-    # SDSS
-    #if z_mean<0.4:
-        #plt.hist(MR_arr_SDSS, lw=1, weights=np.ones_like(MR_arr_SDSS) / ( mdex * volume_SDSS * completeness_SDSS ) ,
-                 #bins = kbins, histtype = 'step', rasterized = True, label = 'SDSS data')
 
     #
     plt.title(r'$\bar{z}$=' + str(np.round(z_mean, 3)))
@@ -283,23 +283,24 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     #
     # literature DATA
     # COSMOS
-    #if z_mean<4:
-        #plt.hist(magr_arr_COSMOS, lw=1, weights=np.ones_like(magr_arr_COSMOS) / (  area_COSMOS * completeness_COSMOS ) ,
-                 #bins = rbins, histtype = 'step', rasterized = True, label = 'COSMOS data', cumulative = True)
+    if z_mean<4 and z_mean>0.5:
+        plt.hist(magr_arr_COSMOS, lw=1, weights=np.ones_like(magr_arr_COSMOS) / (  area_COSMOS * completeness_COSMOS ) ,
+                 bins = rbins, histtype = 'step', rasterized = True, label = 'COSMOS data', cumulative = True)
     # GAMA G09
-    if z_mean<0.6:
+    if z_mean<0.4:
         plt.hist(magr_arr_GAMA, lw=1, weights=np.ones_like(magr_arr_GAMA) / (  area_GAMA * completeness_GAMA ) ,
                  bins = rbins, histtype = 'step', rasterized = True, label = 'GAMA data', cumulative = True)
     # KIDS
-    if z_mean<0.6:
+    if z_mean<0.6 and z_mean>0.1:
         plt.hist(magr_arr_KIDS, lw=1, weights=np.ones_like(magr_arr_KIDS) / (  area_KIDS * completeness_KIDS ) ,
                  bins = rbins, histtype = 'step', rasterized = True, label = 'KIDS data', cumulative = True)
+    # SDSS
+    if z_mean<0.25:
+        plt.hist(magr_arr_SDSS, lw=1, weights=np.ones_like(magr_arr_SDSS) / ( area_SDSS * completeness_SDSS ) ,
+                 bins = mbins, histtype = 'step', rasterized = True, label = 'SDSS data', cumulative = True)
     # Mock catalog
     plt.hist(MAG['r_GP'], lw=2, weights=np.ones_like(MAG['r_GP']) / (  meta['mean_area'] ) ,
             bins = rbins, histtype = 'step', rasterized = True, label = 'Mock', color='grey', cumulative = True)
-    #if z_mean<0.4:
-        #plt.hist(magr_arr_SDSS, lw=1, weights=np.ones_like(magr_arr_SDSS) / ( area_SDSS * completeness_SDSS ) ,
-                 #bins = mbins, histtype = 'step', rasterized = True, label = 'SDSS data', cumulative = True)
 
     #
     plt.title(r'$\bar{z}$=' + str(np.round(z_mean, 3)))
