@@ -18,24 +18,25 @@ python GAL_setup_zMsSFR_COSMOS.py
 # create gal_GP_model_COSMOStraining.pkl
 # python GAL_setup_zMsSFR_LS10.py
 
+# in ds43 screens, verify it rusn without memory issues, otherwise, loop over small parts of the files.
 
-python GAL_pipeline_zMsSfr.py z0p00 LC0002
-python GAL_pipeline_zMsSfr.py z0p02 LC0002
-python GAL_pipeline_zMsSfr.py z0p05 LC0002
-python GAL_pipeline_zMsSfr.py z0p09 LC0002
-python GAL_pipeline_zMsSfr.py z0p14 LC0002
-python GAL_pipeline_zMsSfr.py z0p19 LC0002
-python GAL_pipeline_zMsSfr.py z0p25 LC0002
-python GAL_pipeline_zMsSfr.py z0p30 LC0002
-python GAL_pipeline_zMsSfr.py z0p36 LC0002
-python GAL_pipeline_zMsSfr.py z0p43 LC0002
-python GAL_pipeline_zMsSfr.py z0p49 LC0002
-python GAL_pipeline_zMsSfr.py z0p56 LC0002
-python GAL_pipeline_zMsSfr.py z0p63 LC0002
-python GAL_pipeline_zMsSfr.py z0p70 LC0002
-python GAL_pipeline_zMsSfr.py z0p78 LC0002
-python GAL_pipeline_zMsSfr.py z0p86 LC0002
-python GAL_pipeline_zMsSfr.py z0p94 LC0002
+python GAL_pipeline_zMsSfr.py z0p00 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p02 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p05 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p09 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p14 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p19 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p25 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p30 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p36 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p43 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p49 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p56 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p63 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p70 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p78 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p86 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z0p94 LC0002 # DONE
 python GAL_pipeline_zMsSfr.py z1p03 LC0002
 python GAL_pipeline_zMsSfr.py z1p12 LC0002
 python GAL_pipeline_zMsSfr.py z1p22 LC0002
@@ -65,24 +66,25 @@ conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
 
-python GAL_pipeline_zMsSfr.py z0p02 FullSky
-python GAL_pipeline_zMsSfr.py z0p05 FullSky
-python GAL_pipeline_zMsSfr.py z0p09 FullSky
-python GAL_pipeline_zMsSfr.py z0p14 FullSky
-python GAL_pipeline_zMsSfr.py z0p19 FullSky
-python GAL_pipeline_zMsSfr.py z0p25 FullSky
-python GAL_pipeline_zMsSfr.py z0p30 FullSky
-python GAL_pipeline_zMsSfr.py z0p36 FullSky
-python GAL_pipeline_zMsSfr.py z0p43 FullSky
-python GAL_pipeline_zMsSfr.py z0p49 FullSky
-python GAL_pipeline_zMsSfr.py z0p56 FullSky
-python GAL_pipeline_zMsSfr.py z0p63 FullSky
-python GAL_pipeline_zMsSfr.py z0p70 FullSky
-python GAL_pipeline_zMsSfr.py z0p78 FullSky
-python GAL_pipeline_zMsSfr.py z0p86 FullSky
-python GAL_pipeline_zMsSfr.py z0p94 FullSky
-python GAL_pipeline_zMsSfr.py z1p03 FullSky
-python GAL_pipeline_zMsSfr.py z1p12 FullSky
+python GAL_pipeline_zMsSfr.py z0p00 FullSky # DONE
+python GAL_pipeline_zMsSfr.py z0p02 FullSky # DONE
+# python GAL_pipeline_zMsSfr.py z0p05 FullSky
+# python GAL_pipeline_zMsSfr.py z0p09 FullSky
+# python GAL_pipeline_zMsSfr.py z0p14 FullSky
+# python GAL_pipeline_zMsSfr.py z0p19 FullSky
+# python GAL_pipeline_zMsSfr.py z0p25 FullSky
+# python GAL_pipeline_zMsSfr.py z0p30 FullSky
+# python GAL_pipeline_zMsSfr.py z0p36 FullSky
+# python GAL_pipeline_zMsSfr.py z0p43 FullSky
+python GAL_pipeline_zMsSfr.py z0p49 FullSky # not enough memory for single run
+python GAL_pipeline_zMsSfr.py z0p56 FullSky # not enough memory for single run
+python GAL_pipeline_zMsSfr.py z0p63 FullSky # not enough memory for single run
+python GAL_pipeline_zMsSfr.py z0p70 FullSky # not enough memory for single run
+python GAL_pipeline_zMsSfr.py z0p78 FullSky # not enough memory for single run
+python GAL_pipeline_zMsSfr.py z0p86 FullSky # not enough memory for single run
+python GAL_pipeline_zMsSfr.py z0p94 FullSky # not enough memory for single run
+python GAL_pipeline_zMsSfr.py z1p03 FullSky # not enough memory for single run
+python GAL_pipeline_zMsSfr.py z1p12 FullSky # not enough memory for single run
 python GAL_pipeline_zMsSfr.py z1p22 FullSky
 python GAL_pipeline_zMsSfr.py z1p32 FullSky
 python GAL_pipeline_zMsSfr.py z1p43 FullSky

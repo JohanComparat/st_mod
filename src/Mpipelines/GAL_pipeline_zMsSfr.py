@@ -151,11 +151,16 @@ for p_2_catalogue in C_GAL.p_2_catalogues[is_cat]:
 	x_1 = norm_var_v(np.log10(t_sim_gal['obs_sfr']/t_sim_gal['obs_sm']), np.min(t_COS['log10sSFR'] ), np.max(t_COS['log10sSFR'] ))
 	X_all = np.transpose([x_0, x_1])
 
-	t0 = time.time()
-	y_all = gpr.predict(X_all)#, return_std=True)
-	print((time.time()-t0)/len(X_all))
+	# slice X_all in 100k
+	N_step = 10_000
+	Y_result = []
+	for j_slice in np.arange(0, len(x_0), N_step):
+		t0 = time.time()
+		Y_result.append( gpr.predict(X_all[j_slice:j_slice+N_step]) )
+		print(N_step, (time.time()-t0)/N_step)
 
 
+	y_all = np.vstack(( Y_result ))
 	t_sim_gal['nuv_GP'] = de_norm_var( y_all.T[0] , np.min(t_COS['NUV'] -t_COS['dist_mod']), np.max(t_COS['NUV']-t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
 	t_sim_gal['u_GP'  ] = de_norm_var( y_all.T[1] , np.min(t_COS['U']   -t_COS['dist_mod']), np.max(t_COS['U']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
 	t_sim_gal['g_GP'  ] = de_norm_var( y_all.T[2] , np.min(t_COS['G']   -t_COS['dist_mod']), np.max(t_COS['G']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
