@@ -147,7 +147,7 @@ for p_2_catalogue in C_GAL.p_2_catalogues[is_cat]:
 
 	# input features
 	t_sim_gal['obs_sfr'][t_sim_gal['obs_sfr']<=0]=1e-6
-	x_0 = norm_var_v(np.log10(t_sim_gal['obs_sm']), np.min(t_COS['log10Mstar']), np.max(t_COS['log10Mstar']))
+	x_0 = norm_var_v(np.log10(t_sim_gal['obs_sm']), np.min(t_COS['mass_med']), np.max(t_COS['mass_med']))
 	x_1 = norm_var_v(np.log10(t_sim_gal['obs_sfr']/t_sim_gal['obs_sm']), np.min(t_COS['log10sSFR'] ), np.max(t_COS['log10sSFR'] ))
 	X_all = np.transpose([x_0, x_1])
 
