@@ -156,16 +156,16 @@ for p_2_catalogue in C_GAL.p_2_catalogues[is_cat]:
 	print((time.time()-t0)/len(X_all))
 
 
-	t_sim_gal['nuv_GP'] = de_norm_var( y_all.T[0] , np.min(t_COS['NUV']-t_COS['dist_mod']), np.max(t_COS['NUV']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['u_GP'  ] = de_norm_var( y_all.T[1] , np.min(t_COS['U']-t_COS['dist_mod']), np.max(t_COS['U']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['g_GP'  ] = de_norm_var( y_all.T[2] , np.min(t_COS['G']-t_COS['dist_mod']), np.max(t_COS['G']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['r_GP'  ] = de_norm_var( y_all.T[3] , np.min(t_COS['R']-t_COS['dist_mod']), np.max(t_COS['R']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['i_GP'  ] = de_norm_var( y_all.T[4] , np.min(t_COS['I']-t_COS['dist_mod']), np.max(t_COS['I']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['z_GP'  ] = de_norm_var( y_all.T[5] , np.min(t_COS['Z']-t_COS['dist_mod']), np.max(t_COS['Z']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['j_GP'  ] = de_norm_var( y_all.T[6] , np.min(t_COS['J']-t_COS['dist_mod']), np.max(t_COS['J']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['i1_GP' ] = de_norm_var( y_all.T[7] , np.min(t_COS['I1']-t_COS['dist_mod']), np.max(t_COS['I1']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['k_GP'  ] = de_norm_var( y_all.T[8] , np.min(t_COS['K']-t_COS['dist_mod']), np.max(t_COS['K']-t_COS['dist_mod']) ) + t_COS['dist_mod']
-	t_sim_gal['ext_GP'] = de_norm_var( y_all.T[9] , np.min(t_COS['ebv']), np.max(t_COS['ebv']) )
+	t_sim_gal['nuv_GP'] = de_norm_var( y_all.T[0] , np.min(t_COS['NUV'] -t_COS['dist_mod']), np.max(t_COS['NUV']-t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['u_GP'  ] = de_norm_var( y_all.T[1] , np.min(t_COS['U']   -t_COS['dist_mod']), np.max(t_COS['U']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['g_GP'  ] = de_norm_var( y_all.T[2] , np.min(t_COS['G']   -t_COS['dist_mod']), np.max(t_COS['G']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['r_GP'  ] = de_norm_var( y_all.T[3] , np.min(t_COS['R']   -t_COS['dist_mod']), np.max(t_COS['R']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['i_GP'  ] = de_norm_var( y_all.T[4] , np.min(t_COS['I']   -t_COS['dist_mod']), np.max(t_COS['I']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['z_GP'  ] = de_norm_var( y_all.T[5] , np.min(t_COS['Z']   -t_COS['dist_mod']), np.max(t_COS['Z']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['j_GP'  ] = de_norm_var( y_all.T[6] , np.min(t_COS['J']   -t_COS['dist_mod']), np.max(t_COS['J']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['i1_GP' ] = de_norm_var( y_all.T[7] , np.min(t_COS['I1']  -t_COS['dist_mod']), np.max(t_COS['I1'] -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['k_GP'  ] = de_norm_var( y_all.T[8] , np.min(t_COS['K']   -t_COS['dist_mod']), np.max(t_COS['K']  -t_COS['dist_mod']) ) + t_sim_gal['dist_mod']
+	t_sim_gal['ext_GP'] = de_norm_var( y_all.T[9] , np.min(t_COS['ebv'])                   , np.max(t_COS['ebv'])                   )
 
 	t_sim_gal.write(p_2_catalogue_out, overwrite = True)
 	print(p_2_catalogue_out, 'written')
