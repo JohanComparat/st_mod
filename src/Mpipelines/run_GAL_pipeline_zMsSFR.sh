@@ -2,6 +2,22 @@
 conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
+# attempt with GAMA
+# creates gal_GP_model_GAMAtraining.pkl
+python GAL_setup_zMsSFR_GAMA.py
+# uses gal_GP_model_GAMAtraining.pkl on COSMOS to see the outcome
+python GAL_setup_zMsSFR_GAMA_test_COSMOS.py
+# limited in prediction power since the E(B-V) is not available in the data.
+
+# attempt with COSMOS
+# create gal_GP_model_COSMOStraining.pkl
+python GAL_setup_zMsSFR_COSMOS.py
+# good performances
+
+# attempt with LS10, but does not have SFR !
+# create gal_GP_model_COSMOStraining.pkl
+# python GAL_setup_zMsSFR_LS10.py
+
 
 python GAL_pipeline_zMsSfr.py z0p00 LC0002
 python GAL_pipeline_zMsSfr.py z0p02 LC0002

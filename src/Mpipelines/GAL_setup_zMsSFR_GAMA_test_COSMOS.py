@@ -45,6 +45,7 @@ print('model files are written here : ', model_dir)
 
 path_2_GAMA = os.path.join(os.environ['DATA'], 'GAMA', 'forJohan.fits')
 path_2_COSMOS = os.path.join(os.environ['DATA'], 'COSMOS', 'photoz_vers2.0_010312.fits')
+path_2_LS10 = os.path.join(os.environ['LSDR10'], 'sweep', 'MergeALL_BGSlike_LPH.fits' )
 
 
 def norm_var(var):

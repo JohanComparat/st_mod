@@ -1,5 +1,3 @@
-
-
 """
 What it does
 ------------
@@ -52,7 +50,7 @@ print('figures are written here : ', fig_dir)
 print('model files are written here : ', model_dir)
 
 path_2_GAMA = os.path.join(os.environ['DATA'], 'GAMA', 'forJohan.fits')
-#path_2_COSMOS = os.path.join(os.environ['DATA'], 'COSMOS', 'photoz_vers2.0_010312.fits')
+path_2_COSMOS = os.path.join(os.environ['DATA'], 'COSMOS', 'photoz_vers2.0_010312.fits')
 
 
 def norm_var(var):
@@ -67,45 +65,40 @@ def de_norm_var(var, min_val, max_val):
 #
 # GAMA
 #
-t_gama = Table.read(path_2_GAMA)
+t_COS = Table.read(path_2_COSMOS)
 
-t_gama['u_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_ut'])
-t_gama['g_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_gt'])
-t_gama['r_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_rt'])
-t_gama['i_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_it'])
-t_gama['z_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_Zt'])
-t_gama['y_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_Yt'])
-t_gama['j_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_Jt'])
-t_gama['h_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_Ht'])
-t_gama['k_mag'] = 8.9 - 2.5*np.log10(t_gama['flux_Kt'])
+#t_COS['U']
+#t_COS['G']
+#t_COS['R']
+#t_COS['I']
+#t_COS['Z']
+#t_COS['NUV']
+#t_COS['J']
+#t_COS['I1']
+#t_COS['K']
 
-t_gama['log10sSFR'] = np.log10(t_gama['SFR_50']/t_gama['StellarMass_50'])
-t_gama['log10sSFR'][t_gama['log10sSFR']<-15] = -15 # clips the lowest 2.5%
-t_gama['log10Mstar'] = np.log10(t_gama['StellarMass_50'])
-#t_gama['Z']
+t_COS['log10sSFR'] = t_COS['ssfr_med']
+t_COS['log10sSFR'][t_COS['log10sSFR']<-15] = -15 # clips the lowest XX%
 
-mag_min = (t_gama['u_mag']>0) &(t_gama['g_mag']>0) &(t_gama['r_mag']>0) & (t_gama['i_mag']>0) & (t_gama['z_mag']>0) &(t_gama['y_mag']>0) &(t_gama['j_mag']>0) &(t_gama['h_mag']>0) &(t_gama['k_mag']>0)
-mag_max = (t_gama['u_mag']<25) &(t_gama['g_mag']<25) &(t_gama['r_mag']<25) & (t_gama['i_mag']<25) & (t_gama['z_mag']<25) &(t_gama['y_mag']<25) &(t_gama['j_mag']<25) &(t_gama['h_mag']<25) &(t_gama['k_mag']<25)
+mag_min = (t_COS['U']>0) &(t_COS['G']>0) &(t_COS['R']>0) & (t_COS['I']>0) & (t_COS['Z']>0) &(t_COS['NUV']>0) &(t_COS['J']>0) &(t_COS['I1']>0) &(t_COS['K']>0)
+mag_max = (t_COS['U']<26) &(t_COS['G']<26) &(t_COS['R']<26) & (t_COS['I']<26) & (t_COS['Z']<26) &(t_COS['NUV']<26) &(t_COS['J']<26) &(t_COS['I1']<26) &(t_COS['K']<26)
 
-keep_gama = (mag_min) & (mag_max) & (t_gama['Z']>0.01) & (t_gama['Z']<0.4) &(t_gama['log10Mstar']<13)&(t_gama['log10Mstar']>6)
-t_gama = Table(t_gama[keep_gama])
+keep_COS = (mag_min) & (mag_max) & (t_COS['photoz']>0.01) & (t_COS['photoz']<1.) &(t_COS['mass_med']<13)&(t_COS['mass_med']>7.1)
+t_COS = Table(t_COS[keep_COS])
 
-dm_values = dm_itp(t_gama['Z'].data.data)
-t_gama['dist_mod'] = dm_values
+dm_values = dm_itp(t_COS['photoz'].data.data)
+t_COS['dist_mod'] = dm_values
 
-p2_model = os.path.join(model_dir, "gal_GP_model_GAMAtraining.pkl")
+p2_model = os.path.join(model_dir, "gal_GP_model_COSMOStraining.pkl")
 print(p2_model, 'opening')
 from pickle import load
 with open(p2_model, "rb") as f:
     gpr = load(f)
 
-
-
 print(len(C_GAL.p_2_catalogues), 'catalogues to loop over', ', Dt=', time.time()-t0, 'seconds')
 is_cat = np.array([os.path.isfile(el) for el in C_GAL.p_2_catalogues])
 for p_2_catalogue in C_GAL.p_2_catalogues[is_cat]:
 	print('='*100)
-
 	p_2_catalogue_out = os.path.join( os.path.dirname(p_2_catalogue), 'zMsSFRmatch_mags.fits')
 	print('reading', p_2_catalogue)
 	t_sim_gal = Table.read(p_2_catalogue)
@@ -154,23 +147,25 @@ for p_2_catalogue in C_GAL.p_2_catalogues[is_cat]:
 
 	# input features
 	t_sim_gal['obs_sfr'][t_sim_gal['obs_sfr']<=0]=1e-6
-	x_0 = norm_var_v(np.log10(t_sim_gal['obs_sm']), np.min(t_gama['log10Mstar']), np.max(t_gama['log10Mstar']))
-	x_1 = norm_var_v(np.log10(t_sim_gal['obs_sfr']/t_sim_gal['obs_sm']), np.min(t_gama['log10sSFR'] ), np.max(t_gama['log10sSFR'] ))
+	x_0 = norm_var_v(np.log10(t_sim_gal['obs_sm']), np.min(t_COS['log10Mstar']), np.max(t_COS['log10Mstar']))
+	x_1 = norm_var_v(np.log10(t_sim_gal['obs_sfr']/t_sim_gal['obs_sm']), np.min(t_COS['log10sSFR'] ), np.max(t_COS['log10sSFR'] ))
 	X_all = np.transpose([x_0, x_1])
 
 	t0 = time.time()
 	y_all = gpr.predict(X_all)#, return_std=True)
 	print((time.time()-t0)/len(X_all))
 
-	t_sim_gal['u_GP'] = de_norm_var( y_all.T[0] , np.min(t_gama['u_mag']-t_gama['dist_mod']), np.max(t_gama['u_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
-	t_sim_gal['g_GP'] = de_norm_var( y_all.T[1] , np.min(t_gama['g_mag']-t_gama['dist_mod']), np.max(t_gama['g_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
-	t_sim_gal['r_GP'] = de_norm_var( y_all.T[2] , np.min(t_gama['r_mag']-t_gama['dist_mod']), np.max(t_gama['r_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
-	t_sim_gal['i_GP'] = de_norm_var( y_all.T[3] , np.min(t_gama['i_mag']-t_gama['dist_mod']), np.max(t_gama['i_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
-	t_sim_gal['z_GP'] = de_norm_var( y_all.T[4] , np.min(t_gama['z_mag']-t_gama['dist_mod']), np.max(t_gama['z_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
-	t_sim_gal['y_GP'] = de_norm_var( y_all.T[5] , np.min(t_gama['y_mag']-t_gama['dist_mod']), np.max(t_gama['y_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
-	t_sim_gal['j_GP'] = de_norm_var( y_all.T[6] , np.min(t_gama['j_mag']-t_gama['dist_mod']), np.max(t_gama['j_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
-	t_sim_gal['h_GP'] = de_norm_var( y_all.T[7] , np.min(t_gama['h_mag']-t_gama['dist_mod']), np.max(t_gama['h_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
-	t_sim_gal['k_GP'] = de_norm_var( y_all.T[8] , np.min(t_gama['k_mag']-t_gama['dist_mod']), np.max(t_gama['k_mag']-t_gama['dist_mod']) ) + t_sim_gal['dist_mod']
+
+	t_sim_gal['nuv_GP'] = de_norm_var( y_all.T[0] , np.min(t_COS['NUV']-t_COS['dist_mod']), np.max(t_COS['NUV']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['u_GP'  ] = de_norm_var( y_all.T[1] , np.min(t_COS['U']-t_COS['dist_mod']), np.max(t_COS['U']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['g_GP'  ] = de_norm_var( y_all.T[2] , np.min(t_COS['G']-t_COS['dist_mod']), np.max(t_COS['G']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['r_GP'  ] = de_norm_var( y_all.T[3] , np.min(t_COS['R']-t_COS['dist_mod']), np.max(t_COS['R']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['i_GP'  ] = de_norm_var( y_all.T[4] , np.min(t_COS['I']-t_COS['dist_mod']), np.max(t_COS['I']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['z_GP'  ] = de_norm_var( y_all.T[5] , np.min(t_COS['Z']-t_COS['dist_mod']), np.max(t_COS['Z']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['j_GP'  ] = de_norm_var( y_all.T[6] , np.min(t_COS['J']-t_COS['dist_mod']), np.max(t_COS['J']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['i1_GP' ] = de_norm_var( y_all.T[7] , np.min(t_COS['I1']-t_COS['dist_mod']), np.max(t_COS['I1']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['k_GP'  ] = de_norm_var( y_all.T[8] , np.min(t_COS['K']-t_COS['dist_mod']), np.max(t_COS['K']-t_COS['dist_mod']) ) + t_COS['dist_mod']
+	t_sim_gal['ext_GP'] = de_norm_var( y_all.T[9] , np.min(t_COS['ebv']), np.max(t_COS['ebv']) )
 
 	t_sim_gal.write(p_2_catalogue_out, overwrite = True)
 	print(p_2_catalogue_out, 'written')
