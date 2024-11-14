@@ -37,30 +37,30 @@ python GAL_pipeline_zMsSfr.py z0p70 LC0002 # DONE
 python GAL_pipeline_zMsSfr.py z0p78 LC0002 # DONE
 python GAL_pipeline_zMsSfr.py z0p86 LC0002 # DONE
 python GAL_pipeline_zMsSfr.py z0p94 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z1p03 LC0002
-python GAL_pipeline_zMsSfr.py z1p12 LC0002
-python GAL_pipeline_zMsSfr.py z1p22 LC0002
-python GAL_pipeline_zMsSfr.py z1p32 LC0002
-python GAL_pipeline_zMsSfr.py z1p43 LC0002
-python GAL_pipeline_zMsSfr.py z1p54 LC0002
-python GAL_pipeline_zMsSfr.py z1p65 LC0002
-python GAL_pipeline_zMsSfr.py z1p77 LC0002
-python GAL_pipeline_zMsSfr.py z1p90 LC0002
-python GAL_pipeline_zMsSfr.py z2p03 LC0002
-python GAL_pipeline_zMsSfr.py z2p17 LC0002
-python GAL_pipeline_zMsSfr.py z2p31 LC0002
-python GAL_pipeline_zMsSfr.py z2p46 LC0002
-python GAL_pipeline_zMsSfr.py z2p62 LC0002
-python GAL_pipeline_zMsSfr.py z2p78 LC0002
-python GAL_pipeline_zMsSfr.py z2p95 LC0002
-python GAL_pipeline_zMsSfr.py z3p13 LC0002
-python GAL_pipeline_zMsSfr.py z3p32 LC0002
-python GAL_pipeline_zMsSfr.py z3p61 LC0002
-python GAL_pipeline_zMsSfr.py z3p93 LC0002
-python GAL_pipeline_zMsSfr.py z4p27 LC0002
-python GAL_pipeline_zMsSfr.py z4p63 LC0002
-python GAL_pipeline_zMsSfr.py z5p15 LC0002
-python GAL_pipeline_zMsSfr.py z5p73 LC0002
+python GAL_pipeline_zMsSfr.py z1p03 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z1p12 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z1p22 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z1p32 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z1p43 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z1p54 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z1p65 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z1p77 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z1p90 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z2p03 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z2p17 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z2p31 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z2p46 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z2p62 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z2p78 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z2p95 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z3p13 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z3p32 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z3p61 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z3p93 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z4p27 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z4p63 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z5p15 LC0002 # DONE
+python GAL_pipeline_zMsSfr.py z5p73 LC0002 # DONE
 
 conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
@@ -68,29 +68,29 @@ cd $GIT_STMOD/src/Mpipelines
 
 python GAL_pipeline_zMsSfr.py z0p00 FullSky # DONE
 python GAL_pipeline_zMsSfr.py z0p02 FullSky # DONE
-# python GAL_pipeline_zMsSfr.py z0p05 FullSky
-# python GAL_pipeline_zMsSfr.py z0p09 FullSky
-# python GAL_pipeline_zMsSfr.py z0p14 FullSky
-# python GAL_pipeline_zMsSfr.py z0p19 FullSky
-# python GAL_pipeline_zMsSfr.py z0p25 FullSky
-# python GAL_pipeline_zMsSfr.py z0p30 FullSky
-# python GAL_pipeline_zMsSfr.py z0p36 FullSky
-# python GAL_pipeline_zMsSfr.py z0p43 FullSky
-python GAL_pipeline_zMsSfr.py z0p49 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z0p56 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z0p63 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z0p70 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z0p78 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z0p86 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z0p94 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z1p03 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z1p12 FullSky # not enough memory for single run
-python GAL_pipeline_zMsSfr.py z1p22 FullSky
-python GAL_pipeline_zMsSfr.py z1p32 FullSky
-python GAL_pipeline_zMsSfr.py z1p43 FullSky
-python GAL_pipeline_zMsSfr.py z1p54 FullSky
-python GAL_pipeline_zMsSfr.py z1p65 FullSky
-python GAL_pipeline_zMsSfr.py z1p77 FullSky
+python GAL_pipeline_zMsSfr.py z0p05 FullSky # ds43_3
+python GAL_pipeline_zMsSfr.py z0p09 FullSky # ds43_3
+python GAL_pipeline_zMsSfr.py z0p14 FullSky # ds43
+python GAL_pipeline_zMsSfr.py z0p19 FullSky # ds43
+python GAL_pipeline_zMsSfr.py z0p25 FullSky # ds52 #
+python GAL_pipeline_zMsSfr.py z0p30 FullSky # ds52 #
+python GAL_pipeline_zMsSfr.py z0p36 FullSky # ds52 #
+python GAL_pipeline_zMsSfr.py z0p43 FullSky # ds52 #
+python GAL_pipeline_zMsSfr.py z0p49 FullSky # ds52
+python GAL_pipeline_zMsSfr.py z0p56 FullSky # ds52
+python GAL_pipeline_zMsSfr.py z0p63 FullSky # ds52
+python GAL_pipeline_zMsSfr.py z0p70 FullSky # ds52
+python GAL_pipeline_zMsSfr.py z0p78 FullSky # ds52 2
+python GAL_pipeline_zMsSfr.py z0p86 FullSky # ds52 2
+python GAL_pipeline_zMsSfr.py z0p94 FullSky # ds52 2
+python GAL_pipeline_zMsSfr.py z1p03 FullSky # ds52 2
+python GAL_pipeline_zMsSfr.py z1p12 FullSky # ds52 2
+python GAL_pipeline_zMsSfr.py z1p22 FullSky #ds43
+python GAL_pipeline_zMsSfr.py z1p32 FullSky #ds43
+python GAL_pipeline_zMsSfr.py z1p43 FullSky #ds43
+python GAL_pipeline_zMsSfr.py z1p54 FullSky #ds43
+python GAL_pipeline_zMsSfr.py z1p65 FullSky #ds43
+python GAL_pipeline_zMsSfr.py z1p77 FullSky #ds43
 python GAL_pipeline_zMsSfr.py z1p90 FullSky
 python GAL_pipeline_zMsSfr.py z2p03 FullSky
 python GAL_pipeline_zMsSfr.py z2p17 FullSky
