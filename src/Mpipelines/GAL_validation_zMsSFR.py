@@ -345,23 +345,23 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
                 #, topdir = validation_dir_Yband
                         #)
 
-        plot_LF_uizyjhk(
-                mag_name = 'J'
-                , mock_mag = MAG['j_mag']-MAG['dist_mod']
-                , Mr_arr_COSMOS = COSMOS['MJ'][z_COSMOS]
-                , MR_arr_GAMA = GAMA['Jmag_abs'][z_GAMA]
-                , MR_arr_KIDS = KIDS['Jmag_abs'][z_KIDS]
-                , topdir = validation_dir_Jband
-                        )
+        #plot_LF_uizyjhk(
+                #mag_name = 'J'
+                #, mock_mag = MAG['j_mag']-MAG['dist_mod']
+                #, Mr_arr_COSMOS = COSMOS['MJ'][z_COSMOS]
+                #, MR_arr_GAMA = GAMA['Jmag_abs'][z_GAMA]
+                #, MR_arr_KIDS = KIDS['Jmag_abs'][z_KIDS]
+                #, topdir = validation_dir_Jband
+                        #)
 
-        plot_LF_uizyjhk(
-                mag_name = 'H'
-                , mock_mag = MAG['h_mag']-MAG['dist_mod']
-                , Mr_arr_COSMOS = COSMOS['MH'][z_COSMOS]
-                , MR_arr_GAMA = GAMA['Hmag_abs'][z_GAMA]
-                , MR_arr_KIDS = KIDS['Hmag_abs'][z_KIDS]
-                , topdir = validation_dir_Hband
-                        )
+        #plot_LF_uizyjhk(
+                #mag_name = 'H'
+                #, mock_mag = MAG['h_mag']-MAG['dist_mod']
+                #, Mr_arr_COSMOS = COSMOS['MH'][z_COSMOS]
+                #, MR_arr_GAMA = GAMA['Hmag_abs'][z_GAMA]
+                #, MR_arr_KIDS = KIDS['Hmag_abs'][z_KIDS]
+                #, topdir = validation_dir_Hband
+                        #)
 
         plot_LF_uizyjhk(
                 mag_name = 'K'
