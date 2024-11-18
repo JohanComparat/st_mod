@@ -336,14 +336,14 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
                 , topdir = validation_dir_Zband
                         )
 
-        plot_LF_uizyjhk(
-                mag_name = 'Y'
-                , mock_mag = MAG['y_mag']-MAG['dist_mod']
-                , Mr_arr_COSMOS = COSMOS['MY'][z_COSMOS]
-                , MR_arr_GAMA = GAMA['Ymag_abs'][z_GAMA]
-                , MR_arr_KIDS = KIDS['Ymag_abs'][z_KIDS]
-                , topdir = validation_dir_Yband
-                        )
+        #plot_LF_uizyjhk(
+                #mag_name = 'Y'
+                #, mock_mag = MAG['y_mag']-MAG['dist_mod']
+                #, Mr_arr_COSMOS = COSMOS['MY'][z_COSMOS]
+                #, MR_arr_GAMA = GAMA['Ymag_abs'][z_GAMA]
+                #, MR_arr_KIDS = KIDS['Ymag_abs'][z_KIDS]
+                #, topdir = validation_dir_Yband
+                        #)
 
         plot_LF_uizyjhk(
                 mag_name = 'J'
