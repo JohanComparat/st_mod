@@ -47,7 +47,67 @@ class GAL:
         self.path_2_KIDS = os.path.join(os.environ['DATA'], 'GAMA', 'G09.GAMADR4+LegacyDR9.galreference+RM.fits')
         self.path_2_GAMA = os.path.join(os.environ['DATA'], 'GAMA', 'forJohan.fits')
         self.path_2_COSMOS = os.path.join(os.environ['DATA'], 'COSMOS', 'photoz_vers2.0_010312.fits')
+        self.path_2_LS10 = os.path.join(os.environ['LSDR10'], 'sweep', 'MergeALL_BGSlike_LPH.fits' )
         self.LC_MetaData = Table.read( os.path.join(os.environ['UCHUU'], 'area_per_replica_'+self.z_dir+'.fits') )
+        self.path_2_COSMOS_RSBC = self.path_2_COSMOS[:-5]+'_zlt0p94_RSBC.fits'
+        self.path_2_KIDS_RSBC   = self.path_2_KIDS[:-5]+'_zlt0p94_RSBC.fits'
+        self.path_2_LS10_RSBC   = self.path_2_LS10[:-5]+'_zlt0p6_RSBC.fits'
+        self.path_2_GAMA_RSBC   = self.path_2_GAMA[:-5]+'_zlt0p6_RSBC.fits'
+
+    def construct_OBS_kdTree_RSBC(self):
+        #if self.mean_z<0.15 :
+            ## use LS10 BGS
+            #t_ref = Table.read(self.path_2_LS10_RSBC)
+        if self.mean_z<0.949 :
+            # use KIDS
+            t_ref_0 = Table.read(self.path_2_KIDS_RSBC)
+            t_ref_0['u_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_ut'])
+            t_ref_0['g_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_gt'])
+            t_ref_0['r_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_rt'])
+            t_ref_0['i_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_it'])
+            t_ref_0['z_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_Zt'])
+            t_ref_0['k_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_Kt'])
+            #
+            # computing K-corrected K band absolute magnitudes
+            # file below contains :
+            # redshift, distmod, bandpass, kcorr_median, kcorr_16pc, kcorr_84pc = KCORR_DATA
+            # rescale redshift variable
+            KCORR_DATA = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], 'data', 'models','model_GAL', 'VISTA_Ks_kcorrections.txt'), unpack = True)
+            kcorr_itp = interp1d(KCORR_DATA[0], KCORR_DATA[3])
+            # kmag = ab_smag + distmod + bandpass + kcorrection
+            # ab_smag = appmag - distmod - kcorr
+            # is properly zero-centred; or at least zero-ish; the median +/- NMAD is 0.05 +/- 0.12.
+            dm_values = dm_itp(t_ref_0['z_peak'].data.data)
+            kmag_abs = t_ref_0['k_mag'] - ( dm_values + kcorr_itp(t_ref_0['z_peak'].data.data) )
+            t_ref_0['Kmag_abs'] = kmag_abs
+            # variables min and max
+            self.min_Z = 0.1
+            self.max_Z = 0.95
+            self.min_K = -28.
+            self.max_K = -15.
+            #
+            # RS
+            #
+            t_ref = t_ref_0[(t_ref_0['k_mag']>0) & (t_ref_0['z_peak']>0.) &(t_ref_0['is_RS'])]
+            self.z_01_RS = (t_ref['z_peak'] - self.min_Z ) / ( self.max_Z - self.min_Z )
+            self.k_01_RS = (t_ref['Kmag_abs'] - self.min_K ) / ( self.max_K - self.min_K )
+            self.t_ref_RS = t_ref
+            #
+            # BC
+            #
+            t_ref = t_ref_0[(t_ref_0['k_mag']>0) & (t_ref_0['z_peak']>0.) &(t_ref_0['is_BC'])]
+            self.z_01_BC = (t_ref['z_peak'] - self.min_Z ) / ( self.max_Z - self.min_Z )
+            self.k_01_BC = (t_ref['Kmag_abs'] - self.min_K ) / ( self.max_K - self.min_K )
+            self.t_ref_BC = t_ref
+        else:
+            print('z>0.949, no observed galaxy file useable for matching, no red sequence model.')
+
+        print(len(self.t_ref_RS), len(self.t_ref_BC),'lines in reference catalogue RS, BC')
+        #self.Tree_Obs = BallTree(np.transpose([self.z_01, self.k_01]))
+        # placeholder for next DEV
+        self.Tree_Obs_SF = BallTree(np.transpose([self.z_01_BC, self.k_01_BC]))
+        self.Tree_Obs_QU = BallTree(np.transpose([self.z_01_RS, self.k_01_RS]))
+        print('kd trees are constructed, t=', time.time()-t0, 'seconds')
 
     def construct_OBS_kdTree(self):
         """
@@ -82,7 +142,7 @@ class GAL:
             # computing K-corrected K band absolute magnitudes
             # file below contains :
             # redshift, distmod, bandpass, kcorr_median, kcorr_16pc, kcorr_84pc = KCORR_DATA
-            KCORR_DATA = np.loadtxt( os.path.join( os.environ['GIT_STMOD'], 'data', 'models','model_GAL', 'VISTA_Ks_kcorrections.txt'), unpack = True)
+            KCORR_DATA = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], 'data', 'models','model_GAL', 'VISTA_Ks_kcorrections.txt'), unpack = True)
             kcorr_itp = interp1d(KCORR_DATA[0], KCORR_DATA[3])
             # kmag = ab_smag + distmod + bandpass + kcorrection
             # ab_smag = appmag - distmod - kcorr
@@ -146,7 +206,7 @@ class GAL:
 
         """
         t_sim_gal ['K_mag_abs'] = -99.
-        z0, z1, slope, OO, zpt, scatter = np.loadtxt(os.path.join( os.environ['GIT_STMOD'], 'data', 'models','model_GAL', 'logMs-MK-look-up-table-2parameters_2023Aug22.txt'), unpack=True)
+        z0, z1, slope, OO, zpt, scatter = np.loadtxt(os.path.join( os.environ['GIT_STMOD_DATA'], 'data', 'models','model_GAL', 'logMs-MK-look-up-table-2parameters_2023Aug22.txt'), unpack=True)
         fun = lambda x, a, b : a * x + b
         for zmin, zmax, slope_i, OO_i, zpt_i, scatter_i in zip(z0, z1, slope, OO, zpt, scatter):
             #print(zmin, zmax, p_b)
@@ -158,7 +218,7 @@ class GAL:
                 t_sim_gal ['K_mag_abs'][s_gal]+=norm.rvs(loc=0, scale=scatter_i, size=len(t_sim_gal[str_redshift][s_gal]))
         return t_sim_gal
 
-    def add_magnitudes_direct_match_K(self, t_sim_gal, str_redshift = 'redshift_S', str_stellar_mass = 'obs_sm'):
+    def add_magnitudes_direct_match_K(self, Tree_Obs, cat_ref, t_sim_gal, str_redshift = 'redshift_S', str_stellar_mass = 'obs_sm', str_sfr = 'obs_sfr'):
         """
         Direct match using (redshift, K_mag_abs) between the observed catalogue and the simulated catalogue.
 
@@ -182,26 +242,26 @@ class GAL:
         SIM_k_01      = ( sim_k_mag - self.min_K ) / ( self.max_K - self.min_K )
         SIM_DATA = np.transpose([SIM_z_01, SIM_k_01])
         # search nearest neighbour in tree
-        dist_out, ids_out = self.Tree_Obs.query(SIM_DATA, k=1, return_distance = True)
-        kids_ID = np.arange(len(self.t_ref))
+        dist_out, ids_out = Tree_Obs.query(SIM_DATA, k=1, return_distance = True)
+        kids_ID = np.arange(len(cat_ref))
         ids = np.hstack((ids_out))
         dist_map = np.hstack(( dist_out ))
         id_to_map = kids_ID[ids]
-        columns_to_add = np.array([ 'umag',
-                                    'gmag',
-                                    'rmag',
-                                    'imag',
-                                    'zmag',
-                                    'kmag' ])
+        columns_to_add = np.array([ 'u_mag',
+                                    'g_mag',
+                                    'r_mag',
+                                    'i_mag',
+                                    'z_mag',
+                                    'k_mag' ])
 
         print('outputing results')
         t_out = Table()
-        t_out['ID_glist']   = np.arange(len(t_sim_gal))
         t_out[str_redshift] = sim_redshift
         t_out['log10_sm']   = np.log10(t_sim_gal [str_stellar_mass])
+        t_out['log10_sfr']   = np.log10(t_sim_gal [str_sfr])
         t_out['K_mag_abs']  = sim_k_mag
         for el in columns_to_add :
-            t_out[el] = self.t_ref[el][id_to_map]
+            t_out[el] = cat_ref[el][id_to_map]
         t_out['distance_match'] = dist_map
         return t_out
 

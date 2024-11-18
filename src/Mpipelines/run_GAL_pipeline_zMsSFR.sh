@@ -2,23 +2,32 @@
 conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
+
+
+# The GaussianProcess ML tool fails to extrapolate where the UniverseMachine model predicts the existence of galaxies that have no counterpart in current observations.
+
 # attempt with GAMA
 # creates gal_GP_model_GAMAtraining.pkl
-python GAL_setup_zMsSFR_GAMA.py
+# python GAL_setup_zMsSFR_GAMA.py
 # uses gal_GP_model_GAMAtraining.pkl on COSMOS to see the outcome
-python GAL_setup_zMsSFR_GAMA_test_COSMOS.py
+# python GAL_setup_zMsSFR_GAMA_test_COSMOS.py
 # limited in prediction power since the E(B-V) is not available in the data.
 
 # attempt with COSMOS
 # create gal_GP_model_COSMOStraining.pkl
-python GAL_setup_zMsSFR_COSMOS.py
+# python GAL_setup_zMsSFR_COSMOS.py
 # good performances
 
 # attempt with LS10, but does not have SFR !
 # create gal_GP_model_COSMOStraining.pkl
 # python GAL_setup_zMsSFR_LS10.py
 
-# in ds43 screens, verify it rusn without memory issues, otherwise, loop over small parts of the files.
+# classifies galaxies in red sequence and blue cloud :
+python GAL_setup_zMsSFR.py # DONE
+
+python GAL_pipeline_zMsSfr.py z0p05 FullSky # ds43_3
+
+
 
 python GAL_pipeline_zMsSfr.py z0p00 LC0002 # DONE
 python GAL_pipeline_zMsSfr.py z0p02 LC0002 # DONE
