@@ -61,12 +61,19 @@ class GAL:
         if self.mean_z<0.949 :
             # use KIDS
             t_ref_0 = Table.read(self.path_2_KIDS_RSBC)
+            print(t_ref_0.info())
+            t_ref_0['fuv_mag']= 8.9 - 2.5*np.log10(t_ref_0['flux_FUVt'])
+            t_ref_0['nuv_mag']= 8.9 - 2.5*np.log10(t_ref_0['flux_NUVt'])
             t_ref_0['u_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_ut'])
             t_ref_0['g_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_gt'])
             t_ref_0['r_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_rt'])
             t_ref_0['i_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_it'])
             t_ref_0['z_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_Zt'])
+            t_ref_0['j_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_Jt'])
+            t_ref_0['h_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_Ht'])
             t_ref_0['k_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_Kt'])
+            t_ref_0['w1_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_W1t'])
+            t_ref_0['w2_mag'] = 8.9 - 2.5*np.log10(t_ref_0['flux_W2t'])
             #
             # computing K-corrected K band absolute magnitudes
             # file below contains :

@@ -29,23 +29,23 @@ python GAL_pipeline_zMsSfr.py z0p05 FullSky # ds43_3
 
 
 
-python GAL_pipeline_zMsSfr.py z0p00 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p02 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p05 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p09 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p14 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p19 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p25 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p30 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p36 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p43 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p49 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p56 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p63 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p70 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p78 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p86 LC0002 # DONE
-python GAL_pipeline_zMsSfr.py z0p94 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p00 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p02 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p05 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p09 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p14 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p19 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p25 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p30 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p36 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p43 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p49 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p56 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p63 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p70 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p78 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p86 LC0002 # DONE
+# python GAL_pipeline_zMsSfr.py z0p94 LC0002 # DONE
 python GAL_pipeline_zMsSfr.py z1p03 LC0002 # DONE
 python GAL_pipeline_zMsSfr.py z1p12 LC0002 # DONE
 python GAL_pipeline_zMsSfr.py z1p22 LC0002 # DONE
@@ -75,23 +75,23 @@ conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
 
-python GAL_pipeline_zMsSfr.py z0p00 FullSky # DONE
-python GAL_pipeline_zMsSfr.py z0p02 FullSky # DONE
-python GAL_pipeline_zMsSfr.py z0p05 FullSky # ds43_3
-python GAL_pipeline_zMsSfr.py z0p09 FullSky # ds43_3
-python GAL_pipeline_zMsSfr.py z0p14 FullSky # ds43
-python GAL_pipeline_zMsSfr.py z0p19 FullSky # ds43
-python GAL_pipeline_zMsSfr.py z0p25 FullSky # ds52 #
-python GAL_pipeline_zMsSfr.py z0p30 FullSky # ds52 #
-python GAL_pipeline_zMsSfr.py z0p36 FullSky # ds52 #
-python GAL_pipeline_zMsSfr.py z0p43 FullSky # ds52 #
-python GAL_pipeline_zMsSfr.py z0p49 FullSky # ds52
-python GAL_pipeline_zMsSfr.py z0p56 FullSky # ds52
-python GAL_pipeline_zMsSfr.py z0p63 FullSky # ds52
-python GAL_pipeline_zMsSfr.py z0p70 FullSky # ds52
-python GAL_pipeline_zMsSfr.py z0p78 FullSky # ds52 2
-python GAL_pipeline_zMsSfr.py z0p86 FullSky # ds52 2
-python GAL_pipeline_zMsSfr.py z0p94 FullSky # ds52 2
+# python GAL_pipeline_zMsSfr.py z0p00 FullSky # DONE
+# python GAL_pipeline_zMsSfr.py z0p02 FullSky # DONE
+# python GAL_pipeline_zMsSfr.py z0p05 FullSky # ds43_3
+# python GAL_pipeline_zMsSfr.py z0p09 FullSky # ds43_3
+# python GAL_pipeline_zMsSfr.py z0p14 FullSky # ds43
+# python GAL_pipeline_zMsSfr.py z0p19 FullSky # ds43
+# python GAL_pipeline_zMsSfr.py z0p25 FullSky # ds52 #
+# python GAL_pipeline_zMsSfr.py z0p30 FullSky # ds52 #
+# python GAL_pipeline_zMsSfr.py z0p36 FullSky # ds52 #
+# python GAL_pipeline_zMsSfr.py z0p43 FullSky # ds52 #
+# python GAL_pipeline_zMsSfr.py z0p49 FullSky # ds52
+# python GAL_pipeline_zMsSfr.py z0p56 FullSky # ds52
+# python GAL_pipeline_zMsSfr.py z0p63 FullSky # ds52
+# python GAL_pipeline_zMsSfr.py z0p70 FullSky # ds52
+# python GAL_pipeline_zMsSfr.py z0p78 FullSky # ds52 2
+# python GAL_pipeline_zMsSfr.py z0p86 FullSky # ds52 2
+# python GAL_pipeline_zMsSfr.py z0p94 FullSky # ds52 2
 python GAL_pipeline_zMsSfr.py z1p03 FullSky # ds52 2
 python GAL_pipeline_zMsSfr.py z1p12 FullSky # ds52 2
 python GAL_pipeline_zMsSfr.py z1p22 FullSky #ds43

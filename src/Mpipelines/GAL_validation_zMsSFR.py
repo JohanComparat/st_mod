@@ -166,6 +166,7 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     if os.path.isfile(p_2_catalogue) and os.path.isfile(p_2_catal_MAG):
         GAL = Table.read(p_2_catalogue)
         MAG = Table.read(p_2_catal_MAG)
+        MAG['dist_mod'] = dm_itp(GAL['redshift_S'])
         z_min, z_max = np.min(GAL['redshift_R']), np.max(GAL['redshift_R'])
         shell_volume = ( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) )
         mock_area = meta['mean_area']
@@ -335,14 +336,14 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
                 , topdir = validation_dir_Zband
                         )
 
-        #plot_LF_uizyjhk(
-                #mag_name = 'Y'
-                #, mock_mag = MAG['y_mag']-MAG['dist_mod']
-                #, Mr_arr_COSMOS = COSMOS['MY'][z_COSMOS]
-                #, MR_arr_GAMA = GAMA['Ymag_abs'][z_GAMA]
-                #, MR_arr_KIDS = KIDS['Ymag_abs'][z_KIDS]
-                #, topdir = validation_dir_Yband
-                        #)
+        plot_LF_uizyjhk(
+                mag_name = 'Y'
+                , mock_mag = MAG['y_mag']-MAG['dist_mod']
+                , Mr_arr_COSMOS = COSMOS['MY'][z_COSMOS]
+                , MR_arr_GAMA = GAMA['Ymag_abs'][z_GAMA]
+                , MR_arr_KIDS = KIDS['Ymag_abs'][z_KIDS]
+                , topdir = validation_dir_Yband
+                        )
 
         plot_LF_uizyjhk(
                 mag_name = 'J'
@@ -353,14 +354,14 @@ for meta in C_GAL.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
                 , topdir = validation_dir_Jband
                         )
 
-        #plot_LF_uizyjhk(
-                #mag_name = 'H'
-                #, mock_mag = MAG['h_mag']-MAG['dist_mod']
-                #, Mr_arr_COSMOS = COSMOS['MH'][z_COSMOS]
-                #, MR_arr_GAMA = GAMA['Hmag_abs'][z_GAMA]
-                #, MR_arr_KIDS = KIDS['Hmag_abs'][z_KIDS]
-                #, topdir = validation_dir_Hband
-                        #)
+        plot_LF_uizyjhk(
+                mag_name = 'H'
+                , mock_mag = MAG['h_mag']-MAG['dist_mod']
+                , Mr_arr_COSMOS = COSMOS['MH'][z_COSMOS]
+                , MR_arr_GAMA = GAMA['Hmag_abs'][z_GAMA]
+                , MR_arr_KIDS = KIDS['Hmag_abs'][z_KIDS]
+                , topdir = validation_dir_Hband
+                        )
 
         plot_LF_uizyjhk(
                 mag_name = 'K'
