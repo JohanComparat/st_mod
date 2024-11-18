@@ -259,7 +259,10 @@ class GAL:
                                     'r_mag',
                                     'i_mag',
                                     'z_mag',
-                                    'k_mag' ])
+                                    'j_mag',
+                                    'h_mag',
+                                    'k_mag',
+                                    'w1_mag'])
 
         print('outputing results')
         t_out = Table()

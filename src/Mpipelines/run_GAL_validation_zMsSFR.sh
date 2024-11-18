@@ -2,61 +2,61 @@
 conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
+#
+#
+# nohup python GAL_validation_zMsSFR.py z0p00 LC0002 > logs/GAL_pipeline_zMsSfr_z0p00_LC0002.log & # no galaxies
+# nohup python GAL_validation_zMsSFR.py z0p02 LC0002 > logs/GAL_pipeline_zMsSfr_z0p02_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p05 LC0002 > logs/GAL_pipeline_zMsSfr_z0p05_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p09 LC0002 > logs/GAL_pipeline_zMsSfr_z0p09_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p14 LC0002 > logs/GAL_pipeline_zMsSfr_z0p14_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p19 LC0002 > logs/GAL_pipeline_zMsSfr_z0p19_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p25 LC0002 > logs/GAL_pipeline_zMsSfr_z0p25_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p30 LC0002 > logs/GAL_pipeline_zMsSfr_z0p30_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p36 LC0002 > logs/GAL_pipeline_zMsSfr_z0p36_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p43 LC0002 > logs/GAL_pipeline_zMsSfr_z0p43_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p49 LC0002 > logs/GAL_pipeline_zMsSfr_z0p49_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p56 LC0002 > logs/GAL_pipeline_zMsSfr_z0p56_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p63 LC0002 > logs/GAL_pipeline_zMsSfr_z0p63_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p70 LC0002 > logs/GAL_pipeline_zMsSfr_z0p70_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p78 LC0002 > logs/GAL_pipeline_zMsSfr_z0p78_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p86 LC0002 > logs/GAL_pipeline_zMsSfr_z0p86_LC0002.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p94 LC0002 > logs/GAL_pipeline_zMsSfr_z0p94_LC0002.log & # DONE
+#
+# nohup python GAL_validation_zMsSFR.py z0p00 LC0060 > logs/GAL_pipeline_zMsSfr_z0p00_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p02 LC0060 > logs/GAL_pipeline_zMsSfr_z0p02_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p05 LC0060 > logs/GAL_pipeline_zMsSfr_z0p05_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p09 LC0060 > logs/GAL_pipeline_zMsSfr_z0p09_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p14 LC0060 > logs/GAL_pipeline_zMsSfr_z0p14_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p19 LC0060 > logs/GAL_pipeline_zMsSfr_z0p19_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p25 LC0060 > logs/GAL_pipeline_zMsSfr_z0p25_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p30 LC0060 > logs/GAL_pipeline_zMsSfr_z0p30_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p36 LC0060 > logs/GAL_pipeline_zMsSfr_z0p36_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p43 LC0060 > logs/GAL_pipeline_zMsSfr_z0p43_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p49 LC0060 > logs/GAL_pipeline_zMsSfr_z0p49_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p56 LC0060 > logs/GAL_pipeline_zMsSfr_z0p56_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p63 LC0060 > logs/GAL_pipeline_zMsSfr_z0p63_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p70 LC0060 > logs/GAL_pipeline_zMsSfr_z0p70_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p78 LC0060 > logs/GAL_pipeline_zMsSfr_z0p78_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p86 LC0060 > logs/GAL_pipeline_zMsSfr_z0p86_LC0060.log & # DONE
+# nohup python GAL_validation_zMsSFR.py z0p94 LC0060 > logs/GAL_pipeline_zMsSfr_z0p94_LC0060.log & # DONE
 
-
-nohup python GAL_validation_zMsSFR.py z0p00 LC0002 > logs/GAL_pipeline_zMsSfr_z0p00_LC0002.log & # no galaxies
-nohup python GAL_validation_zMsSFR.py z0p02 LC0002 > logs/GAL_pipeline_zMsSfr_z0p02_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p05 LC0002 > logs/GAL_pipeline_zMsSfr_z0p05_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p09 LC0002 > logs/GAL_pipeline_zMsSfr_z0p09_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p14 LC0002 > logs/GAL_pipeline_zMsSfr_z0p14_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p19 LC0002 > logs/GAL_pipeline_zMsSfr_z0p19_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p25 LC0002 > logs/GAL_pipeline_zMsSfr_z0p25_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p30 LC0002 > logs/GAL_pipeline_zMsSfr_z0p30_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p36 LC0002 > logs/GAL_pipeline_zMsSfr_z0p36_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p43 LC0002 > logs/GAL_pipeline_zMsSfr_z0p43_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p49 LC0002 > logs/GAL_pipeline_zMsSfr_z0p49_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p56 LC0002 > logs/GAL_pipeline_zMsSfr_z0p56_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p63 LC0002 > logs/GAL_pipeline_zMsSfr_z0p63_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p70 LC0002 > logs/GAL_pipeline_zMsSfr_z0p70_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p78 LC0002 > logs/GAL_pipeline_zMsSfr_z0p78_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p86 LC0002 > logs/GAL_pipeline_zMsSfr_z0p86_LC0002.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p94 LC0002 > logs/GAL_pipeline_zMsSfr_z0p94_LC0002.log & # DONE
-
-nohup python GAL_validation_zMsSFR.py z0p00 LC0060 > logs/GAL_pipeline_zMsSfr_z0p00_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p02 LC0060 > logs/GAL_pipeline_zMsSfr_z0p02_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p05 LC0060 > logs/GAL_pipeline_zMsSfr_z0p05_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p09 LC0060 > logs/GAL_pipeline_zMsSfr_z0p09_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p14 LC0060 > logs/GAL_pipeline_zMsSfr_z0p14_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p19 LC0060 > logs/GAL_pipeline_zMsSfr_z0p19_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p25 LC0060 > logs/GAL_pipeline_zMsSfr_z0p25_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p30 LC0060 > logs/GAL_pipeline_zMsSfr_z0p30_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p36 LC0060 > logs/GAL_pipeline_zMsSfr_z0p36_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p43 LC0060 > logs/GAL_pipeline_zMsSfr_z0p43_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p49 LC0060 > logs/GAL_pipeline_zMsSfr_z0p49_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p56 LC0060 > logs/GAL_pipeline_zMsSfr_z0p56_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p63 LC0060 > logs/GAL_pipeline_zMsSfr_z0p63_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p70 LC0060 > logs/GAL_pipeline_zMsSfr_z0p70_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p78 LC0060 > logs/GAL_pipeline_zMsSfr_z0p78_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p86 LC0060 > logs/GAL_pipeline_zMsSfr_z0p86_LC0060.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p94 LC0060 > logs/GAL_pipeline_zMsSfr_z0p94_LC0060.log & # DONE
-
-# nohup python GAL_validation_zMsSFR.py z0p00 LC1800 > logs/GAL_pipeline_zMsSfr_z0p00_LC1800.log & # DONE
-# nohup python GAL_validation_zMsSFR.py z0p02 LC1800 > logs/GAL_pipeline_zMsSfr_z0p02_LC1800.log & # DONE
-# nohup python GAL_validation_zMsSFR.py z0p05 LC1800 > logs/GAL_pipeline_zMsSfr_z0p05_LC1800.log & # DONE
-# nohup python GAL_validation_zMsSFR.py z0p09 LC1800 > logs/GAL_pipeline_zMsSfr_z0p09_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p14 LC1800 > logs/GAL_pipeline_zMsSfr_z0p14_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p19 LC1800 > logs/GAL_pipeline_zMsSfr_z0p19_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p25 LC1800 > logs/GAL_pipeline_zMsSfr_z0p25_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p30 LC1800 > logs/GAL_pipeline_zMsSfr_z0p30_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p36 LC1800 > logs/GAL_pipeline_zMsSfr_z0p36_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p43 LC1800 > logs/GAL_pipeline_zMsSfr_z0p43_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p49 LC1800 > logs/GAL_pipeline_zMsSfr_z0p49_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p56 LC1800 > logs/GAL_pipeline_zMsSfr_z0p56_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p63 LC1800 > logs/GAL_pipeline_zMsSfr_z0p63_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p70 LC1800 > logs/GAL_pipeline_zMsSfr_z0p70_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p78 LC1800 > logs/GAL_pipeline_zMsSfr_z0p78_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p86 LC1800 > logs/GAL_pipeline_zMsSfr_z0p86_LC1800.log & # DONE
-nohup python GAL_validation_zMsSFR.py z0p94 LC1800 > logs/GAL_pipeline_zMsSfr_z0p94_LC1800.log & # DONE
+nohup python GAL_validation_zMsSFR.py z0p00 LC1800 > logs/GAL_pipeline_zMsSfr_z0p00_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p02 LC1800 > logs/GAL_pipeline_zMsSfr_z0p02_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p05 LC1800 > logs/GAL_pipeline_zMsSfr_z0p05_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p09 LC1800 > logs/GAL_pipeline_zMsSfr_z0p09_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p14 LC1800 > logs/GAL_pipeline_zMsSfr_z0p14_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p19 LC1800 > logs/GAL_pipeline_zMsSfr_z0p19_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p25 LC1800 > logs/GAL_pipeline_zMsSfr_z0p25_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p30 LC1800 > logs/GAL_pipeline_zMsSfr_z0p30_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p36 LC1800 > logs/GAL_pipeline_zMsSfr_z0p36_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p43 LC1800 > logs/GAL_pipeline_zMsSfr_z0p43_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p49 LC1800 > logs/GAL_pipeline_zMsSfr_z0p49_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p56 LC1800 > logs/GAL_pipeline_zMsSfr_z0p56_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p63 LC1800 > logs/GAL_pipeline_zMsSfr_z0p63_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p70 LC1800 > logs/GAL_pipeline_zMsSfr_z0p70_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p78 LC1800 > logs/GAL_pipeline_zMsSfr_z0p78_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p86 LC1800 > logs/GAL_pipeline_zMsSfr_z0p86_LC1800.log & # TODO
+nohup python GAL_validation_zMsSFR.py z0p94 LC1800 > logs/GAL_pipeline_zMsSfr_z0p94_LC1800.log & # TODO
 
 
 nohup python GAL_validation_zMsSFR.py z0p00 FullSky > logs/GAL_pipeline_zMsSfr_z0p00_FullSky.log & # TODO
