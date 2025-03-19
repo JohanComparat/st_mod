@@ -10,32 +10,35 @@ cd $GIT_STMOD/src/Mpipelines
 #
 # tabulates a file with profiles inside
 #
-python GAS_setup.py z0p14 FullSky
+python GAS_setup.py z0p14 FullSky # DONE
 
-python GAS_pipeline.py z0p00 FullSky
-python GAS_pipeline.py z0p02 FullSky
-python GAS_pipeline.py z0p05 FullSky
-python GAS_pipeline.py z0p09 FullSky
-python GAS_pipeline.py z0p14 FullSky
-python GAS_pipeline.py z0p19 FullSky
-python GAS_pipeline.py z0p25 FullSky
-python GAS_pipeline.py z0p30 FullSky
-python GAS_pipeline.py z0p36 FullSky
-python GAS_pipeline.py z0p43 FullSky
-python GAS_pipeline.py z0p49 FullSky
-python GAS_pipeline.py z0p56 FullSky
-python GAS_pipeline.py z0p63 FullSky
-python GAS_pipeline.py z0p70 FullSky
-python GAS_pipeline.py z0p78 FullSky
-python GAS_pipeline.py z0p86 FullSky
-python GAS_pipeline.py z0p94 FullSky
-python GAS_pipeline.py z1p03 FullSky
-python GAS_pipeline.py z1p12 FullSky
-python GAS_pipeline.py z1p22 FullSky
-python GAS_pipeline.py z1p32 FullSky
-python GAS_pipeline.py z1p43 FullSky
-python GAS_pipeline.py z1p54 FullSky
+python GAS_pipeline.py z0p00 FullSky # DONE
+python GAS_pipeline.py z0p02 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p05 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p09 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p14 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p19 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p25 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p30 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p36 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p43 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p49 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p56 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p63 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p70 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p78 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p86 FullSky # ONGOING sciserver
+python GAS_pipeline.py z0p94 FullSky # ONGOING sciserver
+python GAS_pipeline.py z1p03 FullSky # ONGOING sciserver
+python GAS_pipeline.py z1p12 FullSky # ONGOING sciserver
+python GAS_pipeline.py z1p22 FullSky # ONGOING sciserver
+python GAS_pipeline.py z1p32 FullSky # ONGOING sciserver
+python GAS_pipeline.py z1p43 FullSky # ONGOING sciserver
+python GAS_pipeline.py z1p54 FullSky # ONGOING sciserver
 
+#
+# NOT NEEDED
+#
 
 python GAS_pipeline.py z0p00 LC0002
 python GAS_pipeline.py z0p02 LC0002

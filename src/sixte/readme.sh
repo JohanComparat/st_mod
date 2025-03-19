@@ -9,6 +9,7 @@ python create_image_library_hotgas.py
 
 # images are here :
 /home/idies/workspace/erosim/Uchuu/cluster_images/z1.54
+/home/idies/workspace/erosim/Uchuu/cluster_Xspectra
 
 
 
