@@ -603,11 +603,11 @@ class GAS:
         #angularSize_per_pixel = x_max/(n_pixel/2.)
 
         CAT['XRAY_image_path_simput'] = np.array([ el+"[IMAGE]" for el in CAT['XRAY_image_path'] ])
-        template_exists = np.array([ os.path.isfile( el ) for el in CAT['XRAY_image_path'] ])
-        N_exist = len(template_exists.nonzero()[0])
-        N_templates = len(template_exists)
-        if N_exist<N_templates:
-            print('error, missing images', N_exist, N_templates)
+        #template_exists = np.array([ os.path.isfile( el ) for el in CAT['XRAY_image_path'] ])
+        #N_exist = len(template_exists.nonzero()[0])
+        #N_templates = len(template_exists)
+        #if N_exist<N_templates:
+            #print('error, missing images', N_exist, N_templates)
 
         def tpl_name(temperature, redshift, nh_val): return  'cluster_Xspectra/galNH_' + str(np.round(nh_val, 3)) +'_10000kT_' + str(int(10000*temperature)) + '_10000z_' + str(int(10000*redshift)) + '.fits'+ """[SPECTRUM][#row==1]"""
         kt_arr = 10**np.arange(-1,1.3,0.05)
