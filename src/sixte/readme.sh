@@ -1,9 +1,14 @@
 # installation of sixte done on sciserver
 
 # makes the image library for the galaxy cluster Uchuu run
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/sixte
 python create_image_library_hotgas.py
 
-
+# images are here :
+/home/idies/workspace/erosim/Uchuu/cluster_images/z1.54
 
 
 
