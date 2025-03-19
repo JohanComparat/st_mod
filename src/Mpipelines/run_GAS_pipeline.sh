@@ -1,4 +1,9 @@
 #!/bin/bash
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+
 conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
