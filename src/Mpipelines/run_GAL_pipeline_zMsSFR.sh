@@ -96,7 +96,7 @@ nohup python GAL_pipeline_zMsSfr.py z0p49 FullSky > logs/GAL_pipeline_zMsSfr_z0p
 nohup python GAL_pipeline_zMsSfr.py z0p56 FullSky > logs/GAL_pipeline_zMsSfr_z0p56_FullSky.log & # DONE
 nohup python GAL_pipeline_zMsSfr.py z0p63 FullSky > logs/GAL_pipeline_zMsSfr_z0p63_FullSky.log & # DONE
 nohup python GAL_pipeline_zMsSfr.py z0p70 FullSky > logs/GAL_pipeline_zMsSfr_z0p70_FullSky.log & # DONE
-nohup python GAL_pipeline_zMsSfr.py z0p78 FullSky > logs/GAL_pipeline_zMsSfr_z0p78_FullSky.log & # DONE
-nohup python GAL_pipeline_zMsSfr.py z0p86 FullSky > logs/GAL_pipeline_zMsSfr_z0p86_FullSky.log & # DONE
-nohup python GAL_pipeline_zMsSfr.py z0p94 FullSky > logs/GAL_pipeline_zMsSfr_z0p94_FullSky.log & # DONE
+nohup python GAL_pipeline_zMsSfr.py z0p78 FullSky > logs/GAL_pipeline_zMsSfr_z0p78_FullSky.log & # TODO
+nohup python GAL_pipeline_zMsSfr.py z0p86 FullSky > logs/GAL_pipeline_zMsSfr_z0p86_FullSky.log & # TODO
+nohup python GAL_pipeline_zMsSfr.py z0p94 FullSky > logs/GAL_pipeline_zMsSfr_z0p94_FullSky.log & # TODO
 #

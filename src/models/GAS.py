@@ -13,12 +13,12 @@ output :
 """
 import time
 t0 = time.time()
-
 from sklearn.neighbors import BallTree
 from astropy.cosmology import FlatLambdaCDM
 import astropy.units as u
 import os, glob
 from scipy.interpolate import interp1d
+from scipy.interpolate import RegularGridInterpolator
 from scipy.stats import norm
 from astropy.table import Table
 import numpy as np
@@ -69,9 +69,15 @@ class GAS:
         Mvir = t1['Mvir']
         zzz = t1['redshift_R']
         cvir = concentration.concentration(Mvir, 'vir', zzz, model = 'ishiyama21')
-        t1['M200b'], t1['R200b'], t1['c200b'] = mass_defs.changeMassDefinition(Mvir, cvir, zzz.mean(), 'vir', '200m')
-        t1['M200c'], t1['R200c'], t1['c200c'] = mass_defs.changeMassDefinition(Mvir, cvir, zzz.mean(), 'vir', '200c')
-        t1['M500c'], t1['R500c'], t1['c500c'] = mass_defs.changeMassDefinition(Mvir, cvir, zzz.mean(), 'vir', '500c')
+        M200b, R200b, t1['c200b'] = mass_defs.changeMassDefinition(Mvir*h, cvir, zzz.mean(), 'vir', '200m')
+        M200c, R200c, t1['c200c'] = mass_defs.changeMassDefinition(Mvir*h, cvir, zzz.mean(), 'vir', '200c')
+        M500c, R500c, t1['c500c'] = mass_defs.changeMassDefinition(Mvir*h, cvir, zzz.mean(), 'vir', '500c')
+        t1['M200b'] = M200b / h
+        t1['M200c'] = M200c / h
+        t1['M500c'] = M500c / h
+        t1['R200b'] = R200b / h
+        t1['R200c'] = R200c / h
+        t1['R500c'] = R500c / h
         self.CAT = t1[(t1['M500c']>10**self.logM500c_min)]
         self.CAT.remove_columns([
                 'x',
@@ -103,13 +109,12 @@ class GAS:
                 'redshift_R',
                 #'redshift_S',
                 'dL',
-                'nH',
+                #'nH',
                 'ebv'])
         t1=0
         self.N_cat = len(self.CAT )
         self.zmin = np.min(self.CAT['redshift_S'] )
         self.zmax = np.max(self.CAT['redshift_S'] )
-
 
     def calc_lx(self, prof,kt,m5,z,fraction=1):
         """
@@ -142,7 +147,6 @@ class GAS:
         lx_500=np.interp(fraction,self.xgrid_ext,lxcum) # evaluated at R500
         return lx_500
 
-
     def draw_simulated_values(self, nsim = 100, zmin=0., zmax=0.1):
         """
         Draws simulated values from the covariance matrix of Comparat, Eckert et al. 2019
@@ -167,7 +171,7 @@ class GAS:
             - self.alllx_Rvir  : integrated LX up to Rvir
 
         """
-        self.path_2_cbp= os.path.join(os.environ['GIT_STMOD'], 'data/models/model_GAS')
+        self.path_2_cbp= os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS')
         self.covor     = np.loadtxt(os.path.join(self.path_2_cbp, 'covmat_xxl_hiflugcs_xcop.txt'))
         self.xgrid_ext = np.loadtxt(os.path.join(self.path_2_cbp, 'radial_binning.txt'))
         self.mean_log  = np.loadtxt(os.path.join(self.path_2_cbp, 'mean_pars.txt'))
@@ -188,10 +192,10 @@ class GAS:
         self.allm5    = allm5_i   [in_zbin]
         self.profiles = profiles_i[in_zbin]
         self.nsim2    = len(self.allz)
-        c500c = concentration.concentration(self.allm5, '500c', self.allz, model = 'ishiyama21')
-        Mvir , Rvir , cvir  = mass_defs.changeMassDefinition(self.allm5, c500c, np.mean(self.allz), '500c', 'vir')
-        M200c, R200c, c200c = mass_defs.changeMassDefinition(self.allm5, c500c, np.mean(self.allz), '500c', '200c')
-        M500c, R500c, c500cBis = mass_defs.changeMassDefinition(self.allm5, c500c, np.mean(self.allz), '500c', '500c')
+        c500c = concentration.concentration(self.allm5*h, '500c', self.allz, model = 'ishiyama21')
+        Mvir , Rvir , cvir  = mass_defs.changeMassDefinition(self.allm5*h, c500c, np.mean(self.allz), '500c', 'vir')
+        M200c, R200c, c200c = mass_defs.changeMassDefinition(self.allm5*h, c500c, np.mean(self.allz), '500c', '200c')
+        M500c, R500c, c500cBis = mass_defs.changeMassDefinition(self.allm5*h, c500c, np.mean(self.allz), '500c', '500c')
         self.frac_r200c = R200c/R500c
         self.frac_rVIR  = Rvir/R500c
 
@@ -222,6 +226,73 @@ class GAS:
             ##self.allm5    = allm5_i   [in_zbin]
             ##self.profiles = profiles_i[in_zbin]
             ##self.nsim2 = len(self.allz)
+
+    def draw_and_save_simulated_profiles_m14(self, p_2_out='test.fits', nsim = 100, zmin=0., zmax=0.1):
+        """
+        Draws simulated values from the covariance matrix of Comparat, Eckert et al. 2019, then save a set of profiles
+
+        Adds as attribute to the class the covariance matrix and its dependencies
+            - self.path_2_cbp: path to the tabulated data
+            - self.covor     : covariance matric
+            - self.xgrid_ext : radial grid
+            - self.mean_log  : mean parameters
+            - self.coolfunc  : cooling function
+
+        Then draws nsim simulated vectors and adds them as attribute to the class
+            - self.allz      : redshifts
+            - self.allkt     : temperatures
+            - self.allm5     : M500c
+            - self.profiles  : profiles
+            - self.nsim2     : number of simulated vectros in the redshift range of interest
+            - self.frac_r200c = R200c/R500c
+            - self.frac_rVIR  = Rvir/R500c
+            - self.alllx       : integrated LX up to R500c
+            - self.alllx_R200c : integrated LX up to R200c
+            - self.alllx_Rvir  : integrated LX up to Rvir
+
+        """
+        self.path_2_cbp= os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS')
+        self.covor     = np.loadtxt(os.path.join(self.path_2_cbp, 'covmat_xxl_hiflugcs_xcop.txt'))
+        self.xgrid_ext = np.loadtxt(os.path.join(self.path_2_cbp, 'radial_binning.txt'))
+        self.mean_log  = np.loadtxt(os.path.join(self.path_2_cbp, 'mean_pars.txt'))
+        self.coolfunc  = np.loadtxt(os.path.join(self.path_2_cbp, 'coolfunc.dat'))
+
+        profs=np.exp(np.random.multivariate_normal(self.mean_log,self.covor,size=nsim))
+
+        allz_i  = profs[:,len(self.mean_log)-3]
+        allkt_i = profs[:,len(self.mean_log)-1]
+        allm5_i = profs[:,len(self.mean_log)-2]
+
+        profiles_i = profs[:,:len(self.xgrid_ext)]
+        # filters output to cover the relevant redshift range
+        in_zbin = (allz_i<zmax)&(allz_i>zmin)&(allm5_i>1e14)&(allm5_i<2e14)
+        t_out = Table()
+        t_out['redshift']     = allz_i    [in_zbin]
+        t_out['kT']    = allkt_i   [in_zbin]
+        t_out['M500c']    = allm5_i   [in_zbin]
+        t_out['profiles'] = profiles_i[in_zbin]
+        nsim2    = len(t_out['redshift'])
+        c500c = concentration.concentration(t_out['M500c']*h, '500c', t_out['redshift'], model = 'ishiyama21')
+        Mvir , Rvir , cvir  = mass_defs.changeMassDefinition(t_out['M500c']*h, c500c, np.mean(t_out['redshift']), '500c', 'vir')
+        M200c, R200c, c200c = mass_defs.changeMassDefinition(t_out['M500c']*h, c500c, np.mean(t_out['redshift']), '500c', '200c')
+        M500c, R500c, c500cBis = mass_defs.changeMassDefinition(t_out['M500c']*h, c500c, np.mean(t_out['redshift']), '500c', '500c')
+        t_out['R500c'] = R500c /h
+        t_out['frac_r200c'] = R200c/R500c
+        t_out['frac_rVIR']  = Rvir/R500c
+
+        # integrate to get LX within R500c, R200C, Rvir
+        t_out['LX_R500c']       = np.empty(nsim2)
+        t_out['LX_R200c'] = np.empty(nsim2)
+        t_out['LX_Rvir']  = np.empty(nsim2)
+        t_out['LX_2Rvir']  = np.empty(nsim2)
+        for i in range(nsim2):
+            tprof = t_out['profiles'][i]
+            t_out['LX_R500c'][i]         = self.calc_lx(tprof, t_out['kT'][i], t_out['M500c'][i], t_out['redshift'][i], 1.0)
+            t_out['LX_R200c'][i]   = self.calc_lx(tprof, t_out['kT'][i], t_out['M500c'][i], t_out['redshift'][i], t_out['frac_r200c'][i] )
+            t_out['LX_Rvir'] [i]   = self.calc_lx(tprof, t_out['kT'][i], t_out['M500c'][i], t_out['redshift'][i], t_out['frac_rVIR'][i] )
+            t_out['LX_2Rvir'] [i]   = self.calc_lx(tprof, t_out['kT'][i], t_out['M500c'][i], t_out['redshift'][i], 2*t_out['frac_rVIR'][i] )
+        t_out.write(p_2_out, overwrite = True)
+        print(len(t_out), 'profiles written in ', p_2_out)
 
     def populate_cat_Seppi2022(self):
         """
@@ -301,7 +372,6 @@ class GAS:
 
         # attenuation grid should cover down to 0.05 keV
         #itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_AGN_MOCK'], "data", "xray_k_correction", "fraction_observed_clusters.txt"), unpack=True )
-
 
     def populate_cat_forcing_SR(self):
         """
@@ -416,8 +486,7 @@ class GAS:
         # attenuation grid should cover down to 0.05 keV
         #itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_AGN_MOCK'], "data", "xray_k_correction", "fraction_observed_clusters.txt"), unpack=True )
 
-
-    def populate_cat(self):
+    def populate_cat(self, p_2_profiles):
         """
         Assigns to each catalog entry a vector of quantities drawn by the draw_simulated_values function
             - finds the nearest neighbour in redshift and M500c
@@ -425,30 +494,7 @@ class GAS:
         Compared to previous incarnations of the algorithm, it ignores the halo dynamical state (Xoff). Indeed Xoff is not available in the Uchuu light cone.
 
         """
-        Tree_profiles = BallTree(np.transpose([self.allz, np.log10(self.allm5)]))
-        DATA = np.transpose([self.CAT['redshift_S'], np.log10(self.CAT['M500c'] * self.b_HS)])
-        ids_out = Tree_profiles.query(DATA, k=1, return_distance = False)
-        ids = np.hstack((ids_out))
-
-        # LX_out 0.5-2 rest frame erg/s
-        # to convert to 0.5-2 observed frame
-        LX_out        = self.alllx[ids]
-        LX_out_R200c  = self.alllx_R200c[ids]
-        LX_out_Rvir   = self.alllx_Rvir [ids]
-        KT_OUT        = self.allkt[ids]
-        CBP_redshift  = self.allz[ids]
-        CBP_M500c     = np.log10(self.allm5)[ids]
-
-        # maximum kT for the k-correction
-        KT_OUT[KT_OUT>19.4] = 19.4
-
-        self.CAT['CBP_CLUSTER_LX_soft_RF_R500c'] = np.log10( LX_out       )
-        self.CAT['CBP_CLUSTER_LX_soft_RF_R200c'] = np.log10( LX_out_R200c )
-        self.CAT['CBP_CLUSTER_LX_soft_RF_Rvir' ] = np.log10( LX_out_Rvir  )
-        self.CAT['CBP_redshift' ] = CBP_redshift
-        self.CAT['CBP_M500c' ] = CBP_M500c
-        self.CAT['CBP_kT' ] = KT_OUT
-
+        t_prof = Table.read(p_2_profiles)
         # intrinsic scatter
         #sigma_kT_int = np.random.normal(loc=0.0, scale=0.15, size=len(self.CAT))
         #sigma_LXX_int = 0.25 / 0.15 * sigma_kT_int
@@ -471,8 +517,141 @@ class GAS:
         corr_scat = np.random.multivariate_normal([0,0], cov_kT_LX, size=len(self.CAT))
         corr_scat_kT = corr_scat.T[0]
         corr_scat_LX = corr_scat.T[1]
-        self.CAT['CLUSTER_kT'] = self.CAT['kT_Mean_oEzm23'] + corr_scat_kT + 2./3. * np.log10(EZ)
+        self.CAT['CLUSTER_kT'] = 10**( self.CAT['kT_Mean_oEzm23'] + corr_scat_kT + 2./3. * np.log10(EZ) )
         self.CAT['CLUSTER_LX_soft_RF_R500c'] = self.CAT['LX_Mean_eZm1'] + corr_scat_LX + 2*np.log10(EZ)
+        self.CAT['idx_profile'] = np.random.random_integers(0, high=len(t_prof), size=len(self.CAT))
+
+        # convert to fluxes
+        #itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters.txt"), unpack=True )
+        itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters_no_nH.txt"), unpack=True )
+        #nh_vals = 10**np.arange(-2,4+0.01,0.5)#0.05)
+        kT_vals = 10**np.arange(-2.09,1.8,0.01)
+        z_vals = np.hstack((np.array([0.]), np.arange(0.001, 0.01, 0.001), 10**np.arange(np.log10(0.01), np.log10(6.1), 0.01)))
+        YY_z, ZZ_kt = np.meshgrid(z_vals, kT_vals)
+        shape_i = YY_z.shape
+        matrix_2d = itp_frac_obs.reshape(shape_i)
+        attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
+
+        k_correction_2d = attenuation_2d( np.transpose([self.CAT['CLUSTER_kT'], self.CAT['redshift_S']]))
+
+        dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
+        self.CAT['CLUSTER_LX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_RF_R500c'] - np.log10( k_correction_2d )
+        self.CAT['CLUSTER_FX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_OBS_R500c'] - np.log10( (4 * np.pi * dL_cm**2.) )
+
+        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt2p0.txt"), unpack=True )
+        itp_attenuation_kt2p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
+        attenuation = itp_attenuation_kt2p0( np.log10( self.CAT['nH'] ) )
+        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] = self.CAT['CLUSTER_FX_soft_OBS_R500c'] + np.log10( attenuation )
+
+        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt1p0.txt"), unpack=True )
+        itp_attenuation_kt1p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
+        attenuation1p0 = itp_attenuation_kt1p0( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=1.5)]
+        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=1.5)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=1.5)] + np.log10( attenuation1p0 )
+
+        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt0p5.txt"), unpack=True )
+        itp_attenuation_kt0p5 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
+        attenuation0p5 = itp_attenuation_kt0p5( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=0.7)]
+        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=0.7)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=0.7)] + np.log10( attenuation0p5 )
+
+    def make_simput( self, p_2_catalogue_out, p_2_profiles, dir_2_simput, simput_file, simput_file_name ):
+        """
+        create simput files and images
+
+        """
+        CAT = Table.read( p_2_catalogue_out )
+        t_prof = Table.read( p_2_profiles )
+        p2_simput_out = os.path.join( simput_file, simput_file_name )
+
+        N_clu_all = len(CAT['RA'])
+        print('Number of clusters=',N_clu_all)
+        print('density=',N_clu_all/53., '/deg2')
+        ra_array = CAT['RA']
+        dec_array = CAT['DEC']
+        redshift = CAT['redshift_R']
+        kT = CAT['CLUSTER_kT']
+        galactic_nh = np.max([CAT['nH'], np.ones_like(CAT['nH'])*10**19.9], axis=0)
+        galNH = (10*np.log10(galactic_nh)).astype('int')/10.
+        # size of the pixel in the image written
+        # randomize orientations
+        rd_all = np.random.rand(N_clu_all)
+        orientation = np.random.rand(N_clu_all) * 180.  # IMGROTA
+        # scale the image with the size of the cluster
+        # all images have 5.5e-04*120*60 = 3.96 arc minute on the side
+        # default size 0.033 arcmin/pixel
+        pixel_rescaling =  np.ones_like(CAT['angularSize_per_pixel'])
+        # NOW ASSIGNS TEMPLATES BASED ON THE HALO PROPERTIES
+        #template = np.zeros(N_clu_all).astype('U100')
+        #template[template == "0.0"] = "cluster_images/elliptical_ba_0p25_cc.fits[SPECTRUM][#row==1]"
+        # link to templates
+        #def tpl_name(temperature, redshift): return 'cluster_Xspectra/cluster_spectrum_10000kT_' + str(int(temperature * 10000)).zfill(7) + '_10000z_' + str(int(redshift * 10000)).zfill(7) + '.fits[SPECTRUM][#row==1]'
+        #HEALPIX_8_id = 151
+
+        template = np.array([ el.strip()+".fits[IMAGE]" for el in CAT['XRAY_image_path'] ])
+        template_fullPath = np.array([ os.path.join( dir_2_SMPT, el.strip()+".fits")  for el in CAT['XRAY_image_path'] ])
+        template_exists = np.array([ os.path.isfile( os.path.join( dir_2_SMPT, el.strip()+".fits") ) for el in CAT['XRAY_image_path'] ])
+        N_exist = len(template_exists.nonzero()[0])
+        N_templates = len(template_exists)
+        if N_exist<N_templates:
+            print('error, missing images', N_exist, N_templates)
+
+        def tpl_name(temperature, redshift, nh_val): return  'cluster_Xspectra/galNH_' + str(n.round(nh_val, 3)) +'_10000kT_' + str(int(10000*temperature)) + '_10000z_' + str(int(10000*redshift)) + '.fits'+ """[SPECTRUM][#row==1]"""
+        kt_arr = 10**np.arange(-1,1.3,0.05)
+        z_arr = np.hstack((np.array([0., 0.01]), 10**np.arange(np.log10(0.02), np.log10(4.), 0.05)))
+        #galNH = np.arange(19.0, 22.6, 0.1)
+        indexes_kt = np.array([(np.abs(kT_val - kt_arr)).argmin() for kT_val in kT])
+        kT_values = kt_arr[indexes_kt]
+        indexes_z = np.array([(np.abs(z_val - z_arr)).argmin() for z_val in redshift])
+        z_values = z_arr[indexes_z]
+        spec_names = np.zeros(N_clu_all).astype('U200')
+        for jj, (kT_values_ii, z_values_ii, galNH_ii) in enumerate(zip(kT_values, z_values, galNH)):
+            spec_names[jj] = tpl_name(kT_values_ii, z_values_ii, galNH_ii)
+
+        N_per_simput = 1999
+        for jj, (id_min, id_max) in enumerate(zip(np.arange(0,N_clu_all,N_per_simput), np.arange(0,N_clu_all,N_per_simput)+N_per_simput)):
+            path_2_SMPT_catalog = os.path.join(dir_2_SMPT, 'c_'+str(HEALPIX_8_id).zfill(6) + '_N_'+str(jj)+'.fit')
+            hdu_cols = fits.ColDefs([
+                fits.Column(name="SRC_ID",  format='K',    unit='',    array=(np.arange(N_clu_all) + 4e8).astype('int')[id_min:id_max]),
+                fits.Column(name="RA",      format='D',    unit='deg', array=ra_array[id_min:id_max]),
+                fits.Column(name="DEC",     format='D',    unit='deg', array=dec_array[id_min:id_max]),
+                fits.Column(name="E_MIN",   format='D',    unit='keV', array=np.ones(N_clu_all)[id_min:id_max] * 0.5),
+                fits.Column(name="E_MAX",   format='D',    unit='keV', array=np.ones(N_clu_all)[id_min:id_max] * 2.0),
+                fits.Column(name="FLUX",    format='D',    unit='erg/s/cm**2', array=CAT['FX_soft_SIMPUT'][id_min:id_max]),
+                fits.Column(name="IMAGE",   format='100A', unit='', array=template[id_min:id_max]),
+                fits.Column(name="SPECTRUM",format='100A', unit='', array=spec_names[id_min:id_max]),
+                fits.Column(name="IMGROTA", format='D',    unit='deg', array=orientation[id_min:id_max]),
+                fits.Column(name="IMGSCAL", format='D',    unit='', array=pixel_rescaling[id_min:id_max])
+            ])
+            hdu = fits.BinTableHDU.from_columns(hdu_cols)
+            hdu.name = 'SRC_CAT'
+            hdu.header['HDUCLASS'] = 'HEASARC/SIMPUT'
+            hdu.header['HDUCLAS1'] = 'SRC_CAT'
+            hdu.header['HDUVERS'] = '1.1.0'
+            hdu.header['RADESYS'] = 'FK5'
+            hdu.header['EQUINOX'] = 2000.0
+            outf = fits.HDUList([fits.PrimaryHDU(), hdu])  # ,  ])
+            if os.path.isfile(path_2_SMPT_catalog):
+                os.system("rm " + path_2_SMPT_catalog)
+            outf.writeto(path_2_SMPT_catalog, overwrite=True)
+            print(path_2_SMPT_catalog, 'written', time.time() - t0)
+            path_2_CLU_catalog = os.path.join(dir_2_eRO_all, 'c_'+str(HEALPIX_8_id).zfill(6) +'_N_'+str(jj)+ '.fit')
+            t_out = Table( CAT[id_min:id_max] )
+            t_out.add_column(Column(name="SRC_ID",   dtype = np.int64,    unit='',            data = (np.arange(N_clu_all) + 4e8).astype('int')[id_min:id_max])   )
+            t_out.add_column(Column(name="E_MIN",    dtype = np.float,    unit='keV',         data = np.ones(N_clu_all)[id_min:id_max] * 0.5)     )
+            t_out.add_column(Column(name="E_MAX",    dtype = np.float,    unit='keV',         data = np.ones(N_clu_all)[id_min:id_max] * 2.0)     )
+            t_out.add_column(Column(name="FLUX",     dtype = np.float,    unit='erg/s/cm**2', data = CAT['FX_soft_SIMPUT'][id_min:id_max])          )
+            t_out.add_column(Column(name="IMAGE",    dtype = np.str,      unit='',            data = template[id_min:id_max])                    )
+            t_out.add_column(Column(name="SPECTRUM", dtype = np.str,      unit='',            data = spec_names[id_min:id_max])                  )
+            t_out.add_column(Column(name="IMGROTA",  dtype = np.float,    unit='deg',         data = orientation[id_min:id_max])                 )
+            t_out.add_column(Column(name="IMGSCAL",  dtype = np.float,    unit='',            data = pixel_rescaling[id_min:id_max])             )
+            t_out.write(path_2_CLU_catalog, overwrite=True)
+            print(path_2_CLU_catalog, 'written', time.time() - t0)
+
+
+        # create file with links to images and spectra
+
+        # write images (if inexistant)
+
+
 
     def make_photons(self):
         """

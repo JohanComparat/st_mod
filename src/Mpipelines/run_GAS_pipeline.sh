@@ -2,6 +2,11 @@
 conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
+#
+# tabulates a file with profiles inside
+#
+python GAS_setup.py z0p14 FullSky
+
 python GAS_pipeline.py z0p00 FullSky
 python GAS_pipeline.py z0p02 FullSky
 python GAS_pipeline.py z0p05 FullSky
