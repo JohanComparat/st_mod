@@ -71,7 +71,7 @@ xgrid_ext = np.loadtxt(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/m
 p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits')
 #
 snapshot, redshift, scale_factor = np.loadtxt( os.path.join(os.environ['UCHUU'], 'snap_list.txt'), unpack = True)
-all_zs = redshift[(redshift>0)&(redshift<1.5)]
+all_zs = redshift[(redshift>0)&(redshift<1.6)]
 
 pixel_size_image = 20 # arc second
 
@@ -113,9 +113,9 @@ for j_z in np.arange(len(all_zs)):
         matrix, angularSize_per_pixel_j = create_matrix(profile, n_pixel = n_pixel, b_a = b_a, truncation_radius = truncation_radius)
         angularSize_per_pixel[j_p] = angularSize_per_pixel_j
         #print(r500c_i, conversion_arcmin, r500c_i/ conversion_arcmin, 60*angularSize_per_pixel_j, n_pixel, image_file)
-        #if os.path.isfile(image_file)==False:
-        write_img(matrix, image_file, n_pixel = n_pixel, angularSize_per_pixel=angularSize_per_pixel_j)
-        print(image_file, 'written')
+        if os.path.isfile(image_file)==False:
+            write_img(matrix, image_file, n_pixel = n_pixel, angularSize_per_pixel=angularSize_per_pixel_j)
+            print(image_file, 'written')
 
     t_prof['path_2_images'] = path_2_images
     t_prof['angularSize_per_pixel'] = angularSize_per_pixel
