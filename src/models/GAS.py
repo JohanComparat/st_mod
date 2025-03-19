@@ -594,7 +594,7 @@ class GAS:
         path_2_images = []
         for j_p in CAT['idx_profile']:
             file_name = 'profileLineID_'+str(int(j_p)).zfill(5)+'_ba_'+e_str+'_'+z_str
-            path_2_images.append( os.path.join(img_dir, file_name+'.fits') )
+            path_2_images.append( os.path.join('cluster_images', z_str, file_name+'.fits') )
         path_2_images = np.array(path_2_images)
         CAT['XRAY_image_path'] = path_2_images
         #x_max = truncation_radius
