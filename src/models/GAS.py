@@ -88,7 +88,7 @@ class GAS:
                 'z',
                 #'Mvir',
                 'icl',
-                'id',
+                #'id',
                 #'obs_sfr',
                 #'obs_sm',
                 'obs_uv',
@@ -622,7 +622,7 @@ class GAS:
             spec_names[jj] = tpl_name(kT_values_ii, z_values_ii, galNH_ii)
 
         hdu_cols = fits.ColDefs([
-            fits.Column(name="SRC_ID",  format='K',    unit='',    array=(np.arange(N_clu_all) + 4e8).astype('int')),
+            fits.Column(name="SRC_ID",  format='K',    unit='',    array=(CAT['id']).astype('int')),
             fits.Column(name="RA",      format='D',    unit='deg', array=ra_array),
             fits.Column(name="DEC",     format='D',    unit='deg', array=dec_array),
             fits.Column(name="E_MIN",   format='D',    unit='keV', array=np.ones(N_clu_all) * 0.5),
