@@ -1,4 +1,10 @@
-# installation of sixte beta. 
+# installation of sixte done on sciserver
+
+# makes the image library for the galaxy cluster Uchuu run
+python create_image_library_hotgas.py
+
+
+
 
 
 # what to simulate

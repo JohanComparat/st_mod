@@ -92,9 +92,9 @@ for j_z in np.arange(len(all_zs)):
     conversion_arcmin = cosmo.kpc_proper_per_arcmin(z_bar).value
     print('creates SIMPUT images',z_bar,conversion_arcmin,b_a)
     path_2_images = []
-    angularSize_per_pixel = np.zeros(len(t_prof))
     t_prof = Table.read( p_2_profiles )
     p_2_profiles_images = os.path.join(img_dir, 'profiles_010z015_1e14M2e14_p2images.fits')
+    angularSize_per_pixel = np.zeros(len(t_prof))
 
     # loop over profile
     for j_p in np.arange(len(t_prof)):
