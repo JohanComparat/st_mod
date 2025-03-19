@@ -69,9 +69,7 @@ from colossus.halo import concentration
 xgrid_ext = np.loadtxt(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'radial_binning.txt'))
 
 p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits')
-#p_2_profiles_images = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14_p2images.fits')
-
-t_prof = Table.read( p_2_profiles )
+#
 snapshot, redshift, scale_factor = np.loadtxt( os.path.join(os.environ['UCHUU'], 'snap_list.txt'), unpack = True)
 all_zs = redshift[(redshift>0)&(redshift<1.5)]
 
@@ -95,6 +93,8 @@ for j_z in np.arange(len(all_zs)):
     print('creates SIMPUT images',z_bar,conversion_arcmin,b_a)
     path_2_images = []
     angularSize_per_pixel = np.zeros(len(t_prof))
+    t_prof = Table.read( p_2_profiles )
+    p_2_profiles_images = os.path.join(img_dir, 'profiles_010z015_1e14M2e14_p2images.fits')
 
     # loop over profile
     for j_p in np.arange(len(t_prof)):
@@ -117,5 +117,7 @@ for j_z in np.arange(len(all_zs)):
         write_img(matrix, image_file, n_pixel = n_pixel, angularSize_per_pixel=angularSize_per_pixel_j)
         print(image_file, 'written')
 
-#t_prof['path_2_images'] = path_2_images
-#t_prof.write(p_2_profiles_images, overwrite = True)
+    t_prof['path_2_images'] = path_2_images
+    t_prof['angularSize_per_pixel'] = angularSize_per_pixel
+    t_prof.write(p_2_profiles_images, overwrite = True)
+    print(p_2_profiles_images, 'written')

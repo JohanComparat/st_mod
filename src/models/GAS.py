@@ -21,6 +21,7 @@ from scipy.interpolate import interp1d
 from scipy.interpolate import RegularGridInterpolator
 from scipy.stats import norm
 from astropy.table import Table
+import astropy.io.fits as fits
 import numpy as np
 
 cosmoUCHUU = FlatLambdaCDM(H0=67.74 * u.km / u.s / u.Mpc, Om0=0.308900)
@@ -43,6 +44,8 @@ class GAS:
         self.z_dir = z_dir
         self.mean_z = int(z_dir[1])+int(z_dir[3:])/100.
         self.LC_dir = LC_dir
+        #
+        self.uchuu_snapshot, self.uchuu_redshift, self.uchuu_scale_factor = np.loadtxt( os.path.join(os.environ['UCHUU'], 'snap_list.txt'), unpack = True)
         print('directory:',self.z_dir, ', mean redshift=',self.mean_z)
         # get halo + galaxy catalogues in the redshift slice of the light cone
         self.p_2_catalogues = np.array( glob.glob( os.path.join(os.environ['UCHUU'], self.LC_dir, z_dir, 'replication_*_*_*', 'glist.fits') ) )
@@ -100,8 +103,8 @@ class GAS:
                 'vx',
                 'vy',
                 'vz',
-                'RA',
-                'DEC',
+                #'RA',
+                #'DEC',
                 'g_lat',
                 'g_lon',
                 'ecl_lat',
@@ -519,7 +522,7 @@ class GAS:
         corr_scat_LX = corr_scat.T[1]
         self.CAT['CLUSTER_kT'] = 10**( self.CAT['kT_Mean_oEzm23'] + corr_scat_kT + 2./3. * np.log10(EZ) )
         self.CAT['CLUSTER_LX_soft_RF_R500c'] = self.CAT['LX_Mean_eZm1'] + corr_scat_LX + 2*np.log10(EZ)
-        self.CAT['idx_profile'] = np.random.random_integers(0, high=len(t_prof), size=len(self.CAT))
+        self.CAT['idx_profile'] = np.random.random_integers(0, high=len(t_prof)-1, size=len(self.CAT))
 
         # convert to fluxes
         #itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters.txt"), unpack=True )
@@ -553,48 +556,60 @@ class GAS:
         attenuation0p5 = itp_attenuation_kt0p5( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=0.7)]
         self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=0.7)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=0.7)] + np.log10( attenuation0p5 )
 
-    def make_simput( self, p_2_catalogue_out, p_2_profiles, dir_2_simput, simput_file, simput_file_name ):
+    def make_simput( self, p_2_catalogue_out, p_2_profiles, dir_2_simput, simput_file_name ):
         """
         create simput files and images
 
         """
         CAT = Table.read( p_2_catalogue_out )
         t_prof = Table.read( p_2_profiles )
-        p2_simput_out = os.path.join( simput_file, simput_file_name )
+        PRF = t_prof[CAT['idx_profile']]
+        frac_flux_rescale = PRF['LX_2Rvir']/PRF['LX_R500c']
 
+        p2_simput_out = os.path.join( dir_2_simput, simput_file_name )
+        z_bar = self.uchuu_redshift[ np.argmin(abs(self.uchuu_redshift - self.mean_z)) ]
+        z_str = 'z'+str(np.round(z_bar,5))
+        img_dir = os.path.join(os.environ['UCHUU'], 'cluster_images', z_str )
+        print(img_dir)
+        j_e = 0
+        b_to_a_500c = [0.75]
+        b_a = b_to_a_500c[j_e]
+        e_str = str( np.round( b_a, 2) )
+        print(z_str, e_str)
         N_clu_all = len(CAT['RA'])
         print('Number of clusters=',N_clu_all)
-        print('density=',N_clu_all/53., '/deg2')
         ra_array = CAT['RA']
         dec_array = CAT['DEC']
-        redshift = CAT['redshift_R']
+        redshift = CAT['redshift_S']
+        flux_array = CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] * frac_flux_rescale
         kT = CAT['CLUSTER_kT']
         galactic_nh = np.max([CAT['nH'], np.ones_like(CAT['nH'])*10**19.9], axis=0)
         galNH = (10*np.log10(galactic_nh)).astype('int')/10.
         # size of the pixel in the image written
         # randomize orientations
         rd_all = np.random.rand(N_clu_all)
-        orientation = np.random.rand(N_clu_all) * 180.  # IMGROTA
-        # scale the image with the size of the cluster
-        # all images have 5.5e-04*120*60 = 3.96 arc minute on the side
-        # default size 0.033 arcmin/pixel
-        pixel_rescaling =  np.ones_like(CAT['angularSize_per_pixel'])
-        # NOW ASSIGNS TEMPLATES BASED ON THE HALO PROPERTIES
-        #template = np.zeros(N_clu_all).astype('U100')
-        #template[template == "0.0"] = "cluster_images/elliptical_ba_0p25_cc.fits[SPECTRUM][#row==1]"
-        # link to templates
-        #def tpl_name(temperature, redshift): return 'cluster_Xspectra/cluster_spectrum_10000kT_' + str(int(temperature * 10000)).zfill(7) + '_10000z_' + str(int(redshift * 10000)).zfill(7) + '.fits[SPECTRUM][#row==1]'
-        #HEALPIX_8_id = 151
+        orientation = np.random.rand(N_clu_all) * 180.  # IMGROTA is random
+        pixel_rescaling =  np.ones_like(CAT['RA'])
+        # loop over profile
+        path_2_images = []
+        for j_p in CAT['idx_profile']:
+            file_name = 'profileLineID_'+str(int(j_p)).zfill(5)+'_ba_'+e_str+'_'+z_str
+            path_2_images.append( os.path.join(img_dir, file_name+'.fits') )
+        path_2_images = np.array(path_2_images)
+        CAT['XRAY_image_path'] = path_2_images
+        #x_max = truncation_radius
+        #sel = (profile.y < profile.y.max()/20)
+        #x_max = np.min([np.min(profile.x[sel]), profile.x[-2]])
+        #angularSize_per_pixel = x_max/(n_pixel/2.)
 
-        template = np.array([ el.strip()+".fits[IMAGE]" for el in CAT['XRAY_image_path'] ])
-        template_fullPath = np.array([ os.path.join( dir_2_SMPT, el.strip()+".fits")  for el in CAT['XRAY_image_path'] ])
-        template_exists = np.array([ os.path.isfile( os.path.join( dir_2_SMPT, el.strip()+".fits") ) for el in CAT['XRAY_image_path'] ])
+        CAT['XRAY_image_path_simput'] = np.array([ el+"[IMAGE]" for el in CAT['XRAY_image_path'] ])
+        template_exists = np.array([ os.path.isfile( el ) for el in CAT['XRAY_image_path'] ])
         N_exist = len(template_exists.nonzero()[0])
         N_templates = len(template_exists)
         if N_exist<N_templates:
             print('error, missing images', N_exist, N_templates)
 
-        def tpl_name(temperature, redshift, nh_val): return  'cluster_Xspectra/galNH_' + str(n.round(nh_val, 3)) +'_10000kT_' + str(int(10000*temperature)) + '_10000z_' + str(int(10000*redshift)) + '.fits'+ """[SPECTRUM][#row==1]"""
+        def tpl_name(temperature, redshift, nh_val): return  'cluster_Xspectra/galNH_' + str(np.round(nh_val, 3)) +'_10000kT_' + str(int(10000*temperature)) + '_10000z_' + str(int(10000*redshift)) + '.fits'+ """[SPECTRUM][#row==1]"""
         kt_arr = 10**np.arange(-1,1.3,0.05)
         z_arr = np.hstack((np.array([0., 0.01]), 10**np.arange(np.log10(0.02), np.log10(4.), 0.05)))
         #galNH = np.arange(19.0, 22.6, 0.1)
@@ -606,45 +621,42 @@ class GAS:
         for jj, (kT_values_ii, z_values_ii, galNH_ii) in enumerate(zip(kT_values, z_values, galNH)):
             spec_names[jj] = tpl_name(kT_values_ii, z_values_ii, galNH_ii)
 
-        N_per_simput = 1999
-        for jj, (id_min, id_max) in enumerate(zip(np.arange(0,N_clu_all,N_per_simput), np.arange(0,N_clu_all,N_per_simput)+N_per_simput)):
-            path_2_SMPT_catalog = os.path.join(dir_2_SMPT, 'c_'+str(HEALPIX_8_id).zfill(6) + '_N_'+str(jj)+'.fit')
-            hdu_cols = fits.ColDefs([
-                fits.Column(name="SRC_ID",  format='K',    unit='',    array=(np.arange(N_clu_all) + 4e8).astype('int')[id_min:id_max]),
-                fits.Column(name="RA",      format='D',    unit='deg', array=ra_array[id_min:id_max]),
-                fits.Column(name="DEC",     format='D',    unit='deg', array=dec_array[id_min:id_max]),
-                fits.Column(name="E_MIN",   format='D',    unit='keV', array=np.ones(N_clu_all)[id_min:id_max] * 0.5),
-                fits.Column(name="E_MAX",   format='D',    unit='keV', array=np.ones(N_clu_all)[id_min:id_max] * 2.0),
-                fits.Column(name="FLUX",    format='D',    unit='erg/s/cm**2', array=CAT['FX_soft_SIMPUT'][id_min:id_max]),
-                fits.Column(name="IMAGE",   format='100A', unit='', array=template[id_min:id_max]),
-                fits.Column(name="SPECTRUM",format='100A', unit='', array=spec_names[id_min:id_max]),
-                fits.Column(name="IMGROTA", format='D',    unit='deg', array=orientation[id_min:id_max]),
-                fits.Column(name="IMGSCAL", format='D',    unit='', array=pixel_rescaling[id_min:id_max])
-            ])
-            hdu = fits.BinTableHDU.from_columns(hdu_cols)
-            hdu.name = 'SRC_CAT'
-            hdu.header['HDUCLASS'] = 'HEASARC/SIMPUT'
-            hdu.header['HDUCLAS1'] = 'SRC_CAT'
-            hdu.header['HDUVERS'] = '1.1.0'
-            hdu.header['RADESYS'] = 'FK5'
-            hdu.header['EQUINOX'] = 2000.0
-            outf = fits.HDUList([fits.PrimaryHDU(), hdu])  # ,  ])
-            if os.path.isfile(path_2_SMPT_catalog):
-                os.system("rm " + path_2_SMPT_catalog)
-            outf.writeto(path_2_SMPT_catalog, overwrite=True)
-            print(path_2_SMPT_catalog, 'written', time.time() - t0)
-            path_2_CLU_catalog = os.path.join(dir_2_eRO_all, 'c_'+str(HEALPIX_8_id).zfill(6) +'_N_'+str(jj)+ '.fit')
-            t_out = Table( CAT[id_min:id_max] )
-            t_out.add_column(Column(name="SRC_ID",   dtype = np.int64,    unit='',            data = (np.arange(N_clu_all) + 4e8).astype('int')[id_min:id_max])   )
-            t_out.add_column(Column(name="E_MIN",    dtype = np.float,    unit='keV',         data = np.ones(N_clu_all)[id_min:id_max] * 0.5)     )
-            t_out.add_column(Column(name="E_MAX",    dtype = np.float,    unit='keV',         data = np.ones(N_clu_all)[id_min:id_max] * 2.0)     )
-            t_out.add_column(Column(name="FLUX",     dtype = np.float,    unit='erg/s/cm**2', data = CAT['FX_soft_SIMPUT'][id_min:id_max])          )
-            t_out.add_column(Column(name="IMAGE",    dtype = np.str,      unit='',            data = template[id_min:id_max])                    )
-            t_out.add_column(Column(name="SPECTRUM", dtype = np.str,      unit='',            data = spec_names[id_min:id_max])                  )
-            t_out.add_column(Column(name="IMGROTA",  dtype = np.float,    unit='deg',         data = orientation[id_min:id_max])                 )
-            t_out.add_column(Column(name="IMGSCAL",  dtype = np.float,    unit='',            data = pixel_rescaling[id_min:id_max])             )
-            t_out.write(path_2_CLU_catalog, overwrite=True)
-            print(path_2_CLU_catalog, 'written', time.time() - t0)
+        hdu_cols = fits.ColDefs([
+            fits.Column(name="SRC_ID",  format='K',    unit='',    array=(np.arange(N_clu_all) + 4e8).astype('int')),
+            fits.Column(name="RA",      format='D',    unit='deg', array=ra_array),
+            fits.Column(name="DEC",     format='D',    unit='deg', array=dec_array),
+            fits.Column(name="E_MIN",   format='D',    unit='keV', array=np.ones(N_clu_all) * 0.5),
+            fits.Column(name="E_MAX",   format='D',    unit='keV', array=np.ones(N_clu_all) * 2.0),
+            fits.Column(name="FLUX",    format='D',    unit='erg/s/cm**2', array=flux_array),
+            fits.Column(name="IMAGE",   format='100A', unit='', array=CAT['XRAY_image_path_simput']),
+            fits.Column(name="SPECTRUM",format='100A', unit='', array=spec_names),
+            fits.Column(name="IMGROTA", format='D',    unit='deg', array=orientation),
+            fits.Column(name="IMGSCAL", format='D',    unit='', array=pixel_rescaling)
+        ])
+        hdu = fits.BinTableHDU.from_columns(hdu_cols)
+        hdu.name = 'SRC_CAT'
+        hdu.header['HDUCLASS'] = 'HEASARC/SIMPUT'
+        hdu.header['HDUCLAS1'] = 'SRC_CAT'
+        hdu.header['HDUVERS'] = '1.1.0'
+        hdu.header['RADESYS'] = 'FK5'
+        hdu.header['EQUINOX'] = 2000.0
+        outf = fits.HDUList([fits.PrimaryHDU(), hdu])  # ,  ])
+        if os.path.isfile(p2_simput_out):
+            os.system("rm " + p2_simput_out)
+        outf.writeto(p2_simput_out, overwrite=True)
+        print(p2_simput_out, 'written', time.time() - t0)
+        #path_2_CLU_catalog = os.path.join(dir_2_eRO_all, 'c_'+str(HEALPIX_8_id).zfill(6) +'_N_'+str(jj)+ '.fit')
+        #t_out = Table( CAT )
+        #t_out.add_column(Column(name="SRC_ID",   dtype = np.int64,    unit='',            data = (np.arange(N_clu_all) + 4e8).astype('int'))   )
+        #t_out.add_column(Column(name="E_MIN",    dtype = np.float,    unit='keV',         data = np.ones(N_clu_all) * 0.5)     )
+        #t_out.add_column(Column(name="E_MAX",    dtype = np.float,    unit='keV',         data = np.ones(N_clu_all) * 2.0)     )
+        #t_out.add_column(Column(name="FLUX",     dtype = np.float,    unit='erg/s/cm**2', data = CAT['FX_soft_SIMPUT'])          )
+        #t_out.add_column(Column(name="IMAGE",    dtype = np.str,      unit='',            data = template)                    )
+        #t_out.add_column(Column(name="SPECTRUM", dtype = np.str,      unit='',            data = spec_names)                  )
+        #t_out.add_column(Column(name="IMGROTA",  dtype = np.float,    unit='deg',         data = orientation)                 )
+        #t_out.add_column(Column(name="IMGSCAL",  dtype = np.float,    unit='',            data = pixel_rescaling)             )
+        #t_out.write(path_2_CLU_catalog, overwrite=True)
+        #print(path_2_CLU_catalog, 'written', time.time() - t0)
 
 
         # create file with links to images and spectra

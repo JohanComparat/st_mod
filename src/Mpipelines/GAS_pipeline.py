@@ -32,7 +32,7 @@ for p_2_catalogue in C_GAS.p_2_catalogues[is_cat]:
 	print(p_2_catalogue_out, 'written, t=', time.time()-t0)
 	C_GAS.make_simput( p_2_catalogue_out,
 				   p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits'),
-				   dir_2_simput = os.path.join( os.path.dirname(p_2_catalogue), 'simput')
+				   dir_2_simput = os.path.join( os.path.dirname(p_2_catalogue) ),
 				   simput_file_name =  'Xgas_bHS0.8_simput.fits'
 				   )
 
