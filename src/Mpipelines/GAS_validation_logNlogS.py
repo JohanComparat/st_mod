@@ -70,16 +70,16 @@ zs = np.arange(0.0000001, 7.1, 0.001)
 dm_itp = interp1d(zs, cosmo.distmod(zs).value)
 
 # K-correction to get observed fluxes
-nh_vals = 10**n.arange(-2,4+0.01,0.5)#0.05)
-kT_vals = 10**n.arange(-2.09,1.8,0.01)
-z_vals = n.hstack((n.array([0.]), n.arange(0.001, 0.01, 0.001), 10**n.arange(n.log10(0.01), n.log10(6.1), 0.01)))
-dir_2_result = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'xray_k_correction')
-itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( dir_2_result "fraction_observed_clusters_no_nH.txt"), unpack=True )
-YY_z, ZZ_kt = np.meshgrid(z_vals, kT_vals)
-shape_i = YY_z.shape
-matrix_2d = itp_frac_obs.reshape(shape_i)
-from scipy.interpolate import RegularGridInterpolator
-attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
+#nh_vals = 10**n.arange(-2,4+0.01,0.5)#0.05)
+#kT_vals = 10**n.arange(-2.09,1.8,0.01)
+#z_vals = n.hstack((n.array([0.]), n.arange(0.001, 0.01, 0.001), 10**n.arange(n.log10(0.01), n.log10(6.1), 0.01)))
+#dir_2_result = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'xray_k_correction')
+#itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( dir_2_result, "fraction_observed_clusters_no_nH.txt"), unpack=True )
+#YY_z, ZZ_kt = np.meshgrid(z_vals, kT_vals)
+#shape_i = YY_z.shape
+#matrix_2d = itp_frac_obs.reshape(shape_i)
+#from scipy.interpolate import RegularGridInterpolator
+#attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
 
 LC_dir= sys.argv[1] #'LC0002'
 validation_dir       = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation','validation_GAS')
