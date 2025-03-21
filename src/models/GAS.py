@@ -510,7 +510,7 @@ class GAS:
         fun_M_T =  lambda log10M500c : 0.6 * log10M500c - 8.
         sigma_kT = 0.2
         # covariance
-        rho = 0.9
+        rho = 0.95
         cov_kT_LX = np.array([[sigma_kT**2, rho*sigma_kT*sigma_LX ],[rho*sigma_kT*sigma_LX, sigma_LX**2]])
         # generates means
         EZ = cosmo.efunc(self.CAT['redshift_S'])
