@@ -2,14 +2,45 @@
 conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
-# nohup python GAS_validation_logNlogS.py LC0002    > log.log &
-# nohup python GAS_validation_logNlogS.py LC0060    > log.log &
-# nohup python GAS_validation_logNlogS.py LC1800 8  > log.log &
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+
+# conda activate stmod
+cd $GIT_STMOD/src/Mpipelines
+
+python GAS_validation.py z0p00 FullSky # TODO
+python GAS_validation.py z0p02 FullSky # TODO
+python GAS_validation.py z0p05 FullSky # TODO
+python GAS_validation.py z0p09 FullSky # TODO
+python GAS_validation.py z0p14 FullSky # TODO
+python GAS_validation.py z0p19 FullSky # TODO
+python GAS_validation.py z0p25 FullSky # TODO
+python GAS_validation.py z0p30 FullSky # TODO
+python GAS_validation.py z0p36 FullSky # TODO
+python GAS_validation.py z0p43 FullSky # TODO
+python GAS_validation.py z0p49 FullSky # TODO
+python GAS_validation.py z0p56 FullSky # TODO
+python GAS_validation.py z0p63 FullSky # TODO
+python GAS_validation.py z0p70 FullSky # TODO
+python GAS_validation.py z0p78 FullSky # TODO
+python GAS_validation.py z0p86 FullSky # TODO
+python GAS_validation.py z0p94 FullSky # TODO
+python GAS_validation.py z1p03 FullSky # TODO
+python GAS_validation.py z1p12 FullSky # TODO
+python GAS_validation.py z1p22 FullSky # TODO
+python GAS_validation.py z1p32 FullSky # TODO
+python GAS_validation.py z1p43 FullSky # TODO
+python GAS_validation.py z1p54 FullSky # TODO
+
+nohup python GAS_validation_logNlogS.py LC0002    > log.log &
+nohup python GAS_validation_logNlogS.py LC0060    > log.log &
+nohup python GAS_validation_logNlogS.py LC1800 8  > log.log &
 nohup python GAS_validation_logNlogS.py LC1800 12 > log.log &
 nohup python GAS_validation_logNlogS.py LC1800 17 > log.log &
 nohup python GAS_validation_logNlogS.py LC1800 22 > log.log &
 nohup python GAS_validation_logNlogS.py LC1800 27 > log.log &
-# nohup python GAS_validation_logNlogS.py FullSky 5 > log.log &
+nohup python GAS_validation_logNlogS.py FullSky 5 > log.log &
 nohup python GAS_validation_logNlogS.py FullSky 6 > log.log &
 nohup python GAS_validation_logNlogS.py FullSky 7 > log.log &
 nohup python GAS_validation_logNlogS.py FullSky 8 > log.log &

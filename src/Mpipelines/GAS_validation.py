@@ -171,7 +171,7 @@ MERGE_Ms = Table.read(os.path.join(SR_dir, 'FULL_SUMMARY_Mstarbin_centrals_Z3P.f
 t_ms = MERGE_Ms[np.unique(MERGE_Ms['file_ID'], return_index=True)[1]]
 t_ms = t_ms [(t_ms['N_gal'] > 1000)&(t_ms['M_min'] >= 10.75)&(t_ms['M_max'] <=11.75)]
 
-MS_A15, LX_max_A15, LX_min_A15 = np.loadtxt(  os.path.join( os.environ['GIT_EVTXCORR'], 'data', 'anderson2015', 'anderson2015_fig5_total.ascii'), unpack = True)
+MS_A15, LX_max_A15, LX_min_A15 = np.loadtxt(  os.path.join( os.environ['GIT_STMOD_DATA'], 'data/benchmark', 'anderson2015', 'anderson2015_fig5_total.ascii'), unpack = True)
 MS_A15 = np.arange(10.1,11.95, 0.1)+0.05
 
 
@@ -186,7 +186,7 @@ for meta in C_GAS.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     print(meta)
     # retrieve the resulting catalogues and meta data
     p_2_catalogue = os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']), 'glist.fits')
-    p_2_catal_GAS = os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']), 'Xgas.fits')
+    p_2_catal_GAS = os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']), 'Xgas_bHS0.8.fits')
     XGA = Table.read(p_2_catal_GAS)
     z_min, z_max = np.min(XGA['redshift_S']), np.max(XGA['redshift_S'])
     print('z_min, z_max=', z_min, z_max)
@@ -324,7 +324,7 @@ for meta in C_GAS.LC_MetaData[(enough_area)&(small_difference_minmax_1)&(small_d
     #
     ##
     xx = np.log10(XGA['obs_sm'])
-    yy = XGA['CLUSTER_LX_soft_RF_R500c']
+    yy = 10**XGA['CLUSTER_LX_soft_RF_R500c']
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
 
     fig_out = os.path.join(validation_dir_SR, LC_dir+'_StellarMass-LX_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']) +'.png' )
