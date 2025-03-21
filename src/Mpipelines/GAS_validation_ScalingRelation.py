@@ -335,7 +335,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     )
     x_val = np.arange(11, 15.5, 0.1)
     #p.plot(10**x_val, 10**(1.7*x_val+19.3), 'k--')#, label='1.7x+19.3\n 1.5x+22')
-    p.plot(10**x_val, 10**(1.5*x_val+22), 'k--', label='1.5x+22')
+    p.plot(10**x_val, 10**(1.61*(x_val-15)+44.7), 'k--', label='1.61(x-15)+44.7')
 
     p.grid()
     p.xlabel(r'$E(z) M_{500c}\; [M_\odot]$')
@@ -511,8 +511,8 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     p.plot(10**mean_mass, 10**(mean_mass_proxy), color='r')
     p.fill_between(10**mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='r', label='Mock')
 
-    x_val = np.arange(-0.7, 1.5, 0.01)
-    p.plot(10**x_val, 10**(2.5*x_val+42.), 'k--', label='2.5x+42')
+    #x_val = np.arange(-0.7, 1.5, 0.01)
+    #p.plot(10**x_val, 10**(2.5*x_val+42.), 'k--', label='2.5x+42')
     #
     p.xlabel(r'kT/E$^{2/3}(z)$ [keV]')
     p.ylabel(r'$L^{0.5-2\; keV}_X/E^2(z) \; [erg/s]$')
