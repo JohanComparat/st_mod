@@ -347,5 +347,5 @@ t['x'] = x_out_mock[ok_mock]
 t['y_mean'] = c_out_mock[ok_mock]
 t['y_low'] = c_out_mock[ok_mock]-c_err_mock[ok_mock]
 t['y_high'] = c_out_mock[ok_mock]+c_err_mock[ok_mock]
-t.write(fig_out[:-3]+'.fits', overwrite = True)
-print(fig_out[:-3]+'.fits', 'written')
+t.write(fig_out[:-3]+'fits', overwrite = True)
+print(fig_out[:-3]+'fits', 'written')
