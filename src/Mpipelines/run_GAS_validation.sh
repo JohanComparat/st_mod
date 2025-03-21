@@ -9,29 +9,31 @@ export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 # conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
-python GAS_validation_ScalingRelation.py z0p00 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p02 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p05 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p09 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p14 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p19 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p25 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p30 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p36 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p43 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p49 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p56 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p63 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p70 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p78 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p86 FullSky # TODO
-python GAS_validation_ScalingRelation.py z0p94 FullSky # TODO
-python GAS_validation_ScalingRelation.py z1p03 FullSky # TODO
-python GAS_validation_ScalingRelation.py z1p12 FullSky # TODO
-python GAS_validation_ScalingRelation.py z1p22 FullSky # TODO
-python GAS_validation_ScalingRelation.py z1p32 FullSky # TODO
-python GAS_validation_ScalingRelation.py z1p43 FullSky # TODO
-python GAS_validation_ScalingRelation.py z1p54 FullSky # TODO
+python GAS_validation_ScalingRelation.py z0p00 FullSky # DONE
+python GAS_validation_ScalingRelation.py z0p02 FullSky # DONE
+python GAS_validation_ScalingRelation.py z0p05 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p09 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p14 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p19 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p25 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p30 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p36 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p43 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p49 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p56 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p63 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p70 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p78 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p86 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z0p94 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z1p03 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z1p12 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z1p22 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z1p32 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z1p43 FullSky # ONGOING
+python GAS_validation_ScalingRelation.py z1p54 FullSky # ONGOING
+
+python GAS_validation_logNlogS.py FullSky 5
 
 nohup python GAS_validation_logNlogS.py LC0002    > log.log &
 nohup python GAS_validation_logNlogS.py LC0060    > log.log &

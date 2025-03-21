@@ -186,24 +186,25 @@ def get_FX(p_2_cata):
     print(p_2_cata)
     XGA = Table.read(p_2_cata)
     print(len(XGA))
-    print(XGA['CLUSTER_kT'].min(), XGA['redshift_S'].min())
-    print(XGA['CLUSTER_kT'].max(), XGA['redshift_S'].max())
-    ZZ = XGA['redshift_S']
-    ZZ[ZZ>=3.98] = 3.98
+    #print(XGA['CLUSTER_kT'].min(), XGA['redshift_S'].min())
+    #print(XGA['CLUSTER_kT'].max(), XGA['redshift_S'].max())
+    #ZZ = XGA['redshift_S']
+    #ZZ[ZZ>=3.98] = 3.98
     # kT_vals = 10**n.arange(-2.09,1.8,0.01)
-    TT = XGA['CLUSTER_kT']
-    TT[TT<-2.09]=-2.09
-    TT[TT>1.8]=1.8
-    k_correction_2d = attenuation_2d( np.transpose([10**TT, ZZ]))
-    DL_z = (cosmo.luminosity_distance(XGA['redshift_S']).to(u.cm)).value
-    dl2_4pi = np.log10(4*np.pi*(DL_z)**2.)
-    LX_obsF_500c = XGA['CLUSTER_LX_soft_RF_R500c'] -np.log10( k_correction_2d ) - dl2_4pi
+    #TT = XGA['CLUSTER_kT']
+    #TT[TT<-2.09]=-2.09
+    #TT[TT>1.8]=1.8
+    #k_correction_2d = attenuation_2d( np.transpose([10**TT, ZZ]))
+    #DL_z = (cosmo.luminosity_distance(XGA['redshift_S']).to(u.cm)).value
+    #dl2_4pi = np.log10(4*np.pi*(DL_z)**2.)
+    #LX_obsF_500c = XGA['CLUSTER_LX_soft_RF_R500c'] -np.log10( k_correction_2d ) - dl2_4pi
     #LX_obsF_200c = XGA['CLUSTER_LX_soft_RF_R200c'] -np.log10( k_correction_2d ) - dl2_4pi
     #LX_obsF_vir = XGA['CLUSTER_LX_soft_RF_Rvir']   -np.log10( k_correction_2d ) - dl2_4pi
     t_out = Table()
     t_out['M500c'] = np.log10(XGA['M500c'])
     t_out['z']= XGA['redshift_S']
-    t_out['FX_obsF_500']= LX_obsF_500c
+    #t_out['FX_obsF_500']= XGA['CLUSTER_FX_soft_OBS_R500c_nHattenuated']
+    t_out['FX_obsF_500']= XGA['CLUSTER_FX_soft_OBS_R500c']
     #t_out['FX_obsF_200']= LX_obsF_200c
     #t_out['FX_obsF_vir']= LX_obsF_vir
     return t_out
