@@ -505,7 +505,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     print(np.mean(EZ), np.std(EZ), EZ)
     print(np.mean(-2./3.*np.log10(EZ)), np.std(-2./3.*np.log10(EZ)), -2./3.*np.log10(EZ))
     print(np.mean(-2.*np.log10(EZ)), np.std(-2.*np.log10(EZ)), -2.*np.log10(EZ))
-    xx = XGA['CLUSTER_kT'] #-2./3.*np.log10(EZ)
+    xx = np.log10(XGA['CLUSTER_kT']) #-2./3.*np.log10(EZ)
     yy = XGA['CLUSTER_LX_soft_RF_R500c'] # -2.*np.log10(EZ)
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
     p.plot(10**mean_mass, 10**(mean_mass_proxy), color='r')
@@ -536,7 +536,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
 
     p.figure(0, (5.5, 5.))
     xx = np.log10(XGA['obs_sm'])
-    yy = XGA['CLUSTER_kT']
+    yy = np.log10(XGA['CLUSTER_kT'])
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
     p.plot(mean_mass, 10**(mean_mass_proxy), color='r')
     p.fill_between(mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='r', label='Mock')

@@ -66,25 +66,25 @@ python GAS_pipeline.py z1p22 LC0002 # DONE
 python GAS_pipeline.py z1p32 LC0002 # DONE
 python GAS_pipeline.py z1p43 LC0002 # DONE
 python GAS_pipeline.py z1p54 LC0002 # DONE
-# python GAS_pipeline.py z1p65 LC0002
-# python GAS_pipeline.py z1p77 LC0002
-# python GAS_pipeline.py z1p90 LC0002
-# python GAS_pipeline.py z2p03 LC0002
-# python GAS_pipeline.py z2p17 LC0002
-# python GAS_pipeline.py z2p31 LC0002
-# python GAS_pipeline.py z2p46 LC0002
-# python GAS_pipeline.py z2p62 LC0002
-# python GAS_pipeline.py z2p78 LC0002
-# python GAS_pipeline.py z2p95 LC0002
-# python GAS_pipeline.py z3p13 LC0002
-# python GAS_pipeline.py z3p32 LC0002
-# python GAS_pipeline.py z3p61 LC0002
-# python GAS_pipeline.py z3p93 LC0002
-# python GAS_pipeline.py z4p27 LC0002
-# python GAS_pipeline.py z4p63 LC0002
-# python GAS_pipeline.py z5p15 LC0002
-# python GAS_pipeline.py z5p73 LC0002
-#
+python GAS_pipeline.py z1p65 LC0002 # DONE
+python GAS_pipeline.py z1p77 LC0002 # DONE
+python GAS_pipeline.py z1p90 LC0002 # DONE
+python GAS_pipeline.py z2p03 LC0002 # DONE
+python GAS_pipeline.py z2p17 LC0002 # DONE
+python GAS_pipeline.py z2p31 LC0002 # DONE
+python GAS_pipeline.py z2p46 LC0002 # DONE
+python GAS_pipeline.py z2p62 LC0002 # DONE
+python GAS_pipeline.py z2p78 LC0002 # DONE
+python GAS_pipeline.py z2p95 LC0002 # DONE
+python GAS_pipeline.py z3p13 LC0002 # DONE
+python GAS_pipeline.py z3p32 LC0002 # DONE
+python GAS_pipeline.py z3p61 LC0002 # DONE
+python GAS_pipeline.py z3p93 LC0002 # DONE
+python GAS_pipeline.py z4p27 LC0002 # DONE
+python GAS_pipeline.py z4p63 LC0002 # DONE
+python GAS_pipeline.py z5p15 LC0002 # DONE
+python GAS_pipeline.py z5p73 LC0002 # DONE
+
 python GAS_pipeline.py z0p00 LC0060 # DONE
 python GAS_pipeline.py z0p02 LC0060 # DONE
 python GAS_pipeline.py z0p05 LC0060 # DONE
@@ -108,20 +108,20 @@ python GAS_pipeline.py z1p22 LC0060 # DONE
 python GAS_pipeline.py z1p32 LC0060 # DONE
 python GAS_pipeline.py z1p43 LC0060 # DONE
 python GAS_pipeline.py z1p54 LC0060 # DONE
-# python GAS_pipeline.py z1p65 LC0060
-# python GAS_pipeline.py z1p77 LC0060
-# python GAS_pipeline.py z1p90 LC0060
-# python GAS_pipeline.py z2p03 LC0060
-# python GAS_pipeline.py z2p17 LC0060
-# python GAS_pipeline.py z2p31 LC0060
-# python GAS_pipeline.py z2p46 LC0060
-# python GAS_pipeline.py z2p62 LC0060
-# python GAS_pipeline.py z2p78 LC0060
-# python GAS_pipeline.py z2p95 LC0060
-# python GAS_pipeline.py z3p13 LC0060
-# python GAS_pipeline.py z3p32 LC0060
-# python GAS_pipeline.py z3p61 LC0060
-# python GAS_pipeline.py z3p93 LC0060
+python GAS_pipeline.py z1p65 LC0060 # DONE
+python GAS_pipeline.py z1p77 LC0060 # DONE
+python GAS_pipeline.py z1p90 LC0060 # DONE
+python GAS_pipeline.py z2p03 LC0060 # DONE
+python GAS_pipeline.py z2p17 LC0060 # DONE
+python GAS_pipeline.py z2p31 LC0060 # DONE
+python GAS_pipeline.py z2p46 LC0060 # DONE
+python GAS_pipeline.py z2p62 LC0060 # DONE
+python GAS_pipeline.py z2p78 LC0060 # DONE
+python GAS_pipeline.py z2p95 LC0060 # DONE
+python GAS_pipeline.py z3p13 LC0060 # DONE
+python GAS_pipeline.py z3p32 LC0060 # DONE
+python GAS_pipeline.py z3p61 LC0060 # DONE
+python GAS_pipeline.py z3p93 LC0060 # DONE
 
 python GAS_pipeline.py z0p00 LC1800 # DONE
 python GAS_pipeline.py z0p02 LC1800 # DONE
@@ -146,7 +146,7 @@ python GAS_pipeline.py z1p22 LC1800 # DONE
 python GAS_pipeline.py z1p32 LC1800 # DONE
 python GAS_pipeline.py z1p43 LC1800 # DONE
 python GAS_pipeline.py z1p54 LC1800 # DONE
-# python GAS_pipeline.py z1p65 LC1800
-# python GAS_pipeline.py z1p77 LC1800
-# python GAS_pipeline.py z1p90 LC1800
-# python GAS_pipeline.py z2p03 LC1800
+python GAS_pipeline.py z1p65 LC1800 # DONE
+python GAS_pipeline.py z1p77 LC1800 # DONE
+python GAS_pipeline.py z1p90 LC1800 # DONE
+python GAS_pipeline.py z2p03 LC1800 # DONE

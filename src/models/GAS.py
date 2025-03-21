@@ -504,7 +504,7 @@ class GAS:
         #sigma_var  = np.random.normal(loc=0.0, scale=0.02, size=len(self.CAT))
         #sigma_var2 = np.random.normal(loc=0.0, scale=0.02, size=len(self.CAT))
         # Matching log10(LX_05_20/EZ) = 1.5 log10(M500c EZ) + 22
-        fun_M_L =  lambda log10M500c : 1.5 * log10M500c + 22.
+        fun_M_L =  lambda log10M500c : 44.7 + 1.61 * (log10M500c-15)
         sigma_LX = 0.3
         # Matching log10(kT/EZ^(2/3)) = 0.6 log10(M500c) - 8
         fun_M_T =  lambda log10M500c : 0.6 * log10M500c - 8.
@@ -515,13 +515,13 @@ class GAS:
         # generates means
         EZ = cosmo.efunc(self.CAT['redshift_S'])
         self.CAT['kT_Mean_oEzm23'] = ( fun_M_T(np.log10(self.CAT['M500c'])) ) #+ 2./3. * np.log10(EZ)
-        self.CAT['LX_Mean_eZm1'] = fun_M_L( np.log10(self.CAT['M500c']) ) #+ 2*np.log10(EZ)
+        self.CAT['LX_Mean_eZm2'] = fun_M_L( np.log10(self.CAT['M500c']) ) #+ 2*np.log10(EZ)
         # generate values with correlated scatter
         corr_scat = np.random.multivariate_normal([0,0], cov_kT_LX, size=len(self.CAT))
         corr_scat_kT = corr_scat.T[0]
         corr_scat_LX = corr_scat.T[1]
         self.CAT['CLUSTER_kT'] = 10**( self.CAT['kT_Mean_oEzm23'] + corr_scat_kT + 2./3. * np.log10(EZ) )
-        self.CAT['CLUSTER_LX_soft_RF_R500c'] = self.CAT['LX_Mean_eZm1'] + corr_scat_LX + 2*np.log10(EZ)
+        self.CAT['CLUSTER_LX_soft_RF_R500c'] = self.CAT['LX_Mean_eZm2'] + corr_scat_LX + 2*np.log10(EZ)
         self.CAT['idx_profile'] = np.random.random_integers(0, high=len(t_prof)-1, size=len(self.CAT))
 
         # convert to fluxes
