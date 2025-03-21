@@ -451,7 +451,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     #p.plot(mean_mass, (mean_mass_proxy), color='b')
     #p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.2, color='b', label='Mock Co20')
 
-    xx = XGA['M500c']
+    xx = np.log10(XGA['M500c'])
     yy = np.log10(XGA['CLUSTER_kT'])- 2./3.*np.log10(EZ_mean)
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
     p.plot(mean_mass, (mean_mass_proxy), color='r')
