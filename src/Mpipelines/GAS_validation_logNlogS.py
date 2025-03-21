@@ -238,7 +238,7 @@ for p_2_cata in p_2_catal_GAS_b08[1:]:
 #ok_spiders = (c_err_spiders>0)&(c_out_spiders>0)&(c_out_spiders>2*c_err_spiders)&(x_out_spiders>-14)
 
 
-#p_2_header = os.path.join(os.environ['GIT_STMOD'],'logNlogS/spidersLogNLogS','lgnlgs_header.tbl')
+#p_2_header = os.path.join(os.environ['GIT_STMOD_DATA'],'logNlogS/spidersLogNLogS','lgnlgs_header.tbl')
 #  (1)              (2)        (3)      (4)
 #lg(flux) N>flux: 0.1<z<0.3 0.3<z<0.5 0.5<z<0.7
 spiders_om205s860 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GAS/logN_logS/spidersLogNLogS','lgnlgs_om205s860.tbl'), unpack = True )
@@ -254,7 +254,7 @@ fig_out = os.path.join(validation_dir_lNlS, LC_dir+'_zlt_'+z_max+'_logNlogS.png'
 
 p.figure(3, (6., 6.))
 
-path_2_logNlogS_data = os.path.join(    os.environ["GIT_STMOD"], 'data/validation/validation_GAS/logN_logS', 'logNlogS_Finoguenov_cosmos_2007_clusters.data')
+path_2_logNlogS_data = os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'logNlogS_Finoguenov_cosmos_2007_clusters.data')
 x_data, y_data, y_data_min, y_data_max = np.loadtxt(    path_2_logNlogS_data, unpack=True)
 p.fill_between(
     np.log10(x_data),
@@ -263,7 +263,7 @@ p.fill_between(
     rasterized=True,
     alpha=0.1,
     label='Fi07 COSMOS')
-path_2_logNlogS_data = os.path.join(    os.environ["GIT_STMOD"], 'data/validation/validation_GAS/logN_logS', 'logNlogS_Finoguenov_ecdfs_2015_clusters.data')
+path_2_logNlogS_data = os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'logNlogS_Finoguenov_ecdfs_2015_clusters.data')
 x_data, y_data, y_data_min, y_data_max = np.loadtxt(    path_2_logNlogS_data, unpack=True)
 p.fill_between(
     np.log10(x_data),
@@ -272,7 +272,7 @@ p.fill_between(
     rasterized=True,
     alpha=0.1,
     label='Fi15 CDFS')
-#path_2_logNlogS_data = os.path.join(os.environ["GIT_STMOD"],'data/validation/validation_GAS/logN_logS','Boehringer_noras2_2017.data')
+#path_2_logNlogS_data = os.path.join(os.environ["GIT_STMOD_DATA"],'data/validation/validation_GAS/logN_logS','Boehringer_noras2_2017.data')
 #FX_01_24, N_per_str_up, N_per_str_low = np.loadtxt(    path_2_logNlogS_data, unpack=True)
 #N_per_str = (N_per_str_up + N_per_str_low)/2.
 #x_data = FX_01_24 * 1e-12 * 0.67 / 1
