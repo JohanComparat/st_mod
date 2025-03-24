@@ -556,6 +556,21 @@ class GAS:
         attenuation0p5 = itp_attenuation_kt0p5( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=0.7)]
         self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=0.7)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=0.7)] + np.log10( attenuation0p5 )
 
+        frac_ell = np.array([0.22, 0.30, 0.25, 0.23]) # fraction of objects at a given ellipticity
+        ell_val = [0.55, 0.65, 0.75, 0.85] # corresponding ellipcity value
+        N_tot = (len(self.CAT) * 2 * frac_ell).astype('int')
+        ellipticity_values = np.hstack((
+            np.ones(N_tot[0])*ell_val[0],
+            np.ones(N_tot[1])*ell_val[1],
+            np.ones(N_tot[2])*ell_val[2],
+            np.ones(N_tot[3])*ell_val[3]
+            ))
+        np.random.shuffle(ellipticity_values)
+        self.CAT['ellipticity'] = ellipticity_values[:len(self.CAT)]
+        OUT = np.unique(self.CAT['ellipticity'], return_counts=True)
+        print(OUT)
+        print(OUT[1]/len(self.CAT))
+
     def make_simput( self, p_2_catalogue_out, p_2_profiles, dir_2_simput, simput_file_name ):
         """
         create simput files and images
@@ -565,17 +580,11 @@ class GAS:
         t_prof = Table.read( p_2_profiles )
         PRF = t_prof[CAT['idx_profile']]
         frac_flux_rescale = PRF['LX_2Rvir']/PRF['LX_R500c']
-
         p2_simput_out = os.path.join( dir_2_simput, simput_file_name )
         z_bar = self.uchuu_redshift[ np.argmin(abs(self.uchuu_redshift - self.mean_z)) ]
         z_str = 'z'+str(np.round(z_bar,5))
         img_dir = os.path.join(os.environ['UCHUU'], 'cluster_images', z_str )
         print(img_dir)
-        j_e = 0
-        b_to_a_500c = [0.75]
-        b_a = b_to_a_500c[j_e]
-        e_str = str( np.round( b_a, 2) )
-        print(z_str, e_str)
         N_clu_all = len(CAT['RA'])
         print('Number of clusters=',N_clu_all)
         ra_array = CAT['RA']
@@ -592,7 +601,12 @@ class GAS:
         pixel_rescaling =  np.ones_like(CAT['RA'])
         # loop over profile
         path_2_images = []
-        for j_p in CAT['idx_profile']:
+        for b_a, j_p in zip(CAT['idx_profile'], CAT['ellipticity']):
+            #j_e = 0
+            #b_to_a_500c = [0.75]
+            #b_a =  # b_to_a_500c[j_e]
+            e_str = str( np.round( b_a, 2) )
+            #print(z_str, e_str)
             file_name = 'profileLineID_'+str(int(j_p)).zfill(5)+'_ba_'+e_str+'_'+z_str
             path_2_images.append( os.path.join('cluster_images', z_str, file_name+'.fits') )
         path_2_images = np.array(path_2_images)

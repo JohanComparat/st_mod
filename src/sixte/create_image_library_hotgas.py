@@ -85,37 +85,38 @@ for j_z in np.arange(len(all_zs)):
     print(img_dir)
 
     # loop over ellipticity
-    j_e = 0
-    b_to_a_500c = [0.75]
-    b_a = b_to_a_500c[j_e]
-    e_str = str( np.round( b_a, 2) )
-    conversion_arcmin = cosmo.kpc_proper_per_arcmin(z_bar).value
-    print('creates SIMPUT images',z_bar,conversion_arcmin,b_a)
-    path_2_images = []
-    t_prof = Table.read( p_2_profiles )
-    p_2_profiles_images = os.path.join(img_dir, 'profiles_010z015_1e14M2e14_p2images.fits')
-    angularSize_per_pixel = np.zeros(len(t_prof))
+    #b_to_a_500c = [0.75]
+    b_to_a_500c = [0.55, 0.65, 0.75, 0.85]
+    for j_e in np.arange(len(b_to_a_500c)):
+        b_a = b_to_a_500c[j_e]
+        e_str = str( np.round( b_a, 2) )
+        conversion_arcmin = cosmo.kpc_proper_per_arcmin(z_bar).value
+        print('creates SIMPUT images',z_bar,conversion_arcmin,b_a)
+        path_2_images = []
+        t_prof = Table.read( p_2_profiles )
+        p_2_profiles_images = os.path.join(img_dir, 'profiles_010z015_1e14M2e14_p2images.fits')
+        angularSize_per_pixel = np.zeros(len(t_prof))
 
-    # loop over profile
-    for j_p in np.arange(len(t_prof)):
-        prf = t_prof[j_p]
-        file_name = 'profileLineID_'+str(j_p).zfill(5)+'_ba_'+e_str+'_'+z_str
-        image_file = os.path.join(img_dir, file_name+'.fits')
-        #print(image_file)
-        path_2_images.append( image_file )
-        r500c_i = prf['R500c']
-        profile_i = prf['profiles']/prf['profiles'].max()
-        x_coord = np.hstack(( 0., xgrid_ext*r500c_i/conversion_arcmin, 10*xgrid_ext[-1]*r500c_i/conversion_arcmin, 10000000 ))
-        y_coord = np.hstack(( profile_i[0], profile_i, 0., 0. ))
-        profile = interp1d(x_coord, y_coord)
-        truncation_radius = 2 * r500c_i/ conversion_arcmin
-        n_pixel = 2*int(truncation_radius*60/pixel_size_image)+1
-        matrix, angularSize_per_pixel_j = create_matrix(profile, n_pixel = n_pixel, b_a = b_a, truncation_radius = truncation_radius)
-        angularSize_per_pixel[j_p] = angularSize_per_pixel_j
-        #print(r500c_i, conversion_arcmin, r500c_i/ conversion_arcmin, 60*angularSize_per_pixel_j, n_pixel, image_file)
-        #if os.path.isfile(image_file)==False:
-        write_img(matrix, image_file, n_pixel = n_pixel, angularSize_per_pixel=angularSize_per_pixel_j)
-        print(image_file, 'written')
+        # loop over profile
+        for j_p in np.arange(len(t_prof)):
+            prf = t_prof[j_p]
+            file_name = 'profileLineID_'+str(j_p).zfill(5)+'_ba_'+e_str+'_'+z_str
+            image_file = os.path.join(img_dir, file_name+'.fits')
+            #print(image_file)
+            path_2_images.append( image_file )
+            r500c_i = prf['R500c']
+            profile_i = prf['profiles']/prf['profiles'].max()
+            x_coord = np.hstack(( 0., xgrid_ext*r500c_i/conversion_arcmin, 10*xgrid_ext[-1]*r500c_i/conversion_arcmin, 10000000 ))
+            y_coord = np.hstack(( profile_i[0], profile_i, 0., 0. ))
+            profile = interp1d(x_coord, y_coord)
+            truncation_radius = 2 * r500c_i/ conversion_arcmin
+            n_pixel = 2*int(truncation_radius*60/pixel_size_image)+1
+            matrix, angularSize_per_pixel_j = create_matrix(profile, n_pixel = n_pixel, b_a = b_a, truncation_radius = truncation_radius)
+            angularSize_per_pixel[j_p] = angularSize_per_pixel_j
+            #print(r500c_i, conversion_arcmin, r500c_i/ conversion_arcmin, 60*angularSize_per_pixel_j, n_pixel, image_file)
+            if os.path.isfile(image_file)==False:
+                write_img(matrix, image_file, n_pixel = n_pixel, angularSize_per_pixel=angularSize_per_pixel_j)
+                print(image_file, 'written')
 
     t_prof['path_2_images'] = path_2_images
     t_prof['angularSize_per_pixel'] = angularSize_per_pixel
