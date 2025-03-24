@@ -114,9 +114,9 @@ for j_z in np.arange(len(all_zs)):
             matrix, angularSize_per_pixel_j = create_matrix(profile, n_pixel = n_pixel, b_a = b_a, truncation_radius = truncation_radius)
             angularSize_per_pixel[j_p] = angularSize_per_pixel_j
             #print(r500c_i, conversion_arcmin, r500c_i/ conversion_arcmin, 60*angularSize_per_pixel_j, n_pixel, image_file)
-            if os.path.isfile(image_file)==False:
-                write_img(matrix, image_file, n_pixel = n_pixel, angularSize_per_pixel=angularSize_per_pixel_j)
-                print(image_file, 'written')
+            #if os.path.isfile(image_file)==False:
+            write_img(matrix, image_file, n_pixel = n_pixel, angularSize_per_pixel=angularSize_per_pixel_j)
+            print(image_file, 'written')
 
     t_prof['path_2_images'] = path_2_images
     t_prof['angularSize_per_pixel'] = angularSize_per_pixel
