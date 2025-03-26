@@ -40,9 +40,6 @@ python GAS_pipeline.py z1p43 FullSky # DONE
 python GAS_pipeline.py z1p54 FullSky # DONE
 
 #
-# REST is NOT NEEDED
-#
-#
 python GAS_pipeline.py z0p00 LC0002 # DONE
 python GAS_pipeline.py z0p02 LC0002 # DONE
 python GAS_pipeline.py z0p05 LC0002 # DONE

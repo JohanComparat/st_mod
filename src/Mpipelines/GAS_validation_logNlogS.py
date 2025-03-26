@@ -253,6 +253,31 @@ spiders_om307s823 = spiders_om307s823_i.T[4:].T
 fig_out = os.path.join(validation_dir_lNlS, LC_dir+'_zlt_'+z_max+'_logNlogS.png' )
 
 p.figure(3, (6., 6.))
+e1_F0223, e1_logNlogS = np.loadtxt(os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'erass1.txt'), unpack=True)
+efeds_F0223, efeds_logNlogS = np.loadtxt(os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'efeds.txt'), unpack=True)
+noras_F0223, noras_logNlogS = np.loadtxt(os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'noras.txt'), unpack=True)
+X_shift = np.log10(0.767)
+p.fill_between(
+    np.log10(e1_F0223)+X_shift,
+    y1= e1_logNlogS*0.99,
+    y2= e1_logNlogS*1.01,
+    rasterized=True,
+    alpha=0.5,
+    label='eRASS1')
+p.fill_between(
+    np.log10(efeds_F0223)+X_shift,
+    y1= efeds_logNlogS*0.95,
+    y2= efeds_logNlogS*1.05,
+    rasterized=True,
+    alpha=0.5,
+    label='eFEDS')
+p.fill_between(
+    np.log10(noras_F0223)+X_shift,
+    y1= noras_logNlogS*0.9,
+    y2= noras_logNlogS*1.1,
+    rasterized=True,
+    alpha=0.5,
+    label='NORAS')
 
 path_2_logNlogS_data = os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'logNlogS_Finoguenov_cosmos_2007_clusters.data')
 x_data, y_data, y_data_min, y_data_max = np.loadtxt(    path_2_logNlogS_data, unpack=True)
