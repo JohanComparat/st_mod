@@ -343,8 +343,8 @@ c_out_mock = out/area
 c_err_mock = c_out_mock * out**(-0.5)
 x_out_mock = - 0.5 * (FX_bins[1:] + FX_bins[:-1])
 ok_mock = (c_err_mock>0)&(c_out_mock>0)&(c_out_mock>2*c_err_mock)
-p.fill_between(x_out_mock[ok_mock], y1=c_out_mock[ok_mock]-c_err_mock[ok_mock], y2=c_out_mock[ok_mock]+c_err_mock[ok_mock], label='Mock r<R500c', alpha=0.1, color='k')
-p.plot(x_out_mock[ok_mock], c_out_mock[ok_mock], color='k', label='Mock r<R500c')
+#p.fill_between(x_out_mock[ok_mock], y1=c_out_mock[ok_mock]-c_err_mock[ok_mock], y2=c_out_mock[ok_mock]+c_err_mock[ok_mock], alpha=0.1, color='k')
+p.plot(x_out_mock[ok_mock], c_out_mock[ok_mock], color='k', label='Mock')
 
 #FX_bins = np.arange(8, 18., 0.25)
 #out = np.cumsum(np.histogram(- DATA_b10['FX_obsF_500'], bins=FX_bins)[0])
