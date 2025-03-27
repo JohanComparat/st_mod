@@ -419,7 +419,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     #p.plot(lx_val, N_GAS/dlog10lx/volume_mock/np.log(10), lw=3, label='Mock b=0.6')
     #
     N_GAS = np.histogram( XGA['CLUSTER_LX_soft_RF_R500c'], lx_bins)[0]
-    p.plot(lx_val, N_GAS/dlog10lx/volume_mock/np.log(10), lw=3, label='Mock b=0.8')
+    p.plot(lx_val, N_GAS/dlog10lx/volume_mock/np.log(10), lw=3, label='Mock')
     #
     #N_GAS = np.histogram( XGA_b10['CLUSTER_LX_soft_RF_R500c'], lx_bins)[0]
     #p.plot(lx_val, N_GAS/dlog10lx/volume_mock/np.log(10), lw=3, label='Mock b=1.0')

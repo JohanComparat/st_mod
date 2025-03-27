@@ -286,7 +286,7 @@ p.fill_between(
     y1= y_data_min,
     y2= y_data_max,
     rasterized=True,
-    alpha=0.1,
+    alpha=0.2,
     label='Fi07 COSMOS')
 path_2_logNlogS_data = os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'logNlogS_Finoguenov_ecdfs_2015_clusters.data')
 x_data, y_data, y_data_min, y_data_max = np.loadtxt(    path_2_logNlogS_data, unpack=True)
@@ -295,7 +295,7 @@ p.fill_between(
     y1=y_data_min,
     y2=y_data_max,
     rasterized=True,
-    alpha=0.1,
+    alpha=0.2,
     label='Fi15 CDFS')
 #path_2_logNlogS_data = os.path.join(os.environ["GIT_STMOD_DATA"],'data/validation/validation_GAS/logN_logS','Boehringer_noras2_2017.data')
 #FX_01_24, N_per_str_up, N_per_str_low = np.loadtxt(    path_2_logNlogS_data, unpack=True)
@@ -325,7 +325,7 @@ y_err_count = y_mean_count**(-0.5)
 #y_mean_count = ( 5100 * y_spiders ).astype('int')
 #y_err_count = y_mean_count**(-0.5) * 2
 #p.plot(spiders_om307s823[0], y_spiders, label='SPIDERS om307s823')
-p.fill_between(x_spiders, y1 = y1_spiders*(1-y_err_count), y2 = y2_spiders*(1+y_err_count), label='Fi20 SPIDERS', alpha=0.1)
+p.fill_between(x_spiders, y1 = y1_spiders*(1-y_err_count), y2 = y2_spiders*(1+y_err_count), label='Fi20 SPIDERS', alpha=0.2)
 
 
 #FX_bins = np.arange(8, 18., 0.25)
@@ -343,8 +343,8 @@ c_out_mock = out/area
 c_err_mock = c_out_mock * out**(-0.5)
 x_out_mock = - 0.5 * (FX_bins[1:] + FX_bins[:-1])
 ok_mock = (c_err_mock>0)&(c_out_mock>0)&(c_out_mock>2*c_err_mock)
-p.fill_between(x_out_mock[ok_mock], y1=c_out_mock[ok_mock]-c_err_mock[ok_mock], y2=c_out_mock[ok_mock]+c_err_mock[ok_mock], label='Mock b=0.8 R500c', alpha=0.3, color='g')
-p.plot(x_out_mock[ok_mock], c_out_mock[ok_mock], color='g')
+p.fill_between(x_out_mock[ok_mock], y1=c_out_mock[ok_mock]-c_err_mock[ok_mock], y2=c_out_mock[ok_mock]+c_err_mock[ok_mock], label='Mock r<R500c', alpha=0.1, color='k')
+p.plot(x_out_mock[ok_mock], c_out_mock[ok_mock], color='k', label='Mock r<R500c')
 
 #FX_bins = np.arange(8, 18., 0.25)
 #out = np.cumsum(np.histogram(- DATA_b10['FX_obsF_500'], bins=FX_bins)[0])
