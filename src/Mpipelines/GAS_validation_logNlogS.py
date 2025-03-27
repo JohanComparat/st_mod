@@ -259,22 +259,22 @@ noras_F0223, noras_logNlogS = np.loadtxt(os.path.join(    os.environ["GIT_STMOD_
 X_shift = np.log10(0.767)
 p.fill_between(
     np.log10(e1_F0223)+X_shift,
-    y1= e1_logNlogS*0.99,
-    y2= e1_logNlogS*1.01,
+    y1= e1_logNlogS*0.9,
+    y2= e1_logNlogS*1.1,
     rasterized=True,
-    alpha=0.5,
+    alpha=0.9,
     label='eRASS1')
 p.fill_between(
     np.log10(efeds_F0223)+X_shift,
-    y1= efeds_logNlogS*0.95,
-    y2= efeds_logNlogS*1.05,
+    y1= efeds_logNlogS*0.1,
+    y2= efeds_logNlogS*1.1,
     rasterized=True,
-    alpha=0.5,
+    alpha=0.9,
     label='eFEDS')
 p.fill_between(
     np.log10(noras_F0223)+X_shift,
-    y1= noras_logNlogS*0.9,
-    y2= noras_logNlogS*1.1,
+    y1= noras_logNlogS*0.8,
+    y2= noras_logNlogS*1.2,
     rasterized=True,
     alpha=0.5,
     label='NORAS')
@@ -287,7 +287,7 @@ p.fill_between(
     y2= y_data_max,
     rasterized=True,
     alpha=0.2,
-    label='Fi07 COSMOS')
+    label='COSMOS')
 path_2_logNlogS_data = os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'logNlogS_Finoguenov_ecdfs_2015_clusters.data')
 x_data, y_data, y_data_min, y_data_max = np.loadtxt(    path_2_logNlogS_data, unpack=True)
 p.fill_between(
@@ -296,7 +296,7 @@ p.fill_between(
     y2=y_data_max,
     rasterized=True,
     alpha=0.2,
-    label='Fi15 CDFS')
+    label='CDFS')
 #path_2_logNlogS_data = os.path.join(os.environ["GIT_STMOD_DATA"],'data/validation/validation_GAS/logN_logS','Boehringer_noras2_2017.data')
 #FX_01_24, N_per_str_up, N_per_str_low = np.loadtxt(    path_2_logNlogS_data, unpack=True)
 #N_per_str = (N_per_str_up + N_per_str_low)/2.
@@ -325,7 +325,7 @@ y_err_count = y_mean_count**(-0.5)
 #y_mean_count = ( 5100 * y_spiders ).astype('int')
 #y_err_count = y_mean_count**(-0.5) * 2
 #p.plot(spiders_om307s823[0], y_spiders, label='SPIDERS om307s823')
-p.fill_between(x_spiders, y1 = y1_spiders*(1-y_err_count), y2 = y2_spiders*(1+y_err_count), label='Fi20 SPIDERS', alpha=0.2)
+p.fill_between(x_spiders, y1 = y1_spiders*(1-y_err_count), y2 = y2_spiders*(1+y_err_count), label='SPIDERS', alpha=0.2)
 
 
 #FX_bins = np.arange(8, 18., 0.25)
@@ -359,7 +359,7 @@ p.xlabel('log(F[0.5-2.0 keV])')
 p.ylabel('log(>F) [/deg2]')
 p.legend(frameon=False, loc=3)
 p.yscale('log')
-p.xlim((-18, -11.))
+p.xlim((-18, -9.5))
 p.ylim((2e-4, 10000))
 p.title(LC_dir+', z<'+z_max)
 p.tight_layout()
