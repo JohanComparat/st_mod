@@ -257,19 +257,19 @@ e1_F0223, e1_logNlogS = np.loadtxt(os.path.join(    os.environ["GIT_STMOD_DATA"]
 efeds_F0223, efeds_logNlogS = np.loadtxt(os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'efeds.txt'), unpack=True)
 noras_F0223, noras_logNlogS = np.loadtxt(os.path.join(    os.environ["GIT_STMOD_DATA"], 'data/validation/validation_GAS/logN_logS', 'noras.txt'), unpack=True)
 X_shift = np.log10(0.767)
-p.fill_between(
+p.plot(
     np.log10(e1_F0223)+X_shift,
-    y1= e1_logNlogS*0.9,
-    y2= e1_logNlogS*1.1,
+    e1_logNlogS,
+    #y2= e1_logNlogS*1.1,
     rasterized=True,
-    alpha=0.9,
+    #alpha=0.9,
     label='eRASS1')
 p.fill_between(
     np.log10(efeds_F0223)+X_shift,
-    y1= efeds_logNlogS*0.1,
-    y2= efeds_logNlogS*1.1,
-    rasterized=True,
-    alpha=0.9,
+    efeds_logNlogS,
+    #y2= efeds_logNlogS*1.1,
+    #rasterized=True,
+    #alpha=0.9,
     label='eFEDS')
 p.fill_between(
     np.log10(noras_F0223)+X_shift,
