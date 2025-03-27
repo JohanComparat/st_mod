@@ -261,10 +261,10 @@ p.plot(
     np.log10(e1_F0223)+X_shift,
     e1_logNlogS,
     #y2= e1_logNlogS*1.1,
-    rasterized=True,
+    #rasterized=True,
     #alpha=0.9,
     label='eRASS1')
-p.fill_between(
+p.plot(
     np.log10(efeds_F0223)+X_shift,
     efeds_logNlogS,
     #y2= efeds_logNlogS*1.1,
