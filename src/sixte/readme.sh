@@ -11,68 +11,36 @@ python create_image_library_hotgas.py # ONGOING sciserver
 /home/idies/workspace/erosim/Uchuu/cluster_images
 /home/idies/workspace/erosim/Uchuu/cluster_Xspectra
 
-#
-# TODO
 # re-cast cluster simput files into erosita tiles
 # implement flux cut
 import numpy as np
-for jj in np.arange(0,47,1):
-    f=open('extract_erosita_tile_'+str(jj).zfill(3)+'.sh', 'w')
-    f.write('#!/bin/bash \n')
-    for kk in np.arange(100*jj, 100*(jj+1), 1):
-        f.write("python extract_erosita_tile.py "+str(kk)+'\n')
-    f.close()
-    print('nohup sh extract_erosita_tile_'+str(jj).zfill(3)+'.sh > logs/extract_erosita_tile_'+str(jj).zfill(3)+'.log &')
+for kk in np.arange(24):
+    print("nohup python extract_erosita_tile.py "+str(kk)+" > logs/extract_erosita_tile_"+str(kk)+".log &")
 
-nohup sh extract_erosita_tile_000.sh > logs/extract_erosita_tile_000.log &
-nohup sh extract_erosita_tile_001.sh > logs/extract_erosita_tile_001.log &
-nohup sh extract_erosita_tile_002.sh > logs/extract_erosita_tile_002.log &
-nohup sh extract_erosita_tile_003.sh > logs/extract_erosita_tile_003.log &
-nohup sh extract_erosita_tile_004.sh > logs/extract_erosita_tile_004.log &
-nohup sh extract_erosita_tile_005.sh > logs/extract_erosita_tile_005.log &
-nohup sh extract_erosita_tile_006.sh > logs/extract_erosita_tile_006.log &
-nohup sh extract_erosita_tile_007.sh > logs/extract_erosita_tile_007.log &
-nohup sh extract_erosita_tile_008.sh > logs/extract_erosita_tile_008.log &
-nohup sh extract_erosita_tile_009.sh > logs/extract_erosita_tile_009.log &
-nohup sh extract_erosita_tile_010.sh > logs/extract_erosita_tile_010.log &
-nohup sh extract_erosita_tile_011.sh > logs/extract_erosita_tile_011.log &
-nohup sh extract_erosita_tile_012.sh > logs/extract_erosita_tile_012.log &
-nohup sh extract_erosita_tile_013.sh > logs/extract_erosita_tile_013.log &
-nohup sh extract_erosita_tile_014.sh > logs/extract_erosita_tile_014.log &
-nohup sh extract_erosita_tile_015.sh > logs/extract_erosita_tile_015.log &
-nohup sh extract_erosita_tile_016.sh > logs/extract_erosita_tile_016.log &
-nohup sh extract_erosita_tile_017.sh > logs/extract_erosita_tile_017.log &
-nohup sh extract_erosita_tile_018.sh > logs/extract_erosita_tile_018.log &
-nohup sh extract_erosita_tile_019.sh > logs/extract_erosita_tile_019.log &
-nohup sh extract_erosita_tile_020.sh > logs/extract_erosita_tile_020.log &
-nohup sh extract_erosita_tile_021.sh > logs/extract_erosita_tile_021.log &
-nohup sh extract_erosita_tile_022.sh > logs/extract_erosita_tile_022.log &
-nohup sh extract_erosita_tile_023.sh > logs/extract_erosita_tile_023.log &
-nohup sh extract_erosita_tile_024.sh > logs/extract_erosita_tile_024.log &
-nohup sh extract_erosita_tile_025.sh > logs/extract_erosita_tile_025.log &
-nohup sh extract_erosita_tile_026.sh > logs/extract_erosita_tile_026.log &
-nohup sh extract_erosita_tile_027.sh > logs/extract_erosita_tile_027.log &
-nohup sh extract_erosita_tile_028.sh > logs/extract_erosita_tile_028.log &
-nohup sh extract_erosita_tile_029.sh > logs/extract_erosita_tile_029.log &
-nohup sh extract_erosita_tile_030.sh > logs/extract_erosita_tile_030.log &
-nohup sh extract_erosita_tile_031.sh > logs/extract_erosita_tile_031.log &
-nohup sh extract_erosita_tile_032.sh > logs/extract_erosita_tile_032.log &
-nohup sh extract_erosita_tile_033.sh > logs/extract_erosita_tile_033.log &
-nohup sh extract_erosita_tile_034.sh > logs/extract_erosita_tile_034.log &
-nohup sh extract_erosita_tile_035.sh > logs/extract_erosita_tile_035.log &
-nohup sh extract_erosita_tile_036.sh > logs/extract_erosita_tile_036.log &
-nohup sh extract_erosita_tile_037.sh > logs/extract_erosita_tile_037.log &
-nohup sh extract_erosita_tile_038.sh > logs/extract_erosita_tile_038.log &
-nohup sh extract_erosita_tile_039.sh > logs/extract_erosita_tile_039.log &
-nohup sh extract_erosita_tile_040.sh > logs/extract_erosita_tile_040.log &
-nohup sh extract_erosita_tile_041.sh > logs/extract_erosita_tile_041.log &
-nohup sh extract_erosita_tile_042.sh > logs/extract_erosita_tile_042.log &
-nohup sh extract_erosita_tile_043.sh > logs/extract_erosita_tile_043.log &
-nohup sh extract_erosita_tile_044.sh > logs/extract_erosita_tile_044.log &
-nohup sh extract_erosita_tile_045.sh > logs/extract_erosita_tile_045.log &
-nohup sh extract_erosita_tile_046.sh > logs/extract_erosita_tile_046.log &
-
-
+nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log &
+nohup python extract_erosita_tile.py 1 > logs/extract_erosita_tile_1.log &
+nohup python extract_erosita_tile.py 2 > logs/extract_erosita_tile_2.log &
+nohup python extract_erosita_tile.py 3 > logs/extract_erosita_tile_3.log &
+nohup python extract_erosita_tile.py 4 > logs/extract_erosita_tile_4.log &
+nohup python extract_erosita_tile.py 5 > logs/extract_erosita_tile_5.log &
+nohup python extract_erosita_tile.py 6 > logs/extract_erosita_tile_6.log &
+nohup python extract_erosita_tile.py 7 > logs/extract_erosita_tile_7.log &
+nohup python extract_erosita_tile.py 8 > logs/extract_erosita_tile_8.log &
+nohup python extract_erosita_tile.py 9 > logs/extract_erosita_tile_9.log &
+nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log &
+nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log &
+nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log &
+nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log &
+nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log &
+nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log &
+nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log &
+nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log &
+nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log &
+nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log &
+nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log &
+nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log &
+nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log &
+nohup python extract_erosita_tile.py 23 > logs/extract_erosita_tile_23.log &
 
 
 
