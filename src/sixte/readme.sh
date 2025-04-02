@@ -18,8 +18,8 @@ for kk in np.arange(24):
     print("nohup python extract_erosita_tile.py "+str(kk)+" > logs/extract_erosita_tile_"+str(kk)+".log &")
 
 # nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # DONE
-nohup python extract_erosita_tile.py 1 > logs/extract_erosita_tile_1.log &
-nohup python extract_erosita_tile.py 2 > logs/extract_erosita_tile_2.log &
+# nohup python extract_erosita_tile.py 1 > logs/extract_erosita_tile_1.log & # DONE
+# nohup python extract_erosita_tile.py 2 > logs/extract_erosita_tile_2.log & # DONE
 nohup python extract_erosita_tile.py 3 > logs/extract_erosita_tile_3.log &
 nohup python extract_erosita_tile.py 4 > logs/extract_erosita_tile_4.log &
 nohup python extract_erosita_tile.py 5 > logs/extract_erosita_tile_5.log &

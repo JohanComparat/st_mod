@@ -69,6 +69,7 @@ for p_2_catalogue in p_2_catalogues:
     t_in = Table.read(p_2_catalogue)
     selection = (t_in['FLUX']>=log10FXmin)
     t_in = t_in[selection]
+    t_in['RA'][t_in['RA']==360.]=359.9999
     if len(t_in)>0:
         t_in['SRVMAP'] = np.array([get_srvmap(ra, dec)[0] for (ra, dec) in zip(t_in['RA'], t_in['DEC']) ])
         U_srvmap_val = np.unique(t_in['SRVMAP'])
