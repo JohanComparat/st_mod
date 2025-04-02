@@ -1,5 +1,5 @@
 import time
-t0 = time.time()
+#t0 = time.time()
 import os, glob, sys
 from astropy.table import Table, vstack
 import numpy as np
@@ -12,9 +12,10 @@ sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models
 
 # merge catalog
 for srv_val in sky_map_hdu['SRVMAP']:
+    t0 = time.time()
     str_field = str(srv_val).zfill(6)
     all_tile_catalogues = np.array( glob.glob( os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'z?p??', 'replication_*', 'Xgas_bHS0.8_simput.fits') ) )
-    print('merging',len(all_tile_catalogues), 'catalogs')
+    print(str_field, 'merging',len(all_tile_catalogues), 'catalogs')
     if len(all_tile_catalogues)>=1:
         full_cat = []
         for el in all_tile_catalogues:

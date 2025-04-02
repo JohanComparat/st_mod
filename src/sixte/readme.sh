@@ -17,52 +17,62 @@ import numpy as np
 for kk in np.arange(24):
     print("nohup python extract_erosita_tile.py "+str(kk)+" > logs/extract_erosita_tile_"+str(kk)+".log &")
 
+# takes <1h
+#
 # nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # DONE
 # nohup python extract_erosita_tile.py 1 > logs/extract_erosita_tile_1.log & # DONE
 # nohup python extract_erosita_tile.py 2 > logs/extract_erosita_tile_2.log & # DONE
-nohup python extract_erosita_tile.py 3 > logs/extract_erosita_tile_3.log &
-nohup python extract_erosita_tile.py 4 > logs/extract_erosita_tile_4.log &
-nohup python extract_erosita_tile.py 5 > logs/extract_erosita_tile_5.log &
-nohup python extract_erosita_tile.py 6 > logs/extract_erosita_tile_6.log &
-nohup python extract_erosita_tile.py 7 > logs/extract_erosita_tile_7.log &
-nohup python extract_erosita_tile.py 8 > logs/extract_erosita_tile_8.log &
-nohup python extract_erosita_tile.py 9 > logs/extract_erosita_tile_9.log &
-nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log &
-nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log &
-nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log &
-nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log &
-nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log &
-nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log &
-nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log &
-nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log &
-nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log &
-nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log &
-nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log &
-nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log &
-nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log &
+# nohup python extract_erosita_tile.py 3 > logs/extract_erosita_tile_3.log &   # DONE
+# nohup python extract_erosita_tile.py 4 > logs/extract_erosita_tile_4.log &   # DONE
+# nohup python extract_erosita_tile.py 5 > logs/extract_erosita_tile_5.log &   # DONE
+# nohup python extract_erosita_tile.py 6 > logs/extract_erosita_tile_6.log &   # DONE
+# nohup python extract_erosita_tile.py 7 > logs/extract_erosita_tile_7.log &   # DONE
+# nohup python extract_erosita_tile.py 8 > logs/extract_erosita_tile_8.log &   # DONE
+# nohup python extract_erosita_tile.py 9 > logs/extract_erosita_tile_9.log &   # DONE
+# nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log &   # DONE
+# nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # DONE
+# nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # DONE
+# nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # DONE
+# nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # DONE
+# nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # DONE
+# nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log & # DONE
+# nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log & # DONE
+# nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log & # DONE
+# nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log & # DONE
+# nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # DONE
+# nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # DONE
+# nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # DONE
 
 # after the scripts above are finished
-python merge_erosita_tile.py
+# python merge_erosita_tile.py # DONE
 
 # after the merging is finished (it deletes temporary files !)
 python clean_erosita_tile.py
 
 
+# start simulating events !
+# rsync ongoing
+~/workspace/Storage/comparat/persistent/data/data_s4_c030
+~/workspace/Storage/comparat/persistent/data/data_s5_c030
 
+szr16jdjsgpd:q5=v0jJ
 
+for eRASS:5,
+let's use this field as for testing:
+81141
+data_s5_c030/081141/c030/sm05_081141_020_FlareGTI_c030.fits
 
-
-
-
-
-
-
-
-
-
+for eRASS:4,
+let's use this field as for testing:
+164087
+data_s4_c030/164087/c030/sm04_164087_020_FlareGTI_c030.fits
 
 
 # what to simulate
+# take attitude file from the true events
+take simput and quantities from $UCHUU DIR
+
+
 
 choose a field ID on the erosita tiles and its metadata
 
