@@ -42,8 +42,11 @@ nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log &
 nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log &
 nohup python extract_erosita_tile.py 23 > logs/extract_erosita_tile_23.log &
 
+# after the scripts above are finished
+python merge_erosita_tile.py
 
-
+# after the merging is finished (it deletes temporary files !)
+python clean_erosita_tile.py
 
 
 
