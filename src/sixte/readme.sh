@@ -17,7 +17,7 @@ import numpy as np
 for kk in np.arange(24):
     print("nohup python extract_erosita_tile.py "+str(kk)+" > logs/extract_erosita_tile_"+str(kk)+".log &")
 
-nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log &
+# nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # DONE
 nohup python extract_erosita_tile.py 1 > logs/extract_erosita_tile_1.log &
 nohup python extract_erosita_tile.py 2 > logs/extract_erosita_tile_2.log &
 nohup python extract_erosita_tile.py 3 > logs/extract_erosita_tile_3.log &
@@ -40,7 +40,6 @@ nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log &
 nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log &
 nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log &
 nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log &
-nohup python extract_erosita_tile.py 23 > logs/extract_erosita_tile_23.log &
 
 # after the scripts above are finished
 python merge_erosita_tile.py
