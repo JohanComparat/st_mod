@@ -601,7 +601,7 @@ class GAS:
         pixel_rescaling =  np.ones_like(CAT['RA'])
         # loop over profile
         path_2_images = []
-        for b_a, j_p in zip(CAT['idx_profile'], CAT['ellipticity']):
+        for j_p, b_a in zip(CAT['idx_profile'], CAT['ellipticity']):
             #j_e = 0
             #b_to_a_500c = [0.75]
             #b_a =  # b_to_a_500c[j_e]
