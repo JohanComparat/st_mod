@@ -15,16 +15,16 @@ python create_image_library_hotgas.py # DONE
 
 # takes <1h
 #
-nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # TODO
-nohup python extract_erosita_tile.py 1 > logs/extract_erosita_tile_1.log & # TODO
-nohup python extract_erosita_tile.py 2 > logs/extract_erosita_tile_2.log & # TODO
-nohup python extract_erosita_tile.py 3 > logs/extract_erosita_tile_3.log &   # TODO
-nohup python extract_erosita_tile.py 4 > logs/extract_erosita_tile_4.log &   # TODO
-nohup python extract_erosita_tile.py 5 > logs/extract_erosita_tile_5.log &   # TODO
-nohup python extract_erosita_tile.py 6 > logs/extract_erosita_tile_6.log &   # TODO
-nohup python extract_erosita_tile.py 7 > logs/extract_erosita_tile_7.log &   # TODO
-nohup python extract_erosita_tile.py 8 > logs/extract_erosita_tile_8.log &   # TODO
-nohup python extract_erosita_tile.py 9 > logs/extract_erosita_tile_9.log &   # TODO
+# # nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # DO NOT extract z=0. Skip it !
+nohup python extract_erosita_tile.py 1  > logs/extract_erosita_tile_1.log  & # TODO
+nohup python extract_erosita_tile.py 2  > logs/extract_erosita_tile_2.log  & # TODO
+nohup python extract_erosita_tile.py 3  > logs/extract_erosita_tile_3.log  & # TODO
+nohup python extract_erosita_tile.py 4  > logs/extract_erosita_tile_4.log  & # TODO
+nohup python extract_erosita_tile.py 5  > logs/extract_erosita_tile_5.log  & # TODO
+nohup python extract_erosita_tile.py 6  > logs/extract_erosita_tile_6.log  & # TODO
+nohup python extract_erosita_tile.py 7  > logs/extract_erosita_tile_7.log  & # TODO
+nohup python extract_erosita_tile.py 8  > logs/extract_erosita_tile_8.log  & # TODO
+nohup python extract_erosita_tile.py 9  > logs/extract_erosita_tile_9.log  & # TODO
 nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log & # TODO
 nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # TODO
 nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # TODO
@@ -55,7 +55,7 @@ python create_links_per_tile.py # DONE
 # retrieve real events
 # rsync ONGOING
 ~/workspace/Storage/comparat/persistent/data/data_s4_c030
-~/workspace/Storage/comparat/persistent/data/data_s5_c030
+~/workspace/Storage/comparat/persistent/data/data_s5_c030  # rsync finished
 
 szr16jdjsgpd:q5=v0jJ
 

@@ -4,16 +4,26 @@ export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 
-# conda activate stmod
+conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
 cd ~/workspace/erosim/sixte_output_events
 rsync -avz joco@raven.mpcdf.mpg.de:/ptmp/joco/erosim/sixte_output_events/* .
+#
+# on sciserver. from sciserver to raven
+cd $GIT_STMOD_DATA
+rsync -avz data joco@raven.mpcdf.mpg.de:~/ptmp_joco/st_mod_data/
+# on ds. from raven to ds
+cd $GIT_STMOD_DATA
+rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/st_mod_data/data .
+# on laptop. from raven to laptop
+cd $GIT_STMOD_DATA
+rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/st_mod_data/data .
 
 #
 # tabulates a file with profiles inside
 #
-# python GAS_setup.py z0p14 FullSky # DONE only run once and do not rerun.
+# python GAS_setup.py z0p14 FullSky # DONE only run once and DO NOT rerun.
 
 python GAS_pipeline.py z0p00 FullSky # DONE
 python GAS_pipeline.py z0p02 FullSky # DONE

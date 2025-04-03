@@ -9,6 +9,11 @@ export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 # conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 
+python GAS_validation_WPRP.py z0p14 # DONE
+python GAS_validation_WPRP.py z0p19 # DONE
+python GAS_validation_WPRP.py z0p25 # DONE
+
+
 python GAS_validation_ScalingRelation.py z0p00 FullSky # DONE
 python GAS_validation_ScalingRelation.py z0p02 FullSky # DONE
 python GAS_validation_ScalingRelation.py z0p05 FullSky # DONE
