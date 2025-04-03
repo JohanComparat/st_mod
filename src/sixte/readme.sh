@@ -5,7 +5,7 @@ export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/sixte
-python create_image_library_hotgas.py # DONE
+# python create_image_library_hotgas.py # DONE no need to REDO
 
 # re-cast cluster simput files into erosita tiles
 # implement flux cut
@@ -16,37 +16,62 @@ python create_image_library_hotgas.py # DONE
 # takes <1h
 #
 # # nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # DO NOT extract z=0. Skip it !
-nohup python extract_erosita_tile.py 1  > logs/extract_erosita_tile_1.log  & # TODO
-nohup python extract_erosita_tile.py 2  > logs/extract_erosita_tile_2.log  & # TODO
-nohup python extract_erosita_tile.py 3  > logs/extract_erosita_tile_3.log  & # TODO
-nohup python extract_erosita_tile.py 4  > logs/extract_erosita_tile_4.log  & # TODO
-nohup python extract_erosita_tile.py 5  > logs/extract_erosita_tile_5.log  & # TODO
-nohup python extract_erosita_tile.py 6  > logs/extract_erosita_tile_6.log  & # TODO
-nohup python extract_erosita_tile.py 7  > logs/extract_erosita_tile_7.log  & # TODO
-nohup python extract_erosita_tile.py 8  > logs/extract_erosita_tile_8.log  & # TODO
-nohup python extract_erosita_tile.py 9  > logs/extract_erosita_tile_9.log  & # TODO
-nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log & # TODO
-nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # TODO
-nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # TODO
-nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # TODO
-nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # TODO
-nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # TODO
-nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log & # TODO
-nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log & # TODO
-nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log & # TODO
-nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log & # TODO
-nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # TODO
-nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # TODO
-nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # TODO
+nohup python extract_erosita_tile.py 1  > logs/extract_erosita_tile_1.log  & # DONE
+nohup python extract_erosita_tile.py 2  > logs/extract_erosita_tile_2.log  & # DONE
+nohup python extract_erosita_tile.py 3  > logs/extract_erosita_tile_3.log  & # DONE
+nohup python extract_erosita_tile.py 4  > logs/extract_erosita_tile_4.log  & # DONE
+nohup python extract_erosita_tile.py 5  > logs/extract_erosita_tile_5.log  & # DONE
+nohup python extract_erosita_tile.py 6  > logs/extract_erosita_tile_6.log  & # DONE
+nohup python extract_erosita_tile.py 7  > logs/extract_erosita_tile_7.log  & # DONE
+nohup python extract_erosita_tile.py 8  > logs/extract_erosita_tile_8.log  & # DONE
+nohup python extract_erosita_tile.py 9  > logs/extract_erosita_tile_9.log  & # DONE
+nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log & # DONE
+nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # DONE
+nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # DONE
+nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # DONE
+nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # DONE
+nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # DONE
+nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log & # DONE
+nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log & # DONE
+nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log & # DONE
+nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log & # DONE
+nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # DONE
+nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # DONE
+nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # DONE
 
 # after the scripts above are finished
-python merge_erosita_tile.py # TODO
-
+python merge_erosita_tile.py # ONGOING
 # after the merging is finished (it deletes temporary files !)
 python clean_erosita_tile.py # TODO
 
 # create links for the images and spectra in each folder
 python create_links_per_tile.py # DONE
+
+# TODO REFORMAT TO THE SIMPUT FITS FORMAT PROPERLY !!!
+        hdu_cols = fits.ColDefs([
+            fits.Column(name="SRC_ID",  format='K',    unit='',    array=(CAT['id']).astype('int')),
+            fits.Column(name="RA",      format='D',    unit='deg', array=ra_array),
+            fits.Column(name="DEC",     format='D',    unit='deg', array=dec_array),
+            fits.Column(name="E_MIN",   format='D',    unit='keV', array=np.ones(N_clu_all) * 0.5),
+            fits.Column(name="E_MAX",   format='D',    unit='keV', array=np.ones(N_clu_all) * 2.0),
+            fits.Column(name="FLUX",    format='D',    unit='erg/s/cm**2', array=flux_array),
+            fits.Column(name="IMAGE",   format='100A', unit='', array=CAT['XRAY_image_path_simput']),
+            fits.Column(name="SPECTRUM",format='100A', unit='', array=spec_names),
+            fits.Column(name="IMGROTA", format='D',    unit='deg', array=orientation),
+            fits.Column(name="IMGSCAL", format='D',    unit='', array=pixel_rescaling)
+        ])
+        hdu = fits.BinTableHDU.from_columns(hdu_cols)
+        hdu.name = 'SRC_CAT'
+        hdu.header['HDUCLASS'] = 'HEASARC/SIMPUT'
+        hdu.header['HDUCLAS1'] = 'SRC_CAT'
+        hdu.header['HDUVERS'] = '1.1.0'
+        hdu.header['RADESYS'] = 'FK5'
+        hdu.header['EQUINOX'] = 2000.0
+        outf = fits.HDUList([fits.PrimaryHDU(), hdu])  # ,  ])
+        if os.path.isfile(p2_simput_out):
+            os.system("rm " + p2_simput_out)
+        outf.writeto(p2_simput_out, overwrite=True)
+        print(p2_simput_out, 'written', time.time() - t0)
 
 /home/idies/workspace/erosim/Uchuu/cluster_images
 /home/idies/workspace/erosim/Uchuu/cluster_Xspectra

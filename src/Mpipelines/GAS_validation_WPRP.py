@@ -191,7 +191,7 @@ def tabulate_wprp_clustering_Cross(RA, DEC, Z, rand_RA , rand_DEC, rand_Z, RA2, 
 LX_mins = np.arange(42.5, 44.1, 0.1)
 Ms_mins = np.arange(10, 11.75, 0.25)[::-1]
 
-for meta in C_GAL.LC_MetaData[:1]:#[(enough_area)&(small_difference_minmax_1)&(small_difference_minmax_2)]:
+for meta in C_GAL.LC_MetaData[1:]:
 	#
 	print(meta)
 	# retrieve the resulting catalogues and meta data
