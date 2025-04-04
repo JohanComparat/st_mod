@@ -4,7 +4,8 @@
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
-cd $GIT_STMOD/src/sixte
+cd $GIT_STMOD/src/sixte_GAS/
+
 # python create_image_library_hotgas.py # DONE no need to REDO
 
 # re-cast cluster simput files into erosita tiles
@@ -65,7 +66,6 @@ python copy_events.py # ONGOING
 
 # simulate data with sixte and events using attitude fiels in the events !!!
 
-
 for eRASS:5,
 let's use this field as for testing:
 81141
@@ -81,51 +81,23 @@ data_s4_c030/164087/c030/sm04_164087_020_FlareGTI_c030.fits
 # take attitude file from the true events
 take simput and quantities from $UCHUU DIR
 
-
-
-choose a field ID on the erosita tiles and its metadata
-
-# hot gas
-haloes that comply to
-z_max(M500c) = z at which M500c = 20'
-will have an image for the simulation
-
-haloes that do not comply to this threshold are simulated as PSF
-
-
-In a given redshift bin of width 0.01
-create a set of images (on sky pixels) that represent the CC/NCC and the extent and possible R500c.
-Say take 20 profile images in each R500c bin (log10 bins of 0.2 or 0.1)
-Depending on the total number on has to write.
-
-Use the mean ellipticity in each R500c bin ? (is iti available for Uchuu ?)
-
-Single temperature apec model
-
-
-# AGN
-
-C019 model extended to lower stellar masses
-Add dependence on SFR ?
-
-
-# XRB
-
-Lehmer model ?
-
-
-# write all the sixte simputs directly
-
-/data56s/comparat/erosim/data_s5/??????/Uchuu/simput_gas
-/data56s/comparat/erosim/data_s5/??????/Uchuu/simput_gas/images
-/data56s/comparat/erosim/data_s5/??????/Uchuu/simput_agn
-/data56s/comparat/erosim/data_s5/??????/Uchuu/simput_xrb
-/data56s/comparat/erosim/data_s5/??????/Uchuu/simput_bkg/images
-
-
 # simulation setup
-
 Make a long eRASS:8 sixte simulation
 
+Make a long eRASS:4 or 5 sixte simulation
 
 
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/sixte_GAS/
+
+
+for jj in n.arange(100):
+    print("nohup python simulate_cluster_only_SEED_SKYMAP.py "+str(jj).zfill(3)+" > sim_cluster_seed"+str(jj).zfill(3)+".log &")
+
+
+cd $GIT_ERASS_SIM/sixte
+nohup python simulate_cluster_only_SEED_SKYMAP.py 001 > sim_cluster_seed001.log &
+nohup python simulate_cluster_only_SEED_SKYMAP.py 002 > sim_cluster_seed002.log &
+nohup python simulate_cluster_only_SEED_SKYMAP.py 003 > sim_cluster_seed003.log &

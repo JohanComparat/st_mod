@@ -20,6 +20,15 @@ rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/st_mod_data/data .
 cd $GIT_STMOD_DATA
 rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/st_mod_data/data .
 
+  184 list_z0pGLIST.list
+   56 list_z1p65GLIST.list
+   56 list_z1p77GLIST.list
+   64 list_z1p90GLIST.list
+ 184+ 440-(64+56+56)
+  list_z1pGLIST.list
+
+2796 x 4 x 22
+
 #
 # tabulates a file with profiles inside
 #
