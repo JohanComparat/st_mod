@@ -79,7 +79,7 @@ def tabulate_wprp_clustering_noW(RA, DEC, Z, rand_RA , rand_DEC, rand_Z, out_fil
 	N = len(RA)
 	rand_N = len(rand_RA)
 	#print(N, rand_N, out_file, time.time()-t0)
-	bins = 10**np.arange(-1.6, 1.81, 0.2)
+	bins = 10**np.arange(-2.0, 1.81, 0.1)
 	nbins = len(bins)-1
 	#print('bins', bins, bins.shape)
 	x = (bins[1:]+bins[:-1])/2.
@@ -134,7 +134,7 @@ def tabulate_wprp_clustering_Cross(RA, DEC, Z, rand_RA , rand_DEC, rand_Z, RA2, 
 	N2 = len(RA2)
 	rand_N2 = len(rand_RA2)
 	#print(N, rand_N, out_file, time.time()-t0)
-	bins = 10**np.arange(-2.0, 1.81, 0.05)
+	bins = 10**np.arange(-2.0, 1.81, 0.1)
 	nbins = len(bins)-1
 	#print('bins', bins, bins.shape)
 	x = (bins[1:]+bins[:-1])/2.
@@ -229,7 +229,7 @@ for meta in C_GAL.LC_MetaData[1:]:
 		rand['Z'] = z_fs[selectionR]
 		N_RD = len(rand['RA'])
 		print(N_RD, 'randoms')
-		p_2_2PCF_G = os.path.join(validation_dir_WPRP, z_dir, M_str+'_'+str_replic+'-wprp-pimax100-2pcf.fits' )
+		p_2_2PCF_G = os.path.join(validation_dir_WPRP, z_dir, M_str+'_'+str_replic+'-wprp-pimax100-2pcf-bin0p1.fits' )
 		print(p_2_2PCF_G)
 		if os.path.isfile(p_2_2PCF_G)==False:
 			tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF_G )
@@ -259,7 +259,7 @@ for meta in C_GAL.LC_MetaData[1:]:
 			CCrand['Z'] = z_fs[selectionR]
 			N_CCRD = len(CCrand['RA'])
 			print(N_CCRD, 'cluster randoms')
-			p_2_2PCF_X = os.path.join(validation_dir_WPRP, z_dir, M_str+'_'+LX_str+'_'+str_replic+'-wprp-pimax100-2pcf.fits' )
+			p_2_2PCF_X = os.path.join(validation_dir_WPRP, z_dir, M_str+'_'+LX_str+'_'+str_replic+'-wprp-pimax100-2pcf-bin0p1.fits' )
 			print(p_2_2PCF_X)
 			if os.path.isfile(p_2_2PCF_X)==False and len(CC['RA'])>10:
 				tabulate_wprp_clustering_Cross(
@@ -299,7 +299,7 @@ for meta in C_GAL.LC_MetaData[1:]:
 		rand['Z'] = z_fs[selectionR]
 		N_RD = len(rand['RA'])
 		print(N_RD, 'randoms')
-		p_2_2PCF_G = os.path.join(validation_dir_WPRP, z_dir, M_str+'_BC_'+str_replic+'-wprp-pimax100-2pcf.fits' )
+		p_2_2PCF_G = os.path.join(validation_dir_WPRP, z_dir, M_str+'_BC_'+str_replic+'-wprp-pimax100-2pcf-bin0p1.fits' )
 		print(p_2_2PCF_G)
 		if os.path.isfile(p_2_2PCF_G)==False:
 			tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF_G )
@@ -329,7 +329,7 @@ for meta in C_GAL.LC_MetaData[1:]:
 			CCrand['Z'] = z_fs[selectionR]
 			N_CCRD = len(CCrand['RA'])
 			print(N_CCRD, 'cluster randoms')
-			p_2_2PCF_X = os.path.join(validation_dir_WPRP, z_dir, M_str+'_BC_'+LX_str+'_'+str_replic+'-wprp-pimax100-2pcf.fits' )
+			p_2_2PCF_X = os.path.join(validation_dir_WPRP, z_dir, M_str+'_BC_'+LX_str+'_'+str_replic+'-wprp-pimax100-2pcf-bin0p1.fits' )
 			print(p_2_2PCF_X)
 			if os.path.isfile(p_2_2PCF_X)==False and len(CC['RA'])>10:
 				tabulate_wprp_clustering_Cross(
@@ -369,7 +369,7 @@ for meta in C_GAL.LC_MetaData[1:]:
 		rand['Z'] = z_fs[selectionR]
 		N_RD = len(rand['RA'])
 		print(N_RD, 'randoms')
-		p_2_2PCF_G = os.path.join(validation_dir_WPRP, z_dir, M_str+'_RS_'+str_replic+'-wprp-pimax100-2pcf.fits' )
+		p_2_2PCF_G = os.path.join(validation_dir_WPRP, z_dir, M_str+'_RS_'+str_replic+'-wprp-pimax100-2pcf-bin0p1.fits' )
 		print(p_2_2PCF_G)
 		if os.path.isfile(p_2_2PCF_G)==False:
 			tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF_G )
@@ -399,7 +399,7 @@ for meta in C_GAL.LC_MetaData[1:]:
 			CCrand['Z'] = z_fs[selectionR]
 			N_CCRD = len(CCrand['RA'])
 			print(N_CCRD, 'cluster randoms')
-			p_2_2PCF_X = os.path.join(validation_dir_WPRP, z_dir, M_str+'_RS_'+LX_str+'_'+str_replic+'-wprp-pimax100-2pcf.fits' )
+			p_2_2PCF_X = os.path.join(validation_dir_WPRP, z_dir, M_str+'_RS_'+LX_str+'_'+str_replic+'-wprp-pimax100-2pcf-bin0p1.fits' )
 			print(p_2_2PCF_X)
 			if os.path.isfile(p_2_2PCF_X)==False and len(CC['RA'])>10:
 				tabulate_wprp_clustering_Cross(

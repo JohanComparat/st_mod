@@ -62,7 +62,7 @@ python format_simput_xgas.py # DONE
 python copy_events.py # ONGOING
 
 
-
+!w*ZGP<4B<9i&h6
 
 # simulate data with sixte and events using attitude fiels in the events !!!
 
