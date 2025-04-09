@@ -50,7 +50,6 @@ python clean_erosita_tile.py # DONE
 # /home/idies/workspace/erosim/Uchuu/cluster_images
 # /home/idies/workspace/erosim/Uchuu/cluster_Xspectra
 
-python merge_erosita_tile.py # DONE
 python format_simput_xgas.py # DONE
 
 
@@ -62,8 +61,13 @@ python format_simput_xgas.py # DONE
 # copy c030 s4 and s5 into erosim
 python copy_events.py # DONE
 
+# simulates events with seed fixed to 001
+# only does the first tile : 121048
+python simulate_cluster_only_SEED_SKYMAP.py
 
-!w*ZGP<4B<9i&h6
+
+
+
 
 # simulate data with sixte and events using attitude fiels in the events !!!
 
