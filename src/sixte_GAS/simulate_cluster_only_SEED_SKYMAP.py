@@ -7,12 +7,12 @@ import os
 import errno
 import sys, glob
 import healpy
-import numpy as n
+import numpy as np
 from astropy.io import fits
 from astropy.table import Table, Column
-#pix_ids = n.arange(healpy.nside2npix(8) )
+#pix_ids = np.arange(healpy.nside2npix(8) )
 #ra_cen_s, dec_cen_s = healpy.pix2ang(8, pix_ids, nest=True, lonlat=True)
-sky_map_hdu = Table.read(os.path.join(os.environ['GIT_ERASS_SIM'], 'data', 'SKYMAPS.fits'))
+sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
 #import pymangle
 #eRASS_ply = os.path.join(os.environ['GIT_ERASS_SIM'], 'data', 'eRASS_SKYMAPS.ply' )
 #mng = pymangle.Mangle( eRASS_ply )
@@ -113,7 +113,7 @@ class Simulator:
 
         if self._N_simputs>=2:
             cmd = ["erosim", "Simput=%s" % self._simput[0] ]
-            for jj in n.arange(len(self._simput))[1:]:
+            for jj in np.arange(len(self._simput))[1:]:
                 cmd.append("Simput"+str(int(jj+1))+"=%s" % self._simput[jj])
             cmd_end = ["Prefix=%s" % prefix,
                     "Attitude=%s" % self._p_2_att_file,
@@ -186,80 +186,63 @@ class Simulator:
             self.run_sixte()
             # delete gti files
             # elements of
-            list_2_delete = n.array(glob.glob(os.path.join(self._data_dir,  "*.gti" )))
+            list_2_delete = np.array(glob.glob(os.path.join(self._data_dir,  "*.gti" )))
             print('============================================')
             print('============================================')
             print('deleting', list_2_delete)
             print('============================================')
             print('============================================')
-            del_list = n.array([ os.remove(el) for el in  list_2_delete])
+            del_list = np.array([ os.remove(el) for el in  list_2_delete])
 
 
 
 if __name__ == '__main__':
-    seed = sys.argv[1]
-    erass_option = "eRASS1"
-    env = "UNIT_fA1i_DIR" #sys.argv[1] #
-    simput_dir = os.path.join(os.environ[env], "SIMPUT_SKYMAP_UNIT_fA1i_DIR_eRO_CLU_b8_CM_0_pixS_20.0_M500c_13.0_FX_-14.5_MGAS_Sept2021" )
-    print(seed, env, erass_option)
-    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)] :
+    seed = 1
+    LC_dir = 'LCerass'
+
+    #erass_option = "eRASS1"
+    #env = "UNIT_fA1i_DIR" #sys.argv[1] #
+    #simput_dir = os.path.join(os.environ[env], "SIMPUT_SKYMAP_UNIT_fA1i_DIR_eRO_CLU_b8_CM_0_pixS_20.0_M500c_13.0_FX_-14.5_MGAS_Sept2021" )
+    print(seed, LC_dir)#, env, erass_option)
+    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1] :
         """
         Loops over healpix pixels and writes the files to path_2_eRO_catalog
         """
         sky_tile_id = str(sky_tile['SRVMAP'])
-        print(sky_tile_id)
+        str_field = str(sky_tile['SRVMAP']).zfill(6)
+        simput_files = np.array([
+            os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput.fits'),
+            ])
+        print(sky_tile_id, simput_files)
         ra_cen = sky_tile['RA_CEN']
         dec_cen = sky_tile['DE_CEN']
-        data_dir = "/data26s/comparat/simulations/erosim/SEED_"+str(seed).zfill(3) +'_' + erass_option+"_events_cluster_"+env+"_2022_01/" + sky_tile_id.zfill(6)
-        print(data_dir)
-        if os.path.isdir(data_dir)==True:
-            print('pass, already done')
-        else:
-            simput_files = n.array(glob.glob(os.path.join(simput_dir, 'c_' + sky_tile_id.zfill(6) + '_N_*.fit')))
-            simput_files.sort()
-            print(simput_files)
-            if len(simput_files)<=6:
-                if erass_option == "eRASS1":
-                    t_starts = n.array([ 628700405.00 ,
-                                        629139605.00 ,
-                                        629332205.00 ,
-                                        629425805.00 ,
-                                        633736805.00 ,
-                                        639151205.00 ])
-                    t_stops = n.array([628740005.00,
-                                        629311205.00,
-                                        629387405.00,
-                                        633717005.00,
-                                        639072005.00,
-                                        645645605.00 ])
-                    p_2_att_file = "/data40s/erosim/eRASS/att_eRASS1.fits"
-
-                if erass_option == "eRASS8":
-                    p_2_att_file = "/data40s/erosim/eRASS/eRASS_4yr_epc85_att.fits"
-                    t_starts = n.array([ 617943605 ])
-                    t_stops = n.array([ 744174005 ])
-
-                for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
-                    print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-                    print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-                    print('STEP', jj, (t0, t1))
-                    print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-                    print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-                    bkg = 0
-                    t_start = t0 # 617943605.0
-                    exposure = t1 - t0 # 31536000 * 4 # = 4 years  # 31536000 = 1year # 15750000 = 1/2 year
-                    # Launch...
-                    # 3 files
-                    #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
-                    # 2 files
-                    Simulator(
-                        jj,
-                        bkg,
-                        t_start,
-                        exposure,
-                        int(seed),
-                        simput_files,
-                        data_dir,
-                        ra_cen,
-                        dec_cen,
-                        p_2_att_file).run_all()
+        data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, "SEED_"+str(seed).zfill(3) +"_events_cluster_2025_04" )
+        print('outputs here',data_dir)
+        os.system('mkdir -p '+data_dir )
+        p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
+        t_starts = np.array([ 617943605 ])
+        t_stops = np.array([ 744174005 ])
+        for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('STEP', jj, (t0, t1))
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+            bkg = 0
+            t_start = t0 # 617943605.0
+            exposure = t1 - t0 # 31536000 * 4 # = 4 years  # 31536000 = 1year # 15750000 = 1/2 year
+            # Launch...
+            # 3 files
+            #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
+            # 2 files
+            Simulator(
+                jj,
+                bkg,
+                t_start,
+                exposure,
+                int(seed),
+                simput_files,
+                data_dir,
+                ra_cen,
+                dec_cen,
+                p_2_att_file).run_all()

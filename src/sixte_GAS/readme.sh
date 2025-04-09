@@ -59,7 +59,7 @@ python format_simput_xgas.py # DONE
 # rsync DONE
 
 # copy c030 s4 and s5 into erosim
-python copy_events.py # ONGOING
+python copy_events.py # DONE
 
 
 !w*ZGP<4B<9i&h6
