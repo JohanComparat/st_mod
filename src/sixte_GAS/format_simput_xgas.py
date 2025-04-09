@@ -16,6 +16,10 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
     t0 = time.time()
     str_field = str(srv_val).zfill(6)
     t_in = Table.read( os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput.fits') )
+    print(len(t_in))
+    temperature = np.array([ int(el.split('_')[4])/10000 for el in t_in['SPECTRUM']  ])
+    t_in = t_in[temperature>=0.1]
+    print(len(t_in), 'after kT<0.1 cut')
     p2_simput_out = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput.fits')
     N_clu_all = len(t_in)
     hdu_cols = fits.ColDefs([
