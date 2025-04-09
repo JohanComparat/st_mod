@@ -24,7 +24,7 @@ for srv_val in sky_map_hdu['SRVMAP']:
         fits.Column(name="DEC",     format='D',    unit='deg', array=t_in["DEC"]),
         fits.Column(name="E_MIN",   format='D',    unit='keV', array=np.ones(N_clu_all) * 0.5),
         fits.Column(name="E_MAX",   format='D',    unit='keV', array=np.ones(N_clu_all) * 2.0),
-        fits.Column(name="FLUX",    format='D',    unit='erg/s/cm**2', array=t_in["FLUX"]),
+        fits.Column(name="FLUX",    format='D',    unit='erg/s/cm**2', array=10**t_in["FLUX"]),
         fits.Column(name="IMAGE",   format='100A', unit='', array=t_in["IMAGE"]),
         fits.Column(name="SPECTRUM",format='100A', unit='', array=t_in["SPECTRUM"]),
         fits.Column(name="IMGROTA", format='D',    unit='deg', array=t_in["IMGROTA"]),

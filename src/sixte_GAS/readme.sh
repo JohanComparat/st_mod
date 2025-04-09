@@ -46,10 +46,11 @@ python merge_erosita_tile.py # DONE
 python clean_erosita_tile.py # DONE
 
 # create links for the images and spectra in each folder
-python create_links_per_tile.py # DONE
-/home/idies/workspace/erosim/Uchuu/cluster_images
-/home/idies/workspace/erosim/Uchuu/cluster_Xspectra
+# python create_links_per_tile.py # DONE
+# /home/idies/workspace/erosim/Uchuu/cluster_images
+# /home/idies/workspace/erosim/Uchuu/cluster_Xspectra
 
+python merge_erosita_tile.py # DONE
 python format_simput_xgas.py # DONE
 
 
