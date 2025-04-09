@@ -110,6 +110,23 @@ class Simulator:
                     "clobber=yes",
                     "chatter=3"
                     ]
+            #cmd = ["runsixt",
+                   #"XMLFile=erosita.xml",
+                    #"Attitude=%s" % self._p_2_att_file,
+                    #"Exposure=%s" % self._exposure,
+                    #"Simput=%s" % self._simput[0],
+                    #"EvtFile=events.fits",
+                    ####"Prefix=%s" % prefix,
+                    ####"RA=%s" % self._ra_cen,
+                    ####"Dec=%s" % self._dec_cen,
+                    ####"GTIFile=%s/erass.gti" % self._data_dir,
+                    ####"TSTART=%s" % self._t_start,
+                    ####"MJDREF=51543.875",
+                    ####"dt=0.5",
+                    ####"Seed=%s" % self._seed,
+                    ####"clobber=yes",
+                    ####"chatter=3"
+                    #]
 
         if self._N_simputs>=2:
             cmd = ["erosim", "Simput=%s" % self._simput[0] ]
@@ -199,13 +216,13 @@ class Simulator:
 if __name__ == '__main__':
     seed = 1
     LC_dir = 'LCerass'
-    erass_option = "eRASS4"
+    #erass_option = "eRASS4"
     #erass_option = "eRASS5"
-    #erass_option = "eRASS8"
+    erass_option = "eRASS8"
     #env = "UNIT_fA1i_DIR" #sys.argv[1] #
     #simput_dir = os.path.join(os.environ[env], "SIMPUT_SKYMAP_UNIT_fA1i_DIR_eRO_CLU_b8_CM_0_pixS_20.0_M500c_13.0_FX_-14.5_MGAS_Sept2021" )
     print(seed, LC_dir, erass_option)#, env, erass_option)
-    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1] :
+    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)] :
         """
         Loops over healpix pixels and writes the files to path_2_eRO_catalog
         """
@@ -217,7 +234,7 @@ if __name__ == '__main__':
         print(sky_tile_id, simput_files)
         ra_cen = sky_tile['RA_CEN']
         dec_cen = sky_tile['DE_CEN']
-        data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, "SEED_"+str(seed).zfill(3) +"_events_cluster_2025_04" )
+        data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, erass_option + "_SEED_"+str(seed).zfill(3) +"_events_cluster_2025_04" )
         print('outputs here',data_dir)
         os.system('mkdir -p '+data_dir )
 
@@ -233,9 +250,19 @@ if __name__ == '__main__':
                 print('not observed, no event file')
                 continue
             evt = fits.open(p2_evt)
-            p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
-            t_starts = np.array([ 617943605 ])
-            t_stops = np.array([ 744174005 ])
+            att_hdu_j = np.arange(2,9,1) # ATTITUDE FILE hdu, ONE PER TM
+            gti_hdu_j = np.arange(58,65,1) # gti hduS, ONE PER TM
+            all_mm = []
+            for jj in gti_hdu_j:
+                print(jj, evt[jj].data['START'].min(), evt[jj].data['STOP'].max())
+                all_mm.append([evt[jj].data['START'].min(), evt[jj].data['STOP'].max()])
+            gti_starts, gti_stops = np.transpose(all_mm)
+            t_starts = np.array([ gti_starts.min() ])
+            t_stops = np.array([ gti_stops.max() ])
+
+            #p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
+            #t_starts = np.array([ 617943605 ])
+            #t_stops = np.array([ 744174005 ])
 
         if erass_option=='eRASS5':
             p2_evt = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field,'s5_c030','*Image_c030.fits.gz') ))[0]
@@ -244,11 +271,20 @@ if __name__ == '__main__':
                 print('not observed, no event file')
                 continue
             evt = fits.open(p2_evt)
-            p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
-            t_starts = np.array([ 617943605 ])
-            t_stops = np.array([ 744174005 ])
+            att_hdu_j = np.arange(2,9,1) # ATTITUDE FILE hdu, ONE PER TM
+            gti_hdu_j = np.arange(58,65,1) # gti hduS, ONE PER TM
+            all_mm = []
+            for jj in gti_hdu_j:
+                print(jj, evt[jj].data['START'].min(), evt[jj].data['STOP'].max())
+                all_mm.append([evt[jj].data['START'].min(), evt[jj].data['STOP'].max()])
+            gti_starts, gti_stops = np.transpose(all_mm)
+            t_starts = np.array([ gti_starts.min() ])
+            t_stops = np.array([ gti_stops.max() ])
+            #p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
+            #t_starts = np.array([ 617943605 ])
+            #t_stops = np.array([ 744174005 ])
 
-        break
+        #break
         for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
             print('+++++++++++++++++++++++++++++++++++++++++++++++++')
             print('+++++++++++++++++++++++++++++++++++++++++++++++++')
