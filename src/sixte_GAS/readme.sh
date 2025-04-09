@@ -43,7 +43,7 @@ nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # D
 # after the scripts above are finished
 python merge_erosita_tile.py # DONE
 # after the merging is finished (it deletes temporary files !)
-python clean_erosita_tile.py # DONE
+python clean_erosita_tile.py # TODO AFTER
 
 # create links for the images and spectra in each folder
 # python create_links_per_tile.py # DONE
@@ -57,9 +57,8 @@ python format_simput_xgas.py # DONE
 # ~/workspace/Storage/comparat/persistent/data/data_s4_c030 # rsync finished
 # ~/workspace/Storage/comparat/persistent/data/data_s5_c030 # rsync finished
 # rsync DONE
-
 # copy c030 s4 and s5 into erosim
-python copy_events.py # DONE
+# python copy_events.py # DONE
 
 # simulates events with seed fixed to 001
 # only does the first tile : 121048

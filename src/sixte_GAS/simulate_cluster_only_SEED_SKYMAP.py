@@ -199,11 +199,12 @@ class Simulator:
 if __name__ == '__main__':
     seed = 1
     LC_dir = 'LCerass'
-
-    #erass_option = "eRASS1"
+    erass_option = "eRASS4"
+    #erass_option = "eRASS5"
+    #erass_option = "eRASS8"
     #env = "UNIT_fA1i_DIR" #sys.argv[1] #
     #simput_dir = os.path.join(os.environ[env], "SIMPUT_SKYMAP_UNIT_fA1i_DIR_eRO_CLU_b8_CM_0_pixS_20.0_M500c_13.0_FX_-14.5_MGAS_Sept2021" )
-    print(seed, LC_dir)#, env, erass_option)
+    print(seed, LC_dir, erass_option)#, env, erass_option)
     for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1] :
         """
         Loops over healpix pixels and writes the files to path_2_eRO_catalog
@@ -219,9 +220,35 @@ if __name__ == '__main__':
         data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, "SEED_"+str(seed).zfill(3) +"_events_cluster_2025_04" )
         print('outputs here',data_dir)
         os.system('mkdir -p '+data_dir )
-        p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
-        t_starts = np.array([ 617943605 ])
-        t_stops = np.array([ 744174005 ])
+
+        if erass_option=='eRASS8':
+            p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
+            t_starts = np.array([ 617943605 ])
+            t_stops = np.array([ 744174005 ])
+
+        if erass_option=='eRASS4':
+            p2_evt = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field,'s4_c030','*Image_c030.fits.gz') ))[0]
+            print(p2_evt)
+            if os.path.isfile(p2_evt)==False:
+                print('not observed, no event file')
+                continue
+            evt = fits.open(p2_evt)
+            p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
+            t_starts = np.array([ 617943605 ])
+            t_stops = np.array([ 744174005 ])
+
+        if erass_option=='eRASS5':
+            p2_evt = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field,'s5_c030','*Image_c030.fits.gz') ))[0]
+            print(p2_evt)
+            if os.path.isfile(p2_evt)==False:
+                print('not observed, no event file')
+                continue
+            evt = fits.open(p2_evt)
+            p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
+            t_starts = np.array([ 617943605 ])
+            t_stops = np.array([ 744174005 ])
+
+        break
         for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
             print('+++++++++++++++++++++++++++++++++++++++++++++++++')
             print('+++++++++++++++++++++++++++++++++++++++++++++++++')
