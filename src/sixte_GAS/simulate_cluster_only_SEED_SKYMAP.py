@@ -242,73 +242,33 @@ if __name__ == '__main__':
             p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
             t_starts = np.array([ 617943605 ])
             t_stops = np.array([ 744174005 ])
-
-        if erass_option=='eRASS4':
-            p2_evt = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field,'s4_c030','*Image_c030.fits.gz') ))[0]
-            print(p2_evt)
-            if os.path.isfile(p2_evt)==False:
-                print('not observed, no event file')
-                continue
-            evt = fits.open(p2_evt)
-            att_hdu_j = np.arange(2,9,1) # ATTITUDE FILE hdu, ONE PER TM
-            gti_hdu_j = np.arange(58,65,1) # gti hduS, ONE PER TM
-            all_mm = []
-            for jj in gti_hdu_j:
-                print(jj, evt[jj].data['START'].min(), evt[jj].data['STOP'].max())
-                all_mm.append([evt[jj].data['START'].min(), evt[jj].data['STOP'].max()])
-            gti_starts, gti_stops = np.transpose(all_mm)
-            t_starts = np.array([ gti_starts.min() ])
-            t_stops = np.array([ gti_stops.max() ])
-
-            #p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
-            #t_starts = np.array([ 617943605 ])
-            #t_stops = np.array([ 744174005 ])
-
-        if erass_option=='eRASS5':
-            p2_evt = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field,'s5_c030','*Image_c030.fits.gz') ))[0]
-            print(p2_evt)
-            if os.path.isfile(p2_evt)==False:
-                print('not observed, no event file')
-                continue
-            evt = fits.open(p2_evt)
-            att_hdu_j = np.arange(2,9,1) # ATTITUDE FILE hdu, ONE PER TM
-            gti_hdu_j = np.arange(58,65,1) # gti hduS, ONE PER TM
-            all_mm = []
-            for jj in gti_hdu_j:
-                print(jj, evt[jj].data['START'].min(), evt[jj].data['STOP'].max())
-                all_mm.append([evt[jj].data['START'].min(), evt[jj].data['STOP'].max()])
-            gti_starts, gti_stops = np.transpose(all_mm)
-            t_starts = np.array([ gti_starts.min() ])
-            t_stops = np.array([ gti_stops.max() ])
-            #p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
-            #t_starts = np.array([ 617943605 ])
-            #t_stops = np.array([ 744174005 ])
-
-        #break
-        for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
-            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-            print('STEP', jj, (t0, t1))
-            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-            bkg = 0
-            t_start = t0 # 617943605.0
-            exposure = t1 - t0 # 31536000 * 4 # = 4 years  # 31536000 = 1year # 15750000 = 1/2 year
-            # Launch...
-            # 3 files
-            #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
-            # 2 files
-            try:
-                Simulator(
-                jj,
-                bkg,
-                t_start,
-                exposure,
-                int(seed),
-                simput_files,
-                data_dir,
-                ra_cen,
-                dec_cen,
-                p_2_att_file).run_all()
-            except(FileNotFoundError):
-                print('missing file for field ', str_field)
+        ccd1_file = os.path.join( data_dir, 't0erass_ccd1_evt.fits' )
+        if os.path.isfile(ccd1_file)==False:
+            #break
+            for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+                print('STEP', jj, (t0, t1))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+                bkg = 0
+                t_start = t0 # 617943605.0
+                exposure = t1 - t0 # 31536000 * 4 # = 4 years  # 31536000 = 1year # 15750000 = 1/2 year
+                # Launch...
+                # 3 files
+                #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
+                # 2 files
+                try:
+                    Simulator(
+                    jj,
+                    bkg,
+                    t_start,
+                    exposure,
+                    int(seed),
+                    simput_files,
+                    data_dir,
+                    ra_cen,
+                    dec_cen,
+                    p_2_att_file).run_all()
+                except(FileNotFoundError):
+                    print('missing file for field ', str_field)
