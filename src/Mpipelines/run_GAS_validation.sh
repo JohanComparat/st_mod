@@ -8,6 +8,7 @@ export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 
 conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
+conda activate clustering
 
 nohup python GAS_validation_WPRP.py z0p14 > logs/wprpGASz0p14.log & # DONE
 nohup python GAS_validation_WPRP.py z0p19 > logs/wprpGASz0p19.log & # DONE

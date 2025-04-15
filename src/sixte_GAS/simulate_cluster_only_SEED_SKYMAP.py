@@ -298,7 +298,8 @@ if __name__ == '__main__':
             # 3 files
             #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
             # 2 files
-            Simulator(
+            try:
+                Simulator(
                 jj,
                 bkg,
                 t_start,
@@ -309,3 +310,5 @@ if __name__ == '__main__':
                 ra_cen,
                 dec_cen,
                 p_2_att_file).run_all()
+            except(FileNotFoundError):
+                print('missing file for field ', str_field)
