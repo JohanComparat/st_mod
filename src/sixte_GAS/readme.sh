@@ -52,7 +52,6 @@ python clean_erosita_tile.py # TODO AFTER
 
 python format_simput_xgas.py # DONE
 
-
 # retrieve real events from complete repo
 # ~/workspace/Storage/comparat/persistent/data/data_s4_c030 # rsync finished
 # ~/workspace/Storage/comparat/persistent/data/data_s5_c030 # rsync finished
@@ -62,7 +61,7 @@ python format_simput_xgas.py # DONE
 
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
-python simulate_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
+python simulate_cluster_only_SEED_SKYMAP.py # DONE for eROSITA_DE, ongoing for eROSITA_RU v2.7 sixte runs
 python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
 
 

@@ -6,39 +6,67 @@ export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/sixte_AGN/
 
-# python create_image_library_hotgas.py # DONE no need to REDO
-
 # re-cast cluster simput files into erosita tiles
 # implement flux cut
 # import numpy as np
-# for kk in np.arange(24):
+# for kk in np.arange(237):
 #     print("nohup python extract_erosita_tile.py "+str(kk)+" > logs/extract_erosita_tile_"+str(kk)+".log &")
 
 # takes <1h
 #
 # # nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # DO NOT extract z=0. Skip it !
-nohup python extract_erosita_tile.py 1  > logs/extract_erosita_tile_1.log  & # DONE
-nohup python extract_erosita_tile.py 2  > logs/extract_erosita_tile_2.log  & # DONE
-nohup python extract_erosita_tile.py 3  > logs/extract_erosita_tile_3.log  & # DONE
-nohup python extract_erosita_tile.py 4  > logs/extract_erosita_tile_4.log  & # DONE
-nohup python extract_erosita_tile.py 5  > logs/extract_erosita_tile_5.log  & # DONE
-nohup python extract_erosita_tile.py 6  > logs/extract_erosita_tile_6.log  & # DONE
-nohup python extract_erosita_tile.py 7  > logs/extract_erosita_tile_7.log  & # DONE
-nohup python extract_erosita_tile.py 8  > logs/extract_erosita_tile_8.log  & # DONE
-nohup python extract_erosita_tile.py 9  > logs/extract_erosita_tile_9.log  & # DONE
-nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log & # DONE
-nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # DONE
-nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # DONE
-nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # DONE
-nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # DONE
-nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # DONE
-nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log & # DONE
-nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log & # DONE
-nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log & # DONE
-nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log & # DONE
-nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # DONE
-nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # DONE
-nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # DONE
+# nohup python extract_erosita_tile.py 1  > logs/extract_erosita_tile_1.log  & # DONE
+# nohup python extract_erosita_tile.py 2  > logs/extract_erosita_tile_2.log  & # DONE
+# nohup python extract_erosita_tile.py 3  > logs/extract_erosita_tile_3.log  & # DONE
+# nohup python extract_erosita_tile.py 4  > logs/extract_erosita_tile_4.log  & # DONE
+# nohup python extract_erosita_tile.py 5  > logs/extract_erosita_tile_5.log  & # DONE
+# nohup python extract_erosita_tile.py 6  > logs/extract_erosita_tile_6.log  & # DONE
+# nohup python extract_erosita_tile.py 7  > logs/extract_erosita_tile_7.log  & # DONE
+# nohup python extract_erosita_tile.py 8  > logs/extract_erosita_tile_8.log  & # DONE
+# nohup python extract_erosita_tile.py 9  > logs/extract_erosita_tile_9.log  & # DONE
+# nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log & # DONE
+# nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 23 > logs/extract_erosita_tile_23.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 24 > logs/extract_erosita_tile_24.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 25 > logs/extract_erosita_tile_25.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 26 > logs/extract_erosita_tile_26.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 27 > logs/extract_erosita_tile_27.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 28 > logs/extract_erosita_tile_28.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 29 > logs/extract_erosita_tile_29.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 30 > logs/extract_erosita_tile_30.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 31 > logs/extract_erosita_tile_31.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 32 > logs/extract_erosita_tile_32.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 33 > logs/extract_erosita_tile_33.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 34 > logs/extract_erosita_tile_34.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 35 > logs/extract_erosita_tile_35.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 36 > logs/extract_erosita_tile_36.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 37 > logs/extract_erosita_tile_37.log & # FAILED may need to re-run AGN model
+# nohup python extract_erosita_tile.py 38 > logs/extract_erosita_tile_38.log & # not DONE
+# nohup python extract_erosita_tile.py 39 > logs/extract_erosita_tile_39.log & # not DONE
+# nohup python extract_erosita_tile.py 40 > logs/extract_erosita_tile_10.log & # not DONE
+# nohup python extract_erosita_tile.py 41 > logs/extract_erosita_tile_11.log & # not DONE
+# nohup python extract_erosita_tile.py 42 > logs/extract_erosita_tile_12.log & # not DONE
+# nohup python extract_erosita_tile.py 43 > logs/extract_erosita_tile_13.log & # not DONE
+# nohup python extract_erosita_tile.py 44 > logs/extract_erosita_tile_14.log & # not DONE
+# nohup python extract_erosita_tile.py 45 > logs/extract_erosita_tile_15.log & # not DONE
+# nohup python extract_erosita_tile.py 46 > logs/extract_erosita_tile_16.log & # not DONE
+# nohup python extract_erosita_tile.py 47 > logs/extract_erosita_tile_17.log & # not DONE
+# nohup python extract_erosita_tile.py 48 > logs/extract_erosita_tile_18.log & # not DONE
+# nohup python extract_erosita_tile.py 49 > logs/extract_erosita_tile_19.log & # not DONE
+
+# TODO
+# TODO
 
 # after the scripts above are finished
 python merge_erosita_tile.py # DONE

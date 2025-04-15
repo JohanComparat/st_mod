@@ -132,6 +132,20 @@ python AGN_pipeline.py z1p22 FullSky 0.8 8
 python AGN_pipeline.py z1p32 FullSky 0.8 8
 python AGN_pipeline.py z1p43 FullSky 0.8 8
 python AGN_pipeline.py z1p54 FullSky 0.8 8
+python AGN_pipeline.py z1p65 FullSky 0.8 8
+python AGN_pipeline.py z1p77 FullSky 0.8 8
+python AGN_pipeline.py z1p90 FullSky 0.8 8
+python AGN_pipeline.py z2p03 FullSky 0.8 8
+python AGN_pipeline.py z2p17 FullSky 0.8 8
+python AGN_pipeline.py z2p31 FullSky 0.8 8
+python AGN_pipeline.py z2p46 FullSky 0.8 8
+python AGN_pipeline.py z2p62 FullSky 0.8 8
+python AGN_pipeline.py z2p78 FullSky 0.8 8
+python AGN_pipeline.py z2p95 FullSky 0.8 8
+python AGN_pipeline.py z3p13 FullSky 0.8 8
+python AGN_pipeline.py z3p32 FullSky 0.8 8
+python AGN_pipeline.py z3p61 FullSky 0.8 8
+python AGN_pipeline.py z3p93 FullSky 0.8 8
 
 
 

@@ -252,7 +252,7 @@ class AGN:
         """
         NHS = np.arange(20, 26 + 0.05, 0.4)
         path_2_RF_obs_hard = os.path.join(
-            os.environ['GIT_STMOD'],
+            os.environ['GIT_STMOD_DATA'],
             "data", "models", "model_AGN",
             "xray_k_correction",
             "v3_fraction_observed_A15_RF_hard_Obs_hard_fscat_002.txt")
@@ -282,7 +282,7 @@ class AGN:
         # path_2_hard_RF_obs_soft
         # link to X-ray K-correction and attenuation curves
         path_2_hard_RF_obs_soft = os.path.join(
-            os.environ['GIT_STMOD'],
+            os.environ['GIT_STMOD_DATA'],
             "data", "models", "model_AGN",
             "xray_k_correction",
             "v3_fraction_observed_A15_RF_hard_Obs_soft_fscat_002.txt")
@@ -302,8 +302,8 @@ class AGN:
         percent_observed_H_S = percent_observed_itp(self.AGN['logNH'])
 
         path_2_hard_RF_obs_soft_3D = np.array( glob.glob( os.path.join(
-            os.environ['GIT_AGN_MOCK'],
-            "data",
+            os.environ['GIT_STMOD_DATA'],
+            "data", "models", "model_AGN",
             "xray_k_correction",
             "v3_fraction_observed_A15_RF_hard_Obs_soft_fscat_002_GALnH_*.txt") ) )
         path_2_hard_RF_obs_soft_3D.sort()
