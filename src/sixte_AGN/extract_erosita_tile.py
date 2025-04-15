@@ -7,6 +7,7 @@ import numpy as np
 nl = lambda sel : len(sel.nonzero()[0])
 
 log10FXmin = -16.
+MvirMax=7e14
 jj_zdir = int(sys.argv[1])
 
 all_z_dirs = np.array([  'z0p00',
@@ -68,7 +69,7 @@ p_2_catalogues.sort()
 for p_2_catalogue in p_2_catalogues:
     t_in = Table.read(p_2_catalogue)
     t_in.remove_columns(['FX_hard', 'LX_soft_MWattenuated','lvmp', 'scatter_LX_Ms', 'SDSS_r_AB_attenuated'])
-    selection = (t_in['FX_soft']>=log10FXmin)
+    selection = (t_in['FX_soft']>=log10FXmin)&(t_in['FX_soft']<=MvirMax)
     t_in = t_in[selection]
     #GAL = Table.read( os.path.join( os.path.dirname(p_2_catalogue), 'glist.fits' ) )[t_in['ID_glist']]
     #t_in['RA'] = GAL['RA']
