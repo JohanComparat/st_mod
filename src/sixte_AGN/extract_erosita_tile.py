@@ -70,9 +70,9 @@ for p_2_catalogue in p_2_catalogues:
     t_in.remove_columns(['FX_hard', 'LX_soft_MWattenuated','lvmp', 'scatter_LX_Ms', 'SDSS_r_AB_attenuated'])
     selection = (t_in['FX_soft']>=log10FXmin)
     t_in = t_in[selection]
-    GAL = Table.read( os.path.join( os.path.dirname(p_2_catalogue), 'glist.fits' ) )[t_in['ID_glist']]
-    t_in['RA'] = GAL['RA']
-    t_in['DEC'] = GAL['DEC']
+    #GAL = Table.read( os.path.join( os.path.dirname(p_2_catalogue), 'glist.fits' ) )[t_in['ID_glist']]
+    #t_in['RA'] = GAL['RA']
+    #t_in['DEC'] = GAL['DEC']
     t_in['RA'][t_in['RA']==360.]=359.9999
     if len(t_in)>0:
         t_in['SRVMAP'] = np.array([get_srvmap(ra, dec)[0] for (ra, dec) in zip(t_in['RA'], t_in['DEC']) ])
