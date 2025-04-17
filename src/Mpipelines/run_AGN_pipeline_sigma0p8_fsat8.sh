@@ -108,7 +108,11 @@ python AGN_pipeline.py z1p65 LC1800  0.8 8
 python AGN_pipeline.py z1p77 LC1800  0.8 8
 python AGN_pipeline.py z1p90 LC1800  0.8 8
 python AGN_pipeline.py z2p03 LC1800  0.8 8
-#                                    0.8 8
+
+conda activate stmod
+cd $GIT_STMOD/src/Mpipelines
+
+#
 # nohup python AGN_pipeline.py z0p00 FullSky 0.8 8 > logs/testz0p00.log & # DONE
 # nohup python AGN_pipeline.py z0p02 FullSky 0.8 8 > logs/testz0p02.log & # DONE
 # nohup python AGN_pipeline.py z0p05 FullSky 0.8 8 > logs/testz0p05.log & # DONE
@@ -122,128 +126,53 @@ python AGN_pipeline.py z2p03 LC1800  0.8 8
 # nohup python AGN_pipeline.py z0p49 FullSky 0.8 8 > logs/testz0p49.log & # DONE
 # nohup python AGN_pipeline.py z0p56 FullSky 0.8 8 > logs/testz0p56.log & # DONE
 # nohup python AGN_pipeline.py z0p63 FullSky 0.8 8 > logs/testz0p63.log & # DONE
-# nohup python AGN_pipeline.py z0p70 FullSky 0.8 8 > logs/testz0p70.log & # ONGOING
-# nohup python AGN_pipeline.py z0p78 FullSky 0.8 8 > logs/testz0p78.log & # ONGOING
-# nohup python AGN_pipeline.py z0p86 FullSky 0.8 8 > logs/testz0p86.log & # ONGOING
-# nohup python AGN_pipeline.py z0p94 FullSky 0.8 8 > logs/testz0p94.log & # ONGOING
-# nohup python AGN_pipeline.py z1p03 FullSky 0.8 8 > logs/testz1p03.log & # ONGOING
-nohup python AGN_pipeline.py z1p12 FullSky 0.8 8 > logs/testz1p12.log & # # TODO
-nohup python AGN_pipeline.py z1p22 FullSky 0.8 8 > logs/testz1p22.log & # # TODO
-nohup python AGN_pipeline.py z1p32 FullSky 0.8 8 > logs/testz1p32.log & # # TODO
-nohup python AGN_pipeline.py z1p43 FullSky 0.8 8 > logs/testz1p43.log & # # TODO
-nohup python AGN_pipeline.py z1p54 FullSky 0.8 8 > logs/testz1p54.log & # # TODO
-nohup python AGN_pipeline.py z1p65 FullSky 0.8 8 > logs/testz1p65.log & # # TODO
-nohup python AGN_pipeline.py z1p77 FullSky 0.8 8 > logs/testz1p77.log & # # TODO
-nohup python AGN_pipeline.py z1p90 FullSky 0.8 8 > logs/testz1p90.log & # # TODO
-nohup python AGN_pipeline.py z2p03 FullSky 0.8 8 > logs/testz2p03.log & # # TODO
-nohup python AGN_pipeline.py z2p17 FullSky 0.8 8 > logs/testz2p17.log & # # TODO
-nohup python AGN_pipeline.py z2p31 FullSky 0.8 8 > logs/testz2p31.log & # # TODO
-nohup python AGN_pipeline.py z2p46 FullSky 0.8 8 > logs/testz2p46.log & # # TODO
-nohup python AGN_pipeline.py z2p62 FullSky 0.8 8 > logs/testz2p62.log & # # TODO
-nohup python AGN_pipeline.py z2p78 FullSky 0.8 8 > logs/testz2p78.log & # # TODO
-nohup python AGN_pipeline.py z2p95 FullSky 0.8 8 > logs/testz2p95.log & # # TODO
-nohup python AGN_pipeline.py z3p13 FullSky 0.8 8 > logs/testz3p13.log & # # TODO
-nohup python AGN_pipeline.py z3p32 FullSky 0.8 8 > logs/testz3p32.log & # # TODO
-nohup python AGN_pipeline.py z3p61 FullSky 0.8 8 > logs/testz3p61.log & # # TODO
-nohup python AGN_pipeline.py z3p93 FullSky 0.8 8 > logs/testz3p93.log & # # TODO
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# nohup python AGN_pipeline.py z0p70 FullSky 0.8 8 > logs/testz0p70.log & # DONE
+# nohup python AGN_pipeline.py z0p78 FullSky 0.8 8 > logs/testz0p78.log & # DONE
+# nohup python AGN_pipeline.py z0p86 FullSky 0.8 8 > logs/testz0p86.log & # DONE
+# nohup python AGN_pipeline.py z0p94 FullSky 0.8 8 > logs/testz0p94.log & # DONE
+# nohup python AGN_pipeline.py z1p03 FullSky 0.8 8 > logs/testz1p03.log & # DONE
+# nohup python AGN_pipeline.py z1p12 FullSky 0.8 8 > logs/testz1p12.log & # DONE
+# nohup python AGN_pipeline.py z1p22 FullSky 0.8 8 > logs/testz1p22.log & # DONE
+# nohup python AGN_pipeline.py z1p32 FullSky 0.8 8 > logs/testz1p32.log & # DONE
+# nohup python AGN_pipeline.py z1p43 FullSky 0.8 8 > logs/testz1p43.log & # DONE
+# nohup python AGN_pipeline.py z1p54 FullSky 0.8 8 > logs/testz1p54.log & # DONE
+# nohup python AGN_pipeline.py z1p65 FullSky 0.8 8 > logs/testz1p65.log & # DONE
+# nohup python AGN_pipeline.py z1p77 FullSky 0.8 8 > logs/testz1p77.log & # DONE
+# nohup python AGN_pipeline.py z1p90 FullSky 0.8 8 > logs/testz1p90.log & # DONE
+nohup python AGN_pipeline.py z2p03 FullSky 0.8 8 > logs/testz2p03.log & # # ongoing
+nohup python AGN_pipeline.py z2p17 FullSky 0.8 8 > logs/testz2p17.log & # DONE
+nohup python AGN_pipeline.py z2p31 FullSky 0.8 8 > logs/testz2p31.log & # # ongoing
+nohup python AGN_pipeline.py z2p46 FullSky 0.8 8 > logs/testz2p46.log & # # ongoing
+nohup python AGN_pipeline.py z2p62 FullSky 0.8 8 > logs/testz2p62.log & # PARTIAL DATA. TODO LC
+nohup python AGN_pipeline.py z2p78 FullSky 0.8 8 > logs/testz2p78.log & # PARTIAL DATA. TODO LC
+nohup python AGN_pipeline.py z2p95 FullSky 0.8 8 > logs/testz2p95.log & # PARTIAL DATA. TODO LC
+nohup python AGN_pipeline.py z3p13 FullSky 0.8 8 > logs/testz3p13.log & # FAILED
+nohup python AGN_pipeline.py z3p32 FullSky 0.8 8 > logs/testz3p32.log & # ongoing
+nohup python AGN_pipeline.py z3p61 FullSky 0.8 8 > logs/testz3p61.log & # NO DATA. TODO LC
+nohup python AGN_pipeline.py z3p93 FullSky 0.8 8 > logs/testz3p93.log & # NO DATA. TODO LC
+
+z3p13
+opens /home/idies/workspace/erosim/Uchuu/FullSky/z3p13/replication_-3.0_1.0_-1.0/glist.fits
+3.095387754568758 <z< 3.2186020276156158
+3.095387754568758 3.2186020276156158
+====================================================================================================
+3.09
+0 AGN tabulated
+native N, cen, sat, f_sat 97 74 23 0.3108108108108108
+downsamples sat
+N sat goal 5.92
+renormalizing DC by 1.1975308641975309
+N AGN 20
+Traceback (most recent call last):
+  File "/home/idies/workspace/erosim/software/st_mod/src/Mpipelines/AGN_pipeline.py", line 146, in <module>
+    C_AGN.abundance_matching()
+  File "/home/idies/workspace/erosim/software/st_mod/src/models/AGN.py", line 191, in abundance_matching
+    print( np.transpose([M_scatt[ids_M_scatt], self.AGN_tab['LX_hard'][:len(lx)]]) )
+  File "<__array_function__ internals>", line 200, in transpose
+  File "/home/idies/miniconda3/lib/python3.9/site-packages/numpy/core/fromnumeric.py", line 668, in transpose
+    return _wrapfunc(a, 'transpose', axes)
+  File "/home/idies/miniconda3/lib/python3.9/site-packages/numpy/core/fromnumeric.py", line 54, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/idies/miniconda3/lib/python3.9/site-packages/numpy/core/fromnumeric.py", line 43, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (2,) + inhomogeneous part.

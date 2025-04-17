@@ -61,8 +61,8 @@ python format_simput_xgas.py # DONE
 
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
-python simulate_cluster_only_SEED_SKYMAP.py # DONE for eROSITA_DE, ongoing for eROSITA_RU v2.7 sixte runs
-python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
+python simulate_cluster_only_SEED_SKYMAP.py # DONE for eROSITA_DE, eROSITA_RU v2.7 sixte runs
+python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # v2.7 sixte runs TODO
 
 
 

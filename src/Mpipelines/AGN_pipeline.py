@@ -84,98 +84,99 @@ for p_2_catalogue in C_AGN.p_2_catalogues[is_cat]:
     j1 = np.searchsorted(z_bins, C_AGN.z_max, side='right')-1
     print(C_AGN.z_min, C_AGN.z_max)
     all_cat_outputs = []
-    for jj in np.arange(j0, j1+1, 1):
-        print('=='*50)
-        z_bins_val = z_bins[jj]
-        print(z_bins_val)
-        p_2_catalogue_out = os.path.join( os.path.dirname(p_2_catalogue),
-                        'AGN_list_z_'+str(np.round(z_bins_val,2))+'_sigma_'+C_AGN.str_scatter_0+'_fsat_'+C_AGN.str_fsat+'.fits' )
-        t_sim_gal = t_sim_gal_full[(t_sim_gal_full['redshift_R']>=z_bins_val)&(t_sim_gal_full['redshift_R']<z_bins_val+DZ)]
-        if len(t_sim_gal)==0:
-            continue
-        C_AGN.z_min = np.min(t_sim_gal['redshift_R'])
-        C_AGN.z_max = np.max(t_sim_gal['redshift_R'])
-        C_AGN.z_mean = np.mean(t_sim_gal['redshift_R'])
-        dCx_min, dCx_max = np.min(t_sim_gal['x']), np.max(t_sim_gal['x'])
-        dCy_min, dCy_max = np.min(t_sim_gal['y']), np.max(t_sim_gal['y'])
-        dCz_min, dCz_max = np.min(t_sim_gal['z']), np.max(t_sim_gal['z'])
-        #print(t_sim_gal.info())
-        t_sim_gal.remove_columns([
-                    'x',
-                    'y',
-                    'z',
-                    #'Mvir',
-                    'icl',
-                    'id',
-                    #'obs_sfr',
-                    #'obs_sm',
-                    'obs_uv',
-                    'sfr',
-                    'sm',
-                    #'upid',
-                    'A_UV',
-                    'Mpeak',
-                    'Vmax_Mpeak',
-                    'desc_id',
-                    'vmax',
-                    'vx',
-                    'vy',
-                    'vz',
-                    #'RA',
-                    #'DEC',
-                    'g_lat',
-                    'g_lon',
-                    'ecl_lat',
-                    'ecl_lon',
-                    'redshift_R',
-                    #'redshift_S',
-                    #'dL',
-                    #'nH',
-                    #'ebv'
-                    ])
-        #print(t_sim_gal.info())
-        ##
-        ## retrieves tabulated AGN FILE
-        ##
-        C_AGN.get_tabulated_AGN(z_bins_val, dCx_min, dCx_max, dCy_min, dCy_max, dCz_min, dCz_max)
-        ##
-        ## applies f_sat and duty cycle
-        ##
-        C_AGN.get_z_mass_id(t_sim_gal)
-        ## scatter parameter is used here :
-        C_AGN.abundance_matching()
-        #
-        C_AGN.get_obscured_fractions()
-        C_AGN.compute_fluxes()
-        C_AGN.AGN['agn_type'] = C_AGN.compute_agn_type(C_AGN.AGN['redshift_S'], C_AGN.AGN['LX_hard'], C_AGN.AGN['logNH'])
-        C_AGN.compute_r_mag()
-
-        t_out = C_AGN.AGN
-        #print(t_out.info())
-        t_out.remove_columns([
-                    'dL',
-                    'nH',
-                    'ebv'
-                    ])
-
-        #print(t_out.info())
-
-        t_out.write(p_2_catalogue_out, overwrite = True)
-        print(p_2_catalogue_out, 'written', time.time()-t0)
-        all_cat_outputs.append(p_2_catalogue_out)
-
-
     path_2_output = os.path.join( os.path.dirname(p_2_catalogue),'AGN_list_sigma_'+C_AGN.str_scatter_0+'_fsat_'+C_AGN.str_fsat+'.fits' )
-    file_list = np.array(all_cat_outputs)
-    t = Table.read(file_list[0])
+    if os.path.isfile( path_2_output )==False:
+        for jj in np.arange(j0, j1+1, 1):
+            print('=='*50)
+            z_bins_val = z_bins[jj]
+            print(z_bins_val)
+            p_2_catalogue_out = os.path.join( os.path.dirname(p_2_catalogue),
+                            'AGN_list_z_'+str(np.round(z_bins_val,2))+'_sigma_'+C_AGN.str_scatter_0+'_fsat_'+C_AGN.str_fsat+'.fits' )
+            t_sim_gal = t_sim_gal_full[(t_sim_gal_full['redshift_R']>=z_bins_val)&(t_sim_gal_full['redshift_R']<z_bins_val+DZ)]
+            if len(t_sim_gal)==0:
+                continue
+            C_AGN.z_min = np.min(t_sim_gal['redshift_R'])
+            C_AGN.z_max = np.max(t_sim_gal['redshift_R'])
+            C_AGN.z_mean = np.mean(t_sim_gal['redshift_R'])
+            dCx_min, dCx_max = np.min(t_sim_gal['x']), np.max(t_sim_gal['x'])
+            dCy_min, dCy_max = np.min(t_sim_gal['y']), np.max(t_sim_gal['y'])
+            dCz_min, dCz_max = np.min(t_sim_gal['z']), np.max(t_sim_gal['z'])
+            #print(t_sim_gal.info())
+            t_sim_gal.remove_columns([
+                        'x',
+                        'y',
+                        'z',
+                        #'Mvir',
+                        'icl',
+                        'id',
+                        #'obs_sfr',
+                        #'obs_sm',
+                        'obs_uv',
+                        'sfr',
+                        'sm',
+                        #'upid',
+                        'A_UV',
+                        'Mpeak',
+                        'Vmax_Mpeak',
+                        'desc_id',
+                        'vmax',
+                        'vx',
+                        'vy',
+                        'vz',
+                        #'RA',
+                        #'DEC',
+                        'g_lat',
+                        'g_lon',
+                        'ecl_lat',
+                        'ecl_lon',
+                        'redshift_R',
+                        #'redshift_S',
+                        #'dL',
+                        #'nH',
+                        #'ebv'
+                        ])
+            #print(t_sim_gal.info())
+            ##
+            ## retrieves tabulated AGN FILE
+            ##
+            C_AGN.get_tabulated_AGN(z_bins_val, dCx_min, dCx_max, dCy_min, dCy_max, dCz_min, dCz_max)
+            ##
+            ## applies f_sat and duty cycle
+            ##
+            C_AGN.get_z_mass_id(t_sim_gal)
+            ## scatter parameter is used here :
+            C_AGN.abundance_matching()
+            #
+            C_AGN.get_obscured_fractions()
+            C_AGN.compute_fluxes()
+            C_AGN.AGN['agn_type'] = C_AGN.compute_agn_type(C_AGN.AGN['redshift_S'], C_AGN.AGN['LX_hard'], C_AGN.AGN['logNH'])
+            C_AGN.compute_r_mag()
 
-    for p_2_file in file_list[1:]:
-        print(p_2_file)
-        t1 = Table.read(p_2_file)
-        t = vstack(( t, t1))
+            t_out = C_AGN.AGN
+            #print(t_out.info())
+            t_out.remove_columns([
+                        'dL',
+                        'nH',
+                        'ebv'
+                        ])
 
-    t_out = Table(t)
-    t_out.write(path_2_output, overwrite=True)
-    print(path_2_output, 'written')
-    for p_2_file in file_list:
-        os.remove(p_2_file)
+            #print(t_out.info())
+
+            t_out.write(p_2_catalogue_out, overwrite = True)
+            print(p_2_catalogue_out, 'written', time.time()-t0)
+            all_cat_outputs.append(p_2_catalogue_out)
+
+
+        file_list = np.array(all_cat_outputs)
+        t = Table.read(file_list[0])
+
+        for p_2_file in file_list[1:]:
+            print(p_2_file)
+            t1 = Table.read(p_2_file)
+            t = vstack(( t, t1))
+
+        t_out = Table(t)
+        t_out.write(path_2_output, overwrite=True)
+        print(path_2_output, 'written')
+        for p_2_file in file_list:
+            os.remove(p_2_file)

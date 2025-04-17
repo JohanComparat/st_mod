@@ -10,7 +10,8 @@ log10FXmin = -16.
 MvirMax=7e14
 jj_zdir = int(sys.argv[1])
 
-all_z_dirs = np.array([  'z0p00',
+all_z_dirs = np.array([
+                    'z0p00',
                     'z0p02',
                     'z0p05',
                     'z0p09',

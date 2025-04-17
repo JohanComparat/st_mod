@@ -14,7 +14,6 @@ nohup python GAS_validation_WPRP.py z0p14 > logs/wprpGASz0p14.log & # DONE
 nohup python GAS_validation_WPRP.py z0p19 > logs/wprpGASz0p19.log & # DONE
 nohup python GAS_validation_WPRP.py z0p25 > logs/wprpGASz0p25.log & # DONE
 
-
 python GAS_validation_ScalingRelation.py z0p00 FullSky # DONE
 python GAS_validation_ScalingRelation.py z0p02 FullSky # DONE
 python GAS_validation_ScalingRelation.py z0p05 FullSky # DONE

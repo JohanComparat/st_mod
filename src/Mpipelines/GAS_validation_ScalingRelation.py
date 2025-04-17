@@ -136,6 +136,9 @@ t_mh = MERGE_Mh[np.unique(MERGE_Mh['file_ID'], return_index=True)[1]]
 t_mh = t_mh [(t_mh['N_gal'] > 1000)&(t_mh['M_min'] >= 12.0)&(t_mh['M_max'] <=14.0)]
 t = t_mh
 
+erass1 = Table.read(os.path.join(SR_dir,'erass1cl_main_v2.0.fits'))
+sz = ( erass1['BEST_Z']>0.01 ) & ( erass1['BEST_Z']<0.35 )&(erass1['M500']>=0.01)&(erass1['L500']>=0.01)&(erass1['CR500']>0.1)
+erass1 = erass1[sz]
 
 def get_mean_scaling_relation(mass_array_log10, mass_proxy_array):#, percents = percents ):
     """
@@ -252,99 +255,98 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
 
     p.figure(0, (5.5, 5.))
 
-    # popesso 23
-    z_po23 = 0.1
-    po23_x_m500  = np.array([7.5e12, 2.2e13])*cosmo.efunc(z_po23)
-    po23_y_LX500 = np.array([2.8e41, 1.0e42])/cosmo.efunc(z_po23)
-    po23_yLO_LX500 = np.array([1e38, 2.2e41])/cosmo.efunc(z_po23)
-    po23_yUP_LX500 = np.array([5.5e41, 1.8e42])/cosmo.efunc(z_po23)
-    p.errorbar( po23_x_m500 ,
-        po23_y_LX500 ,
-        yerr= [po23_y_LX500-po23_yLO_LX500 , po23_yUP_LX500-po23_y_LX500],
-        marker='v', ls='', mfc='none', label='Po23', markersize=10)
+    ## popesso 23
+    #z_po23 = 0.1
+    #po23_x_m500  = np.array([7.5e12, 2.2e13])*cosmo.efunc(z_po23)
+    #po23_y_LX500 = np.array([2.8e41, 1.0e42])/cosmo.efunc(z_po23)
+    #po23_yLO_LX500 = np.array([1e38, 2.2e41])/cosmo.efunc(z_po23)
+    #po23_yUP_LX500 = np.array([5.5e41, 1.8e42])/cosmo.efunc(z_po23)
+    #p.errorbar( po23_x_m500 ,
+        #po23_y_LX500 ,
+        #yerr= [po23_y_LX500-po23_yLO_LX500 , po23_yUP_LX500-po23_y_LX500],
+        #marker='+', ls='', mfc='none', color='grey', zorder=1, rasterized=True)
 
     # Bulbul 18
     p.plot(B18_M500*1e14*cosmo.efunc(B18_z),
         B18_LXcin * 1e44 / cosmo.efunc(B18_z),
-        marker='*', ls='', mfc='none', label='Bu19')
+        marker='+', ls='', mfc='none',color='grey', zorder=1, rasterized=True)
 
     # Mantz 16
     k_correction_3d_Ma16 = attenuation_3d( np.transpose([WtG['Ma16_z'], np.ones_like(WtG['Ma16_z'])*20.1, WtG['Ma16_kT_keV']]))
     p.plot(  WtG['Ma16_Mlen_1e15'] * 1e15 ,
         WtG['Ma16_LX_1e44'] * k_correction_3d_Ma16 * 1e44 / cosmo.efunc(WtG['Ma16_z'] )  ,
-        marker='s', ls='', mfc='none', label='Ma16')
+        marker='+', ls='', mfc='none', color='grey', zorder=1, rasterized=True)
 
     # Liu 22
-    p.plot(efeds['M500']*cosmo.efunc(efeds['z_final']), efeds['L500'].T[1]/cosmo.efunc(efeds['z_final']), marker='^', ls='', mfc='none', label='Li22', rasterized = True)
+    p.plot(efeds['M500']*cosmo.efunc(efeds['z_final']), efeds['L500'].T[1]/cosmo.efunc(efeds['z_final']), marker='+', ls='', mfc='none',color='grey', zorder=1)
+    # Bulbul 24
+    p.plot(erass1['M500']*cosmo.efunc(erass1['BEST_Z'])*1e13, erass1['L500']*1e42/cosmo.efunc(erass1['BEST_Z']), marker='+', ls='', mfc='none',color='grey', zorder=1)
 
     # Lovsari 2020
     k_correction_3d_Lo20 = attenuation_3d( np.transpose([Lo20_z, np.ones_like(Lo20_z)*20.1, Lo20_kT]))
     p.plot( Lo20_M500*1e14*cosmo.efunc(Lo20_z) ,
         Lo20_LX * k_correction_3d_Lo20 * 1e44 / cosmo.efunc(Lo20_z)   ,
-        marker='o', ls='', mfc='none', label='Lo20')
+        marker='+', ls='', mfc='none', color='grey', zorder=1, rasterized=True)
 
     # Adami 18, XXL
     ok = (XXL['Mgas500kpc']*1e11*10**(1.1) * cosmo.efunc(XXL['z'])>4e13)
     p.plot( XXL['Mgas500kpc'][ok]*1e11*10**(1.1) * cosmo.efunc(XXL['z'][ok]),
         XXL['LXXL500MT'][ok] * 1e42/cosmo.efunc(XXL['z'][ok]) ,
-        marker='o', ls='', label='Ad18', mfc='none')
+        marker='+', ls='', color='grey', mfc='none', zorder=1, rasterized=True)
 
     # Lovisari 2015, groups
     k_correction_3d_Lo15 = attenuation_3d( np.transpose([np.ones_like(kT_kev)*0.02, np.ones_like(kT_kev)*20.1, kT_kev]))
     ok = (M500 * 1e13 / 0.7>4e13)
     p.plot( M500[ok] * 1e13 / 0.7 ,
         LXxmm[ok] * k_correction_3d_Lo15[ok] * 1e43,
-        marker='s', ls='', mfc='none', label='Lo15')
+        marker='+', ls='', mfc='none', color='grey', zorder=1, rasterized=True)
 
     # Schellenberger 18
     k_correction_3d_Sc17 = attenuation_3d( np.transpose([redshift_s18, np.ones_like(redshift_s18)*20.1, np.ones_like(redshift_s18)*2]))
     ok = (M500NFWFreeze*1e14*cosmo.efunc(redshift_s18) >4e13)
     p.plot(M500NFWFreeze[ok]*1e14*cosmo.efunc(redshift_s18[ok]),
         LX_s18[ok] * k_correction_3d_Sc17[ok] * 1e43 / cosmo.efunc(redshift_s18[ok]),
-        marker='o', ls='', label='Sc17', mfc='none')
+        marker='+', ls='',color='grey', mfc='none', zorder=1, rasterized=True, label='literature')
 
-    xx = np.log10(XGA['M500c'])+np.log10(EZ_mean)
-    yy = XGA['CLUSTER_LX_soft_RF_R500c']-np.log10(EZ_mean)
-    mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    p.plot(10**mean_mass, 10**(mean_mass_proxy), color='r')
-    p.fill_between(10**mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='r', label='eqLX')
+    log10_M500c = np.arange(11, 15.5,0.01)
+    SR_slope = 1.612
+    log10_LX_05_20_mean = np.log10( 10** ( (SR_slope) * (log10_M500c - 15) + 44.7 ) )
+    SR_slope_lo = 1.612 - 0.072
+    SR_slope_hi = 1.612 + 0.068
+    log10_LX_05_20_mean_lo = np.log10( 10** ( (SR_slope_lo) * (log10_M500c - 15) + 44.7 ) )
+    log10_LX_05_20_mean_hi = np.log10( 10** ( (SR_slope_hi) * (log10_M500c - 15) + 44.7 ) )
+    p.fill_between(10**(log10_M500c), 10**log10_LX_05_20_mean_lo, 10**log10_LX_05_20_mean_hi, alpha=0.2, color='darkblue', label='Comparat 2025, X-corr', zorder=10)#, label='This work, X-corr, M*>'+m0_str, zorder=40 )
+    p.plot(10**(log10_M500c), 10**log10_LX_05_20_mean, color='darkblue', ls='--', lw=1, zorder=10)
 
-    #xx = np.log10(XGA['M500c'])+np.log10(EZ_mean)
-    #yy = XGA['CLUSTER_LX_soft_RF_R500c_kTcorr']-np.log10(EZ_mean)
-    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    #p.plot(10**mean_mass, 10**(mean_mass_proxy), color='g')
-    #p.fill_between(10**mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='g', label='eqkT')
+    logm500c, LX_soft_high, LX_soft_low = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/benchmark/popesso2024', 'SR_fig6_left.ascii' ), unpack = True )
+    ok=(logm500c>12.6)
+    logm500c, LX_soft_high, LX_soft_low = logm500c[ok], LX_soft_high[ok], LX_soft_low[ok]
+    p.errorbar(10**logm500c, 10**(0.5*(LX_soft_low+LX_soft_high)),
+                xerr=[10**(logm500c)-10**(logm500c-0.25), 10**(logm500c+0.25)-10**(logm500c)],
+                yerr=[10**(0.5*(LX_soft_low+LX_soft_high))-10**(LX_soft_low), 10**LX_soft_high-10**(0.5*(LX_soft_low+LX_soft_high))],
+                    color='green', ls='none', label='Popesso 2024, IGrM stack', zorder=3)
 
-    #xx = np.log10(XGA['M500c'])+np.log10(EZ_mean)
-    #yy = XGA['CBP_CLUSTER_LX_soft_RF_R500c']-np.log10(EZ_mean)
-    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    #p.plot(10**mean_mass, 10**(mean_mass_proxy), color='b')
-    #p.fill_between(10**mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='b', label='Mock Co20')
-
-
+    Zh24mh_M200m0, Zh24mh_M200m1, Zh24mh_M500c0, Zh24mh_M500c1, Zh24mh_z0, Zh24mh_z1, Zh24mh_LX_T_NM, Zh24mh_LX_T_NM_err, Zh24mh_LX_T_NM_exp, Zh24mh_LX_T_M, Zh24mh_LX_T_M_err, Zh24mh_LX_T_M_exp, Zh24mh_LX_CGM, Zh24mh_LX_CGM_err, Zh24mh_LX_CGM_exp, Zh24mh_LX_CONT, Zh24mh_LX_CONT_err, Zh24mh_LX_CONT_exp = np.loadtxt(os.path.join(SR_dir, 'zhang_2024_HaloMass.ascii'), unpack=True, max_rows=5)
 
     EF = cosmo.efunc((Zh24mh_z0+ Zh24mh_z1)/2.)
     p.errorbar(EF*10**((Zh24mh_M500c0 + Zh24mh_M500c1)/2.), Zh24mh_LX_CGM*10**Zh24mh_LX_CGM_exp / EF,
                xerr = [EF*10**((Zh24mh_M500c0 + Zh24mh_M500c1)/2.)-EF*10**Zh24mh_M500c0, EF*10**Zh24mh_M500c1-EF*10**((Zh24mh_M500c0 + Zh24mh_M500c1)/2.)],
-               yerr = Zh24mh_LX_CGM_err*10**Zh24mh_LX_CGM_exp/ EF, color='purple', label='CGM Zhang 24'
-    )
+               yerr = Zh24mh_LX_CGM_err*10**Zh24mh_LX_CGM_exp/ EF, color='purple', label='Zhang 2024, CGM stack', ls='none', zorder=3)
 
-    p.errorbar(EF*10**((Zh24mh_M500c0 + Zh24mh_M500c1)/2.), Zh24mh_LX_T_NM*10**Zh24mh_LX_T_NM_exp/ EF,
-               xerr = [EF*10**((Zh24mh_M500c0 + Zh24mh_M500c1)/2.)-EF*10**Zh24mh_M500c0, EF*10**Zh24mh_M500c1-EF*10**((Zh24mh_M500c0 + Zh24mh_M500c1)/2.)],
-               yerr = Zh24mh_LX_T_NM_err*10**Zh24mh_LX_T_NM_exp/ EF, color='grey', label='CGM+AGN+\n XRB Zhang 24'
-    )
-    x_val = np.arange(11, 15.5, 0.1)
-    #p.plot(10**x_val, 10**(1.7*x_val+19.3), 'k--')#, label='1.7x+19.3\n 1.5x+22')
-    p.plot(10**x_val, 10**(1.61*(x_val-15)+44.7), 'k--', label='1.61(x-15)+44.7')
+    xx = np.log10(XGA['M500c'])+np.log10(EZ_mean)
+    yy = XGA['CLUSTER_LX_soft_RF_R500c']-np.log10(EZ_mean)
+    mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
+    p.plot(10**mean_mass, 10**(mean_mass_proxy), color='darkred', ls='--', zorder=100)
+    p.fill_between(10**mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='darkred', label='This model', zorder=100)
 
     p.grid()
     p.xlabel(r'$E(z) M_{500c}\; [M_\odot]$')
     p.ylabel(r'$L^{<R_{500c}}_{X,\; 0.5-2 keV}/E(z)$ [erg s$^{-1}$]')
-    p.legend(frameon=True, loc=2, ncol=2, fontsize=10, title=z_dir)
+    p.legend(frameon=True, loc=2, ncol=1, fontsize=11)#, title=z_dir)
     p.xscale('log')
     p.yscale('log')
     p.xlim((1e11, 2e15))
-    p.ylim((1e38, 1e47))
+    p.ylim((1e38, 1e46))
     p.tight_layout()
     p.savefig(fig_out)
     p.clf()
@@ -364,42 +366,25 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     xx = np.log10(XGA['obs_sm'])
     yy = XGA['CLUSTER_LX_soft_RF_R500c']
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    p.plot(mean_mass, 10**(mean_mass_proxy), color='r')
-    p.fill_between(mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='r', label='Mock')
-
-    #xx = np.log10(XGA['obs_sm'])
-    #yy = XGA['CLUSTER_LX_soft_RF_R500c_kTcorr']
-    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    #p.plot(mean_mass, 10**(mean_mass_proxy), color='g')
-    #p.fill_between(mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='g', label='EqkT')
-
-    #xx = np.log10(XGA['obs_sm'])
-    #yy = XGA['CBP_CLUSTER_LX_soft_RF_R500c']
-    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    #p.plot(mean_mass, 10**(mean_mass_proxy), color='b')
-    #p.fill_between(mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='b', label='Mock Co20')
+    p.plot(mean_mass, 10**(mean_mass_proxy), color='darkred', ls='--', zorder=100)
+    p.fill_between(mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='darkred', label='This model', zorder=100)
 
     y1 = 10** ( (LX_min_A15+LX_max_A15)/2. )
     yerr_up = 10** LX_max_A15 - y1
     yerr_lo = - 10** LX_min_A15 + y1
-    p.errorbar( MS_A15-np.log10(0.7), y1 , xerr=0.05, yerr=  [yerr_lo, yerr_up],  label=r'Anderson 2015', ls='', fmt='s',markersize=8,markerfacecolor='none', color='grey')
+    p.errorbar( MS_A15-np.log10(0.7), y1 , xerr=0.05, yerr=  [yerr_lo, yerr_up],  label=r'Anderson 2015', ls='', fmt='s',markersize=8,markerfacecolor='none', color='orange', zorder=1)
 
     p.errorbar(((Zh24ms_MS0+ Zh24ms_MS1)/2.), Zh24ms_LX_CGM*10**Zh24ms_LX_CGM_exp,
                xerr = [((Zh24ms_MS0+ Zh24ms_MS1)/2.)-Zh24ms_MS0, Zh24ms_MS1-((Zh24ms_MS0+ Zh24ms_MS1)/2.)],
-               yerr = Zh24ms_LX_CGM_err*10**Zh24ms_LX_CGM_exp, color='purple', label='CGM Zhang 24'
+               yerr = Zh24ms_LX_CGM_err*10**Zh24ms_LX_CGM_exp, color='purple', label='Zhang 2024', ls='none', zorder=10
     )
 
-    p.errorbar(((Zh24ms_MS0+ Zh24ms_MS1)/2.), Zh24ms_LX_T_NM*10**Zh24ms_LX_T_NM_exp,
-               xerr = [((Zh24ms_MS0+ Zh24ms_MS1)/2.)-Zh24ms_MS0, Zh24ms_MS1-((Zh24ms_MS0+ Zh24ms_MS1)/2.)],
-               yerr = Zh24ms_LX_T_NM_err*10**Zh24ms_LX_T_NM_exp, color='grey', label='CGM+AGN+XRB Zhang 24'
-    )
-
-    p.xlabel(r'$\log_{10}(M_*)$ [M$_\odot$]')
-    p.ylabel(r'L$^{<R_{500c}}_{X}$ [erg/s]')
-    p.legend(fontsize=10, loc='upper left', ncol=2, title=z_dir)#, title='Centrals')
+    p.xlabel(r'$\log_{10}($M$_*$ [M$_\odot$]$)$')
+    p.ylabel(r'$L^{<R_{500c}}_{X,\; 0.5-2 keV}$ [erg s$^{-1}$]')
+    p.legend(fontsize=11, loc='upper left', ncol=1)#, title=z_dir)#, title='Centrals')
     p.yscale('log')
     p.xlim((10, 12.2))
-    p.ylim((1e38, 5e46))
+    p.ylim((1e38, 1e45))
     p.tight_layout()
     p.savefig( fig_out )
     p.clf()
@@ -425,7 +410,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     #p.plot(lx_val, N_GAS/dlog10lx/volume_mock/np.log(10), lw=3, label='Mock b=1.0')
     p.xlabel(r'$\log_{10}(L_X/[erg/s])$')
     p.ylabel(r'$dn/d\log_{10}(L_X)/dV$ [Mpc$^{-3}$ dex$^{-1}$]')
-    p.legend(frameon=True, loc=3, fontsize=10, title=z_dir)
+    p.legend(frameon=True, loc=3, fontsize=10)#, title=z_dir)
     #p.xscale('log')
     p.yscale('log')
     p.xlim((41.5, 45.5))
@@ -436,49 +421,116 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     print(fig_out)
     print('-'*30)
 
+    ez01 = cosmo.efunc(0.1)
+    log10_M500c, log10_M500c_up, log10_M500c_lo, kt_lo, kT_BGmod, kt, kt_up = np.transpose([
+        [12.97878, 13.08223, 12.88064, 0.22239, 0.43046, 0.62596, 0.79247],
+        [13.17507, 13.27851, 13.08488, 0.53541, 0.71267, 0.83320, 0.93197],
+        [13.37401, 13.28382, 13.47480, 0.46203, 0.72753, 0.88641, 0.99736],
+        [13.57029, 13.47215, 13.67374, 0.67186, 0.94861, 1.64151, 2.26364],
+        [13.82759, 13.66578, 14.06631, 1.47621, 2.10900, 2.31084, 3.97526],
+        [14.21751, 14.06897, 14.36870, 2.87422, 3.43040, 3.19606, 3.95189],
+        [14.65252, 14.36340, 14.86472, 4.07013, 7.08477, 4.71660, 9.97363],])
 
     fig_out = os.path.join(validation_dir_SR, LC_dir+'_M500-kT_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']) +'.png' )
     p.figure(0, (5.5, 5.))
-    p.plot(np.log10( Lo20_M500*1e14), np.log10(Lo20_kT / 0.77 / cosmo.efunc(Lo20_z)**(2./3.)), marker='o', ls='', mfc='none', label='Lo20')
-    p.plot( np.log10(XXL['Mgas500kpc']*1e11*10**(1.1) * cosmo.efunc(XXL['z'])), np.log10(XXL['T300kpc'] /cosmo.efunc(XXL['z'])**(2./3.) ), marker='o', ls='', label='Ad18', mfc='none')
-    p.plot(np.log10(M500*1e13/0.7), np.log10(kT_kev), marker='s', ls='', mfc='none', label='Lo15')
-    p.plot(np.log10(B18_M500*1e14), np.log10(B18_TXcin/0.77 / cosmo.efunc(B18_z)**(2./3.)), marker='*', ls='', mfc='none', label='Bu18', alpha=0.7)
-    p.plot(np.log10(WtG['Ma16_Mlen_1e15']*1e15), np.log10(WtG['Ma16_kT_keV']/0.77/cosmo.efunc(WtG['Ma16_z'])**(2./3.)), marker='s', ls='', mfc='none', label='Ma16', alpha=0.5)
-    #
-    #xx = np.log10(XGA['M500c'])
-    #yy = np.log10(XGA['CBP_kT'])- 2./3.*np.log10(EZ_mean)
-    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    #p.plot(mean_mass, (mean_mass_proxy), color='b')
-    #p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.2, color='b', label='Mock Co20')
+    p.errorbar(log10_M500c, np.log10(kt/ez01**(2./3.) ), xerr=[log10_M500c_up-log10_M500c, log10_M500c-log10_M500c_lo], yerr=[np.log10(kt_up/ez01**(2./3.))-np.log10(kt/ez01**(2./3.)), np.log10(kt/ez01**(2./3.))-np.log10(kt_lo/ez01**(2./3.))], ls='none', label='Toptun 2025, stack', zorder=20)
+
+    p.plot(np.log10( Lo20_M500*1e14), np.log10(Lo20_kT / 0.77 / cosmo.efunc(Lo20_z)**(2./3.)), marker='+', color='grey', ls='', mfc='none', zorder=1)
+    p.plot( np.log10(XXL['Mgas500kpc']*1e11*10**(1.1) * cosmo.efunc(XXL['z'])), np.log10(XXL['T300kpc'] /cosmo.efunc(XXL['z'])**(2./3.) ), marker='+', color='grey', ls='', mfc='none',zorder=1)
+    p.plot(np.log10(M500*1e13/0.7), np.log10(kT_kev), marker='+', ls='', color='grey', mfc='none', label='literature',zorder=1)
+    p.plot(np.log10(B18_M500*1e14), np.log10(B18_TXcin/0.77 / cosmo.efunc(B18_z)**(2./3.)), marker='+', color='grey', ls='', mfc='none', alpha=0.7,zorder=1)
+    p.plot(np.log10(WtG['Ma16_Mlen_1e15']*1e15), np.log10(WtG['Ma16_kT_keV']/0.77/cosmo.efunc(WtG['Ma16_z'])**(2./3.)), marker='+', color='grey', ls='', mfc='none', alpha=0.5,zorder=1)
+    #kt_err = (erass1['KT_H']-erass1['KT_L'])/2.
+    #ok = (erass1['KT']>0)&(erass1['KT_L']/kt_err>7)
+    #p.plot(np.log10(erass1['M500'][ok]*1e13), np.log10(erass1['KT'][ok]/cosmo.efunc(erass1['BEST_Z'][ok])**(2./3.) ), marker='+', ls='', mfc='none',color='orange', zorder=1)
 
     xx = np.log10(XGA['M500c'])
     yy = np.log10(XGA['CLUSTER_kT'])- 2./3.*np.log10(EZ_mean)
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    p.plot(mean_mass, (mean_mass_proxy), color='r')
-    p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.2, color='r', label='Mock')
+    p.plot(mean_mass, (mean_mass_proxy), color='darkred', ls='dashed',zorder=10)
+    p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.4, color='darkred', label='This model',zorder=10)
 
-    #xx = np.log10(XGA['M500c'])
-    #yy = np.log10(XGA['CLUSTER_kT_kTcorr'])- 2./3.*np.log10(EZ_mean)
-    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    #p.plot(mean_mass, (mean_mass_proxy), color='g')
-    #p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.2, color='g', label='Eq kT')
+    #x_val = np.arange(11, 15, 0.01)
+    #p.plot(x_val, (0.6*x_val-8.), 'k--', label='0.6x-8')
+    M500c_MW = np.log10(9.7e11)
+    M500c_MW_up = np.log10(9.7e11+1.5e11)
+    M500c_MW_lo = np.log10(9.7e11-1.5e11)
+    kt_MW = np.log10( ( 0.153 + 0.178 ) / 2. )
+    kt_MW_up = np.log10(0.178)
+    kt_MW_lo = np.log10(0.153)
+
+    p.plot([M500c_MW, M500c_MW], [kt_MW_lo, kt_MW_up], color='orange', lw=2, zorder=100)
+    p.plot([M500c_MW_lo, M500c_MW_up], [kt_MW, kt_MW], color='orange', lw=2, label='Ponti 2023, MW',zorder=100)
 
     x_val = np.arange(11, 15, 0.01)
-    p.plot(x_val, (0.6*x_val-8.), 'k--', label='0.6x-8')
-    #corr=10**(XGA['CLUSTER_LX_soft_RF_R500c']-XGA['CBP_CLUSTER_LX_soft_RF_R500c'])
-    #xx = np.log10(XGA['M500c'])
-    #yy = np.log10(XGA['CBP_kT']*corr)- 2./3.*np.log10(EZ_mean)
-    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
-    #p.plot(mean_mass, (mean_mass_proxy), color='r')
-    #p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.2, color='r', label='Mock Se22')
+    p.plot(x_val, (0.6*x_val-8.), 'k:', label='0.6x-8')
+
     p.xlabel(r'$\log_{10}(M_{500c}$ [M$_\odot$])')
     p.ylabel(r'$\log_{10}($kT/E$(z)^{2/3}$ [keV])')
-    p.legend(frameon=True, loc=4, fontsize=10, title=z_dir)
+    p.legend(frameon=True, loc=4, fontsize=11)#, title=z_dir)
     #p.xscale('log')
     p.grid()
     #p.yscale('log')
     p.xlim((11.5, 15.5))
-    p.ylim((-2, 1.5))
+    p.ylim((-1.5, 1.5))
+    p.tight_layout()
+    p.savefig(fig_out)
+    p.clf()
+    print(fig_out)
+
+
+    ez01 = cosmo.efunc(0.1)
+    log10_M500c, log10_M500c_up, log10_M500c_lo, kt_lo, kT_BGmod, kt, kt_up = np.transpose([
+        [12.97878, 13.08223, 12.88064, 0.22239, 0.43046, 0.62596, 0.79247],
+        [13.17507, 13.27851, 13.08488, 0.53541, 0.71267, 0.83320, 0.93197],
+        [13.37401, 13.28382, 13.47480, 0.46203, 0.72753, 0.88641, 0.99736],
+        [13.57029, 13.47215, 13.67374, 0.67186, 0.94861, 1.64151, 2.26364],
+        [13.82759, 13.66578, 14.06631, 1.47621, 2.10900, 2.31084, 3.97526],
+        [14.21751, 14.06897, 14.36870, 2.87422, 3.43040, 3.19606, 3.95189],
+        [14.65252, 14.36340, 14.86472, 4.07013, 7.08477, 4.71660, 9.97363],])
+
+    fig_out = os.path.join(validation_dir_SR, LC_dir+'_M500-kT_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']) +'-noTT.png' )
+    p.figure(0, (5.5, 5.))
+    #p.errorbar(log10_M500c, np.log10(kt/ez01**(2./3.) ), xerr=[log10_M500c_up-log10_M500c, log10_M500c-log10_M500c_lo], yerr=[np.log10(kt_up/ez01**(2./3.))-np.log10(kt/ez01**(2./3.)), np.log10(kt/ez01**(2./3.))-np.log10(kt_lo/ez01**(2./3.))], ls='none', label='Toptun 2025, stack', zorder=20)
+
+    p.plot(np.log10( Lo20_M500*1e14), np.log10(Lo20_kT / 0.77 / cosmo.efunc(Lo20_z)**(2./3.)), marker='+', color='grey', ls='', mfc='none', zorder=1)
+    p.plot( np.log10(XXL['Mgas500kpc']*1e11*10**(1.1) * cosmo.efunc(XXL['z'])), np.log10(XXL['T300kpc'] /cosmo.efunc(XXL['z'])**(2./3.) ), marker='+', color='grey', ls='', mfc='none',zorder=1)
+    p.plot(np.log10(M500*1e13/0.7), np.log10(kT_kev), marker='+', ls='', color='grey', mfc='none', label='literature',zorder=1)
+    p.plot(np.log10(B18_M500*1e14), np.log10(B18_TXcin/0.77 / cosmo.efunc(B18_z)**(2./3.)), marker='+', color='grey', ls='', mfc='none', alpha=0.7,zorder=1)
+    p.plot(np.log10(WtG['Ma16_Mlen_1e15']*1e15), np.log10(WtG['Ma16_kT_keV']/0.77/cosmo.efunc(WtG['Ma16_z'])**(2./3.)), marker='+', color='grey', ls='', mfc='none', alpha=0.5,zorder=1)
+    #kt_err = (erass1['KT_H']-erass1['KT_L'])/2.
+    #ok = (erass1['KT']>0)&(erass1['KT_L']/kt_err>7)
+    #p.plot(np.log10(erass1['M500'][ok]*1e13), np.log10(erass1['KT'][ok]/cosmo.efunc(erass1['BEST_Z'][ok])**(2./3.) ), marker='+', ls='', mfc='none',color='orange', zorder=1)
+
+    xx = np.log10(XGA['M500c'])
+    yy = np.log10(XGA['CLUSTER_kT'])- 2./3.*np.log10(EZ_mean)
+    mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
+    p.plot(mean_mass, (mean_mass_proxy), color='darkred', ls='dashed',zorder=10)
+    p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.4, color='darkred', label='This model',zorder=10)
+
+    #x_val = np.arange(11, 15, 0.01)
+    #p.plot(x_val, (0.6*x_val-8.), 'k--', label='0.6x-8')
+    M500c_MW = np.log10(9.7e11)
+    M500c_MW_up = np.log10(9.7e11+1.5e11)
+    M500c_MW_lo = np.log10(9.7e11-1.5e11)
+    kt_MW = np.log10( ( 0.153 + 0.178 ) / 2. )
+    kt_MW_up = np.log10(0.178)
+    kt_MW_lo = np.log10(0.153)
+
+    p.plot([M500c_MW, M500c_MW], [kt_MW_lo, kt_MW_up], color='orange', lw=2, zorder=100)
+    p.plot([M500c_MW_lo, M500c_MW_up], [kt_MW, kt_MW], color='orange', lw=2, label='Ponti 2023, MW',zorder=100)
+
+    x_val = np.arange(11, 15, 0.01)
+    p.plot(x_val, (0.6*x_val-8.), 'k:', label='0.6x-8')
+
+    p.xlabel(r'$\log_{10}(M_{500c}$ [M$_\odot$])')
+    p.ylabel(r'$\log_{10}($kT/E$(z)^{2/3}$ [keV])')
+    p.legend(frameon=True, loc=4, fontsize=11)#, title=z_dir)
+    #p.xscale('log')
+    p.grid()
+    #p.yscale('log')
+    p.xlim((11.5, 15.5))
+    p.ylim((-1.5, 1.5))
     p.tight_layout()
     p.savefig(fig_out)
     p.clf()
