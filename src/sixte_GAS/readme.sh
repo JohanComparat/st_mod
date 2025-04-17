@@ -80,6 +80,7 @@ nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log
 
 # after the scripts above are finished
 python merge_erosita_tile.py # DONE
+python merge_erosita_tile_glist.py # TODO
 # after the merging is finished (it deletes temporary files !)
 python clean_erosita_tile.py # TODO AFTER
 

@@ -142,11 +142,11 @@ cd $GIT_STMOD/src/Mpipelines
 # nohup python AGN_pipeline.py z2p03 FullSky 0.8 8 > logs/testz2p03.log & # DONE
 # nohup python AGN_pipeline.py z2p17 FullSky 0.8 8 > logs/testz2p17.log & # DONE
 # nohup python AGN_pipeline.py z2p31 FullSky 0.8 8 > logs/testz2p31.log & # DONE
-nohup python AGN_pipeline.py z2p46 FullSky 0.8 8 > logs/testz2p46.log & # # FAILED
+nohup python AGN_pipeline.py z2p46 FullSky 0.8 8 > logs/testz2p46.log & # RSYNC ongoing
 nohup python AGN_pipeline.py z2p62 FullSky 0.8 8 > logs/testz2p62.log & # RSYNC ongoing
 nohup python AGN_pipeline.py z2p78 FullSky 0.8 8 > logs/testz2p78.log & # RSYNC ongoing
 nohup python AGN_pipeline.py z2p95 FullSky 0.8 8 > logs/testz2p95.log & # RSYNC ongoing
-nohup python AGN_pipeline.py z3p13 FullSky 0.8 8 > logs/testz3p13.log & # ongoing
+# nohup python AGN_pipeline.py z3p13 FullSky 0.8 8 > logs/testz3p13.log & # DONE
 # nohup python AGN_pipeline.py z3p32 FullSky 0.8 8 > logs/testz3p32.log & # DONE
 nohup python AGN_pipeline.py z3p61 FullSky 0.8 8 > logs/testz3p61.log & # ongoing
 nohup python AGN_pipeline.py z3p93 FullSky 0.8 8 > logs/testz3p93.log & # RSYNC ongoing
