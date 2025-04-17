@@ -78,11 +78,15 @@ nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log
 nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log &
 nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log &
 
+TODO : extract files with the cluster model computed
+
 # after the scripts above are finished
 python merge_erosita_tile.py # DONE
 python merge_erosita_tile_glist.py # TODO
+TODO : merge files with the cluster model computed
+
 # after the merging is finished (it deletes temporary files !)
-python clean_erosita_tile.py # TODO AFTER
+# python clean_erosita_tile.py # TODO AT THE END, or not
 
 # create links for the images and spectra in each folder
 # python create_links_per_tile.py # DONE
@@ -127,7 +131,6 @@ take simput and quantities from $UCHUU DIR
 Make a long eRASS:8 sixte simulation
 
 Make a long eRASS:4 or 5 sixte simulation
-
 
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
