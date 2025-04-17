@@ -40,6 +40,44 @@ nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # D
 nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # DONE
 nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # DONE
 
+nohup python extract_erosita_tile_glist.py 1  > logs/extract_erosita_tile_1.log  &
+nohup python extract_erosita_tile_glist.py 2  > logs/extract_erosita_tile_2.log  &
+nohup python extract_erosita_tile_glist.py 3  > logs/extract_erosita_tile_3.log  &
+nohup python extract_erosita_tile_glist.py 4  > logs/extract_erosita_tile_4.log  &
+nohup python extract_erosita_tile_glist.py 5  > logs/extract_erosita_tile_5.log  &
+nohup python extract_erosita_tile_glist.py 6  > logs/extract_erosita_tile_6.log  &
+nohup python extract_erosita_tile_glist.py 7  > logs/extract_erosita_tile_7.log  &
+nohup python extract_erosita_tile_glist.py 8  > logs/extract_erosita_tile_8.log  &
+nohup python extract_erosita_tile_glist.py 9  > logs/extract_erosita_tile_9.log  &
+nohup python extract_erosita_tile_glist.py 10 > logs/extract_erosita_tile_10.log &
+nohup python extract_erosita_tile_glist.py 11 > logs/extract_erosita_tile_11.log &
+nohup python extract_erosita_tile_glist.py 12 > logs/extract_erosita_tile_12.log &
+nohup python extract_erosita_tile_glist.py 13 > logs/extract_erosita_tile_13.log &
+nohup python extract_erosita_tile_glist.py 14 > logs/extract_erosita_tile_14.log &
+nohup python extract_erosita_tile_glist.py 15 > logs/extract_erosita_tile_15.log &
+nohup python extract_erosita_tile_glist.py 16 > logs/extract_erosita_tile_16.log &
+nohup python extract_erosita_tile_glist.py 17 > logs/extract_erosita_tile_17.log &
+nohup python extract_erosita_tile_glist.py 18 > logs/extract_erosita_tile_18.log &
+nohup python extract_erosita_tile_glist.py 19 > logs/extract_erosita_tile_19.log &
+nohup python extract_erosita_tile_glist.py 20 > logs/extract_erosita_tile_20.log &
+nohup python extract_erosita_tile_glist.py 21 > logs/extract_erosita_tile_21.log &
+nohup python extract_erosita_tile_glist.py 22 > logs/extract_erosita_tile_22.log &
+nohup python extract_erosita_tile_glist.py 23 > logs/extract_erosita_tile_23.log &
+nohup python extract_erosita_tile_glist.py 24 > logs/extract_erosita_tile_24.log &
+nohup python extract_erosita_tile_glist.py 25 > logs/extract_erosita_tile_25.log &
+nohup python extract_erosita_tile_glist.py 26 > logs/extract_erosita_tile_26.log &
+nohup python extract_erosita_tile_glist.py 27 > logs/extract_erosita_tile_27.log &
+nohup python extract_erosita_tile_glist.py 28 > logs/extract_erosita_tile_28.log &
+nohup python extract_erosita_tile_glist.py 29 > logs/extract_erosita_tile_29.log &
+nohup python extract_erosita_tile_glist.py 30 > logs/extract_erosita_tile_30.log &
+nohup python extract_erosita_tile_glist.py 31 > logs/extract_erosita_tile_31.log &
+nohup python extract_erosita_tile_glist.py 32 > logs/extract_erosita_tile_32.log &
+nohup python extract_erosita_tile_glist.py 33 > logs/extract_erosita_tile_33.log &
+nohup python extract_erosita_tile_glist.py 34 > logs/extract_erosita_tile_34.log &
+nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log &
+nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log &
+nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log &
+
 # after the scripts above are finished
 python merge_erosita_tile.py # DONE
 # after the merging is finished (it deletes temporary files !)
@@ -64,8 +102,7 @@ python format_simput_xgas.py # DONE
 python simulate_cluster_only_SEED_SKYMAP.py # DONE for eROSITA_DE, eROSITA_RU v2.7 sixte runs
 python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # v2.7 sixte runs TODO
 
-
-
+python plot_events_with_catalog.py 164087 "eRASS8_SEED_001_events_cluster_2025_04"
 
 
 # simulate data with sixte and events using attitude fiels in the events !!!

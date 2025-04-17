@@ -139,19 +139,32 @@ cd $GIT_STMOD/src/Mpipelines
 # nohup python AGN_pipeline.py z1p65 FullSky 0.8 8 > logs/testz1p65.log & # DONE
 # nohup python AGN_pipeline.py z1p77 FullSky 0.8 8 > logs/testz1p77.log & # DONE
 # nohup python AGN_pipeline.py z1p90 FullSky 0.8 8 > logs/testz1p90.log & # DONE
-nohup python AGN_pipeline.py z2p03 FullSky 0.8 8 > logs/testz2p03.log & # # ongoing
-nohup python AGN_pipeline.py z2p17 FullSky 0.8 8 > logs/testz2p17.log & # DONE
-nohup python AGN_pipeline.py z2p31 FullSky 0.8 8 > logs/testz2p31.log & # # ongoing
-nohup python AGN_pipeline.py z2p46 FullSky 0.8 8 > logs/testz2p46.log & # # ongoing
-nohup python AGN_pipeline.py z2p62 FullSky 0.8 8 > logs/testz2p62.log & # PARTIAL DATA. TODO LC
-nohup python AGN_pipeline.py z2p78 FullSky 0.8 8 > logs/testz2p78.log & # PARTIAL DATA. TODO LC
-nohup python AGN_pipeline.py z2p95 FullSky 0.8 8 > logs/testz2p95.log & # PARTIAL DATA. TODO LC
-nohup python AGN_pipeline.py z3p13 FullSky 0.8 8 > logs/testz3p13.log & # FAILED
-nohup python AGN_pipeline.py z3p32 FullSky 0.8 8 > logs/testz3p32.log & # ongoing
-nohup python AGN_pipeline.py z3p61 FullSky 0.8 8 > logs/testz3p61.log & # NO DATA. TODO LC
-nohup python AGN_pipeline.py z3p93 FullSky 0.8 8 > logs/testz3p93.log & # NO DATA. TODO LC
+# nohup python AGN_pipeline.py z2p03 FullSky 0.8 8 > logs/testz2p03.log & # DONE
+# nohup python AGN_pipeline.py z2p17 FullSky 0.8 8 > logs/testz2p17.log & # DONE
+# nohup python AGN_pipeline.py z2p31 FullSky 0.8 8 > logs/testz2p31.log & # DONE
+nohup python AGN_pipeline.py z2p46 FullSky 0.8 8 > logs/testz2p46.log & # # FAILED
+nohup python AGN_pipeline.py z2p62 FullSky 0.8 8 > logs/testz2p62.log & # RSYNC ongoing
+nohup python AGN_pipeline.py z2p78 FullSky 0.8 8 > logs/testz2p78.log & # RSYNC ongoing
+nohup python AGN_pipeline.py z2p95 FullSky 0.8 8 > logs/testz2p95.log & # RSYNC ongoing
+nohup python AGN_pipeline.py z3p13 FullSky 0.8 8 > logs/testz3p13.log & # ongoing
+# nohup python AGN_pipeline.py z3p32 FullSky 0.8 8 > logs/testz3p32.log & # DONE
+nohup python AGN_pipeline.py z3p61 FullSky 0.8 8 > logs/testz3p61.log & # ongoing
+nohup python AGN_pipeline.py z3p93 FullSky 0.8 8 > logs/testz3p93.log & # RSYNC ongoing
+
+z2p46
+
+directory: z2p46 , mean redshift= 2.46
+duty cycle MAX 0.2636811167384793
+duty cycle vs Ms: 8,12.5 by 0.5 [0.26368112 0.26368112 0.26368112 0.26368112 0.26368112 0.26368112
+ 0.26368112 0.26368112 0.26368112 0.26368112]
+0 catalogues to loop over , Dt= 4.8640923500061035 seconds
+Traceback (most recent call last):
+  File "/home/idies/workspace/erosim/software/st_mod/src/Mpipelines/AGN_pipeline.py", line 49, in <module>
+    for p_2_catalogue in C_AGN.p_2_catalogues[is_cat]:
+IndexError: arrays used as indices must be of integer (or boolean) type
 
 z3p13
+
 opens /home/idies/workspace/erosim/Uchuu/FullSky/z3p13/replication_-3.0_1.0_-1.0/glist.fits
 3.095387754568758 <z< 3.2186020276156158
 3.095387754568758 3.2186020276156158
