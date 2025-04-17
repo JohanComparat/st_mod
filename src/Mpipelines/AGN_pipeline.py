@@ -140,33 +140,35 @@ for p_2_catalogue in C_AGN.p_2_catalogues[is_cat]:
             ##
             ## retrieves tabulated AGN FILE
             ##
-            C_AGN.get_tabulated_AGN(z_bins_val, dCx_min, dCx_max, dCy_min, dCy_max, dCz_min, dCz_max)
-            ##
-            ## applies f_sat and duty cycle
-            ##
-            C_AGN.get_z_mass_id(t_sim_gal)
-            ## scatter parameter is used here :
-            C_AGN.abundance_matching()
-            #
-            C_AGN.get_obscured_fractions()
-            C_AGN.compute_fluxes()
-            C_AGN.AGN['agn_type'] = C_AGN.compute_agn_type(C_AGN.AGN['redshift_S'], C_AGN.AGN['LX_hard'], C_AGN.AGN['logNH'])
-            C_AGN.compute_r_mag()
+            try:
+                C_AGN.get_tabulated_AGN(z_bins_val, dCx_min, dCx_max, dCy_min, dCy_max, dCz_min, dCz_max)
+                ##
+                ## applies f_sat and duty cycle
+                ##
+                C_AGN.get_z_mass_id(t_sim_gal)
+                ## scatter parameter is used here :
+                C_AGN.abundance_matching()
+                #
+                C_AGN.get_obscured_fractions()
+                C_AGN.compute_fluxes()
+                C_AGN.AGN['agn_type'] = C_AGN.compute_agn_type(C_AGN.AGN['redshift_S'], C_AGN.AGN['LX_hard'], C_AGN.AGN['logNH'])
+                C_AGN.compute_r_mag()
 
-            t_out = C_AGN.AGN
-            #print(t_out.info())
-            t_out.remove_columns([
-                        'dL',
-                        'nH',
-                        'ebv'
-                        ])
+                t_out = C_AGN.AGN
+                #print(t_out.info())
+                t_out.remove_columns([
+                            'dL',
+                            'nH',
+                            'ebv'
+                            ])
 
-            #print(t_out.info())
+                #print(t_out.info())
 
-            t_out.write(p_2_catalogue_out, overwrite = True)
-            print(p_2_catalogue_out, 'written', time.time()-t0)
-            all_cat_outputs.append(p_2_catalogue_out)
-
+                t_out.write(p_2_catalogue_out, overwrite = True)
+                print(p_2_catalogue_out, 'written', time.time()-t0)
+                all_cat_outputs.append(p_2_catalogue_out)
+            except(ValueError):
+                print('Value Error')
 
         file_list = np.array(all_cat_outputs)
         t = Table.read(file_list[0])
