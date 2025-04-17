@@ -54,38 +54,39 @@ for p_2_catalogue in C_AGN.p_2_catalogues[is_cat]:
     print(p_2_catalogue)
     replication_dir = p_2_catalogue.split('/')[-2]
     print(replication_dir)
-    ix = float(replication_dir.split('_')[1])
-    iy = float(replication_dir.split('_')[2])
-    iz = float(replication_dir.split('_')[3])
-    #print(ix, iy, iz)
-    selection_area = ( C_AGN.LC_MetaData['jx'] == ix ) & ( C_AGN.LC_MetaData['jy'] == iy ) & ( C_AGN.LC_MetaData['jz'] == iz )
-    #print(C_AGN.LC_MetaData[selection_area])
-    sky_frac_Dmin = C_AGN.LC_MetaData['area_DC_min'][selection_area].sum() / C_AGN.LC_MetaData['area_DC_min'].sum()
-    sky_frac_Dmax = C_AGN.LC_MetaData['area_DC_max'][selection_area].sum() / C_AGN.LC_MetaData['area_DC_max'].sum()
-    C_AGN.sky_frac = sky_frac_Dmax * C_AGN.LC_MetaData['N_frac_'+LC_dir][selection_area]
-    print('sky fraction', C_AGN.sky_frac)
-    if C_AGN.sky_frac==0.:
-        print('area = 0 deg2')
-        continue
-    print('area = ', C_AGN.sky_frac, ' deg2')
-
-    ##
-    ## OPENS Galaxy light cone
-    ##
-    print('opens', p_2_catalogue)
-    t_sim_gal_full = Table.read(p_2_catalogue)
-    t_sim_gal_full['ID_glist'] = np.arange(len(t_sim_gal_full))
-    ZZ = t_sim_gal_full['redshift_R']
-    C_AGN.z_min = np.min(ZZ)
-    C_AGN.z_max = np.max(ZZ)
-    C_AGN.z_mean = np.mean(ZZ)
-    print(C_AGN.z_min,'<z<',C_AGN.z_max)
-    j0 = np.searchsorted(z_bins, C_AGN.z_min, side='right')-1
-    j1 = np.searchsorted(z_bins, C_AGN.z_max, side='right')-1
-    print(C_AGN.z_min, C_AGN.z_max)
-    all_cat_outputs = []
     path_2_output = os.path.join( os.path.dirname(p_2_catalogue),'AGN_list_sigma_'+C_AGN.str_scatter_0+'_fsat_'+C_AGN.str_fsat+'.fits' )
+    print('already done ? ', os.path.isfile( path_2_output ))
     if os.path.isfile( path_2_output )==False:
+        ix = float(replication_dir.split('_')[1])
+        iy = float(replication_dir.split('_')[2])
+        iz = float(replication_dir.split('_')[3])
+        #print(ix, iy, iz)
+        selection_area = ( C_AGN.LC_MetaData['jx'] == ix ) & ( C_AGN.LC_MetaData['jy'] == iy ) & ( C_AGN.LC_MetaData['jz'] == iz )
+        #print(C_AGN.LC_MetaData[selection_area])
+        sky_frac_Dmin = C_AGN.LC_MetaData['area_DC_min'][selection_area].sum() / C_AGN.LC_MetaData['area_DC_min'].sum()
+        sky_frac_Dmax = C_AGN.LC_MetaData['area_DC_max'][selection_area].sum() / C_AGN.LC_MetaData['area_DC_max'].sum()
+        C_AGN.sky_frac = sky_frac_Dmax * C_AGN.LC_MetaData['N_frac_'+LC_dir][selection_area]
+        print('sky fraction', C_AGN.sky_frac)
+        if C_AGN.sky_frac==0.:
+            print('area = 0 deg2')
+            continue
+        print('area = ', C_AGN.sky_frac, ' deg2')
+
+        ##
+        ## OPENS Galaxy light cone
+        ##
+        print('opens', p_2_catalogue)
+        t_sim_gal_full = Table.read(p_2_catalogue)
+        t_sim_gal_full['ID_glist'] = np.arange(len(t_sim_gal_full))
+        ZZ = t_sim_gal_full['redshift_R']
+        C_AGN.z_min = np.min(ZZ)
+        C_AGN.z_max = np.max(ZZ)
+        C_AGN.z_mean = np.mean(ZZ)
+        print(C_AGN.z_min,'<z<',C_AGN.z_max)
+        j0 = np.searchsorted(z_bins, C_AGN.z_min, side='right')-1
+        j1 = np.searchsorted(z_bins, C_AGN.z_max, side='right')-1
+        print(C_AGN.z_min, C_AGN.z_max)
+        all_cat_outputs = []
         for jj in np.arange(j0, j1+1, 1):
             print('=='*50)
             z_bins_val = z_bins[jj]
