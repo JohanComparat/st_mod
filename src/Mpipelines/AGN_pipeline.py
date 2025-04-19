@@ -167,8 +167,8 @@ for p_2_catalogue in C_AGN.p_2_catalogues[is_cat]:
                 t_out.write(p_2_catalogue_out, overwrite = True)
                 print(p_2_catalogue_out, 'written', time.time()-t0)
                 all_cat_outputs.append(p_2_catalogue_out)
-            except(ValueError):
-                print('Value Error')
+            except(ValueError, ZeroDivisionError):
+                print('Value Error, ZeroDivisionError')
 
         file_list = np.array(all_cat_outputs)
         t = Table.read(file_list[0])

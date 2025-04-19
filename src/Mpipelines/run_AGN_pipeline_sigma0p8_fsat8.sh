@@ -142,16 +142,16 @@ cd $GIT_STMOD/src/Mpipelines
 # nohup python AGN_pipeline.py z2p03 FullSky 0.8 8 > logs/testz2p03.log & # DONE
 # nohup python AGN_pipeline.py z2p17 FullSky 0.8 8 > logs/testz2p17.log & # DONE
 # nohup python AGN_pipeline.py z2p31 FullSky 0.8 8 > logs/testz2p31.log & # DONE
-nohup python AGN_pipeline.py z2p46 FullSky 0.8 8 > logs/testz2p46.log & # RSYNC ongoing
-nohup python AGN_pipeline.py z2p62 FullSky 0.8 8 > logs/testz2p62.log & # RSYNC ongoing
-nohup python AGN_pipeline.py z2p78 FullSky 0.8 8 > logs/testz2p78.log & # RSYNC ongoing
-nohup python AGN_pipeline.py z2p95 FullSky 0.8 8 > logs/testz2p95.log & # RSYNC ongoing
+# nohup python AGN_pipeline.py z2p46 FullSky 0.8 8 > logs/testz2p46.log & # DONE
+# nohup python AGN_pipeline.py z2p62 FullSky 0.8 8 > logs/testz2p62.log & # DONE
+# nohup python AGN_pipeline.py z2p78 FullSky 0.8 8 > logs/testz2p78.log & # DONE
+# nohup python AGN_pipeline.py z2p95 FullSky 0.8 8 > logs/testz2p95.log & # DONE
 # nohup python AGN_pipeline.py z3p13 FullSky 0.8 8 > logs/testz3p13.log & # DONE
 # nohup python AGN_pipeline.py z3p32 FullSky 0.8 8 > logs/testz3p32.log & # DONE
-nohup python AGN_pipeline.py z3p61 FullSky 0.8 8 > logs/testz3p61.log & # ongoing
-nohup python AGN_pipeline.py z3p93 FullSky 0.8 8 > logs/testz3p93.log & # RSYNC ongoing
+# nohup python AGN_pipeline.py z3p61 FullSky 0.8 8 > logs/testz3p61.log & # DONE
+nohup python AGN_pipeline.py z3p93 FullSky 0.8 8 > logs/testz3p93.log & # FAILED error below
 
-z2p46
+z3p93 error :
 
 directory: z2p46 , mean redshift= 2.46
 duty cycle MAX 0.2636811167384793
@@ -188,4 +188,33 @@ Traceback (most recent call last):
     return _wrapit(obj, method, *args, **kwds)
   File "/home/idies/miniconda3/lib/python3.9/site-packages/numpy/core/fromnumeric.py", line 43, in _wrapit
     result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (2,) + inhomogeneous part.
+ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (2,) + inhomogeneous part.====================================================================================================
+/home/idies/workspace/erosim/Uchuu/FullSky/z3p93/replication_-2.0_2.0_0.0/glist.fits
+replication_-2.0_2.0_0.0
+already done ?  True
+====================================================================================================
+/home/idies/workspace/erosim/Uchuu/FullSky/z3p93/replication_-2.0_2.0_1.0/glist.fits
+replication_-2.0_2.0_1.0
+already done ?  False
+sky fraction     N_frac_FullSky
+----------------------
+0.00011033077165341695
+area =      N_frac_FullSky
+----------------------
+0.00011033077165341695  deg2
+opens /home/idies/workspace/erosim/Uchuu/FullSky/z3p93/replication_-2.0_2.0_1.0/glist.fits
+3.8537613809574403 <z< 4.095818443436751
+3.8537613809574403 4.095818443436751
+====================================================================================================
+3.85
+0 AGN tabulated
+native N, cen, sat, f_sat 12 12 0 0.0
+downsamples centrals
+N cen goal 0.0
+Traceback (most recent call last):
+  File "/home/idies/workspace/erosim/software/st_mod/src/Mpipelines/AGN_pipeline.py", line 148, in <module>
+    C_AGN.get_z_mass_id(t_sim_gal)
+  File "/home/idies/workspace/erosim/software/st_mod/src/models/AGN.py", line 156, in get_z_mass_id
+    print('renormalizing DC by', N_galaxies/N_kept1)
+ZeroDivisionError: division by zero
+
