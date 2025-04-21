@@ -58,7 +58,7 @@ def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
 LC_dir = 'LCerass'
-z_dirs = all_z_dirs[:37]
+z_dirs = all_z_dirs#[:37]
 
 N_tot=[]
 z_dir = z_dirs[jj_zdir]
@@ -69,7 +69,7 @@ p_2_catalogues = np.array( glob.glob( os.path.join(os.environ['UCHUU'], 'FullSky
 p_2_catalogues.sort()
 for p_2_catalogue in p_2_catalogues:
     t_in = Table.read(p_2_catalogue)
-    t_in.remove_columns(['FX_hard', 'LX_soft_MWattenuated','lvmp', 'scatter_LX_Ms', 'SDSS_r_AB_attenuated'])
+    t_in.remove_columns(['FX_hard', 'LX_soft_MWattenuated', 'scatter_LX_Ms', 'SDSS_r_AB_attenuated']) # ,'lvmp'
     selection = (t_in['FX_soft']>=log10FXmin)&(t_in['FX_soft']<=MvirMax)
     t_in = t_in[selection]
     #GAL = Table.read( os.path.join( os.path.dirname(p_2_catalogue), 'glist.fits' ) )[t_in['ID_glist']]

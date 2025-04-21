@@ -69,20 +69,21 @@ for p_2_catalogue in p_2_catalogues:
     t_in = Table.read(p_2_catalogue)
     #selection = (t_in['FLUX']>=log10FXmin)
     #t_in = t_in[selection]
-    t_in['RA'][t_in['RA']==360.]=359.9999
     if len(t_in)>0:
+        t_in['RA'][t_in['RA']==360.]=359.9999
         t_in['SRVMAP'] = np.array([get_srvmap(ra, dec)[0] for (ra, dec) in zip(t_in['RA'], t_in['DEC']) ])
         U_srvmap_val = np.unique(t_in['SRVMAP'])
         for srv_val in U_srvmap_val:
-            s2 = t_in['SRVMAP']==srv_val
-            str_field = str(srv_val).zfill(6)
-            N_selected = nl(s2)
             dir_4_out = os.path.join(os.environ['UCHUU'], LC_dir, str_field, z_dir , p_2_catalogue.split('/')[-2])
             os.system('mkdir -p ' + dir_4_out)
             p_2_catalogue_out = os.path.join( dir_4_out, 'glist.fits')
-            t_in[s2].write(p_2_catalogue_out, overwrite = True)
-            print(N_selected, p_2_catalogue_out, 'written')
-            N_tot.append(N_selected)
+            if os.path.isfile(p_2_catalogue_out)==False:
+                s2 = t_in['SRVMAP']==srv_val
+                str_field = str(srv_val).zfill(6)
+                N_selected = nl(s2)
+                t_in[s2].write(p_2_catalogue_out, overwrite = True)
+                print(N_selected, p_2_catalogue_out, 'written')
+                N_tot.append(N_selected)
 
 N_haloes =  np.sum(N_tot)
 print(N_haloes, 'to be simulated')
