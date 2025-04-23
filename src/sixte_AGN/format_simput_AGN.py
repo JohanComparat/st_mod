@@ -83,7 +83,7 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
     p2_simput_out = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'AGN_list_sigma_0.8_fsat_8.0_simput.fits')
     N_agn_all = len(t_in)
     hdu_cols = fits.ColDefs([
-        fits.Column(name="SRC_ID",  format='K',    unit='',    array=(np.arange(len(t_in)).astype('int')),
+        fits.Column(name="SRC_ID",  format='K',    unit='',    array=np.arange(len(t_in)).astype('int') ),
         fits.Column(name="RA",      format='D',    unit='deg', array=t_in["RA"]),
         fits.Column(name="DEC",     format='D',    unit='deg', array=t_in["DEC"]),
         fits.Column(name="E_MIN",   format='D',    unit='keV', array=np.ones(N_agn_all) * 0.5),
