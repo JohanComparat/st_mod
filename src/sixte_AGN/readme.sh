@@ -72,8 +72,8 @@ python format_simput_AGN.py # ONGOING
 
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
-python simulate_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
-python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
+python simulate_AGN_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
+# python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
 
 
 
