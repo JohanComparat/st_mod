@@ -64,6 +64,8 @@ z_dir = sys.argv[1] # 'z0p09'
 #C_AGN = GG.GAL(z_dir, LC_dir='FullSky')
 LC_dir='FullSky'
 C_AGN = GG.AGN(z_dir, LC_dir=LC_dir)
+str_scatter_0 = '0.8'
+str_fsat = '8.0'
 
 def tabulate_wprp_clustering_noW(RA, DEC, Z, rand_RA , rand_DEC, rand_Z, out_file='test.fits', CV_frac=0.01, pimax = 100.0, N_JK=20 ):
 	"""
@@ -155,7 +157,8 @@ for meta in C_AGN.LC_MetaData:
 	GAL = Table.read(p_2_catalogue)
 	#MAG = Table.read(p_2_catal_MAG)
 
-	p_2_catal_AGNs = np.array( glob.glob( os.path.join( os.path.dirname(p_2_catalogue), 'AGN_list_sigma_*_fsat_*.fits' ) ) )
+	#p_2_catal_AGNs = np.array( glob.glob( os.path.join( os.path.dirname(p_2_catalogue), 'AGN_list_sigma_*_fsat_*.fits' ) ) )
+	p_2_catal_AGNs = np.array( glob.glob( os.path.join( os.path.dirname(p_2_catalogue), 'AGN_list_sigma_'+str_scatter_0+'_fsat_'+str_fsat+'.fits' ) ) )
 	print(not os.path.isfile(p_2_catalogue))
 	print(not os.path.isfile(p_2_catal_MAG))
 	print(len(p_2_catal_AGNs)==0)
@@ -207,8 +210,11 @@ for meta in C_AGN.LC_MetaData:
 			#rand.write(p_2_rand, format='fits', overwrite = True)
 			#
 			p_2_2PCF = os.path.join(validation_dir_WPRP, z_dir+'_'+str_replic+'_'+bn_agn+'_rmag_' + str(r_max)+'_fx_' + str(fx_min) +'-wprp-pimax60-2pcf.fits' )
-			if os.path.isfile(p_2_2PCF)==False:
-				tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF, CV_frac=0.01, pimax = 60.0, N_JK = 20 )
+			#if os.path.isfile(p_2_2PCF)==False:
+			tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF, CV_frac=0.01, pimax = 60.0, N_JK = 20 )
 			p_2_2PCF = os.path.join(validation_dir_WPRP, z_dir+'_'+str_replic+'_'+bn_agn+'_rmag_' + str(r_max)+'_fx_' + str(fx_min) +'-wprp-pimax40-2pcf.fits' )
-			if os.path.isfile(p_2_2PCF)==False:
-				tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF, CV_frac=0.01, pimax = 40.0, N_JK = 20 )
+			#if os.path.isfile(p_2_2PCF)==False:
+			tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF, CV_frac=0.01, pimax = 40.0, N_JK = 20 )
+			p_2_2PCF = os.path.join(validation_dir_WPRP, z_dir+'_'+str_replic+'_'+bn_agn+'_rmag_' + str(r_max)+'_fx_' + str(fx_min) +'-wprp-pimax100-2pcf.fits' )
+			#if os.path.isfile(p_2_2PCF)==False:
+			tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF, CV_frac=0.01, pimax = 100.0, N_JK = 20 )
