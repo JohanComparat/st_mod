@@ -125,7 +125,7 @@ for LC_dir in LC_dirs:
 
 	# Georgakakis 2008
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Georgakakis_08_AGN.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
@@ -133,7 +133,7 @@ for LC_dir in LC_dirs:
 
 	# Merloni 2012
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Merloni_12_AGN.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
@@ -141,7 +141,7 @@ for LC_dir in LC_dirs:
 
 	# Mateos 2008
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Mateos_08_AGN.data')
 	x_data, y_data, err = np.loadtxt(path_2_logNlogS_data, unpack=True)
@@ -166,7 +166,7 @@ for LC_dir in LC_dirs:
 
 	# Georgakakis 2008
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Georgakakis_08_AGN.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
@@ -174,7 +174,7 @@ for LC_dir in LC_dirs:
 
 	# Merloni 2012
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Merloni_12_AGN.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
@@ -182,7 +182,7 @@ for LC_dir in LC_dirs:
 
 	# Mateos 2008
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data/logNlogS_Mateos_08_AGN.data')
 	x_data, y_data, err = np.loadtxt(path_2_logNlogS_data, unpack=True)
 	plt.plot(x_data,y_data/ref_line(x_data), lw=3, ls='dotted', color='b', label='M08')
@@ -204,7 +204,7 @@ for LC_dir in LC_dirs:
 
 	# Merloni 2012
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Merloni_12_AGN_hard.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
@@ -244,7 +244,7 @@ for jj, z_dir in enumerate(all_z_dirs):#[:22]:
 
 	# Georgakakis 2008
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Georgakakis_08_AGN.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
@@ -252,7 +252,7 @@ for jj, z_dir in enumerate(all_z_dirs):#[:22]:
 
 	# Merloni 2012
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Merloni_12_AGN.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
@@ -260,7 +260,7 @@ for jj, z_dir in enumerate(all_z_dirs):#[:22]:
 
 	# Mateos 2008
 	path_2_logNlogS_data = os.path.join(
-		os.environ["GIT_STMOD"],
+		os.environ["GIT_STMOD_DATA"],
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Mateos_08_AGN.data')
 	x_data, y_data, err = np.loadtxt(path_2_logNlogS_data, unpack=True)

@@ -26,7 +26,7 @@ cd $GIT_STMOD/src/sixte_AGN/
 # nohup python extract_erosita_tile.py 9  > logs/extract_erosita_tile_9.log  & # DONE   'z0p36',
 # nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log & # DONE   'z0p43',
 # nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # DONE   'z0p49',
-nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # ONGOIN   'z0p56',
+# nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # DONE   'z0p56',
 # nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # DONE   'z0p63',
 # nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # DONE   'z0p70',
 # nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # DONE   'z0p78',
@@ -42,7 +42,7 @@ nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # O
 # nohup python extract_erosita_tile.py 25 > logs/extract_erosita_tile_25.log & # DONE   'z1p77',
 # nohup python extract_erosita_tile.py 26 > logs/extract_erosita_tile_26.log & # DONE   'z1p90',
 # nohup python extract_erosita_tile.py 27 > logs/extract_erosita_tile_27.log & # DONE   'z2p03',
-nohup python extract_erosita_tile.py 28 > logs/extract_erosita_tile_28.log & # ONGOIN   'z2p17',
+# nohup python extract_erosita_tile.py 28 > logs/extract_erosita_tile_28.log & # DONE   'z2p17',
 # nohup python extract_erosita_tile.py 29 > logs/extract_erosita_tile_29.log & # DONE   'z2p31',
 # nohup python extract_erosita_tile.py 30 > logs/extract_erosita_tile_30.log & # DONE   'z2p46',
 # nohup python extract_erosita_tile.py 31 > logs/extract_erosita_tile_31.log & # DONE   'z2p62',
@@ -50,24 +50,24 @@ nohup python extract_erosita_tile.py 28 > logs/extract_erosita_tile_28.log & # O
 # nohup python extract_erosita_tile.py 33 > logs/extract_erosita_tile_33.log & # DONE   'z2p95',
 # nohup python extract_erosita_tile.py 34 > logs/extract_erosita_tile_34.log & # DONE   'z3p13',
 # nohup python extract_erosita_tile.py 35 > logs/extract_erosita_tile_35.log & # DONE   'z3p32',
-nohup python extract_erosita_tile.py 36 > logs/extract_erosita_tile_36.log & # colum bug 'z3p61',
-# nohup python extract_erosita_tile.py 37 > logs/extract_erosita_tile_37.log & # DONE 'z3p93',
+# nohup python extract_erosita_tile.py 36 > logs/extract_erosita_tile_36.log & # DONE   'z3p61',
+# nohup python extract_erosita_tile.py 37 > logs/extract_erosita_tile_37.log & # DONE   'z3p93',
 
 
 # TODO
 # TODO
 
 # after the scripts above are finished
-python merge_erosita_tile.py # DONE
+nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & # ONGOING
 # after the merging is finished (it deletes temporary files !)
-python clean_erosita_tile.py # TODO AFTER
+# python clean_erosita_tile.py # not necessary, only at the end
 
 # create links for the images and spectra in each folder
 # python create_links_per_tile.py # DONE
 # /home/idies/workspace/erosim/Uchuu/cluster_images
 # /home/idies/workspace/erosim/Uchuu/cluster_Xspectra
 
-python format_simput_xgas.py # DONE
+python format_simput_AGN.py # TODO
 
 
 # retrieve real events from complete repo

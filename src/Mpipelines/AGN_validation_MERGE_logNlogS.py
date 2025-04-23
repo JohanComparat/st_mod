@@ -94,14 +94,15 @@ all_z_dirs = np.array([ 'z0p02',
 						'z4p63',
 						'z5p15',
 						'z5p73' ])
-all_suffixes = np.array([ 	'sigma_0.8_fsat_0.0'  ,
+all_suffixes = np.array([ 	#'sigma_0.8_fsat_0.0'  ,
 							'sigma_0.8_fsat_8.0'  ,
-							'sigma_0.8_fsat_20.0'  ,
-							'sigma_0.6_fsat_0.0'  ,
-							'sigma_0.6_fsat_8.0'  ,
-							'sigma_0.4_fsat_0.0'  ,
-							'sigma_0.4_fsat_8.0'  ,
-							'sigma_1.0_fsat_10.0' ])
+							#'sigma_0.8_fsat_20.0'  ,
+							#'sigma_0.6_fsat_0.0'  ,
+							#'sigma_0.6_fsat_8.0'  ,
+							#'sigma_0.4_fsat_0.0'  ,
+							#'sigma_0.4_fsat_8.0'  ,
+							#'sigma_1.0_fsat_10.0' ])
+							])
 
 def get_lnls(LC_dir = 'LC0002', suffix = 'sigma_0.8_fsat_0.0', z_dir=''):
 	DATA = Table()
