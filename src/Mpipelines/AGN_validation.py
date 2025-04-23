@@ -340,7 +340,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         print(fig_out, 'written')
 
     if z_mean<0.5:
-        path_2_GAMA = os.path.join(os.environ['HOME'], 'ptmp_joco/GAMA/', 'forJohan.fits')
+        path_2_GAMA = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'benchmark', 'GAMA', 'forJohan.fits')
         t_gama = Table.read(path_2_GAMA)
         kmag = 8.9 - 2.5*np.log10(t_gama['flux_Kt'])
         zmag = 8.9 - 2.5*np.log10(t_gama['flux_Zt'])
@@ -375,7 +375,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         volume_GAMA = (cosmo.comoving_volume(z_max).value - cosmo.comoving_volume(z_min).value) * np.pi * 60. / 129600.
 
     if z_mean>0.05:
-        path_2_COSMOS = os.path.join(os.environ['HOME'],'ptmp_joco/COSMOS/','photoz_vers2.0_010312.fits')
+        path_2_COSMOS = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'benchmark', 'COSMOS','photoz_vers2.0_010312.fits')
         t = Table.read(path_2_COSMOS)
         good = (t['photoz']>z_min )&( t['photoz']< z_max ) & ( t['MK']<0 )&( t['MK']>-40 )&( t['mass_med']<14 )&( t['mass_med']>4 )
         t_cosmos = t[good]
