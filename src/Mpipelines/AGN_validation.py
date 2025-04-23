@@ -50,7 +50,7 @@ C_AGN = GG.AGN(z_dir, LC_dir=LC_dir)
 #LC_dir='FullSky'
 
 str_scatter_0 = '0.8'
-str_fsat = '8'
+str_fsat = '8.0'
 agn_data_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data', 'validation/validation_AGN/literature_data' )
 
 
