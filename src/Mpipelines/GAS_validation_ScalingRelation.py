@@ -245,6 +245,9 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     yy = XGA['CLUSTER_LX_soft_RF_R500c']-np.log10(EZ_mean)
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
 
+    BP_allz = np.loadtxt( os.path.join( SR_dir, 'BP-mass-lx.txt'), unpack = True)
+    BP_01z03 = np.loadtxt( os.path.join( SR_dir, 'BP-mass-lx-01z03.txt'), unpack = True)
+
     ###
     #
     # M500 - LX
@@ -337,9 +340,17 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     yy = XGA['CLUSTER_LX_soft_RF_R500c']-np.log10(EZ_mean)
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
     p.plot(10**mean_mass, 10**(mean_mass_proxy), color='darkred', ls='--', zorder=100)
-    p.fill_between(10**mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='darkred', label='This model', zorder=100)
+    p.fill_between(10**mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='darkred', label='This work', zorder=100)
 
-    p.grid()
+
+    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
+    #BP_allz = np.loadtxt( os.path.join( SR_dir, 'BP-mass-lx.txt'), unpack = True)
+    #BP_01z03 = np.loadtxt( os.path.join( SR_dir, 'BP-mass-lx-01z03.txt'), unpack = True)
+    #mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = BP_01z03
+    #p.plot(10**mean_mass, 10**(mean_mass_proxy), color='darkgreen', ls='--', zorder=100)
+    #p.fill_between(10**mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='darkgreen', label='BP model 0.1<z<0.3', zorder=100)
+
+    #p.grid()
     p.xlabel(r'$E(z) M_{500c}\; [M_\odot]$')
     p.ylabel(r'$L^{<R_{500c}}_{X,\; 0.5-2 keV}/E(z)$ [erg s$^{-1}$]')
     p.legend(frameon=True, loc=2, ncol=1, fontsize=11)#, title=z_dir)
@@ -367,7 +378,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     yy = XGA['CLUSTER_LX_soft_RF_R500c']
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
     p.plot(mean_mass, 10**(mean_mass_proxy), color='darkred', ls='--', zorder=100)
-    p.fill_between(mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='darkred', label='This model', zorder=100)
+    p.fill_between(mean_mass, 10**(mean_mass_proxy-std_mass_proxy), 10**(mean_mass_proxy+std_mass_proxy), alpha=0.2, color='darkred', label='This work', zorder=100)
 
     y1 = 10** ( (LX_min_A15+LX_max_A15)/2. )
     yerr_up = 10** LX_max_A15 - y1
@@ -448,7 +459,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     yy = np.log10(XGA['CLUSTER_kT'])- 2./3.*np.log10(EZ_mean)
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
     p.plot(mean_mass, (mean_mass_proxy), color='darkred', ls='dashed',zorder=10)
-    p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.4, color='darkred', label='This model',zorder=10)
+    p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.4, color='darkred', label='This work',zorder=10)
 
     #x_val = np.arange(11, 15, 0.01)
     #p.plot(x_val, (0.6*x_val-8.), 'k--', label='0.6x-8')
@@ -469,7 +480,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     p.ylabel(r'$\log_{10}($kT/E$(z)^{2/3}$ [keV])')
     p.legend(frameon=True, loc=4, fontsize=11)#, title=z_dir)
     #p.xscale('log')
-    p.grid()
+    #p.grid()
     #p.yscale('log')
     p.xlim((11.5, 15.5))
     p.ylim((-1.5, 1.5))
@@ -506,7 +517,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     yy = np.log10(XGA['CLUSTER_kT'])- 2./3.*np.log10(EZ_mean)
     mass_mins, mean_mass, mass_maxs, mean_mass_proxy, std_mass_proxy = get_mean_scaling_relation(xx, yy)
     p.plot(mean_mass, (mean_mass_proxy), color='darkred', ls='dashed',zorder=10)
-    p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.4, color='darkred', label='This model',zorder=10)
+    p.fill_between(mean_mass, (mean_mass_proxy-std_mass_proxy), (mean_mass_proxy+std_mass_proxy), alpha=0.4, color='darkred', label='This work',zorder=10)
 
     #x_val = np.arange(11, 15, 0.01)
     #p.plot(x_val, (0.6*x_val-8.), 'k--', label='0.6x-8')
@@ -527,7 +538,7 @@ for meta in C_GAS.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small
     p.ylabel(r'$\log_{10}($kT/E$(z)^{2/3}$ [keV])')
     p.legend(frameon=True, loc=4, fontsize=11)#, title=z_dir)
     #p.xscale('log')
-    p.grid()
+    #p.grid()
     #p.yscale('log')
     p.xlim((11.5, 15.5))
     p.ylim((-1.5, 1.5))

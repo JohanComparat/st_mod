@@ -25,47 +25,33 @@ cd $GIT_STMOD/src/sixte_AGN/
 # nohup python extract_erosita_tile.py 8  > logs/extract_erosita_tile_8.log  & # DONE   'z0p30',
 # nohup python extract_erosita_tile.py 9  > logs/extract_erosita_tile_9.log  & # DONE   'z0p36',
 # nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log & # DONE   'z0p43',
-nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # ONGOIN   'z0p49',
+# nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # DONE   'z0p49',
 nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # ONGOIN   'z0p56',
-nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # ONGOIN   'z0p63',
-nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # ONGOIN   'z0p70',
-nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # ONGOIN   'z0p78',
-nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log & # ONGOIN   'z0p86',
-nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log & # ONGOIN   'z0p94',
-nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log & # ONGOIN   'z1p03',
-nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log & # ONGOIN   'z1p12',
-nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # ONGOIN   'z1p22',
-nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # ONGOIN   'z1p32',
-nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # ONGOIN   'z1p43',
-nohup python extract_erosita_tile.py 23 > logs/extract_erosita_tile_23.log & # ONGOIN   'z1p54',
-nohup python extract_erosita_tile.py 24 > logs/extract_erosita_tile_24.log & # ONGOIN   'z1p65',
-nohup python extract_erosita_tile.py 25 > logs/extract_erosita_tile_25.log & # ONGOIN   'z1p77',
-nohup python extract_erosita_tile.py 26 > logs/extract_erosita_tile_26.log & # ONGOIN   'z1p90',
-nohup python extract_erosita_tile.py 27 > logs/extract_erosita_tile_27.log & # ONGOIN   'z2p03',
+# nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # DONE   'z0p63',
+# nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # DONE   'z0p70',
+# nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # DONE   'z0p78',
+# nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log & # DONE   'z0p86',
+# nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log & # DONE   'z0p94',
+# nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log & # DONE   'z1p03',
+# nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log & # DONE   'z1p12',
+# nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # DONE   'z1p22',
+# nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # DONE   'z1p32',
+# nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # DONE   'z1p43',
+# nohup python extract_erosita_tile.py 23 > logs/extract_erosita_tile_23.log & # DONE   'z1p54',
+# nohup python extract_erosita_tile.py 24 > logs/extract_erosita_tile_24.log & # DONE   'z1p65',
+# nohup python extract_erosita_tile.py 25 > logs/extract_erosita_tile_25.log & # DONE   'z1p77',
+# nohup python extract_erosita_tile.py 26 > logs/extract_erosita_tile_26.log & # DONE   'z1p90',
+# nohup python extract_erosita_tile.py 27 > logs/extract_erosita_tile_27.log & # DONE   'z2p03',
 nohup python extract_erosita_tile.py 28 > logs/extract_erosita_tile_28.log & # ONGOIN   'z2p17',
-nohup python extract_erosita_tile.py 29 > logs/extract_erosita_tile_29.log & # colum bug   'z2p31',
-nohup python extract_erosita_tile.py 30 > logs/extract_erosita_tile_30.log & # colum bug   'z2p46',
-nohup python extract_erosita_tile.py 31 > logs/extract_erosita_tile_31.log & # colum bug   'z2p62',
-nohup python extract_erosita_tile.py 32 > logs/extract_erosita_tile_32.log & # colum bug   'z2p78',
-nohup python extract_erosita_tile.py 33 > logs/extract_erosita_tile_33.log & # colum bug   'z2p95',
-nohup python extract_erosita_tile.py 34 > logs/extract_erosita_tile_34.log & # colum bug   'z3p13',
-nohup python extract_erosita_tile.py 35 > logs/extract_erosita_tile_35.log & # colum bug   'z3p32',
+# nohup python extract_erosita_tile.py 29 > logs/extract_erosita_tile_29.log & # DONE   'z2p31',
+# nohup python extract_erosita_tile.py 30 > logs/extract_erosita_tile_30.log & # DONE   'z2p46',
+# nohup python extract_erosita_tile.py 31 > logs/extract_erosita_tile_31.log & # DONE   'z2p62',
+# nohup python extract_erosita_tile.py 32 > logs/extract_erosita_tile_32.log & # DONE   'z2p78',
+# nohup python extract_erosita_tile.py 33 > logs/extract_erosita_tile_33.log & # DONE   'z2p95',
+# nohup python extract_erosita_tile.py 34 > logs/extract_erosita_tile_34.log & # DONE   'z3p13',
+# nohup python extract_erosita_tile.py 35 > logs/extract_erosita_tile_35.log & # DONE   'z3p32',
 nohup python extract_erosita_tile.py 36 > logs/extract_erosita_tile_36.log & # colum bug 'z3p61',
-nohup python extract_erosita_tile.py 37 > logs/extract_erosita_tile_37.log & # colum bug 'z3p93',
-
-
-
-====================================================================================================
-z2p46
-====================================================================================================
-Traceback (most recent call last):
-  File "/home/idies/workspace/erosim/software/st_mod/src/sixte_AGN/extract_erosita_tile.py", line 72, in <module>
-    t_in.remove_columns(['FX_hard', 'LX_soft_MWattenuated','lvmp', 'scatter_LX_Ms', 'SDSS_r_AB_attenuated'])
-  File "/home/idies/miniconda3/lib/python3.9/site-packages/astropy/table/table.py", line 2915, in remove_columns
-    for name in self._set_of_names_in_colnames(names):
-  File "/home/idies/miniconda3/lib/python3.9/site-packages/astropy/table/table.py", line 2823, in _set_of_names_in_colnames
-    raise KeyError(f'column "{invalid_names.pop()}" does not exist')
-KeyError: 'column "lvmp" does not exist'
+# nohup python extract_erosita_tile.py 37 > logs/extract_erosita_tile_37.log & # DONE 'z3p93',
 
 
 # TODO
