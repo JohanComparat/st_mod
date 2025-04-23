@@ -374,7 +374,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         t_gama['ms'] = np.array(np.log10( t_gama['StellarMass_50'] ))
         volume_GAMA = (cosmo.comoving_volume(z_max).value - cosmo.comoving_volume(z_min).value) * np.pi * 60. / 129600.
 
-    if z_mean>0.05:
+    if z_mean>0.25:
         path_2_COSMOS = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'benchmark', 'COSMOS','photoz_vers2.0_010312.fits')
         t = Table.read(path_2_COSMOS)
         good = (t['photoz']>z_min )&( t['photoz']< z_max ) & ( t['MK']<0 )&( t['MK']>-40 )&( t['mass_med']<14 )&( t['mass_med']>4 )
@@ -424,9 +424,9 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                     y2=(Rgal) * (1 + (RgalN)**(-0.5)),
                     color='k',
                     alpha=0.7,
-                    label='Uchuu Galaxies',
+                    label='UM galaxies',
                     lw=2)
-    if z_mean>0.05:
+    if z_mean>0.25:
         rmagABS_galCOS = t_cosmos['MR']
         Rgal_cos = np.histogram(rmagABS_galCOS, bins_rLF)[0] / volume_cosmos / dlogR
         RgalN_cos = np.histogram(rmagABS_galCOS, bins_rLF)[0]
@@ -824,7 +824,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_15_z_25_LX_445.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', lw=3)
 
-    if z_mean>0.05:
+    if z_mean>0.25:
         Mgal_COS = np.histogram(t_cosmos['mass_med'], bins=bins_SMF)[0] / volume_cosmos / dlogM
         Mgal_COSN = np.histogram(t_cosmos['mass_med'], bins=bins_SMF)[0]
         plt.fill_between(x_SMF,
