@@ -22,16 +22,16 @@ cd $GIT_STMOD/src/Mpipelines
 # nohup python AGN_validation.py z0p86 FullSky > logs/valid_testz0p86.log & # DONE
 # nohup python AGN_validation.py z0p94 FullSky > logs/valid_testz0p94.log & # DONE
 # nohup python AGN_validation.py z1p03 FullSky > logs/valid_testz1p03.log & # DONE
-nohup python AGN_validation.py z1p12 FullSky > logs/valid_testz1p12.log & # QUEUED
-nohup python AGN_validation.py z1p22 FullSky > logs/valid_testz1p22.log & # QUEUED
-nohup python AGN_validation.py z1p32 FullSky > logs/valid_testz1p32.log & # QUEUED
-nohup python AGN_validation.py z1p43 FullSky > logs/valid_testz1p43.log & # QUEUED
-nohup python AGN_validation.py z1p54 FullSky > logs/valid_testz1p54.log & # QUEUED
-nohup python AGN_validation.py z1p65 FullSky > logs/valid_testz1p65.log & # QUEUED
-nohup python AGN_validation.py z1p77 FullSky > logs/valid_testz1p77.log & # QUEUED
-nohup python AGN_validation.py z1p90 FullSky > logs/valid_testz1p90.log & # QUEUED
-nohup python AGN_validation.py z2p03 FullSky > logs/valid_testz2p03.log & # QUEUED
-nohup python AGN_validation.py z2p17 FullSky > logs/valid_testz2p17.log & # QUEUED
+# nohup python AGN_validation.py z1p12 FullSky > logs/valid_testz1p12.log & # DONE
+# nohup python AGN_validation.py z1p22 FullSky > logs/valid_testz1p22.log & # DONE
+# nohup python AGN_validation.py z1p32 FullSky > logs/valid_testz1p32.log & # DONE
+# nohup python AGN_validation.py z1p43 FullSky > logs/valid_testz1p43.log & # DONE
+# nohup python AGN_validation.py z1p54 FullSky > logs/valid_testz1p54.log & # DONE
+# nohup python AGN_validation.py z1p65 FullSky > logs/valid_testz1p65.log & # DONE
+# nohup python AGN_validation.py z1p77 FullSky > logs/valid_testz1p77.log & # DONE
+# nohup python AGN_validation.py z1p90 FullSky > logs/valid_testz1p90.log & # DONE
+# nohup python AGN_validation.py z2p03 FullSky > logs/valid_testz2p03.log & # DONE
+# nohup python AGN_validation.py z2p17 FullSky > logs/valid_testz2p17.log & # DONE
 nohup python AGN_validation.py z2p31 FullSky > logs/valid_testz2p31.log & # QUEUED
 nohup python AGN_validation.py z2p46 FullSky > logs/valid_testz2p46.log & # QUEUED
 nohup python AGN_validation.py z2p62 FullSky > logs/valid_testz2p62.log & # QUEUED
