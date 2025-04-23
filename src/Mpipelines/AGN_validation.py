@@ -214,9 +214,9 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                         lw=2)  # 2-10  keV')
 
     # Aird 2015
-    plt.plot(x_lx, N_nh20, label='nH<22', ls='dotted', lw=2)
-    plt.plot(x_lx, N_nh22, label='22<nH<24', ls='dotted', lw=2)
-    plt.plot(x_lx, N_nh24, label='24<nH', ls='dotted', lw=2)
+    plt.plot(x_lx, N_nh20, label='nH<22', ls='dashed', lw=3)
+    plt.plot(x_lx, N_nh22, label='22<nH<24', ls='dashed', lw=3)
+    plt.plot(x_lx, N_nh24, label='24<nH', ls='dashed', lw=3)
     plt.xlabel(r'$\log_{10}(L^{2-10\, keV}_X/[erg/s])$')
     plt.ylabel(r'$\Phi$=dN/dlogL/dV [1/Mpc$^3$/dex]')
     plt.legend(frameon=False, loc=0, fontsize=10)
@@ -321,15 +321,15 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                             y2=(nhar) * (1 + (nharN)**(-0.5)),
                             #color='g',
                             alpha=0.7,
-                            label='this work',#AGN_cat_names[p_2_catal_AGN],
+                            label='AGN, this work',#AGN_cat_names[p_2_catal_AGN],
                             lw=2)  # 2-10  keV')
 
-        plt.plot(x_lx, N_nh20, label='nH<22', ls='dotted', lw=2)
-        plt.plot(x_lx, N_nh22, label='22<nH<24', ls='dotted', lw=2)
-        plt.plot(x_lx, N_nh24, label='24<nH', ls='dotted', lw=2)
+        plt.plot(x_lx, N_nh20, label='nH<22', ls='dashed', lw=3)
+        plt.plot(x_lx, N_nh22, label='22<nH<24', ls='dashed', lw=3)
+        plt.plot(x_lx, N_nh24, label='24<nH', ls='dashed', lw=3)
         plt.xlabel(r'$\log_{10}(L^{0.5-2\, keV}_X/[erg/s])$')
         plt.ylabel(r'$\Phi$=dN/dlogL/dV [1/Mpc$^3$/dex]')
-        plt.legend(frameon=False, loc=0, fontsize=10)
+        plt.legend(frameon=False, loc=0, fontsize=12)
         plt.yscale('log')
         plt.xlim((37., 46.5))
         plt.ylim((1 / (2 * volume_mock), 1e-2))
@@ -412,7 +412,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                         y2=(Ragn) * (1 + (RagnN)**(-0.5)),
                         #color='b',
                         alpha=0.7,
-                        label='this work', #AGN_cat_names[p_2_catal_AGN],
+                        label='AGN, this work', #AGN_cat_names[p_2_catal_AGN],
                         lw=2)
     # galaxy data
     DM_gal = cosmo.distmod(z_gal).value
@@ -426,30 +426,30 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                     alpha=0.7,
                     label='UM galaxies',
                     lw=2)
-    if z_mean>0.25:
-        rmagABS_galCOS = t_cosmos['MR']
-        Rgal_cos = np.histogram(rmagABS_galCOS, bins_rLF)[0] / volume_cosmos / dlogR
-        RgalN_cos = np.histogram(rmagABS_galCOS, bins_rLF)[0]
-        plt.fill_between(x_rLF,
-                        y1=(Rgal_cos) * (1 - (RgalN_cos)**(-0.5)),
-                        y2=(Rgal_cos) * (1 + (RgalN_cos)**(-0.5)),
-                        color='g',
-                        alpha=0.7,
-                        label='COSMOS',
-                        lw=2)
-    if z_mean<0.5:
-        ngal, M, phi, Err = np.loadtxt(os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation/validation_GAL/GAMA/loveday_2015', 'LF_loveday_2015.txt'), unpack=True)
-        plt.plot(M, phi, label='loveday 2015 z=0.1')
-        rmagABS_galGAMA = t_gama['Rmag_abs']
-        Rgal_GAMA = np.histogram(rmagABS_galGAMA, bins_rLF)[0] / volume_GAMA / dlogR
-        RgalN_GAMA = np.histogram(rmagABS_galGAMA, bins_rLF)[0]
-        plt.fill_between(x_rLF,
-                        y1=(Rgal_GAMA) * (1 - (RgalN_GAMA)**(-0.5)),
-                        y2=(Rgal_GAMA) * (1 + (RgalN_GAMA)**(-0.5)),
-                        color='orange',
-                        alpha=0.7,
-                        label='GAMA',
-                        lw=2)
+    #if z_mean>0.25:
+        #rmagABS_galCOS = t_cosmos['MR']
+        #Rgal_cos = np.histogram(rmagABS_galCOS, bins_rLF)[0] / volume_cosmos / dlogR
+        #RgalN_cos = np.histogram(rmagABS_galCOS, bins_rLF)[0]
+        #plt.fill_between(x_rLF,
+                        #y1=(Rgal_cos) * (1 - (RgalN_cos)**(-0.5)),
+                        #y2=(Rgal_cos) * (1 + (RgalN_cos)**(-0.5)),
+                        #color='g',
+                        #alpha=0.7,
+                        #label='COSMOS',
+                        #lw=2)
+    #if z_mean<0.5:
+        #ngal, M, phi, Err = np.loadtxt(os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'validation/validation_GAL/GAMA/loveday_2015', 'LF_loveday_2015.txt'), unpack=True)
+        #plt.plot(M, phi, label='loveday 2015 z=0.1')
+        #rmagABS_galGAMA = t_gama['Rmag_abs']
+        #Rgal_GAMA = np.histogram(rmagABS_galGAMA, bins_rLF)[0] / volume_GAMA / dlogR
+        #RgalN_GAMA = np.histogram(rmagABS_galGAMA, bins_rLF)[0]
+        #plt.fill_between(x_rLF,
+                        #y1=(Rgal_GAMA) * (1 - (RgalN_GAMA)**(-0.5)),
+                        #y2=(Rgal_GAMA) * (1 + (RgalN_GAMA)**(-0.5)),
+                        #color='orange',
+                        #alpha=0.7,
+                        #label='GAMA',
+                        #lw=2)
     plt.xlabel(r'$M_R$')
     plt.ylabel(r'$\Phi$=dN/dlogL/dV [1/Mpc$^3$/dex]')
     plt.legend(loc=2, fontsize=8)
@@ -655,7 +655,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         x_43, y_43, y_43_up, y_43_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z025_LXhardgt43.ascii'), unpack=True)
         lab_bib = 'G17 z=0.25'
         #plt.fill_between(x_44, y1=10**(y_44_low),  y2=10**(y_44_up), label=lab_bib+r' $L_X>10^{44}$', alpha=0.5, color='magenta')
-        plt.fill_between(x_43+dx, y1=10**(y_43_low),  y2=10**(y_43_up), label=r' $L_X>10^{43}$erg s$^{-1}$', alpha=0.5,color='blue')
+        plt.fill_between(x_43+dx, y1=10**(y_43_low),  y2=10**(y_43_up), label=lab_bib+r' $L_X>10^{43}$erg s$^{-1}$', alpha=0.5,color='blue')
         plt.fill_between(x_42+dx, y1=10**(y_42_low),  y2=10**(y_42_up), label=r'$L_X>10^{42}$erg s$^{-1}$', alpha=0.5,color='red')
         plt.fill_between(x_41+dx, y1=10**(y_41_low),  y2=10**(y_41_up), label=r'$L_X>10^{41}$erg s$^{-1}$', alpha=0.5,color='black')
 
@@ -665,7 +665,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         x_43, y_43, y_43_up, y_43_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z075_LXhardgt43.ascii'), unpack=True)
         x_44, y_44, y_44_up, y_44_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z075_LXhardgt44.ascii'), unpack=True)
         lab_bib = 'G17 z=0.75'
-        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
+        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=lab_bib+r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
         plt.fill_between(x_43+dx, y1=10**(y_43_low),  y2=10**(y_43_up), label=r'$L_X>10^{43}$erg s$^{-1}$', alpha=0.5,color='blue')
         plt.fill_between(x_42+dx, y1=10**(y_42_low),  y2=10**(y_42_up), label=r'$L_X>10^{42}$erg s$^{-1}$', alpha=0.5,color='red')
         plt.fill_between(x_41+dx, y1=10**(y_41_low),  y2=10**(y_41_up), label=r'$L_X>10^{41}$erg s$^{-1}$', alpha=0.5,color='black')
@@ -675,7 +675,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         x_43, y_43, y_43_up, y_43_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z125_LXhardgt43.ascii'), unpack=True)
         x_44, y_44, y_44_up, y_44_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z125_LXhardgt44.ascii'), unpack=True)
         lab_bib = 'G17 z=1.25'
-        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
+        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=lab_bib+r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
         plt.fill_between(x_43+dx, y1=10**(y_43_low),  y2=10**(y_43_up), label=r'$L_X>10^{43}$erg s$^{-1}$', alpha=0.5,color='blue')
         plt.fill_between(x_42+dx, y1=10**(y_42_low),  y2=10**(y_42_up), label=r'$L_X>10^{42}$erg s$^{-1}$', alpha=0.5,color='red')
         #plt.fill_between(x_41, y1=10**(y_41_low),  y2=10**(y_41_up),label=r'$L_X>10^{41}$', alpha=0.5,color='black')
@@ -685,7 +685,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         x_43, y_43, y_43_up, y_43_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z175_LXhardgt43.ascii'), unpack=True)
         x_44, y_44, y_44_up, y_44_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z175_LXhardgt44.ascii'), unpack=True)
         lab_bib = 'G17 z=1.75'
-        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
+        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=lab_bib+r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
         plt.fill_between(x_43+dx, y1=10**(y_43_low),  y2=10**(y_43_up), label=r'$L_X>10^{43}$erg s$^{-1}$', alpha=0.5,color='blue')
         plt.fill_between(x_42+dx, y1=10**(y_42_low),  y2=10**(y_42_up), label=r'$L_X>10^{42}$erg s$^{-1}$', alpha=0.5,color='red')
         #plt.fill_between(x_41, y1=10**(y_41_low),  y2=10**(y_41_up),label=r'$L_X>10^{41}$', alpha=0.5,color='black')
@@ -695,7 +695,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         x_43, y_43, y_43_up, y_43_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z225_LXhardgt43.ascii'), unpack=True)
         x_44, y_44, y_44_up, y_44_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z225_LXhardgt44.ascii'), unpack=True)
         lab_bib = 'G17 z=2.25'
-        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
+        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=lab_bib+r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
         plt.fill_between(x_43+dx, y1=10**(y_43_low),  y2=10**(y_43_up), label=r'$L_X>10^{43}$erg s$^{-1}$', alpha=0.5,color='blue')
         plt.fill_between(x_42+dx, y1=10**(y_42_low),  y2=10**(y_42_up), label=r'$L_X>10^{42}$erg s$^{-1}$', alpha=0.5,color='red')
         #plt.fill_between(x_41, y1=10**(y_41_low),  y2=10**(y_41_up),label=r'$L_X>10^{41}$', alpha=0.5,color='black')
@@ -705,7 +705,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         x_43, y_43, y_43_up, y_43_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z275_LXhardgt43.ascii'), unpack=True)
         x_44, y_44, y_44_up, y_44_low = np.loadtxt( os.path.join( agn_data_dir,  'duty_cycle_G17_z275_LXhardgt44.ascii'), unpack=True)
         lab_bib = 'G17 z=2.75'
-        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
+        plt.fill_between(x_44+dx, y1=10**(y_44_low),  y2=10**(y_44_up), label=lab_bib+r' $L_X>10^{44}$erg s$^{-1}$', alpha=0.5, color='magenta')
         plt.fill_between(x_43+dx, y1=10**(y_43_low),  y2=10**(y_43_up), label=r'$L_X>10^{43}$erg s$^{-1}$', alpha=0.5,color='blue')
         plt.fill_between(x_42+dx, y1=10**(y_42_low),  y2=10**(y_42_up), label=r'$L_X>10^{42}$erg s$^{-1}$', alpha=0.5,color='red')
         #plt.fill_between(x_41, y1=10**(y_41_low),  y2=10**(y_41_up),label=r'$L_X>10^{41}$', alpha=0.5,color='black')
@@ -720,7 +720,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         #plt.fill_between(x_42, y1=10**(y_42_low),  y2=10**(y_42_up),label=r'$L_X>10^{42}$', alpha=0.5,color='red')
         #plt.fill_between(x_41, y1=10**(y_41_low),  y2=10**(y_41_up),label=r'$L_X>10^{41}$', alpha=0.5,color='black')
 
-    plt.plot(x_SMF, f_duty(x_SMF), ls='dashed', lw=2, label='input='+str(np.round(f_duty(x_SMF),2)) )
+    plt.plot(x_SMF, f_duty(x_SMF), ls='dashed', lw=2, label='input='+str(np.round(f_duty(x_SMF)[0],2)) )
 
     for p_2_catal_AGN in p_2_catal_AGNs:
         AGN = AGNs[AGN_cat_names[p_2_catal_AGN]]
@@ -824,26 +824,26 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_15_z_25_LX_445.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', lw=3)
 
-    if z_mean>0.25:
-        Mgal_COS = np.histogram(t_cosmos['mass_med'], bins=bins_SMF)[0] / volume_cosmos / dlogM
-        Mgal_COSN = np.histogram(t_cosmos['mass_med'], bins=bins_SMF)[0]
-        plt.fill_between(x_SMF,
-                        y1=(Mgal_COS) * (1 - (Mgal_COSN)**(-0.5)),
-                        y2=(Mgal_COS) * (1 + (Mgal_COSN)**(-0.5)),
-                        color='g',
-                        alpha=0.7,
-                        label='COSMOS',
-                        lw=2)
-    if z_mean<0.5:
-        Mgal_GAMA = np.histogram(t_gama['ms'], bins=bins_SMF)[0] / volume_GAMA / dlogM
-        Mgal_GAMAN = np.histogram(t_gama['ms'], bins=bins_SMF)[0]
-        plt.fill_between(x_SMF,
-                        y1=(Mgal_GAMA) * (1 - (Mgal_GAMAN)**(-0.5)),
-                        y2=(Mgal_GAMA) * (1 + (Mgal_GAMAN)**(-0.5)),
-                        color='orange',
-                        alpha=0.7,
-                        label='GAMA',
-                        lw=2)
+    #if z_mean>0.25:
+        #Mgal_COS = np.histogram(t_cosmos['mass_med'], bins=bins_SMF)[0] / volume_cosmos / dlogM
+        #Mgal_COSN = np.histogram(t_cosmos['mass_med'], bins=bins_SMF)[0]
+        #plt.fill_between(x_SMF,
+                        #y1=(Mgal_COS) * (1 - (Mgal_COSN)**(-0.5)),
+                        #y2=(Mgal_COS) * (1 + (Mgal_COSN)**(-0.5)),
+                        #color='g',
+                        #alpha=0.7,
+                        #label='COSMOS',
+                        #lw=2)
+    #if z_mean<0.5:
+        #Mgal_GAMA = np.histogram(t_gama['ms'], bins=bins_SMF)[0] / volume_GAMA / dlogM
+        #Mgal_GAMAN = np.histogram(t_gama['ms'], bins=bins_SMF)[0]
+        #plt.fill_between(x_SMF,
+                        #y1=(Mgal_GAMA) * (1 - (Mgal_GAMAN)**(-0.5)),
+                        #y2=(Mgal_GAMA) * (1 + (Mgal_GAMAN)**(-0.5)),
+                        #color='orange',
+                        #alpha=0.7,
+                        #label='GAMA',
+                        #lw=2)
 
     plt.plot(x_SMF, N_gal / (volume_mock * dlogM), color='green', label='UM galaxies')
 
@@ -867,17 +867,17 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         N_agn_440 = np.histogram(logm[(lx > 44.0)], bins=bins_SMF)[0]
         N_agn_445 = np.histogram(logm[(lx > 44.5)], bins=bins_SMF)[0]
 
-        plt.plot(x_SMF, N_agn_a / (volume_mock * dlogM), color='grey', label='this work') #AGN_cat_names[p_2_catal_AGN])
-        plt.plot(x_SMF, N_agn_410 / (volume_mock * dlogM), color='k', ls='dashed')
-        plt.plot(x_SMF, N_agn_420 / (volume_mock * dlogM), color='k', ls='dashed')
-        plt.plot(x_SMF, N_agn_430 / (volume_mock * dlogM), color='grey', ls='dashed')
-        plt.plot(x_SMF, N_agn_435 / (volume_mock * dlogM), color='grey', ls='dashed')
-        plt.plot(x_SMF, N_agn_440 / (volume_mock * dlogM), color='grey', ls='dashed', lw=3)
-        plt.plot(x_SMF, N_agn_445 / (volume_mock * dlogM), color='grey', ls='dashed', lw=3)
+        plt.plot(x_SMF, N_agn_a / (volume_mock * dlogM), color='grey', label='AGN, this work') #AGN_cat_names[p_2_catal_AGN])
+        plt.plot(x_SMF, N_agn_410 / (volume_mock * dlogM), ls='dashed', label=r'$L_X>41$')
+        plt.plot(x_SMF, N_agn_420 / (volume_mock * dlogM), ls='dashed', label=r'$L_X>42$')
+        plt.plot(x_SMF, N_agn_430 / (volume_mock * dlogM), ls='dashed', label=r'$L_X>43$')
+        #plt.plot(x_SMF, N_agn_435 / (volume_mock * dlogM), ls='dashed', label=r'$L_X>43.5$')
+        #plt.plot(x_SMF, N_agn_440 / (volume_mock * dlogM), ls='dashed', label=r'$L_X>44$')
+        #plt.plot(x_SMF, N_agn_445 / (volume_mock * dlogM), ls='dashed', label=r'$L_X>44.5$')
 
     plt.xlabel(r'$\log_{10}(M^*/[M_\odot])$')
     plt.ylabel(r'$\Phi$=dN/dlogL/dV [1/Mpc$^3$/dex]')
-    plt.legend(frameon=False, loc=0, fontsize=12)
+    plt.legend(frameon=False, loc=0, fontsize=12, ncol=2)
     plt.yscale('log')
     plt.xlim((8, 12.5))
     plt.ylim((1e-8, 1e-1))
