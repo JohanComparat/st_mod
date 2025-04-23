@@ -52,7 +52,7 @@ print('MERGE logNlogS files')
 print('------------------------------------------------')
 print('------------------------------------------------')
 
-LC_dirs = np.array([ 'FullSky', 'LC1800', 'LC0060', 'LC0002' ])[::-1]
+LC_dirs = np.array([ 'FullSky'])#, 'LC1800', 'LC0060', 'LC0002' ])#[::-1]
 
 all_z_dirs = np.array([ 'z0p02',
 						'z0p05',
@@ -141,6 +141,7 @@ for suffix in all_suffixes: #= 'sigma_0.8_fsat_0.0'
 			DATA  = get_lnls(LC_dir = LC_dir, suffix=suffix, z_dir = z_dir)
 			try:
 				DATA.write(os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'logNlogS_AGN_list_'+suffix+'.fits'), overwrite = True)
+				print(os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'logNlogS_AGN_list_'+suffix+'.fits'), 'written')
 			except(AttributeError):
 				print('no data')
 				continue

@@ -64,10 +64,11 @@ nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & # ONGOING
 
 # create links for the images and spectra in each folder
 # python create_links_per_tile.py # DONE
-# /home/idies/workspace/erosim/Uchuu/cluster_images
-# /home/idies/workspace/erosim/Uchuu/cluster_Xspectra
+# /home/idies/workspace/erosim/simput/AGNspectra_V2
 
 python format_simput_AGN.py # TODO
+
+
 
 
 # retrieve real events from complete repo

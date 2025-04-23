@@ -26,7 +26,7 @@ validation_dir           = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'v
 validation_dir_lNlS = os.path.join(validation_dir, 'XrayLogNlogS')
 os.system('mkdir -p ' + validation_dir_lNlS            )
 
-LC_dirs = np.array([ 'FullSky', 'LC1800', 'LC0060', 'LC0002' ])[::-1]
+LC_dirs = np.array([ 'FullSky'])#, 'LC1800', 'LC0060', 'LC0002' ])[::-1]
 area = {}
 area['FullSky'] = 129600. / np.pi
 area['LC1800'] = 1800.
@@ -117,11 +117,11 @@ def get_lnls(LC_dir = 'LC0002', suffix = 'sigma_0.8_fsat_0.0', z_dir=''):
 for LC_dir in LC_dirs:
 	DATA = {}
 	for suffix in all_suffixes:
-		DATA[suffix]  = get_lnls(LC_dir = LC_dir, suffix = 'sigma_0.8_fsat_0.0' )
+		DATA[suffix]  = get_lnls(LC_dir = LC_dir, suffix = suffix )
 
 	plt.figure(1, (6, 6))
 	for suffix in all_suffixes:
-		plt.plot((DATA[suffix]['FX_lo']+DATA[suffix]['FX_hi'])/2., DATA[suffix]['dNdlog10S_CM_soft']/area[LC_dir], lw=2, ls='dashed', label='this work')#suffix)
+		plt.plot((DATA[suffix]['FX_lo']+DATA[suffix]['FX_hi'])/2., DATA[suffix]['dNdlog10S_CM_soft']/area[LC_dir], lw=2, ls='solid', label='AGN, this work')#suffix)
 
 	# Georgakakis 2008
 	path_2_logNlogS_data = os.path.join(
@@ -129,7 +129,7 @@ for LC_dir in LC_dirs:
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Georgakakis_08_AGN.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
-	plt.plot(np.log10(x_data),y_data, lw=3, ls='dotted', color='g', label='G08')
+	plt.plot(np.log10(x_data),y_data, lw=3, ls='dotted', color='g', label='Ge08')
 
 	# Merloni 2012
 	path_2_logNlogS_data = os.path.join(
@@ -137,7 +137,7 @@ for LC_dir in LC_dirs:
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Merloni_12_AGN.data')
 	x_data, y_data = np.loadtxt(path_2_logNlogS_data, unpack=True)
-	plt.plot(np.log10(x_data),y_data, lw=3, ls='dotted', color='r', label='M12')
+	plt.plot(np.log10(x_data),y_data, lw=3, ls='dotted', color='r', label='Me12')
 
 	# Mateos 2008
 	path_2_logNlogS_data = os.path.join(
@@ -145,14 +145,14 @@ for LC_dir in LC_dirs:
 		'data/validation/validation_AGN/literature_data',
 		'logNlogS_Mateos_08_AGN.data')
 	x_data, y_data, err = np.loadtxt(path_2_logNlogS_data, unpack=True)
-	plt.plot(x_data,y_data, lw=3, ls='dotted', color='b', label='M08')
+	plt.plot(x_data,y_data, lw=3, ls='dotted', color='b', label='Ma08')
 
-	plt.xlabel('log10(F_X[0.5-2 keV])')
-	plt.ylabel('N(>F_X) [/deg2]')
-	plt.legend(frameon=False, loc=0)
+	plt.xlabel(r'$\log_{10}(F_X$[0.5-2 keV])')
+	plt.ylabel(r'$N(>F_X)$ [/deg2]')
+	plt.legend(frameon=False, loc=3)
 	plt.yscale('log')
-	plt.xlim((-19, -11.5))
-	plt.ylim((1e-2, 1e5))
+	plt.xlim((-18, -11))
+	plt.ylim((1e-3, 1e5))
 	#plt.grid()
 	plt.tight_layout()
 	plt.savefig(os.path.join(validation_dir_lNlS, LC_dir+"_logN_logS_soft_AGN.png"))
@@ -226,14 +226,15 @@ for jj, z_dir in enumerate(all_z_dirs):#[:22]:
 	print(z_dir)
 	DATA = {}
 	suffix = all_suffixes[0]
-	if jj<22:
-		all_LC_dirs = LC_dirs[::-1]
-	elif jj>=22 and jj<26:
-		all_LC_dirs = LC_dirs[::-1][1:]
-	elif jj>=26 and jj<35:
-		all_LC_dirs = LC_dirs[::-1][2:]
-	elif jj>35 :
-		all_LC_dirs = LC_dirs[::-1][3:]
+	all_LC_dirs = LC_dirs#[::-1]
+	#if jj<22:
+		#all_LC_dirs = LC_dirs[::-1]
+	#elif jj>=22 and jj<26:
+		#all_LC_dirs = LC_dirs[::-1][1:]
+	#elif jj>=26 and jj<35:
+		#all_LC_dirs = LC_dirs[::-1][2:]
+	#elif jj>35 :
+		#all_LC_dirs = LC_dirs[::-1][3:]
 
 	for LC_dir in all_LC_dirs:
 		DATA[LC_dir]  = get_lnls(LC_dir = LC_dir, suffix = suffix, z_dir=z_dir )
