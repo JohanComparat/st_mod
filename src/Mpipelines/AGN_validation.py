@@ -131,7 +131,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
     # retrieve the resulting catalogues and meta data
     p_2_catalogue = os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']), 'glist.fits')
     p_2_catal_MAG = os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']), 'Kmatch_mags.fits')
-    p_2_catal_AGNs = np.array( glob.glob( os.path.join( os.path.dirname(p_2_catalogue), 'AGN_list_sigma_*_fsat_*.fits' ) ) )
+    p_2_catal_AGNs = np.array( glob.glob( os.path.join( os.path.dirname(p_2_catalogue), 'AGN_list_sigma_'+str_scatter_0+'_fsat_'+str_fsat+'.fits' ) ) )
     print(not os.path.isfile(p_2_catalogue))
     print(not os.path.isfile(p_2_catal_MAG))
     print(len(p_2_catal_AGNs)==0)
@@ -210,7 +210,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                         y2=(nhar) * (1 + (nharN)**(-0.5)),
                         #color='g',
                         alpha=0.7,
-                        label=AGN_cat_names[p_2_catal_AGN],
+                        label='this work', #AGN_cat_names[p_2_catal_AGN],
                         lw=2)  # 2-10  keV')
 
     # Aird 2015
@@ -224,7 +224,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
     plt.xlim((37., 46.5))
     plt.ylim((1 / (2 * volume_mock), 1e-2))
     plt.title(str(np.round(z_min, 2)) + "<z<" + str(np.round(z_max, 2)))
-    plt.grid()
+    #plt.grid()
     plt.savefig(fig_out)
     plt.clf()
     print(fig_out, 'written')
@@ -265,7 +265,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
     plt.xlim((37., 46.5))
     plt.ylim((0.7, 1.3))
     plt.title(str(np.round(z_min, 2)) + "<z<" + str(np.round(z_max, 2)))
-    plt.grid()
+    #plt.grid()
     plt.savefig(fig_out)
     plt.clf()
     print(fig_out, 'written')
@@ -321,7 +321,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                             y2=(nhar) * (1 + (nharN)**(-0.5)),
                             #color='g',
                             alpha=0.7,
-                            label=AGN_cat_names[p_2_catal_AGN],
+                            label='this work',#AGN_cat_names[p_2_catal_AGN],
                             lw=2)  # 2-10  keV')
 
         plt.plot(x_lx, N_nh20, label='nH<22', ls='dotted', lw=2)
@@ -334,7 +334,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         plt.xlim((37., 46.5))
         plt.ylim((1 / (2 * volume_mock), 1e-2))
         plt.title(str(np.round(z_min, 2)) + "<z<" + str(np.round(z_max, 2)))
-        plt.grid()
+        #plt.grid()
         plt.savefig(fig_out)
         plt.clf()
         print(fig_out, 'written')
@@ -412,7 +412,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                         y2=(Ragn) * (1 + (RagnN)**(-0.5)),
                         #color='b',
                         alpha=0.7,
-                        label=AGN_cat_names[p_2_catal_AGN],
+                        label='this work', #AGN_cat_names[p_2_catal_AGN],
                         lw=2)
     # galaxy data
     DM_gal = cosmo.distmod(z_gal).value
@@ -457,7 +457,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
     plt.xlim((-28, -8))
     plt.ylim((1 / (2 * volume_mock), 1))
     plt.title(str(np.round(z_min, 2)) + "<z<" + str(np.round(z_max, 2)))
-    plt.grid()
+    #plt.grid()
     fig_out = os.path.join(validation_dir_Rband, LC_dir+'_RLF_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']) +'.png' )
     plt.savefig(fig_out)
     plt.clf()
@@ -605,19 +605,19 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
 
         fun = interp1d(x_LSAR, nall_8)
         nrm = quad(fun, x_LSAR.min(), x_LSAR.max())[0]
-        plt.plot(x_LSAR, nall_8 / nrm, 'magenta', lw=2 , label='8<M<9')
+        plt.plot(x_LSAR, nall_8 / nrm, 'magenta', lw=2 , label='8<M*<9')
 
         fun = interp1d(x_LSAR, nall_9)
         nrm = quad(fun, x_LSAR.min(), x_LSAR.max())[0]
-        plt.plot(x_LSAR, nall_9 / nrm, 'g', lw=2 , label='9<M<10')
+        plt.plot(x_LSAR, nall_9 / nrm, 'g', lw=2 , label='9<M*<10')
 
         fun = interp1d(x_LSAR, nall_10)
         nrm = quad(fun, x_LSAR.min(), x_LSAR.max())[0]
-        plt.plot(x_LSAR, nall_10 / nrm, 'r', lw=2 , label='10<M<11')
+        plt.plot(x_LSAR, nall_10 / nrm, 'r', lw=2 , label='10<M*<11')
 
         fun = interp1d(x_LSAR, nall_11)
         nrm = quad(fun, x_LSAR.min(), x_LSAR.max())[0]
-        plt.plot(x_LSAR, nall_11 / nrm, 'y', lw=2 , label='11<M<12')
+        plt.plot(x_LSAR, nall_11 / nrm, 'y', lw=2 , label='11<M*<12')
 
     plt.xlabel(r'$\log_{10}(\lambda_{SAR})$')
     plt.ylabel(r'probability distribution function')
@@ -626,7 +626,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
     plt.xlim((30., 35.5))
     plt.ylim((1e-4, 4))
     plt.title('Specific accretion rate, ' + str(np.round(z_min, 2)) + r"<z<" + str(np.round(z_max, 2)))
-    plt.grid()
+    #plt.grid()
     fig_out = os.path.join(validation_dir_LSAR, LC_dir+'_LSAR_hist_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']) +'.png' )
     plt.savefig(fig_out)
     plt.clf()
@@ -720,7 +720,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         #plt.fill_between(x_42, y1=10**(y_42_low),  y2=10**(y_42_up),label=r'$L_X>10^{42}$', alpha=0.5,color='red')
         #plt.fill_between(x_41, y1=10**(y_41_low),  y2=10**(y_41_up),label=r'$L_X>10^{41}$', alpha=0.5,color='black')
 
-    plt.plot(x_SMF, f_duty(x_SMF), ls='dashed', lw=2, label='DC input')
+    plt.plot(x_SMF, f_duty(x_SMF), ls='dashed', lw=2, label='input='+str(np.round(f_duty(x_SMF),2)) )
 
     for p_2_catal_AGN in p_2_catal_AGNs:
         AGN = AGNs[AGN_cat_names[p_2_catal_AGN]]
@@ -764,7 +764,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         yerr = y * N_agn_44**(-0.5)  # *dc_val
         plt.errorbar(x_SMF, y, yerr=yerr, color='magenta')#, label=r'L$_X>10^{44}$')
 
-    plt.errorbar(x_SMF-100000, y-100000, yerr=yerr, color='grey', label='Mocks')#AGN_cat_names[p_2_catal_AGN])
+    plt.errorbar(x_SMF-100000, y-100000, yerr=yerr, color='grey', label='this work')#AGN_cat_names[p_2_catal_AGN])
     plt.errorbar(x_SMF-100000, y-100000, yerr=yerr, color='black', label=r'L$_X>10^{41}$')
     plt.errorbar(x_SMF-100000, y-100000, yerr=yerr, color='red', label=r'L$_X>10^{42}$')
     plt.errorbar(x_SMF-100000, y-100000, yerr=yerr, color='blue', label=r'L$_X>10^{43}$')
@@ -776,7 +776,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
     plt.yscale('log')
     plt.ylim((5e-5, 0.4))
     plt.xlim((8.0, 12.))
-    plt.grid()
+    #plt.grid()
     # , '+str(np.round(z_min,2))+"<z<"+str(np.round(z_max,2)))
     plt.title('Duty cycle')
     #plt.legend( loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=2, fancybox=True, title=str(np.round(z_min,2))+"<z<"+str(np.round(z_max,2)) )
@@ -845,7 +845,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
                         label='GAMA',
                         lw=2)
 
-    plt.plot(x_SMF, N_gal / (volume_mock * dlogM), color='green', label='Uchuu galaxies')
+    plt.plot(x_SMF, N_gal / (volume_mock * dlogM), color='green', label='UM galaxies')
 
     for p_2_catal_AGN in p_2_catal_AGNs:
         AGN = AGNs[AGN_cat_names[p_2_catal_AGN]]
@@ -867,7 +867,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
         N_agn_440 = np.histogram(logm[(lx > 44.0)], bins=bins_SMF)[0]
         N_agn_445 = np.histogram(logm[(lx > 44.5)], bins=bins_SMF)[0]
 
-        plt.plot(x_SMF, N_agn_a / (volume_mock * dlogM), color='grey', label=AGN_cat_names[p_2_catal_AGN])
+        plt.plot(x_SMF, N_agn_a / (volume_mock * dlogM), color='grey', label='this work') #AGN_cat_names[p_2_catal_AGN])
         plt.plot(x_SMF, N_agn_410 / (volume_mock * dlogM), color='k', ls='dashed')
         plt.plot(x_SMF, N_agn_420 / (volume_mock * dlogM), color='k', ls='dashed')
         plt.plot(x_SMF, N_agn_430 / (volume_mock * dlogM), color='grey', ls='dashed')
@@ -882,7 +882,7 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
     plt.xlim((8, 12.5))
     plt.ylim((1e-8, 1e-1))
     plt.title('Stellar mass function, ' + str(np.round(z_min, 2)) + "<z<" + str(np.round(z_max, 2)))
-    plt.grid()
+    #plt.grid()
     fig_out = os.path.join(validation_dir_Stell, LC_dir+'_SMF_AGN_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']) +'.png' )
     plt.savefig(fig_out)
     plt.clf()

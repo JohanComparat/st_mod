@@ -73,14 +73,15 @@ all_z_dirs = np.array([ 'z0p02',
 						'z4p63',
 						'z5p15',
 						'z5p73' ])
-all_suffixes = np.array([ 	'sigma_0.8_fsat_0.0'  ,
+all_suffixes = np.array([ 	#'sigma_0.8_fsat_0.0'  ,
 							'sigma_0.8_fsat_8.0'  ,
-							'sigma_0.8_fsat_20.0'  ,
-							'sigma_0.6_fsat_0.0'  ,
-							'sigma_0.6_fsat_8.0'  ,
-							'sigma_0.4_fsat_0.0'  ,
-							'sigma_0.4_fsat_8.0'  ,
-							'sigma_1.0_fsat_10.0' ])
+							#'sigma_0.8_fsat_20.0'  ,
+							#'sigma_0.6_fsat_0.0'  ,
+							#'sigma_0.6_fsat_8.0'  ,
+							#'sigma_0.4_fsat_0.0'  ,
+							#'sigma_0.4_fsat_8.0'  ,
+							#'sigma_1.0_fsat_10.0'
+							])
 
 def get_lnls(LC_dir = 'LC0002', suffix = 'sigma_0.8_fsat_0.0', z_dir=''):
 	print(LC_dir, suffix, z_dir)
@@ -120,7 +121,7 @@ for LC_dir in LC_dirs:
 
 	plt.figure(1, (6, 6))
 	for suffix in all_suffixes:
-		plt.plot((DATA[suffix]['FX_lo']+DATA[suffix]['FX_hi'])/2., DATA[suffix]['dNdlog10S_CM_soft']/area[LC_dir], lw=2, ls='dashed', label=suffix)
+		plt.plot((DATA[suffix]['FX_lo']+DATA[suffix]['FX_hi'])/2., DATA[suffix]['dNdlog10S_CM_soft']/area[LC_dir], lw=2, ls='dashed', label='this work')#suffix)
 
 	# Georgakakis 2008
 	path_2_logNlogS_data = os.path.join(
@@ -152,7 +153,7 @@ for LC_dir in LC_dirs:
 	plt.yscale('log')
 	plt.xlim((-19, -11.5))
 	plt.ylim((1e-2, 1e5))
-	plt.grid()
+	#plt.grid()
 	plt.tight_layout()
 	plt.savefig(os.path.join(validation_dir_lNlS, LC_dir+"_logN_logS_soft_AGN.png"))
 	plt.clf()
@@ -187,12 +188,12 @@ for LC_dir in LC_dirs:
 	plt.plot(x_data,y_data/ref_line(x_data), lw=3, ls='dotted', color='b', label='M08')
 
 	plt.xlabel('log10(F_X[0.5-2 keV])')
-	plt.ylabel('N(>F_X)/(N Uchuu AGN,>F_X) '+suffix)
+	plt.ylabel('N(>F_X)/(N AGN,>F_X) '+suffix)
 	plt.legend(frameon=False, loc=0)
 	plt.xlim((-19, -11.5))
 	plt.ylim((0.3, 1.7))
 	plt.tight_layout()
-	plt.grid()
+	#plt.grid()
 	plt.savefig(os.path.join(validation_dir_lNlS, LC_dir+"_logN_logS_soft_AGN_ratio.png"))
 	plt.clf()
 
@@ -216,7 +217,7 @@ for LC_dir in LC_dirs:
 	plt.xlim((-19, -11.5))
 	#plt.ylim((-2, 5))
 	#lt p.title('Mocks')
-	plt.grid()
+	#plt.grid()
 	plt.savefig(os.path.join(validation_dir_lNlS, LC_dir+"_logN_logS_hard_AGN.png"))
 	plt.clf()
 
@@ -272,7 +273,7 @@ for jj, z_dir in enumerate(all_z_dirs):#[:22]:
 	plt.xlim((-19, -11.5))
 	#plt.ylim((-2, 5))
 	#lt p.title('Mocks')
-	plt.grid()
+	#plt.grid()
 	plt.savefig(os.path.join(validation_dir_lNlS, z_dir+"_logN_logS_soft_AGN.png"))
 	plt.clf()
 	print(os.path.join(validation_dir_lNlS, z_dir+"_logN_logS_soft_AGN.png"), 'written')
