@@ -51,7 +51,7 @@ cd $GIT_STMOD/src/sixte_GAS/
 # nohup python extract_erosita_tile_glist.py 9  > logs/extract_erosita_tile_9.log  & # DONE  'z0p36',
 # nohup python extract_erosita_tile_glist.py 10 > logs/extract_erosita_tile_10.log & # DONE  'z0p43',
 # nohup python extract_erosita_tile_glist.py 11 > logs/extract_erosita_tile_11.log & # DONE  'z0p49',
-# nohup python extract_erosita_tile_glist.py 12 > logs/extract_erosita_tile_12.log & # DONE  'z0p56',
+nohup python extract_erosita_tile_glist.py 12 > logs/extract_erosita_tile_12.log & # DONE  'z0p56',
 nohup python extract_erosita_tile_glist.py 13 > logs/extract_erosita_tile_13.log & # TODO 'z0p63',
 nohup python extract_erosita_tile_glist.py 14 > logs/extract_erosita_tile_14.log & # TODO 'z0p70',
 nohup python extract_erosita_tile_glist.py 15 > logs/extract_erosita_tile_15.log & # TODO 'z0p78',
