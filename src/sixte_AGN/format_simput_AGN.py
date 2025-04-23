@@ -64,7 +64,7 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
     str_nh = np.array(data_nh.astype('str'))#, dtype=np.object)
     s2 = '_Z'
     str_z = np.array(data_z.astype('str'))#, dtype=np.object)
-    s3 = '_N'
+    s3 = '_'
     str_n_e_b = np.array(data_n_e_b.astype('str'))#, dtype=np.object)
     s4 = '.fits' + """[SPECTRUM][#row==1]"""
     #for galNH in np.arange(19.0, 22.6, 0.1):
