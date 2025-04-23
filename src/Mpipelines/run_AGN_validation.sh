@@ -45,106 +45,57 @@ nohup python AGN_validation.py z3p93 FullSky > logs/valid_testz3p93.log & # DONE
 
 
 
-conda activate clustering
-cd $GIT_STMOD/src/Mpipelines
+# conda activate clustering
+# cd $GIT_STMOD/src/Mpipelines
 # python AGN_validation_WPRP.py z0p00
 # python AGN_validation_WPRP.py z0p02
-python AGN_validation_WPRP.py z0p05
-python AGN_validation_WPRP.py z0p09
-python AGN_validation_WPRP.py z0p14
-python AGN_validation_WPRP.py z0p19
-python AGN_validation_WPRP.py z0p25
-python AGN_validation_WPRP.py z0p30
-python AGN_validation_WPRP.py z0p36
-python AGN_validation_WPRP.py z0p43
-python AGN_validation_WPRP.py z0p49
-python AGN_validation_WPRP.py z0p56
-python AGN_validation_WPRP.py z0p63
-python AGN_validation_WPRP.py z0p70
-python AGN_validation_WPRP.py z0p78
-python AGN_validation_WPRP.py z0p86
-python AGN_validation_WPRP.py z0p94
-python AGN_validation_WPRP.py z1p03
-python AGN_validation_WPRP.py z1p12
-python AGN_validation_WPRP.py z1p22
-python AGN_validation_WPRP.py z1p32
-python AGN_validation_WPRP.py z1p43
-python AGN_validation_WPRP.py z1p54
+# python AGN_validation_WPRP.py z0p05
+# python AGN_validation_WPRP.py z0p09
+# python AGN_validation_WPRP.py z0p14
+# python AGN_validation_WPRP.py z0p19
+# python AGN_validation_WPRP.py z0p25
+# python AGN_validation_WPRP.py z0p30
+# python AGN_validation_WPRP.py z0p36
+# python AGN_validation_WPRP.py z0p43
+# python AGN_validation_WPRP.py z0p49
+# python AGN_validation_WPRP.py z0p56
+# python AGN_validation_WPRP.py z0p63
+# python AGN_validation_WPRP.py z0p70
+# python AGN_validation_WPRP.py z0p78
+# python AGN_validation_WPRP.py z0p86
+# python AGN_validation_WPRP.py z0p94
+# python AGN_validation_WPRP.py z1p03
+# python AGN_validation_WPRP.py z1p12
+# python AGN_validation_WPRP.py z1p22
+# python AGN_validation_WPRP.py z1p32
+# python AGN_validation_WPRP.py z1p43
+# python AGN_validation_WPRP.py z1p54
+#
+#
+# conda activate clustering
+# cd $GIT_STMOD/src/Mpipelines
+# python AGN_validation_WTH.py z0p05
+# python AGN_validation_WTH.py z0p09
+# python AGN_validation_WTH.py z0p14
+# python AGN_validation_WTH.py z0p19
+# python AGN_validation_WTH.py z0p25
+# python AGN_validation_WTH.py z0p30
+# python AGN_validation_WTH.py z0p36
+# python AGN_validation_WTH.py z0p43
+# python AGN_validation_WTH.py z0p49
+# python AGN_validation_WTH.py z0p56
+# python AGN_validation_WTH.py z0p63
+# python AGN_validation_WTH.py z0p70
+# python AGN_validation_WTH.py z0p78
+# python AGN_validation_WTH.py z0p86
+# python AGN_validation_WTH.py z0p94
+# python AGN_validation_WTH.py z1p03
+# python AGN_validation_WTH.py z1p12
+# python AGN_validation_WTH.py z1p22
+# python AGN_validation_WTH.py z1p32
+# python AGN_validation_WTH.py z1p43
+# python AGN_validation_WTH.py z1p54
 
-
-conda activate clustering
-cd $GIT_STMOD/src/Mpipelines
-python AGN_validation_WTH.py z0p05
-python AGN_validation_WTH.py z0p09
-python AGN_validation_WTH.py z0p14
-python AGN_validation_WTH.py z0p19
-python AGN_validation_WTH.py z0p25
-python AGN_validation_WTH.py z0p30
-python AGN_validation_WTH.py z0p36
-python AGN_validation_WTH.py z0p43
-python AGN_validation_WTH.py z0p49
-python AGN_validation_WTH.py z0p56
-python AGN_validation_WTH.py z0p63
-python AGN_validation_WTH.py z0p70
-python AGN_validation_WTH.py z0p78
-python AGN_validation_WTH.py z0p86
-python AGN_validation_WTH.py z0p94
-python AGN_validation_WTH.py z1p03
-python AGN_validation_WTH.py z1p12
-python AGN_validation_WTH.py z1p22
-python AGN_validation_WTH.py z1p32
-python AGN_validation_WTH.py z1p43
-python AGN_validation_WTH.py z1p54
-
-
-# nohup python AGN_validation.py z0p00 FullSky > test.log &
-# nohup python AGN_validation.py z0p02 FullSky > test.log &
-# nohup python AGN_validation.py z0p05 FullSky > test.log &
-# nohup python AGN_validation.py z0p09 FullSky > test.log &
-# nohup python AGN_validation.py z0p14 FullSky > test.log &
-# nohup python AGN_validation.py z0p19 FullSky > test.log &
-# nohup python AGN_validation.py z0p25 FullSky > test.log &
-# nohup python AGN_validation.py z0p30 FullSky > test.log &
-# nohup python AGN_validation.py z0p36 FullSky > test.log &
-# nohup python AGN_validation.py z0p43 FullSky > test.log &
-# nohup python AGN_validation.py z0p49 FullSky > test.log &
-# nohup python AGN_validation.py z0p56 FullSky > test.log &
-# nohup python AGN_validation.py z0p63 FullSky > test.log &
-# nohup python AGN_validation.py z0p70 FullSky > test.log &
-# nohup python AGN_validation.py z0p78 FullSky > test.log &
-# nohup python AGN_validation.py z0p86 FullSky > test.log &
-# nohup python AGN_validation.py z0p94 FullSky > test.log &
-# nohup python AGN_validation.py z1p03 FullSky > test.log &
-# nohup python AGN_validation.py z1p12 FullSky > test.log &
-# nohup python AGN_validation.py z1p22 FullSky > test.log &
-# nohup python AGN_validation.py z1p32 FullSky > test.log &
-# nohup python AGN_validation.py z1p43 FullSky > test.log &
-# nohup python AGN_validation.py z1p54 FullSky > test.log &
-
-
-# nohup python AGN_validation_logNlogS.py z0p00 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p02 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p05 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p09 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p14 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p19 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p25 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p30 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p36 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p43 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p49 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p56 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p63 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p70 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p78 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p86 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z0p94 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z1p03 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z1p12 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z1p22 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z1p32 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z1p43 FullSky > test.log &
-# nohup python AGN_validation_logNlogS.py z1p54 FullSky > test.log &
 
 python AGN_validation_logNlogS.py z0p00 FullSky
 python AGN_validation_logNlogS.py z0p02 FullSky
@@ -169,6 +120,21 @@ python AGN_validation_logNlogS.py z1p22 FullSky
 python AGN_validation_logNlogS.py z1p32 FullSky
 python AGN_validation_logNlogS.py z1p43 FullSky
 python AGN_validation_logNlogS.py z1p54 FullSky
+python AGN_validation_logNlogS.py z1p65 FullSky
+python AGN_validation_logNlogS.py z1p77 FullSky
+python AGN_validation_logNlogS.py z1p90 FullSky
+python AGN_validation_logNlogS.py z2p03 FullSky
+python AGN_validation_logNlogS.py z2p17 FullSky
+python AGN_validation_logNlogS.py z2p31 FullSky
+python AGN_validation_logNlogS.py z2p46 FullSky
+python AGN_validation_logNlogS.py z2p62 FullSky
+python AGN_validation_logNlogS.py z2p78 FullSky
+python AGN_validation_logNlogS.py z2p95 FullSky
+python AGN_validation_logNlogS.py z3p13 FullSky
+python AGN_validation_logNlogS.py z3p32 FullSky
+python AGN_validation_logNlogS.py z3p61 FullSky
+python AGN_validation_logNlogS.py z3p93 FullSky
+
 
 
 python AGN_validation_logNlogS.py z0p00 LC0002
