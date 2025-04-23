@@ -795,33 +795,33 @@ for meta in C_AGN.LC_MetaData[(enough_area)]: # &(small_difference_minmax_1)&(sm
     #for fun, name in zip(smf_ilbert_fun, smf_ilbert_name):
         #plt.plot(mbins, fun(10**mbins)/(0.7**3), label=name, ls='dashed', lw=0.5)
     if z_mean>0.15 and z_mean<0.8:
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_03_z_08_LX_430.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_03_z_08_LX_430.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', label='Bo16 43, 43.5, 44, 44.5')
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_03_z_08_LX_435.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_03_z_08_LX_435.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen')
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_03_z_08_LX_440.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_03_z_08_LX_440.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', lw=3)
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_03_z_08_LX_445.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_03_z_08_LX_445.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', lw=3)
 
     if z_mean>0.8 and z_mean<1.5:
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_08_z_15_LX_430.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_08_z_15_LX_430.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', label='Bo16 43, 43.5, 44, 44.5')
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_08_z_15_LX_435.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_08_z_15_LX_435.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen')
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_08_z_15_LX_440.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_08_z_15_LX_440.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', lw=3)
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_08_z_15_LX_445.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_08_z_15_LX_445.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', lw=3)
 
     if z_mean>1.5 and z_mean<2.5:
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_15_z_25_LX_430.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_15_z_25_LX_430.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', label='Bo16 43, 43.5, 44, 44.5')
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_15_z_25_LX_435.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_15_z_25_LX_435.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen')
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_15_z_25_LX_440.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_15_z_25_LX_440.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', lw=3)
-        d1 = np.loadtxt( os.path.join(os.environ['GIT_AGN_MOCK'], 'data', 'agn', 'AGN_HGSMF_BO16_15_z_25_LX_445.ascii'), unpack = True , delimiter = ',')
+        d1 = np.loadtxt( os.path.join(os.environ['GIT_STMOD_DATA'], 'data/validation/validation_AGN/literature_data', 'AGN_HGSMF_BO16_15_z_25_LX_445.ascii'), unpack = True , delimiter = ',')
         plt.plot(d1[0][d1[0]<12], 10**d1[1][d1[0]<12], ls='dashed', color='darkgreen', lw=3)
 
     #if z_mean>0.25:
