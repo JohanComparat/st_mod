@@ -11,11 +11,11 @@ cd $GIT_STMOD/src/Mpipelines
 # nohup python AGN_validation.py z0p09 FullSky > logs/valid_testz0p09.log & # DONE
 # nohup python AGN_validation.py z0p14 FullSky > logs/valid_testz0p14.log & # DONE
 # nohup python AGN_validation.py z0p19 FullSky > logs/valid_testz0p19.log & # DONE
-nohup python AGN_validation.py z0p25 FullSky > logs/valid_testz0p25.log & # TODO
-nohup python AGN_validation.py z0p30 FullSky > logs/valid_testz0p30.log & # TODO
-nohup python AGN_validation.py z0p36 FullSky > logs/valid_testz0p36.log & # TODO
-nohup python AGN_validation.py z0p43 FullSky > logs/valid_testz0p43.log & # TODO
-nohup python AGN_validation.py z0p49 FullSky > logs/valid_testz0p49.log & # TODO
+# nohup python AGN_validation.py z0p25 FullSky > logs/valid_testz0p25.log & # TODO
+# nohup python AGN_validation.py z0p30 FullSky > logs/valid_testz0p30.log & # TODO
+# nohup python AGN_validation.py z0p36 FullSky > logs/valid_testz0p36.log & # TODO
+# nohup python AGN_validation.py z0p43 FullSky > logs/valid_testz0p43.log & # TODO
+# nohup python AGN_validation.py z0p49 FullSky > logs/valid_testz0p49.log & # TODO
 nohup python AGN_validation.py z0p56 FullSky > logs/valid_testz0p56.log & # TODO
 nohup python AGN_validation.py z0p63 FullSky > logs/valid_testz0p63.log & # TODO
 nohup python AGN_validation.py z0p70 FullSky > logs/valid_testz0p70.log & # TODO

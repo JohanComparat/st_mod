@@ -11,7 +11,7 @@ cd $GIT_STMOD/src/sixte_AGN/
 # import numpy as np
 # for kk in np.arange(237):
 #     print("nohup python extract_erosita_tile.py "+str(kk)+" > logs/extract_erosita_tile_"+str(kk)+".log &")
-      6ujYKT&D1Kw7b&$1V$gvv!cPM
+#       6ujYKT&D1Kw7b&$1V$gvv!cPM
 # takes <1h
 #
 # # nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # DO NOT extract z=0. Skip it !
