@@ -20,13 +20,13 @@ def write_img(matrix, out='spherical_cc', n_pixel = 120, angularSize_per_pixel =
     prihdr['EXTNAME'] = 'IMAGE'
     prihdr['CTYPE1'] = ('RA---TAN', 'first axis (column) is Right Ascension')
     prihdr['CRPIX1'] = ((n_pixel+1) / 2., 'middle pixel of array in col direction')
-    prihdr['CRVAL1'] = (0, 'Dec of this middle pixel, in degrees')
+    prihdr['CRVAL1'] = (0, 'RA of this middle pixel, in degrees')
     prihdr['CDELT1'] = (-angularSize_per_pixel/60., 'move 1column forward,decrease RA by CDELT1/deg')
     prihdr['CROTA1'] = 0
     prihdr['CUNIT1'] = 'deg'
     prihdr['CTYPE2'] = ('DEC--TAN', 'first axis (column) is Declination')
     prihdr['CRPIX2'] = ((n_pixel+1) / 2., 'middle pixel of array in row direction')
-    prihdr['CRVAL2'] = (0, 'RA of this middle pixel, in degrees')
+    prihdr['CRVAL2'] = (0, 'DEC of this middle pixel, in degrees')
     prihdr['CDELT2'] = (angularSize_per_pixel/60., 'move 1column forward,increase Dec by CDELT1/deg')
     prihdr['CROTA2'] = 0
     prihdr['CUNIT2'] = 'deg'

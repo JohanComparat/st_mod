@@ -4,43 +4,43 @@ cd $GIT_STMOD/src/Mpipelines
 # A minimum of 3GB memory (so 2 CPU per task) is required to load observed catalogues
 # all below worked and finished :
 
-# nohup python AGN_validation.py z0p00 FullSky > logs/valid_testz0p00.log & # DONE
-# nohup python AGN_validation.py z0p02 FullSky > logs/valid_testz0p02.log & # DONE
-# nohup python AGN_validation.py z0p05 FullSky > logs/valid_testz0p05.log & # DONE
-# nohup python AGN_validation.py z0p09 FullSky > logs/valid_testz0p09.log & # DONE
-# nohup python AGN_validation.py z0p14 FullSky > logs/valid_testz0p14.log & # DONE
-# nohup python AGN_validation.py z0p19 FullSky > logs/valid_testz0p19.log & # DONE
-# nohup python AGN_validation.py z0p25 FullSky > logs/valid_testz0p25.log & # DONE
-# nohup python AGN_validation.py z0p30 FullSky > logs/valid_testz0p30.log & # DONE
-# nohup python AGN_validation.py z0p36 FullSky > logs/valid_testz0p36.log & # DONE
-# nohup python AGN_validation.py z0p43 FullSky > logs/valid_testz0p43.log & # DONE
-# nohup python AGN_validation.py z0p49 FullSky > logs/valid_testz0p49.log & # DONE
-# nohup python AGN_validation.py z0p56 FullSky > logs/valid_testz0p56.log & # DONE
-# nohup python AGN_validation.py z0p63 FullSky > logs/valid_testz0p63.log & # DONE
-# nohup python AGN_validation.py z0p70 FullSky > logs/valid_testz0p70.log & # DONE
-# nohup python AGN_validation.py z0p78 FullSky > logs/valid_testz0p78.log & # DONE
-# nohup python AGN_validation.py z0p86 FullSky > logs/valid_testz0p86.log & # DONE
-# nohup python AGN_validation.py z0p94 FullSky > logs/valid_testz0p94.log & # DONE
-# nohup python AGN_validation.py z1p03 FullSky > logs/valid_testz1p03.log & # DONE
-# nohup python AGN_validation.py z1p12 FullSky > logs/valid_testz1p12.log & # DONE
-# nohup python AGN_validation.py z1p22 FullSky > logs/valid_testz1p22.log & # DONE
-# nohup python AGN_validation.py z1p32 FullSky > logs/valid_testz1p32.log & # DONE
-# nohup python AGN_validation.py z1p43 FullSky > logs/valid_testz1p43.log & # DONE
-# nohup python AGN_validation.py z1p54 FullSky > logs/valid_testz1p54.log & # DONE
-# nohup python AGN_validation.py z1p65 FullSky > logs/valid_testz1p65.log & # DONE
-# nohup python AGN_validation.py z1p77 FullSky > logs/valid_testz1p77.log & # DONE
-# nohup python AGN_validation.py z1p90 FullSky > logs/valid_testz1p90.log & # DONE
-# nohup python AGN_validation.py z2p03 FullSky > logs/valid_testz2p03.log & # DONE
-# nohup python AGN_validation.py z2p17 FullSky > logs/valid_testz2p17.log & # DONE
-nohup python AGN_validation.py z2p31 FullSky > logs/valid_testz2p31.log & # QUEUED
-nohup python AGN_validation.py z2p46 FullSky > logs/valid_testz2p46.log & # QUEUED
-nohup python AGN_validation.py z2p62 FullSky > logs/valid_testz2p62.log & # QUEUED
-nohup python AGN_validation.py z2p78 FullSky > logs/valid_testz2p78.log & # QUEUED
-nohup python AGN_validation.py z2p95 FullSky > logs/valid_testz2p95.log & # QUEUED
-nohup python AGN_validation.py z3p13 FullSky > logs/valid_testz3p13.log & # QUEUED
-nohup python AGN_validation.py z3p32 FullSky > logs/valid_testz3p32.log & # QUEUED
-nohup python AGN_validation.py z3p61 FullSky > logs/valid_testz3p61.log & # QUEUED
-nohup python AGN_validation.py z3p93 FullSky > logs/valid_testz3p93.log & # QUEUED
+nohup python AGN_validation.py z0p00 FullSky > logs/valid_testz0p00.log & # DONE
+nohup python AGN_validation.py z0p02 FullSky > logs/valid_testz0p02.log & # DONE
+nohup python AGN_validation.py z0p05 FullSky > logs/valid_testz0p05.log & # DONE
+nohup python AGN_validation.py z0p09 FullSky > logs/valid_testz0p09.log & # DONE
+nohup python AGN_validation.py z0p14 FullSky > logs/valid_testz0p14.log & # DONE
+nohup python AGN_validation.py z0p19 FullSky > logs/valid_testz0p19.log & # DONE
+nohup python AGN_validation.py z0p25 FullSky > logs/valid_testz0p25.log & # DONE
+nohup python AGN_validation.py z0p30 FullSky > logs/valid_testz0p30.log & # DONE
+nohup python AGN_validation.py z0p36 FullSky > logs/valid_testz0p36.log & # DONE
+nohup python AGN_validation.py z0p43 FullSky > logs/valid_testz0p43.log & # DONE
+nohup python AGN_validation.py z0p49 FullSky > logs/valid_testz0p49.log & # DONE
+nohup python AGN_validation.py z0p56 FullSky > logs/valid_testz0p56.log & # DONE
+nohup python AGN_validation.py z0p63 FullSky > logs/valid_testz0p63.log & # DONE
+nohup python AGN_validation.py z0p70 FullSky > logs/valid_testz0p70.log & # DONE
+nohup python AGN_validation.py z0p78 FullSky > logs/valid_testz0p78.log & # DONE
+nohup python AGN_validation.py z0p86 FullSky > logs/valid_testz0p86.log & # DONE
+nohup python AGN_validation.py z0p94 FullSky > logs/valid_testz0p94.log & # DONE
+nohup python AGN_validation.py z1p03 FullSky > logs/valid_testz1p03.log & # DONE
+nohup python AGN_validation.py z1p12 FullSky > logs/valid_testz1p12.log & # DONE
+nohup python AGN_validation.py z1p22 FullSky > logs/valid_testz1p22.log & # DONE
+nohup python AGN_validation.py z1p32 FullSky > logs/valid_testz1p32.log & # DONE
+nohup python AGN_validation.py z1p43 FullSky > logs/valid_testz1p43.log & # DONE
+nohup python AGN_validation.py z1p54 FullSky > logs/valid_testz1p54.log & # DONE
+nohup python AGN_validation.py z1p65 FullSky > logs/valid_testz1p65.log & # DONE
+nohup python AGN_validation.py z1p77 FullSky > logs/valid_testz1p77.log & # DONE
+nohup python AGN_validation.py z1p90 FullSky > logs/valid_testz1p90.log & # DONE
+nohup python AGN_validation.py z2p03 FullSky > logs/valid_testz2p03.log & # DONE
+nohup python AGN_validation.py z2p17 FullSky > logs/valid_testz2p17.log & # DONE
+nohup python AGN_validation.py z2p31 FullSky > logs/valid_testz2p31.log & # DONE
+nohup python AGN_validation.py z2p46 FullSky > logs/valid_testz2p46.log & # DONE
+nohup python AGN_validation.py z2p62 FullSky > logs/valid_testz2p62.log & # DONE
+nohup python AGN_validation.py z2p78 FullSky > logs/valid_testz2p78.log & # DONE
+nohup python AGN_validation.py z2p95 FullSky > logs/valid_testz2p95.log & # DONE
+nohup python AGN_validation.py z3p13 FullSky > logs/valid_testz3p13.log & # DONE
+nohup python AGN_validation.py z3p32 FullSky > logs/valid_testz3p32.log & # DONE
+nohup python AGN_validation.py z3p61 FullSky > logs/valid_testz3p61.log & # DONE
+nohup python AGN_validation.py z3p93 FullSky > logs/valid_testz3p93.log & # DONE
 
 conda activate clustering
 cd $GIT_STMOD/src/Mpipelines

@@ -6,6 +6,8 @@ export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/sixte_GAS/
 
+export OMP_NUM_THREADS=8
+
 # python create_image_library_hotgas.py # DONE no need to REDO
 
 # re-cast cluster simput files into erosita tiles
@@ -51,9 +53,9 @@ cd $GIT_STMOD/src/sixte_GAS/
 # nohup python extract_erosita_tile_glist.py 9  > logs/extract_erosita_tile_9.log  & # DONE  'z0p36',
 # nohup python extract_erosita_tile_glist.py 10 > logs/extract_erosita_tile_10.log & # DONE  'z0p43',
 # nohup python extract_erosita_tile_glist.py 11 > logs/extract_erosita_tile_11.log & # DONE  'z0p49',
-nohup python extract_erosita_tile_glist.py 12 > logs/extract_erosita_tile_12.log & # DONE  'z0p56',
-nohup python extract_erosita_tile_glist.py 13 > logs/extract_erosita_tile_13.log & # TODO 'z0p63',
-nohup python extract_erosita_tile_glist.py 14 > logs/extract_erosita_tile_14.log & # TODO 'z0p70',
+# nohup python extract_erosita_tile_glist.py 12 > logs/extract_erosita_tile_12.log & # DONE  'z0p56',
+nohup python extract_erosita_tile_glist.py 13 > logs/extract_erosita_tile_13.log & # ONGOING 'z0p63',
+nohup python extract_erosita_tile_glist.py 14 > logs/extract_erosita_tile_14.log & # ONGOING 'z0p70',
 nohup python extract_erosita_tile_glist.py 15 > logs/extract_erosita_tile_15.log & # TODO 'z0p78',
 nohup python extract_erosita_tile_glist.py 16 > logs/extract_erosita_tile_16.log & # TODO 'z0p86',
 nohup python extract_erosita_tile_glist.py 17 > logs/extract_erosita_tile_17.log & # TODO 'z0p94',
@@ -94,6 +96,7 @@ TODO : merge files with the cluster model computed
 # /home/idies/workspace/erosim/Uchuu/cluster_Xspectra
 
 python format_simput_xgas.py # DONE
+# python format_simput_xgas_rewrite_images_radec.py # NOT NEEDED
 
 # retrieve real events from complete repo
 # ~/workspace/Storage/comparat/persistent/data/data_s4_c030 # rsync finished
@@ -105,10 +108,19 @@ python format_simput_xgas.py # DONE
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
 python simulate_cluster_only_SEED_SKYMAP.py # DONE for eROSITA_DE, eROSITA_RU v2.7 sixte runs
+
+
+ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/Att_eRASS8_sixte_v27_SEED_001_events_cluster/t0erass_ccd1_evt.fits > list_clu_ccd1.list
+ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/Att_eRASS8_sixte_v27_SEED_001_events_cluster/t0erass_ccd1_raw.fits > list_clu_ccd1_raw.list
+wc -l list*
+
 python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # v2.7 sixte runs TODO
 
 python plot_events_with_catalog.py 164087 "eRASS8_SEED_001_events_cluster_2025_04"
 
+/opt/sixte/share/sixte/instruments/srg/erosita/erosita_1.xml
+/opt/sixte/share/sixte/instruments/srg/erosita/sixte_erormf_normalized_singles_20170725.rmf
+/opt/sixte/share/sixte/instruments/srg/erosita/erosita_pha2pi_v20210719.fits
 
 # simulate data with sixte and events using attitude fiels in the events !!!
 

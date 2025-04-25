@@ -58,7 +58,7 @@ cd $GIT_STMOD/src/sixte_AGN/
 # TODO
 
 # after the scripts above are finished
-nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & # ONGOING
+nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & # DONE
 # after the merging is finished (it deletes temporary files !)
 # python clean_erosita_tile.py # not necessary, only at the end
 
@@ -66,7 +66,7 @@ nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & # ONGOING
 # python create_links_per_tile.py # DONE
 # /home/idies/workspace/erosim/simput/AGNspectra_V2
 
-python format_simput_AGN.py # ONGOING
+python format_simput_AGN.py # DONE
 
 
 
@@ -75,8 +75,9 @@ python format_simput_AGN.py # ONGOING
 python simulate_AGN_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
 # python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
 
-
-
+ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/eRASS8_SEED_001_events_AGN_2025_04/t0erass_ccd1_evt.fits > list_agn_ccd1.list
+ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/eRASS8_SEED_001_events_AGN_2025_04/t0erass_ccd1_raw.fits > list_agn_ccd1_raw.list
+wc -l list*
 
 
 # simulate data with sixte and events using attitude fiels in the events !!!

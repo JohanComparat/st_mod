@@ -13,6 +13,7 @@ from astropy.table import Table, Column
 #pix_ids = np.arange(healpy.nside2npix(8) )
 #ra_cen_s, dec_cen_s = healpy.pix2ang(8, pix_ids, nest=True, lonlat=True)
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
+sky_map_hdu['ID'] = np.arange(len(sky_map_hdu))
 #import pymangle
 #eRASS_ply = os.path.join(os.environ['GIT_ERASS_SIM'], 'data', 'eRASS_SKYMAPS.ply' )
 #mng = pymangle.Mangle( eRASS_ply )
@@ -211,65 +212,68 @@ class Simulator:
             print('============================================')
             del_list = np.array([ os.remove(el) for el in  list_2_delete])
 
-
+#erosim Simput=/home/idies/workspace/erosim/Uchuu/LCerass/164087/Xgas_bHS0.8_simput_N_000.fits Prefix=/home/idies/workspace/erosim/Uchuu/LCerass/164087/eRASS8_SEED_001_events_cluster_2025_04/t0erass_ Attitude=/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits RA=163.5 Dec=3.000512456781548 GTIFile=/home/idies/workspace/erosim/Uchuu/LCerass/164087/eRASS8_SEED_001_events_cluster_2025_04/erass.gti TSTART=617943605.0 Exposure=126230400.0 MJDREF=51543.875 dt=0.5 Seed=1 clobber=yes chatter=3 Background=no
 
 if __name__ == '__main__':
     seed = 1
     LC_dir = 'LCerass'
     #erass_option = "eRASS4"
     #erass_option = "eRASS5"
-    erass_option = "eRASS8"
+    erass_option = "Att_eRASS8"
+    sixte_version = 'v27'
     #env = "UNIT_fA1i_DIR" #sys.argv[1] #
     #simput_dir = os.path.join(os.environ[env], "SIMPUT_SKYMAP_UNIT_fA1i_DIR_eRO_CLU_b8_CM_0_pixS_20.0_M500c_13.0_FX_-14.5_MGAS_Sept2021" )
     print(seed, LC_dir, erass_option)#, env, erass_option)
     #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==1)] :
-    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)] :
+    #for sky_tile in sky_map_hdu[2224:2224+1]:#[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1] :
+    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][10:] :
         """
         Loops over healpix pixels and writes the files to path_2_eRO_catalog
         """
         sky_tile_id = str(sky_tile['SRVMAP'])
         str_field = str(sky_tile['SRVMAP']).zfill(6)
-        simput_files = np.array([
-            os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput.fits'),
-            ])
-        print(sky_tile_id, simput_files)
         ra_cen = sky_tile['RA_CEN']
         dec_cen = sky_tile['DE_CEN']
-        data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, erass_option + "_SEED_"+str(seed).zfill(3) +"_events_cluster_2025_04" )
+        #simput_files_all = np.array(glob.glob( os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput_N_???.fits')))
+        #simput_files_all.sort()
+        print(sky_tile_id)#, simput_files_all)
+        #for simput_file_i in simput_files_all[:1]:
+        simput_files = np.array([os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput_final.fits'), ])
+        data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, erass_option + "_sixte_"+ sixte_version+ "_SEED_"+str(seed).zfill(3) +"_events_cluster" )
         print('outputs here',data_dir)
         os.system('mkdir -p '+data_dir )
-
-        if erass_option=='eRASS8':
+        if erass_option=='Att_eRASS8':
             p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
             t_starts = np.array([ 617943605 ])
             t_stops = np.array([ 744174005 ])
-        ccd1_file = os.path.join( data_dir, 't0erass_ccd1_evt.fits' )
-        if os.path.isfile(ccd1_file)==False:
-            #break
-            for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
-                print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-                print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-                print('STEP', jj, (t0, t1))
-                print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-                print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-                bkg = 0
-                t_start = t0 # 617943605.0
-                exposure = t1 - t0 # 31536000 * 4 # = 4 years  # 31536000 = 1year # 15750000 = 1/2 year
-                # Launch...
-                # 3 files
-                #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
-                # 2 files
-                try:
-                    Simulator(
-                    jj,
-                    bkg,
-                    t_start,
-                    exposure,
-                    int(seed),
-                    simput_files,
-                    data_dir,
-                    ra_cen,
-                    dec_cen,
-                    p_2_att_file).run_all()
-                except(FileNotFoundError):
-                    print('missing file for field ', str_field)
+        #ccd1_files = os.path.join( data_dir, 't0erass_ccd?_???.fits' )
+        #os.system('rm ' + ccd1_files)
+        #if os.path.isfile(ccd1_file)==False:
+        #break
+        for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('STEP', jj, (t0, t1))
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+            bkg = 0
+            t_start = t0 # 617943605.0
+            exposure = t1 - t0 # 31536000 * 4 # = 4 years  # 31536000 = 1year # 15750000 = 1/2 year
+            # Launch...
+            # 3 files
+            #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
+            # 2 files
+            try:
+                Simulator(
+                jj,
+                bkg,
+                t_start,
+                exposure,
+                int(seed),
+                simput_files,
+                data_dir,
+                ra_cen,
+                dec_cen,
+                p_2_att_file).run_all()
+            except(FileNotFoundError):
+                print('missing file for field ', str_field)
