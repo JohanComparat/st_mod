@@ -1,6 +1,6 @@
 
 # on laptop :
-cd $GIT_SXRBG/sixte
+cd $GIT_STMOD/src/sixte_fgbg/
 python make_BG_simput_spectrum.py
 # creates a spectrum here : /data40s/erosim/eRASS/bkg_erosita_simput_full_sky/spectra/mean_bg_spectrum.fits
 python create_images.py
@@ -13,7 +13,7 @@ python map_to_simput_catalogue.py
 
 # on DS43
 # execute commands in 
-cd $GIT_SXRBG/sixte
+cd $GIT_STMOD/src/sixte_fgbg/
 nohup sh run_bg_sixte_1.sh > run_bg_sixte_1.log &
 nohup sh run_bg_sixte_2.sh > run_bg_sixte_2.log &
 nohup sh run_bg_sixte_3.sh > run_bg_sixte_3.log &

@@ -54,10 +54,10 @@ export OMP_NUM_THREADS=8
 # nohup python extract_erosita_tile_glist.py 10 > logs/extract_erosita_tile_10.log & # DONE  'z0p43',
 # nohup python extract_erosita_tile_glist.py 11 > logs/extract_erosita_tile_11.log & # DONE  'z0p49',
 # nohup python extract_erosita_tile_glist.py 12 > logs/extract_erosita_tile_12.log & # DONE  'z0p56',
-nohup python extract_erosita_tile_glist.py 13 > logs/extract_erosita_tile_13.log & # ONGOING 'z0p63',
-nohup python extract_erosita_tile_glist.py 14 > logs/extract_erosita_tile_14.log & # ONGOING 'z0p70',
-nohup python extract_erosita_tile_glist.py 15 > logs/extract_erosita_tile_15.log & # TODO 'z0p78',
-nohup python extract_erosita_tile_glist.py 16 > logs/extract_erosita_tile_16.log & # TODO 'z0p86',
+# nohup python extract_erosita_tile_glist.py 13 > logs/extract_erosita_tile_13.log & # DONE 'z0p63',
+# nohup python extract_erosita_tile_glist.py 14 > logs/extract_erosita_tile_14.log & # DONE 'z0p70',
+nohup python extract_erosita_tile_glist.py 15 > logs/extract_erosita_tile_15.log & # ONGOING 'z0p78',
+nohup python extract_erosita_tile_glist.py 16 > logs/extract_erosita_tile_16.log & # ONGOING 'z0p86',
 nohup python extract_erosita_tile_glist.py 17 > logs/extract_erosita_tile_17.log & # TODO 'z0p94',
 nohup python extract_erosita_tile_glist.py 18 > logs/extract_erosita_tile_18.log & # TODO 'z1p03',
 nohup python extract_erosita_tile_glist.py 19 > logs/extract_erosita_tile_19.log & # TODO 'z1p12',
@@ -83,7 +83,7 @@ nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log
 TODO : extract files with the cluster model computed
 
 # after the scripts above are finished
-python merge_erosita_tile.py # DONE
+python merge_erosita_tile.py # DONE ERO_DE DONE ERO_RU
 python merge_erosita_tile_glist.py # TODO
 TODO : merge files with the cluster model computed
 
@@ -95,7 +95,7 @@ TODO : merge files with the cluster model computed
 # /home/idies/workspace/erosim/Uchuu/cluster_images
 # /home/idies/workspace/erosim/Uchuu/cluster_Xspectra
 
-python format_simput_xgas.py # DONE
+python format_simput_xgas.py # DONE ERO_DE DONE  ERO_RU
 # python format_simput_xgas_rewrite_images_radec.py # NOT NEEDED
 
 # retrieve real events from complete repo
@@ -107,7 +107,7 @@ python format_simput_xgas.py # DONE
 
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
-python simulate_cluster_only_SEED_SKYMAP.py # DONE for eROSITA_DE, eROSITA_RU v2.7 sixte runs
+python simulate_cluster_only_SEED_SKYMAP.py # # DONE ERO_DE ONGOING ERO_RU v2.7 sixte runs
 
 
 ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/Att_eRASS8_sixte_v27_SEED_001_events_cluster/t0erass_ccd1_evt.fits > list_clu_ccd1.list

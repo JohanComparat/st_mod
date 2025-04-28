@@ -53,12 +53,13 @@ cd $GIT_STMOD/src/sixte_AGN/
 # nohup python extract_erosita_tile.py 36 > logs/extract_erosita_tile_36.log & # DONE   'z3p61',
 # nohup python extract_erosita_tile.py 37 > logs/extract_erosita_tile_37.log & # DONE   'z3p93',
 
-
-# TODO
-# TODO
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/sixte_AGN/
 
 # after the scripts above are finished
-nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & # DONE
+nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & #  DONE ERO_DE DONE ERO_RU
 # after the merging is finished (it deletes temporary files !)
 # python clean_erosita_tile.py # not necessary, only at the end
 
@@ -66,13 +67,11 @@ nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & # DONE
 # python create_links_per_tile.py # DONE
 # /home/idies/workspace/erosim/simput/AGNspectra_V2
 
-python format_simput_AGN.py # DONE
-
-
+python format_simput_AGN.py # DONE ERO_DE ONGOING ERO_RU
 
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
-python simulate_AGN_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
+python simulate_AGN_only_SEED_SKYMAP.py # DONE ERO_DE, TODO  ERO_RU v2.7 sixte runs
 # python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
 
 ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/eRASS8_SEED_001_events_AGN_2025_04/t0erass_ccd1_evt.fits > list_agn_ccd1.list
