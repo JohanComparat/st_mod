@@ -1,6 +1,6 @@
 #!/bin/bash/
 
-python simulate_FG_BG_only.py 000 eRASS8
+# python simulate_FG_BG_only.py 000 eRASS8
 python simulate_FG_BG_only.py 001 eRASS8
 python simulate_FG_BG_only.py 002 eRASS8
 python simulate_FG_BG_only.py 003 eRASS8

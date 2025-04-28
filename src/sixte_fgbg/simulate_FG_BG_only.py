@@ -192,8 +192,8 @@ if __name__ == '__main__':
 	#erass_option = "eRASS8" # sys.argv[4]
 	#print(erass_option)
 	seed = 42
-	tile_id = '000' # sys.argv[1]  # '355'
-	erass_option ='eRASS8' #  sys.argv[2] # "eRASS1" # sys.argv[4]
+	tile_id = sys.argv[1]  # '355'
+	erass_option = sys.argv[2] # "eRASS1" # sys.argv[4]
 	ra_cen = ra_cen_s[int(tile_id)]
 	dec_cen = dec_cen_s[int(tile_id)]
 	data_dir = os.path.join(os.environ['HOME'], "workspace/erosim/eRASS8_events_BG_FG/" + tile_id )
