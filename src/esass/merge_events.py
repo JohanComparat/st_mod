@@ -161,85 +161,86 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	##plt.clf()
 
 
-# eRASS:4 take half of the eRASS8 events
+### eRASS:4 take half of the eRASS8 events
 
-In [61]: hdu_C[1].data.columns
-Out[61]:
-ColDefs(
-    name = 'TIME'; format = 'D'; unit = 's'
-    name = 'FRAME'; format = 'J'
-    name = 'PHA'; format = 'J'; unit = 'ADU'
-    name = 'PI'; format = 'J'; unit = 'ADU'
-    name = 'SIGNAL'; format = 'E'; unit = 'keV'
-    name = 'RAWX'; format = 'I'; unit = 'pixel'
-    name = 'RAWY'; format = 'I'; unit = 'pixel'
-    name = 'RA'; format = 'D'; unit = 'deg'
-    name = 'DEC'; format = 'D'; unit = 'deg'
-    name = 'PH_ID'; format = '2J'
-    name = 'SRC_ID'; format = '2J'
-    name = 'TYPE'; format = 'I'
-    name = 'NPIXELS'; format = 'J'
-    name = 'PILEUP'; format = 'I'
-    name = 'SIGNALS'; format = '9E'; unit = 'keV'
-    name = 'PHAS'; format = '9J'; unit = 'ADU'
-)
+##In [61]: hdu_C[1].data.columns
+##Out[61]:
+##ColDefs(
+    ##name = 'TIME'; format = 'D'; unit = 's'
+    ##name = 'FRAME'; format = 'J'
+    ##name = 'PHA'; format = 'J'; unit = 'ADU'
+    ##name = 'PI'; format = 'J'; unit = 'ADU'
+    ##name = 'SIGNAL'; format = 'E'; unit = 'keV'
+    ##name = 'RAWX'; format = 'I'; unit = 'pixel'
+    ##name = 'RAWY'; format = 'I'; unit = 'pixel'
+    ##name = 'RA'; format = 'D'; unit = 'deg'
+    ##name = 'DEC'; format = 'D'; unit = 'deg'
+    ##name = 'PH_ID'; format = '2J'
+    ##name = 'SRC_ID'; format = '2J'
+    ##name = 'TYPE'; format = 'I'
+    ##name = 'NPIXELS'; format = 'J'
+    ##name = 'PILEUP'; format = 'I'
+    ##name = 'SIGNALS'; format = '9E'; unit = 'keV'
+    ##name = 'PHAS'; format = '9J'; unit = 'ADU'
+##)
 
-ColDefs(
-    name = 'RA'; format = 'D'; unit = 'deg'
-    name = 'DEC'; format = 'D'; unit = 'deg'
-    name = 'SRC_ID_1'; format = 'J'
-    name = 'TIME'; format = 'D'; unit = 's'
-    name = 'SIGNAL'; format = 'E'; unit = 'keV'
-    name = 'SRVMAP'; format = 'J'
+## Stars have a stupid format and lack information ... needs to be re-generated
+##ColDefs(
+    ##name = 'RA'; format = 'D'; unit = 'deg'
+    ##name = 'DEC'; format = 'D'; unit = 'deg'
+    ##name = 'SRC_ID_1'; format = 'J'
+    ##name = 'TIME'; format = 'D'; unit = 's'
+    ##name = 'SIGNAL'; format = 'E'; unit = 'keV'
+    ##name = 'SRVMAP'; format = 'J'
 
 
-In [72]: bg_all.info()
-<Table length=473336>
-    name     dtype  unit
------------ ------- ----
-       TIME float64    s
-         RA float64  deg
-        DEC float64  deg
-          X float64
-          Y float64
-     ENERGY float32
-  EV_WEIGHT float32
-       RAWX   int16
-       RAWY   int16
-       SUBX float64
-       SUBY float64
-        PHA   int16
-    PAT_TYP   int16
-    PAT_INF   uint8
-      TM_NR   uint8
-       FLAG   int32
-  FRAMETIME float64    s
- RECORDTIME float64
-HEALPIX_VAL   int64  deg
-     SRVMAP   int32
+##In [72]: bg_all.info()
+##<Table length=473336>
+    ##name     dtype  unit
+##----------- ------- ----
+       ##TIME float64    s
+         ##RA float64  deg
+        ##DEC float64  deg
+          ##X float64
+          ##Y float64
+     ##ENERGY float32
+  ##EV_WEIGHT float32
+       ##RAWX   int16
+       ##RAWY   int16
+       ##SUBX float64
+       ##SUBY float64
+        ##PHA   int16
+    ##PAT_TYP   int16
+    ##PAT_INF   uint8
+      ##TM_NR   uint8
+       ##FLAG   int32
+  ##FRAMETIME float64    s
+ ##RECORDTIME float64
+##HEALPIX_VAL   int64  deg
+     ##SRVMAP   int32
 
-In [62]: hdul['EVENTS'].columns
-Out[62]:
-ColDefs(
-    name = 'TIME'; format = 'D'; unit = 's'
-    name = 'RA'; format = 'D'; unit = 'deg'; bscale = 1e-06; bzero = 0.0
-    name = 'DEC'; format = 'D'; unit = 'deg'; bscale = 1e-06; bzero = 0.0
-    name = 'X'; format = 'D'; coord_type = 'RA---SIN'; coord_unit = 'deg'; coord_ref_point = 0.0; coord_ref_value = 120.659341; coord_inc = -1.3888889095849e-05
-    name = 'Y'; format = 'D'; coord_type = 'DEC--SIN'; coord_unit = 'deg'; coord_ref_point = 0.0; coord_ref_value = 42.008289; coord_inc = 1.3888889095849e-05
-    name = 'PI'; format = 'E'
-    name = 'EV_WEIGHT'; format = 'E'
-    name = 'RAWX'; format = 'I'
-    name = 'RAWY'; format = 'I'
-    name = 'SUBX'; format = 'D'; bscale = 0.00666666667; bzero = -0.843333333
-    name = 'SUBY'; format = 'D'; bscale = 0.00666666667; bzero = -0.843333333
-    name = 'PHA'; format = 'I'
-    name = 'PAT_TYP'; format = 'I'
-    name = 'PAT_INF'; format = 'B'
-    name = 'TM_NR'; format = 'B'
-    name = 'FLAG'; format = 'J'
-    name = 'FRAMETIME'; format = 'D'; unit = 's'
-    name = 'RECORDTIME'; format = 'D'
-)
+##In [62]: hdul['EVENTS'].columns
+##Out[62]:
+##ColDefs(
+    ##name = 'TIME'; format = 'D'; unit = 's'
+    ##name = 'RA'; format = 'D'; unit = 'deg'; bscale = 1e-06; bzero = 0.0
+    ##name = 'DEC'; format = 'D'; unit = 'deg'; bscale = 1e-06; bzero = 0.0
+    ##name = 'X'; format = 'D'; coord_type = 'RA---SIN'; coord_unit = 'deg'; coord_ref_point = 0.0; coord_ref_value = 120.659341; coord_inc = -1.3888889095849e-05
+    ##name = 'Y'; format = 'D'; coord_type = 'DEC--SIN'; coord_unit = 'deg'; coord_ref_point = 0.0; coord_ref_value = 42.008289; coord_inc = 1.3888889095849e-05
+    ##name = 'PI'; format = 'E'
+    ##name = 'EV_WEIGHT'; format = 'E'
+    ##name = 'RAWX'; format = 'I'
+    ##name = 'RAWY'; format = 'I'
+    ##name = 'SUBX'; format = 'D'; bscale = 0.00666666667; bzero = -0.843333333
+    ##name = 'SUBY'; format = 'D'; bscale = 0.00666666667; bzero = -0.843333333
+    ##name = 'PHA'; format = 'I'
+    ##name = 'PAT_TYP'; format = 'I'
+    ##name = 'PAT_INF'; format = 'B'
+    ##name = 'TM_NR'; format = 'B'
+    ##name = 'FLAG'; format = 'J'
+    ##name = 'FRAMETIME'; format = 'D'; unit = 's'
+    ##name = 'RECORDTIME'; format = 'D'
+##)
 
 
 
