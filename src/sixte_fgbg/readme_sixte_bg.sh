@@ -14,17 +14,14 @@ python map_to_simput_catalogue.py
 # on DS43
 # execute commands in 
 cd $GIT_STMOD/src/sixte_fgbg/
-nohup sh run_bg_sixte_1.sh > run_bg_sixte_1.log &
-nohup sh run_bg_sixte_2.sh > run_bg_sixte_2.log &
-nohup sh run_bg_sixte_3.sh > run_bg_sixte_3.log &
-nohup sh run_bg_sixte_4.sh > run_bg_sixte_4.log &
-nohup sh run_bg_sixte_5.sh > run_bg_sixte_5.log &
-nohup sh run_bg_sixte_6.sh > run_bg_sixte_6.log &
-nohup sh run_bg_sixte_7.sh > run_bg_sixte_7.log &
+nohup sh run_bg_sixte_1.sh > run_bg_sixte_1.log & # DONE
+nohup sh run_bg_sixte_2.sh > run_bg_sixte_2.log & # DONE
+nohup sh run_bg_sixte_3.sh > run_bg_sixte_3.log & # DONE
+nohup sh run_bg_sixte_4.sh > run_bg_sixte_4.log & # DONE
+nohup sh run_bg_sixte_5.sh > run_bg_sixte_5.log & # DONE
+nohup sh run_bg_sixte_6.sh > run_bg_sixte_6.log & # DONE
+nohup sh run_bg_sixte_7.sh > run_bg_sixte_7.log & # DONE
 
-# event files are written here 
-NSIDE = 64
-/data26s/comparat/simulations/erosim/eRASS1_events_BG_FG_Jun2021/
-NSIDE = 128
-/data26s/comparat/simulations/erosim/eRASS1_events_BG_FG_Sept2021/
+ls /home/idies/workspace/erosim/eRASS8_events_BG_FG/???/t0erass_ccd1_evt.fits | wc -l
 
+# re cast into the skymap fields, carefully.

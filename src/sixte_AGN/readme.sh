@@ -67,11 +67,11 @@ nohup python merge_erosita_tile.py > logs/merge_erosita_tile.log & #  DONE ERO_D
 # python create_links_per_tile.py # DONE
 # /home/idies/workspace/erosim/simput/AGNspectra_V2
 
-python format_simput_AGN.py # DONE ERO_DE ONGOING ERO_RU
+python format_simput_AGN.py # DONE ERO_DE DONE ERO_RU
 
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
-python simulate_AGN_only_SEED_SKYMAP.py # DONE ERO_DE, TODO  ERO_RU v2.7 sixte runs
+python simulate_AGN_only_SEED_SKYMAP.py # DONE ERO_DE, DONE ERO_RU v2.7 sixte runs
 # python simulate_eRASS45_cluster_only_SEED_SKYMAP.py # ONGOING v2.7 sixte runs
 
 ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/eRASS8_SEED_001_events_AGN_2025_04/t0erass_ccd1_evt.fits > list_agn_ccd1.list

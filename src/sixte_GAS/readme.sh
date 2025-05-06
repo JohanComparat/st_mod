@@ -41,6 +41,15 @@ export OMP_NUM_THREADS=8
 # nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # DONE
 # nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # DONE
 # nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # DONE
+# installation of sixte done on sciserver
+
+# makes the image library for the galaxy cluster Uchuu run
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/sixte_GAS/
+
+export OMP_NUM_THREADS=8
 
 # nohup python extract_erosita_tile_glist.py 1  > logs/extract_erosita_tile_1.log  & # DONE  'z0p00',
 # nohup python extract_erosita_tile_glist.py 2  > logs/extract_erosita_tile_2.log  & # DONE  'z0p02',
@@ -56,29 +65,29 @@ export OMP_NUM_THREADS=8
 # nohup python extract_erosita_tile_glist.py 12 > logs/extract_erosita_tile_12.log & # DONE  'z0p56',
 # nohup python extract_erosita_tile_glist.py 13 > logs/extract_erosita_tile_13.log & # DONE 'z0p63',
 # nohup python extract_erosita_tile_glist.py 14 > logs/extract_erosita_tile_14.log & # DONE 'z0p70',
-nohup python extract_erosita_tile_glist.py 15 > logs/extract_erosita_tile_15.log & # ONGOING 'z0p78',
-nohup python extract_erosita_tile_glist.py 16 > logs/extract_erosita_tile_16.log & # ONGOING 'z0p86',
-nohup python extract_erosita_tile_glist.py 17 > logs/extract_erosita_tile_17.log & # TODO 'z0p94',
-nohup python extract_erosita_tile_glist.py 18 > logs/extract_erosita_tile_18.log & # TODO 'z1p03',
-nohup python extract_erosita_tile_glist.py 19 > logs/extract_erosita_tile_19.log & # TODO 'z1p12',
-nohup python extract_erosita_tile_glist.py 20 > logs/extract_erosita_tile_20.log & # TODO 'z1p22',
-nohup python extract_erosita_tile_glist.py 21 > logs/extract_erosita_tile_21.log & # TODO 'z1p32',
-nohup python extract_erosita_tile_glist.py 22 > logs/extract_erosita_tile_22.log & # TODO 'z1p43',
-nohup python extract_erosita_tile_glist.py 23 > logs/extract_erosita_tile_23.log & # TODO 'z1p54',
-nohup python extract_erosita_tile_glist.py 24 > logs/extract_erosita_tile_24.log & # TODO 'z1p65',
+# nohup python extract_erosita_tile_glist.py 15 > logs/extract_erosita_tile_15.log & # DONE 'z0p78',
+# nohup python extract_erosita_tile_glist.py 16 > logs/extract_erosita_tile_16.log & # DONE 'z0p86',
+# nohup python extract_erosita_tile_glist.py 17 > logs/extract_erosita_tile_17.log & # DONE 'z0p94',
+# nohup python extract_erosita_tile_glist.py 18 > logs/extract_erosita_tile_18.log & # DONE 'z1p03',
+# nohup python extract_erosita_tile_glist.py 19 > logs/extract_erosita_tile_19.log & # DONE 'z1p12',
+# nohup python extract_erosita_tile_glist.py 20 > logs/extract_erosita_tile_20.log & # DONE 'z1p22',
+# nohup python extract_erosita_tile_glist.py 21 > logs/extract_erosita_tile_21.log & # DONE 'z1p32',
+nohup python extract_erosita_tile_glist.py 22 > logs/extract_erosita_tile_22.log & # ONGOING 'z1p43',
+nohup python extract_erosita_tile_glist.py 23 > logs/extract_erosita_tile_23.log & # ONGOING 'z1p54',
+nohup python extract_erosita_tile_glist.py 24 > logs/extract_erosita_tile_24.log & # ONGOING 'z1p65',
 nohup python extract_erosita_tile_glist.py 25 > logs/extract_erosita_tile_25.log & # TODO 'z1p77',
-nohup python extract_erosita_tile_glist.py 26 > logs/extract_erosita_tile_26.log & # TODO    'z1p90',
-nohup python extract_erosita_tile_glist.py 27 > logs/extract_erosita_tile_27.log & # TODO    'z2p03',
-nohup python extract_erosita_tile_glist.py 28 > logs/extract_erosita_tile_28.log & # TODO    'z2p17',
-nohup python extract_erosita_tile_glist.py 29 > logs/extract_erosita_tile_29.log & # TODO    'z2p31',
-nohup python extract_erosita_tile_glist.py 30 > logs/extract_erosita_tile_30.log & # TODO    'z2p46',
-nohup python extract_erosita_tile_glist.py 31 > logs/extract_erosita_tile_31.log & # TODO    'z2p62',
-nohup python extract_erosita_tile_glist.py 32 > logs/extract_erosita_tile_32.log & # TODO    'z2p78',
-nohup python extract_erosita_tile_glist.py 33 > logs/extract_erosita_tile_33.log & # TODO    'z2p95',
-nohup python extract_erosita_tile_glist.py 34 > logs/extract_erosita_tile_34.log & # TODO    'z3p13',
-nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log & # TODO    'z3p32',
-nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log & # TODO    'z3p61',
-nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log & # TODO    'z3p93',
+nohup python extract_erosita_tile_glist.py 26 > logs/extract_erosita_tile_26.log & # TODO 'z1p90',
+nohup python extract_erosita_tile_glist.py 27 > logs/extract_erosita_tile_27.log & # TODO 'z2p03',
+nohup python extract_erosita_tile_glist.py 28 > logs/extract_erosita_tile_28.log & # TODO 'z2p17',
+nohup python extract_erosita_tile_glist.py 29 > logs/extract_erosita_tile_29.log & # TODO 'z2p31',
+nohup python extract_erosita_tile_glist.py 30 > logs/extract_erosita_tile_30.log & # TODO 'z2p46',
+nohup python extract_erosita_tile_glist.py 31 > logs/extract_erosita_tile_31.log & # TODO 'z2p62',
+nohup python extract_erosita_tile_glist.py 32 > logs/extract_erosita_tile_32.log & # TODO 'z2p78',
+nohup python extract_erosita_tile_glist.py 33 > logs/extract_erosita_tile_33.log & # TODO 'z2p95',
+nohup python extract_erosita_tile_glist.py 34 > logs/extract_erosita_tile_34.log & # TODO 'z3p13',
+nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log & # TODO 'z3p32',
+nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log & # TODO 'z3p61',
+nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log & # TODO 'z3p93',
 
 TODO : extract files with the cluster model computed
 
@@ -107,7 +116,10 @@ python format_simput_xgas.py # DONE ERO_DE DONE  ERO_RU
 
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
-python simulate_cluster_only_SEED_SKYMAP.py # # DONE ERO_DE ONGOING ERO_RU v2.7 sixte runs
+python simulate_cluster_only_SEED_SKYMAP.py # # DONE ERO_DE DONE ERO_RU v2.7 sixte runs
+# SEED 1 done
+# SEED 2 ONGOING
+# SEED 3 ONGOING
 
 
 ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/Att_eRASS8_sixte_v27_SEED_001_events_cluster/t0erass_ccd1_evt.fits > list_clu_ccd1.list

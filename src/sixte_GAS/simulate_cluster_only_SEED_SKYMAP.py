@@ -215,7 +215,7 @@ class Simulator:
 #erosim Simput=/home/idies/workspace/erosim/Uchuu/LCerass/164087/Xgas_bHS0.8_simput_N_000.fits Prefix=/home/idies/workspace/erosim/Uchuu/LCerass/164087/eRASS8_SEED_001_events_cluster_2025_04/t0erass_ Attitude=/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits RA=163.5 Dec=3.000512456781548 GTIFile=/home/idies/workspace/erosim/Uchuu/LCerass/164087/eRASS8_SEED_001_events_cluster_2025_04/erass.gti TSTART=617943605.0 Exposure=126230400.0 MJDREF=51543.875 dt=0.5 Seed=1 clobber=yes chatter=3 Background=no
 
 if __name__ == '__main__':
-    seed = 1
+    seed = 5
     LC_dir = 'LCerass'
     #erass_option = "eRASS4"
     #erass_option = "eRASS5"
@@ -226,7 +226,7 @@ if __name__ == '__main__':
     print(seed, LC_dir, erass_option)#, env, erass_option)
     #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==1)] :
     #for sky_tile in sky_map_hdu[2224:2224+1]:#[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1] :
-    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][10:] :
+    for sky_tile in sky_map_hdu:#[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][10:] :
         """
         Loops over healpix pixels and writes the files to path_2_eRO_catalog
         """

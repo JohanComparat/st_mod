@@ -214,7 +214,7 @@ class Simulator:
 
 
 if __name__ == '__main__':
-    seed = 1
+    seed = 3
     LC_dir = 'LCerass'
     #erass_option = "eRASS4"
     #erass_option = "eRASS5"
@@ -222,7 +222,7 @@ if __name__ == '__main__':
     #env = "UNIT_fA1i_DIR" #sys.argv[1] #
     #simput_dir = os.path.join(os.environ[env], "SIMPUT_SKYMAP_UNIT_fA1i_DIR_eRO_CLU_b8_CM_0_pixS_20.0_M500c_13.0_FX_-14.5_MGAS_Sept2021" )
     print(seed, LC_dir, erass_option)#, env, erass_option)
-    #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==1)] :
+    #for sky_tile in sky_map_hdu:[(sky_map_hdu['OWNER']==1)] :
     for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)] :
         """
         Loops over healpix pixels and writes the files to path_2_eRO_catalog
