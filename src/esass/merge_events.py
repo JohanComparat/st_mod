@@ -95,7 +95,14 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		N_BG = len(bg_tm)
 		N_evs.append([N_ev_A, N_ev_C, N_BG])
 
-	frac_all = N_ev_OBS / np.sum(N_evs)+0.01
+	f_AGN = 0.123
+	f_BKG = 0.858
+	f_CLU = 0.019
+	NA, NC, NB = np.transpose(N_evs).sum(axis=1)
+	N_ev_A = int(f_AGN * N_ev_OBS/7)+1
+	N_ev_B = int(0.95 * N_ev_OBS/7)+1
+	N_ev_C = int(f_CLU * N_ev_OBS/7)+1
+	#frac_all = N_ev_OBS / np.sum(N_evs)+0.01
 
 	data_A = []
 	data_C = []
@@ -107,13 +114,16 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
 		ST_evt_files = n.array( glob.glob( os.path.join( stars_dir, 'simulated_photons_ccd' + str(NCCD) + '.fits' ) ) )
 		hdu_A = fits.open(agn_evt_files[0])
-		N_ev_A = int(len(hdu_A[1].data) * frac_all) + 20
+		#N_ev_A = int(len(hdu_A[1].data) * frac_all) + 20
 		id_A = np.random.choice(np.arange(len(hdu_A[1].data)), size = N_ev_A, replace = False)
 		data_A.append( Table(hdu_A['EVENTS'].data[id_A]) )
 
 		hdu_C = fits.open(CL_evt_files[0])
-		N_ev_C = int(len(hdu_C[1].data) * frac_all) + 20
-		id_C = np.random.choice(np.arange(len(hdu_C[1].data)), size = N_ev_C, replace = False)
+		#N_ev_C = int(len(hdu_C[1].data) * frac_all) + 20
+		if N_ev_C<=len(hdu_C[1].data):
+			id_C = np.random.choice(np.arange(len(hdu_C[1].data)), size = N_ev_C, replace = False)
+		else:
+			id_C = np.arange(len(hdu_C[1].data))
 		data_C.append( Table(hdu_C['EVENTS'].data[id_C]) )
 
 		#hdu_S = fits.open(ST_evt_files[0])
@@ -122,7 +132,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		#data_S.append( Table(hdu_S[1].data[id_S]) )
 
 		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
-		N_ev_B = int(len(bg_tm) * frac_all) + 100
+		#N_ev_B = int(len(bg_tm) * frac_all) + 100
 		id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
 		data_B.append( bg_tm[id_B] )
 
@@ -130,20 +140,14 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	data_A = vstack((data_A))
 	data_C = vstack((data_C))
 	data_B = vstack((data_B))
+	data_B = data_B[:N_ev_OBS-(len(data_A)-len(data_B))]
 	#data_S = vstack((data_S))
-
-	data_A.write(path_2_simeventAGN_file, overwrite = True)
-	data_C.write(path_2_simeventCLU_file, overwrite = True)
-	data_B.write(path_2_simeventBKG_file, overwrite = True)
-	print(path_2_simeventAGN_file)
-	print(path_2_simeventCLU_file)
-	print(path_2_simeventBKG_file)
 
 	fn='RA'
 	#N_total = len(np.hstack((data_C[fn], data_A[fn], data_B[fn], data_S[fn])))
-	N_total = len(np.hstack((data_C[fn], data_A[fn], data_B[fn])))
-	N_to_replace = len(ids_to_replace)
-	print(N_total, N_ev_OBS)
+	#N_total = len(np.hstack((data_C[fn], data_A[fn], data_B[fn])))
+	#N_to_replace = len(ids_to_replace)
+	#print(N_total, N_ev_OBS)
 
 	fi_up = ['RA', 'DEC','RAWX', 'RAWY', 'PHA']#, 'X', 'Y']
 	for fn in fi_up:
@@ -156,6 +160,16 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	print(path_2_event_file)
 	print('='*100)
 	print('='*100)
+	data_A.write(path_2_simeventAGN_file, overwrite = True)
+	data_C.write(path_2_simeventCLU_file, overwrite = True)
+	data_B.write(path_2_simeventBKG_file, overwrite = True)
+	print(path_2_simeventAGN_file, len(data_A))
+	print(path_2_simeventCLU_file, len(data_C))
+	print(path_2_simeventBKG_file, len(data_B))
+	N_sim = len(data_A) + len(data_C) + len(data_B)
+	print(f_AGN, np.round(len(data_A)/N_sim,4))
+	print(f_BKG, np.round(len(data_B)/N_sim,4))
+	print(f_CLU, np.round(len(data_C)/N_sim,4))
 
 	#fig_out = os.path.join('test-ra-dec.png' )
 	#plt.figure(0, (6.,6.))
