@@ -141,7 +141,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	data_A = vstack((data_A))
 	data_C = vstack((data_C))
 	data_B = vstack((data_B))
-	data_B = data_B[:N_ev_OBS-(len(data_A)-len(data_B))]
+	data_B = data_B[:N_ev_OBS-(len(data_A)-len(data_C))]
 	#data_S = vstack((data_S))
 
 	fn='RA'
