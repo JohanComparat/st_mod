@@ -10,12 +10,17 @@ nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # ONGOING
 nohup python merge_events_noAGN.py 1 > logs/merge_events_noAGN_1.log & # ONGOING
 nohup python merge_events_onlyBG.py > logs/merge_events_onlyBG.log & # ONGOING
 
-GE_e4_merge_AGNseed001_SimBKG
-GE_e4_merge_AGNseed001_SimBKG_CLUseed001
+GE_e4_merge_AGNseed001_SimBKG : AGN + BKG
+GE_e4_merge_AGNseed001_SimBKG_CLUseed001 : AGN + BKG + Cluster
+GE_e4_merge_SimBKG : only BKG
+GE_e4_merge_SimBKG_CLUseed001 : BKG + Cluster
 
 # write eSASS commands
 python eRASSX_write_scripts.py GE_e4_merge_AGNseed001_SimBKG #
 python eRASSX_write_scripts.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001 #
+python eRASSX_write_scripts.py GE_e4_merge_SimBKG #
+python eRASSX_write_scripts.py GE_e4_merge_SimBKG_CLUseed001 #
+
 
 # execute eSASS commands on test field:
 cd /home/idies/workspace/erosim/Uchuu/LCerass/121048/GE_e4_merge_AGNseed001_SimBKG/eSASS

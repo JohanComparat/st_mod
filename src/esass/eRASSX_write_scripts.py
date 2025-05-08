@@ -25,7 +25,7 @@ sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models
 
 GE_name = sys.argv[1] # 'sim_evt_e4_merge'
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
 
     sky_tile_id = str(sky_tile['SRVMAP'])
     str_field = str(sky_tile['SRVMAP']).zfill(6)
