@@ -6,9 +6,9 @@ cd $GIT_STMOD/src/esass/
 
 # in the container with sixte 2.7
 nohup python merge_events.py 1 1 > logs/merge_events_1_1.log & # ONGOING
-nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log # ONGOING
-nohup python merge_events_noAGN.py 1 > logs/merge_events_noAGN_1.log # ONGOING
-nohup python merge_events_onlyBG.py> logs/merge_events_onlyBG_1.log # ONGOING
+nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # ONGOING
+nohup python merge_events_noAGN.py 1 > logs/merge_events_noAGN_1.log & # ONGOING
+nohup python merge_events_onlyBG.py> logs/merge_events_onlyBG.log & # ONGOING
 
 GE_e4_merge_AGNseed001_SimBKG
 GE_e4_merge_AGNseed001_SimBKG_CLUseed001

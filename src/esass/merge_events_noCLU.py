@@ -1,12 +1,3 @@
-"""
-
-Pre-rpocess sixte event files to input eSASS
-
-Adapted from bash to python
-
-Based on the Script from Teng Liu
-
-"""
 import os, sys, glob
 import numpy as n
 import astropy.io.fits as fits
