@@ -23,6 +23,8 @@ from astropy.table import Table, vstack
 import astropy.io.fits as fits
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
+GE_name = sys.argv[1] # 'sim_evt_e4_merge'
+
 for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1]:
 
     sky_tile_id = str(sky_tile['SRVMAP'])
@@ -31,7 +33,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     # directory
     #eRASSn = sys.argv[1]
     field_id = str_field # sys.argv[2]
-    indir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", field_id, 'sim_evt_e4_merge')
+    indir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", field_id, GE_name)
     outdir = os.path.join(indir, 'eSASS')
     os.system('mkdir -p ' + outdir)
     # sb05_030108_020_FlareGTI_c030.fits  sb05_030108_020_Image_c030.fits.gz
@@ -48,7 +50,9 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     out_det1 = os.path.join(outdir, outprefix + 'pipeline_det1.sh')
     # ermldet + sensmap + source tool single band
     out_src1 = os.path.join(outdir, outprefix + 'pipeline_Src1.sh')
-
+    print('sh '+out_im1)
+    print('sh '+out_det1)
+    print('sh '+out_src1)
     #
     Sixte = False
     # version

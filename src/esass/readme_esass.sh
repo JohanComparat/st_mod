@@ -5,7 +5,8 @@ export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
 
 # in the container with sixte 2.7
-python merge_events.py # ONGOING
+python merge_events.py 1 1 # ONGOING
+python merge_events_noCLU.py 1 # ONGOING
 
 # write eSASS commands
 python eRASSX_write_scripts.py # DONE
