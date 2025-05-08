@@ -24,4 +24,4 @@ nohup sh run_bg_sixte_7.sh > run_bg_sixte_7.log & # DONE
 
 ls /home/idies/workspace/erosim/eRASS8_events_BG_FG/???/t0erass_ccd1_evt.fits | wc -l
 
-# re cast into the skymap fields, carefully.
+# re cast into the skymap fields, carefully. Not needed, already done and rsync-ed

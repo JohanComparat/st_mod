@@ -23,7 +23,7 @@ from astropy.table import Table, vstack
 import astropy.io.fits as fits
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][1:]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1]:
 
     sky_tile_id = str(sky_tile['SRVMAP'])
     str_field = str(sky_tile['SRVMAP']).zfill(6)
@@ -98,6 +98,36 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     UnVigExpMap = os.path.join(outdir, f"{outprefix}02{VerBand}_UnvExpMap.fits")
     DetMask = os.path.join(outdir, f"{outprefix}02{VerBand}_DetMsk.fits")
 
+    f_out.write("\n")
+    f_out.write("# radec2xy  \n")
+    f_out.write("\n")
+    # radec2xy file=tmp_${hid}.fits ra0=${ra_cen} dec0=${dec_cen}
+    cmd_radec = "radec2xy file="+EvtFiles+" ra0="+str(sky_tile['RA_CEN'])+" dec0="+str(sky_tile['DE_CEN'])
+    f_out.write(cmd_radec)
+
+    f_out.write("\n")
+    f_out.write("# EVTOOL  \n")
+    f_out.write("\n")
+    f_out.write("# EVTOOL creates event image " + os.path.basename(EvtImgFiles) + " \n")
+    f_out.write("\n")
+
+    f_out.write("evtool \\\n")
+    f_out.write("eventfiles=\"" + EvtFiles + "\" \\\n")
+    f_out.write("outfile=\"" + EvtImgFiles + "\" \\\n")
+    f_out.write("events=yes \\\n")
+    f_out.write("image=yes \\\n")
+    f_out.write("rebin=80 \\\n")
+    f_out.write("size='3240 3240' \\\n")
+    f_out.write("pattern=15 \\\n")
+    f_out.write("center_position='0 0' \\\n")
+    f_out.write("flag=0 \\\n")
+    f_out.write("emin=" + """\"""" + eminstr + """\" \\\n""")
+    f_out.write("emax=" + """\"""" + emaxstr + """\" \n """)
+
+    f_out.write(" \n ")
+    f_out.write(" \n ")
+
+
     f_out.write(" \n ")
     f_out.write(" \n ")
 
@@ -109,7 +139,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
     f_out.write("expmap \\\n")
     f_out.write("inputdatasets=\"" + EvtFiles + "\" \\\n")
-    f_out.write("templateimage=\"" + EvtFiles + "\"  \\\n")
+    f_out.write("templateimage=\"" + EvtImgFiles + "\"  \\\n")
     f_out.write("mergedmaps=\"" + ExpMapFiles + "\" \\\n")
     f_out.write("withvignetting=yes  \\\n")
     f_out.write("withmergedmaps=yes  \\\n")
@@ -200,7 +230,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
     f_out.write("erbox \\\n")
     f_out.write("boxlist=\"" + BoxCats[1] + "\" \\\n")
-    f_out.write("images=\"" + EvtFiles + "\" \\\n")
+    f_out.write("images=\"" + EvtImgFiles + "\" \\\n")
     f_out.write("expimages=\"" + ExpMapFiles + "\" \\\n")
     f_out.write("detmasks=\"" + DetMask + "\" \\\n")
     f_out.write("hrdef= \\\n"            )
@@ -224,7 +254,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     f_out.write("erbackmap \\\n")
     f_out.write("boxlist=\"" + BoxCats[1] + "\" \\\n")
     f_out.write("bkgimage=\"" + BkgMapFiles[1] + "\" \\\n")
-    f_out.write("image=\"" + EvtFiles + "\" \\\n")
+    f_out.write("image=\"" + EvtImgFiles + "\" \\\n")
     f_out.write("expimage=\"" + ExpMapFiles + "\" \\\n")
     f_out.write("detmask=\"" + DetMask + "\" \\\n")
     f_out.write("cheesemask=\"" + CheMskFiles + "\" \\\n")
@@ -257,7 +287,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
     f_out.write("erbox \\\n")
     f_out.write("boxlist=\"" + BoxCats[2] + "\" \\\n")
-    f_out.write("images=\"" + EvtFiles + "\" \\\n")
+    f_out.write("images=\"" + EvtImgFiles + "\" \\\n")
     f_out.write("expimages=\"" + ExpMapFiles + "\" \\\n")
     f_out.write("bkgimages=\"" + BkgMapFiles[1] + "\" \\\n")
     f_out.write("detmasks=\"" + DetMask + "\" \\\n")
@@ -287,7 +317,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     f_out.write("erbackmap \\\n")
     f_out.write("boxlist=\"" + BoxCats[2] + "\" \\\n")
     f_out.write("bkgimage=\"" + BkgMapFiles[2] + "\" \\\n")
-    f_out.write("image=\"" + EvtFiles + "\" \\\n")
+    f_out.write("image=\"" + EvtImgFiles + "\" \\\n")
     f_out.write("expimage=\"" + ExpMapFiles + "\" \\\n")
     f_out.write("detmask=\"" + DetMask + "\" \\\n")
     f_out.write("cheesemask=\"" + CheMskFiles + "\" \\\n")
@@ -320,7 +350,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
     f_out.write("erbox \\\n")
     f_out.write("boxlist=\"" + BoxCats[3] + "\" \\\n")
-    f_out.write("images=\"" + EvtFiles + "\" \\\n")
+    f_out.write("images=\"" + EvtImgFiles + "\" \\\n")
     f_out.write("expimages=\"" + ExpMapFiles + "\" \\\n")
     f_out.write("bkgimages=\"" + BkgMapFiles[2] + "\" \\\n")
     f_out.write("detmasks=\"" + DetMask + "\" \\\n")
@@ -349,7 +379,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     f_out.write("erbackmap \\\n")
     f_out.write("boxlist=\"" + BoxCats[3] + "\" \\\n")
     f_out.write("bkgimage=\"" + BkgMapFiles[3] + "\" \\\n")
-    f_out.write("image=\"" + EvtFiles + "\" \\\n")
+    f_out.write("image=\"" + EvtImgFiles + "\" \\\n")
     f_out.write("expimage=\"" + ExpMapFiles + "\" \\\n")
     f_out.write("detmask=\"" + DetMask + "\" \\\n")
     f_out.write("cheesemask=\"" + CheMskFiles + "\" \\\n")
@@ -376,11 +406,11 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     f_out.write("\n")
     f_out.write("\n")
 
-    f_out.write("cd " + outdir + "\n")
-    f_out.write("\n")
-    f_out.write("chgrp erosim * \n")
+    #f_out.write("cd " + outdir + "\n")
+    #f_out.write("\n")
+    #f_out.write("chgrp erosim * \n")
 
-    f_out.write("\n")
+    #f_out.write("\n")
 
     f_out.close()
 
@@ -407,7 +437,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     f_out.write("ermldet \\\n")
     f_out.write("boxlist=\"" + MLinCat[1] + "\" \\\n")
     f_out.write("mllist=\"" + MLCats[1] + "\" \\\n")
-    f_out.write("images=\"" + EvtFiles + "\" \\\n")
+    f_out.write("images=\"" + EvtImgFiles + "\" \\\n")
     f_out.write("expimages=\"" + ExpMapFiles + "\" \\\n")
     f_out.write("bkgimages=\"" + BkgMapFiles[3] + "\" \\\n")
     f_out.write("detmasks=\"" + DetMask + "\" \\\n")
@@ -471,7 +501,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
         f_out.write("mllist=\"" + MLCats[1] + "\" \\\n")
         f_out.write("apelist=\"" + MLCats[1] + "\" \\\n")
         f_out.write("apelistout=\"" + ApeCat(eef) + "\" \\\n")
-        f_out.write("images=\"" + EvtFiles + "\" \\\n")
+        f_out.write("images=\"" + EvtImgFiles + "\" \\\n")
         f_out.write("expimages=\"" + ExpMapFiles + "\" \\\n")
         f_out.write("bkgimages=\"" + BkgMapFiles[3] + "\" \\\n")
         f_out.write("psfmaps=\"" + PSFMapFiles(eef) + "\" \\\n")
@@ -534,11 +564,11 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
     f_out.write("\n"   )
 
-    f_out.write("cd " + outdir + "\n")
-    f_out.write("\n")
-    f_out.write("chgrp erosim * \n")
+    #f_out.write("cd " + outdir + "\n")
+    #f_out.write("\n")
+    #f_out.write("chgrp erosim * \n")
 
-    f_out.write("\n")
+    #f_out.write("\n")
 
     f_out.close()
 

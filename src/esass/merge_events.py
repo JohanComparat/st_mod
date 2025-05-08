@@ -30,11 +30,22 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][1:]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1]:
 	print(sky_tile)
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	evt_list = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's4_c030', '*_Image_c030.fits.gz' ) ) )
+	log_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'logs-erass8')
+	os.system('mkdir -p '+log_dir)
+	esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'sim_evt_e4_merge')
+	os.system('mkdir -p '+esass_dir)
+
+	path_2_event_file = os.path.join(esass_dir, 'evt_'+str_field+'.fits')
+	path_2_simeventAGN_file = os.path.join(esass_dir, 'simAGNevt_'+str_field+'.fits')
+	path_2_simeventCLU_file = os.path.join(esass_dir, 'simCLUevt_'+str_field+'.fits')
+	path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_'+str_field+'.fits')
+	if len(evt_list)==0 or os.path.isfile(path_2_event_file):
+		continue
 	hdul_raw = fits.open(evt_list[0])
 	texps = np.array([ np.sum(hdul_raw['GTI1'].data['STOP']-hdul_raw['GTI1'].data['START'])
 			, np.sum(hdul_raw['GTI2'].data['STOP']-hdul_raw['GTI2'].data['START'])
@@ -57,12 +68,6 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG' ) # 'evt_particle_???.fits' )
 	#RA  = str(sky_tile['RA_CEN'])
 	#DEC = str(sky_tile['DE_CEN'])
-	log_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'logs-erass8')
-	os.system('mkdir -p '+log_dir)
-	esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'sim_evt_e4_merge')
-	os.system('mkdir -p '+esass_dir)
-
-	path_2_event_file = os.path.join(esass_dir, 'evt_'+str_field+'.fits')
 
 	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, 'evt_particle_???.fits' ) ) )
 	bg_all = vstack(([Table.read(el) for el in BG_evt_files]))
@@ -88,7 +93,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
 		N_BG = len(bg_tm)
-		N_evs.append([N_ev_A, N_ev_C, N_ev_S, N_BG])
+		N_evs.append([N_ev_A, N_ev_C, N_BG])
 
 	frac_all = N_ev_OBS / np.sum(N_evs)+0.01
 
@@ -124,9 +129,15 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 	data_A = vstack((data_A))
 	data_C = vstack((data_C))
-	#data_S = vstack((data_S))
 	data_B = vstack((data_B))
+	#data_S = vstack((data_S))
 
+	data_A.write(path_2_simeventAGN_file, overwrite = True)
+	data_C.write(path_2_simeventCLU_file, overwrite = True)
+	data_B.write(path_2_simeventBKG_file, overwrite = True)
+	print(path_2_simeventAGN_file)
+	print(path_2_simeventCLU_file)
+	print(path_2_simeventBKG_file)
 
 	fn='RA'
 	#N_total = len(np.hstack((data_C[fn], data_A[fn], data_B[fn], data_S[fn])))
@@ -134,7 +145,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	N_to_replace = len(ids_to_replace)
 	print(N_total, N_ev_OBS)
 
-	fi_up = ['RA', 'DEC','RAWX', 'RAWY', 'PHA']
+	fi_up = ['RA', 'DEC','RAWX', 'RAWY', 'PHA']#, 'X', 'Y']
 	for fn in fi_up:
 		hdul['EVENTS'].data[fn][ids_to_replace] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))[:N_ev_OBS]
 
@@ -143,6 +154,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 	hdul.writeto(path_2_event_file, overwrite=True)
 	print(path_2_event_file)
+	print('='*100)
+	print('='*100)
 
 	#fig_out = os.path.join('test-ra-dec.png' )
 	#plt.figure(0, (6.,6.))

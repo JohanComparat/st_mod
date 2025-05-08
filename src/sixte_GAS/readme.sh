@@ -72,11 +72,11 @@ export OMP_NUM_THREADS=8
 # nohup python extract_erosita_tile_glist.py 19 > logs/extract_erosita_tile_19.log & # DONE 'z1p12',
 # nohup python extract_erosita_tile_glist.py 20 > logs/extract_erosita_tile_20.log & # DONE 'z1p22',
 # nohup python extract_erosita_tile_glist.py 21 > logs/extract_erosita_tile_21.log & # DONE 'z1p32',
-nohup python extract_erosita_tile_glist.py 22 > logs/extract_erosita_tile_22.log & # ONGOING 'z1p43',
-nohup python extract_erosita_tile_glist.py 23 > logs/extract_erosita_tile_23.log & # ONGOING 'z1p54',
+# nohup python extract_erosita_tile_glist.py 22 > logs/extract_erosita_tile_22.log & # DONE 'z1p43',
+# nohup python extract_erosita_tile_glist.py 23 > logs/extract_erosita_tile_23.log & # DONE 'z1p54',
 nohup python extract_erosita_tile_glist.py 24 > logs/extract_erosita_tile_24.log & # ONGOING 'z1p65',
-nohup python extract_erosita_tile_glist.py 25 > logs/extract_erosita_tile_25.log & # TODO 'z1p77',
-nohup python extract_erosita_tile_glist.py 26 > logs/extract_erosita_tile_26.log & # TODO 'z1p90',
+nohup python extract_erosita_tile_glist.py 25 > logs/extract_erosita_tile_25.log & # ONGOING 'z1p77',
+nohup python extract_erosita_tile_glist.py 26 > logs/extract_erosita_tile_26.log & # ONGOING 'z1p90',
 nohup python extract_erosita_tile_glist.py 27 > logs/extract_erosita_tile_27.log & # TODO 'z2p03',
 nohup python extract_erosita_tile_glist.py 28 > logs/extract_erosita_tile_28.log & # TODO 'z2p17',
 nohup python extract_erosita_tile_glist.py 29 > logs/extract_erosita_tile_29.log & # TODO 'z2p31',
@@ -86,8 +86,8 @@ nohup python extract_erosita_tile_glist.py 32 > logs/extract_erosita_tile_32.log
 nohup python extract_erosita_tile_glist.py 33 > logs/extract_erosita_tile_33.log & # TODO 'z2p95',
 nohup python extract_erosita_tile_glist.py 34 > logs/extract_erosita_tile_34.log & # TODO 'z3p13',
 nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log & # TODO 'z3p32',
-nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log & # TODO 'z3p61',
-nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log & # TODO 'z3p93',
+nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log & # ONGOING 'z3p61',
+# nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log & # DONE 'z3p93',
 
 TODO : extract files with the cluster model computed
 

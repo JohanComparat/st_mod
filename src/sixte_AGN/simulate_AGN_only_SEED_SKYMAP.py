@@ -214,7 +214,7 @@ class Simulator:
 
 
 if __name__ == '__main__':
-    seed = 3
+    seed = 4
     LC_dir = 'LCerass'
     #erass_option = "eRASS4"
     #erass_option = "eRASS5"

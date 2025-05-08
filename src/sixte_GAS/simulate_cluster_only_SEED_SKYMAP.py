@@ -226,7 +226,7 @@ if __name__ == '__main__':
     print(seed, LC_dir, erass_option)#, env, erass_option)
     #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==1)] :
     #for sky_tile in sky_map_hdu[2224:2224+1]:#[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1] :
-    for sky_tile in sky_map_hdu:#[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][10:] :
+    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
         """
         Loops over healpix pixels and writes the files to path_2_eRO_catalog
         """
