@@ -135,7 +135,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
 		#N_ev_B = int(len(bg_tm) * frac_all) + 100
-		if N_ev_B>len(bg_tm):
+		if N_ev_B<len(bg_tm):
 			id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
 			data_B.append( bg_tm[id_B] )
 		else:
