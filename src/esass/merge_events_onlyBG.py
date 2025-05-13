@@ -57,6 +57,9 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, 'evt_particle_???.fits' ) ) )
 	bg_all = vstack(([Table.read(el) for el in BG_evt_files]))
+	if N_ev_OBS>len(bg_all):
+		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_OBS, 'are needed')
+		continue
 
 	N_ev_B = int(N_ev_OBS/7)+5
 	data_B = []
