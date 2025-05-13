@@ -21,7 +21,7 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][50:52]:
 	print(sky_tile)
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
@@ -39,6 +39,12 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	if len(evt_list)==0 or os.path.isfile(path_2_event_file):
 		print('continue', len(evt_list)==0, os.path.isfile(path_2_event_file))
 		continue
+	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG' ) # 'evt_particle_???.fits' )
+	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, 'evt_particle_???.fits' ) ) )
+	if len(BG_evt_files)==0:
+		print('continue', len(BG_evt_files), 'no BG files')
+		continue
+
 	hdul_raw = fits.open(evt_list[0])
 	texps = np.array([ np.sum(hdul_raw['GTI1'].data['STOP']-hdul_raw['GTI1'].data['START'])
 			, np.sum(hdul_raw['GTI2'].data['STOP']-hdul_raw['GTI2'].data['START'])
@@ -53,9 +59,6 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	to_replace = ( np.hstack((SRV_ev)) == sky_tile['SRVMAP'] )
 	ids_to_replace = np.arange(len(to_replace))[to_replace]
 	N_ev_OBS = len(ids_to_replace)
-	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG' ) # 'evt_particle_???.fits' )
-
-	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, 'evt_particle_???.fits' ) ) )
 	bg_all = vstack(([Table.read(el) for el in BG_evt_files]))
 	if N_ev_OBS>len(bg_all):
 		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_OBS, 'are needed')
