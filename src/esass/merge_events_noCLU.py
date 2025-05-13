@@ -89,8 +89,11 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		data_A.append( Table(hdu_A['EVENTS'].data[id_A]) )
 
 		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
-		id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
-		data_B.append( bg_tm[id_B] )
+		if N_ev_B>len(bg_tm):
+			id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
+			data_B.append( bg_tm[id_B] )
+		else:
+			data_B.append( bg_tm )
 
 
 	data_A = vstack((data_A))
