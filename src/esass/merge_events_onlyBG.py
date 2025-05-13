@@ -37,6 +37,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	path_2_simeventCLU_file = os.path.join(esass_dir, 'simCLUevt_'+str_field+'.fits')
 	path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_'+str_field+'.fits')
 	if len(evt_list)==0 or os.path.isfile(path_2_event_file):
+		print('continue', len(evt_list)==0, os.path.isfile(path_2_event_file))
 		continue
 	hdul_raw = fits.open(evt_list[0])
 	texps = np.array([ np.sum(hdul_raw['GTI1'].data['STOP']-hdul_raw['GTI1'].data['START'])
@@ -66,7 +67,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 			id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
 			data_B.append( bg_tm[id_B] )
 		else:
-			data_B.append( bg_tm )
+			print('continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
+			continue
 
 	data_B = vstack((data_B))
 	data_B = data_B[:N_ev_OBS]
