@@ -79,6 +79,10 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	N_ev_A = int(f_AGN * N_ev_OBS/7)+1
 	N_ev_B = int(0.95 * N_ev_OBS/7)+1
 
+	if N_ev_B*7>len(bg_all):
+		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B*7, 'are needed')
+		continue
+
 	data_A = []
 	data_B = []
 
