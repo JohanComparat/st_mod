@@ -5,10 +5,10 @@ export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
 
 # in the container with sixte 2.7
-nohup python merge_events.py 1 1     > logs/merge_events_1_1.log & # ONGOING
+nohup python merge_events.py 1 1     > logs/merge_events_1_1.log     & # ONGOING
 nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # ONGOING
 nohup python merge_events_noAGN.py 1 > logs/merge_events_noAGN_1.log & # ONGOING
-nohup python merge_events_onlyBG.py  > logs/merge_events_onlyBG.log & # ONGOING
+nohup python merge_events_onlyBG.py  > logs/merge_events_onlyBG.log  & # ONGOING
 
 (base) idies@b631d6bc716a:~/workspace/erosim/software/st_mod/src/esass$ tail logs/merge_events_1_1.log
 0.019 0.0183
@@ -39,18 +39,54 @@ cd /home/idies/workspace/erosim/Uchuu/LCerass/121048/GE_e4_merge_AGNseed001_SimB
 sh 121048_pipeline_img1.sh # DONE
 sh 121048_pipeline_det1.sh
 sh 121048_pipeline_Src1.sh
+cd $GIT_STMOD/src/esass
+python photon_matching_RS.py GE_e4_merge_AGNseed001_SimBKG 121048
 
 cd /home/idies/workspace/erosim/Uchuu/LCerass/121048/GE_e4_merge_AGNseed001_SimBKG_CLUseed001/eSASS
 sh 121048_pipeline_img1.sh # DONE
 sh 121048_pipeline_det1.sh
 sh 121048_pipeline_Src1.sh
+cd $GIT_STMOD/src/esass
+python photon_matching_RS.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001 121048
 
 cd /home/idies/workspace/erosim/Uchuu/LCerass/121048/GE_e4_merge_SimBKG/eSASS
 sh 121048_pipeline_img1.sh # DONE
 sh 121048_pipeline_det1.sh
 sh 121048_pipeline_Src1.sh
+#python photon_matching_RS.py GE_e4_merge_SimBKG 121048
 
 cd /home/idies/workspace/erosim/Uchuu/LCerass/121048/GE_e4_merge_SimBKG_CLUseed001/eSASS
 sh 121048_pipeline_img1.sh # DONE
 sh 121048_pipeline_det1.sh
 sh 121048_pipeline_Src1.sh
+cd $GIT_STMOD/src/esass
+python photon_matching_RS.py GE_e4_merge_SimBKG_CLUseed001 121048
+
+
+cd /home/idies/workspace/erosim/Uchuu/LCerass/125048/GE_e4_merge_AGNseed001_SimBKG
+sh 125048_pipeline_img1.sh
+sh 125048_pipeline_det1.sh
+sh 125048_pipeline_Src1.sh
+cd /home/idies/workspace/erosim/software/st_mod/src/esass
+python photon_matching_RS.py GE_e4_merge_AGNseed001_SimBKG 125048
+# =====
+cd /home/idies/workspace/erosim/Uchuu/LCerass/125048/GE_e4_merge_AGNseed001_SimBKG_CLUseed001
+sh 125048_pipeline_img1.sh
+sh 125048_pipeline_det1.sh
+sh 125048_pipeline_Src1.sh
+cd /home/idies/workspace/erosim/software/st_mod/src/esass
+python photon_matching_RS.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001 125048
+# =====
+cd /home/idies/workspace/erosim/Uchuu/LCerass/125048/GE_e4_merge_SimBKG_CLUseed001
+sh 125048_pipeline_img1.sh
+sh 125048_pipeline_det1.sh
+sh 125048_pipeline_Src1.sh
+cd /home/idies/workspace/erosim/software/st_mod/src/esass
+python photon_matching_RS.py GE_e4_merge_SimBKG_CLUseed001 125048
+# =====
+cd /home/idies/workspace/erosim/Uchuu/LCerass/125048/GE_e4_merge_SimBKG
+sh 125048_pipeline_img1.sh
+sh 125048_pipeline_det1.sh
+sh 125048_pipeline_Src1.sh
+cd /home/idies/workspace/erosim/software/st_mod/src/esass
+# =====

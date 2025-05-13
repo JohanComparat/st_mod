@@ -156,7 +156,8 @@ event_ra = np.hstack((Evt_Src['RA'], Evt_Bkg['RA']))
 event_dec = np.hstack((Evt_Src['DEC'], Evt_Bkg['DEC']))
 
 #open source catalog
-SrcCat = Table.read(p_2_esass, memmap=True)
+hdu = fits.open(p_2_esass)#, memmap=True)
+SrcCat = Table(hdu[1].data)
 
 #To do the matching
 AperRad = 20 * np.ones(len(SrcCat))
