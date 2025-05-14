@@ -4,7 +4,7 @@ export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
 
-# in the container with sixte 2.7
+# in any container with python
 nohup python merge_events.py 1 1     > logs/merge_events_1_1.log     & # ONGOING. DONE up to :48
 nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # ONGOING. DONE up to :48
 nohup python merge_events_noAGN.py 1 > logs/merge_events_noAGN_1.log & # ONGOING. DONE up to :48
@@ -15,13 +15,19 @@ GE_e4_merge_AGNseed001_SimBKG_CLUseed001 : AGN + BKG + Cluster
 GE_e4_merge_SimBKG : only BKG
 GE_e4_merge_SimBKG_CLUseed001 : BKG + Cluster
 
-# write eSASS commands
+# write eSASS commands in the relevant folders
 nohup python eRASSX_write_scripts.py GE_e4_merge_AGNseed001_SimBKG            > logs/eRASSX_write_scripts_GE_e4_merge_AGNseed001_SimBKG.log            & # DONE
 nohup python eRASSX_write_scripts.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001 > logs/eRASSX_write_scripts_GE_e4_merge_AGNseed001_SimBKG_CLUseed001.log & # DONE
 nohup python eRASSX_write_scripts.py GE_e4_merge_SimBKG                       > logs/eRASSX_write_scripts_GE_e4_merge_SimBKG.log                       & # DONE
 nohup python eRASSX_write_scripts.py GE_e4_merge_SimBKG_CLUseed001            > logs/eRASSX_write_scripts_GE_e4_merge_SimBKG_CLUseed001.log            & # DONE
 
-# write all commands. Ongoing until field 48
+python make_summary_skymap.py GE_e4_merge_AGNseed001_SimBKG
+python make_summary_skymap.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001
+python make_summary_skymap.py GE_e4_merge_SimBKG
+python make_summary_skymap.py GE_e4_merge_SimBKG_CLUseed001
+
+# write all commands for the list of folders above.
+# Done until field 48
 python write_exec_loop.py > exec.sh
 
 # execute eSASS commands on test field:
