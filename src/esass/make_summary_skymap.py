@@ -45,13 +45,14 @@ sky_map_hdu['has_ApeSen_eef0.75'] = np.ones(len(sky_map_hdu))==0
 sky_map_hdu['has_ApeCat_eef0.75'] = np.ones(len(sky_map_hdu))==0
 sky_map_hdu['has_srcAUTOreg']     = np.ones(len(sky_map_hdu))==0
 sky_map_hdu['has_bkgAUTOreg']     = np.ones(len(sky_map_hdu))==0
+LC_dir = "LCerass"
 
 for jj, sky_tile_value in enumerate(sky_map_hdu['SRVMAP']):
 
     sky_tile_id = str(sky_tile_value)
     str_field = sky_tile_id.zfill(6)
 
-    esass_dir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", str_field, GE_name, 'eSASS')
+    esass_dir = os.path.join("/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, GE_name, 'eSASS')
     VerBand = str(4)
     outprefix = str_field + "_"  # ""
     bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG' ) # 'evt_particle_???.fits' )
