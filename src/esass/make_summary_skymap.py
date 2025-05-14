@@ -25,6 +25,7 @@ sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models
 import numpy as np
 GE_name = sys.argv[1]
 
+sky_map_hdu['N_BG_files']  = np.zeros(len(sky_map_hdu))
 sky_map_hdu['has_merged_events']  = np.ones(len(sky_map_hdu))==0
 sky_map_hdu['has_EvtImg']         = np.ones(len(sky_map_hdu))==0
 sky_map_hdu['has_ExpMap']         = np.ones(len(sky_map_hdu))==0
@@ -53,7 +54,9 @@ for jj, sky_tile_value in enumerate(sky_map_hdu['SRVMAP']):
     esass_dir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", str_field, GE_name, 'eSASS')
     VerBand = str(4)
     outprefix = str_field + "_"  # ""
-
+    bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG' ) # 'evt_particle_???.fits' )
+    BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, 'evt_particle_???.fits' ) ) )
+    sky_map_hdu['N_BG_files'][jj] = len(BG_evt_files)
     sky_map_hdu['has_merged_events']  [jj] = os.path.isfile(os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", str_field, GE_name, 'evt_'+str_field+'.fits'))
     sky_map_hdu['has_EvtImg']         [jj] = os.path.isfile(os.path.join(esass_dir, f"{outprefix}02{VerBand}_EvtImg.fits"))
     sky_map_hdu['has_ExpMap']         [jj] = os.path.isfile(os.path.join(esass_dir, f"{outprefix}02{VerBand}_ExpMap.fits"))

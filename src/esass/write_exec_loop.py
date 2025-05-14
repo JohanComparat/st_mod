@@ -1,24 +1,6 @@
-"""
-This script resambles https://gitlab.mpcdf.mpg.de/joco/erosita_sxrbg/-/blob/main/esass/erassX_write_scripts.py
-It creates 3 scripts:
-1) create images
-2) start detection: 3 loops of erbox and erbackmap
-3) finish detection: ermldet, apetool, srctool
-/data26s/mpecl/eRASS1/??????/c946
-/data26s/mpecl/eRASS1/358144/c946
-/data26s/mpecl/eRASS1/358144/c946/*events*
-
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_img.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_img_RS.log &
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_det1.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_det1_RS.log &
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_det2.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_det2_RS.log &
-
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_img.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_img_RS.log &
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_det1.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_det1_RS.log &
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_det2.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_det2_RS.log &
-"""
-# !/usr/bin/env python
 import sys, os, glob
 import numpy as n
+import numpy as np
 from astropy.table import Table, vstack
 import astropy.io.fits as fits
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
@@ -30,33 +12,37 @@ for GE_name in GE_names:
 
 #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][2:48]:
 for GE_name in GE_names:
+    print('='*100)
     sky_map_hdu = SKYMAP[GE_name]
     print(GE_name)
-    to_process = (sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat']==False)
+    to_process = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat']==False)
+    already_done = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat'])
     print(len(sky_map_hdu[to_process]), 'tiles to process')
+    print(len(sky_map_hdu[already_done]), 'tiles already done')
     if len(sky_map_hdu[to_process])>0:
-        out_im1 = os.path.join(os.environ['GIT_STMOD'], 'src/esass', 'runs', GE_name + '_processing.sh')
-        f_out = open(out_im1, 'w')
-        f_out.write("""#!/bin/bash/ \n""")
-        f_out.write(" \n ")
+        for kk in np.arange(0, len(sky_map_hdu[to_process]), 50):
+            out_im1 = os.path.join(os.environ['GIT_STMOD'], 'src/esass', 'runs', GE_name + '_processing_'+str(kk).zfill(4)+'.sh')
+            f_out = open(out_im1, 'w')
+            f_out.write("""#!/bin/bash/ \n""")
+            f_out.write(" \n ")
 
-        for sky_tile in sky_map_hdu[to_process]:
-            sky_tile_id = str(sky_tile['SRVMAP'])
-            str_field = str(sky_tile['SRVMAP']).zfill(6)
-            indir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", str_field, GE_name)
-            esass_dir = os.path.join(indir, 'eSASS')
-            git_dir = os.path.join(os.environ['GIT_STMOD'], 'src/esass' )
-            path_2_event_file = os.path.join(indir, 'evt_'+str_field+'.fits')
-            if os.path.isfile(path_2_event_file) and os.path.isfile(os.path.join(esass_dir,str_field+"_pipeline_img1.sh")) :
-                f_out.write ("cd "+esass_dir +" \n")
-                f_out.write ("sh "+str_field+"_pipeline_img1.sh"+" \n")
-                f_out.write ("sh "+str_field+"_pipeline_det1.sh"+" \n")
-                f_out.write ("sh "+str_field+"_pipeline_Src1.sh"+" \n")
-                f_out.write ("cd "+git_dir+" \n")
-                if not GE_name=='GE_e4_merge_SimBKG':
-                    f_out.write ("python photon_matching_RS.py "+GE_name+" "+str_field +" \n")
-                f_out.write('# ====='+" \n")
-        f_out.close()
-        print(out_im1, 'written')
+            for sky_tile in sky_map_hdu[to_process][kk: kk+50]:
+                sky_tile_id = str(sky_tile['SRVMAP'])
+                str_field = str(sky_tile['SRVMAP']).zfill(6)
+                indir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", str_field, GE_name)
+                esass_dir = os.path.join(indir, 'eSASS')
+                git_dir = os.path.join(os.environ['GIT_STMOD'], 'src/esass' )
+                path_2_event_file = os.path.join(indir, 'evt_'+str_field+'.fits')
+                if os.path.isfile(path_2_event_file) and os.path.isfile(os.path.join(esass_dir,str_field+"_pipeline_img1.sh")) :
+                    f_out.write ("cd "+esass_dir +" \n")
+                    f_out.write ("sh "+str_field+"_pipeline_img1.sh"+" \n")
+                    f_out.write ("sh "+str_field+"_pipeline_det1.sh"+" \n")
+                    f_out.write ("sh "+str_field+"_pipeline_Src1.sh"+" \n")
+                    f_out.write ("cd "+git_dir+" \n")
+                    if not GE_name=='GE_e4_merge_SimBKG':
+                        f_out.write ("python photon_matching_RS.py "+GE_name+" "+str_field +" \n")
+                    f_out.write('# ====='+" \n")
+            f_out.close()
+            print(out_im1, 'written')
 
 
