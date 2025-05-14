@@ -34,7 +34,7 @@ for GE_name in GE_names:
     print(GE_name)
     to_process = (sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat']==False)
     print(len(sky_map_hdu[to_process]), 'tiles to process')
-    if len(len(sky_map_hdu[to_process]))>0:
+    if len(sky_map_hdu[to_process])>0:
         out_im1 = os.path.join(os.environ['GIT_STMOD'], 'src/esass', 'runs', GE_name + '_processing.sh')
         f_out = open(out_im1, 'w')
         f_out.write("""#!/bin/bash/ \n""")

@@ -30,6 +30,9 @@ nohup python make_summary_skymap.py GE_e4_merge_SimBKG_CLUseed001            > l
 # Done until field 48
 python write_exec_loop.py > exec.sh
 
+cd $GIT_STMOD/src/esass/runs
+
+
 # execute eSASS commands on test field:
 cd /home/idies/workspace/erosim/Uchuu/LCerass/121048/GE_e4_merge_AGNseed001_SimBKG/eSASS
 sh 121048_pipeline_img1.sh # DONE
