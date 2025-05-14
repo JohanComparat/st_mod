@@ -25,22 +25,25 @@ sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models
 
 GE_names = ['GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG']
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][2:48]:
+#for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][2:48]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][48:]:
     sky_tile_id = str(sky_tile['SRVMAP'])
     str_field = str(sky_tile['SRVMAP']).zfill(6)
 
     for GE_name in GE_names:
         indir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", str_field, GE_name)
-        esass_dir = os.path.join(indir, 'eSASS')
-        git_dir = os.path.join(os.environ['GIT_STMOD'], 'src/esass' )
-        print ("cd "+esass_dir )
-        print ("sh "+str_field+"_pipeline_img1.sh")
-        print ("sh "+str_field+"_pipeline_det1.sh")
-        print ("sh "+str_field+"_pipeline_Src1.sh")
-        print ("cd "+git_dir)
-        if not GE_name=='GE_e4_merge_SimBKG':
-            print ("python photon_matching_RS.py "+GE_name+" "+str_field )
-        print('# =====')
+        path_2_event_file = os.path.join(indir, 'evt_'+str_field+'.fits')
+        if os.path.isfile(path_2_event_file):
+            esass_dir = os.path.join(indir, 'eSASS')
+            git_dir = os.path.join(os.environ['GIT_STMOD'], 'src/esass' )
+            print ("cd "+esass_dir )
+            print ("sh "+str_field+"_pipeline_img1.sh")
+            print ("sh "+str_field+"_pipeline_det1.sh")
+            print ("sh "+str_field+"_pipeline_Src1.sh")
+            print ("cd "+git_dir)
+            if not GE_name=='GE_e4_merge_SimBKG':
+                print ("python photon_matching_RS.py "+GE_name+" "+str_field )
+            print('# =====')
 
 
 

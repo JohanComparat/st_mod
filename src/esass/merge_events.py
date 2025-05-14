@@ -65,6 +65,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 			, np.sum(hdul_raw['GTI7'].data['STOP']-hdul_raw['GTI7'].data['START']) ])
 	N_ev_OBS = len(hdul_raw['EVENTS'].data)
 	hdul = fits.open(evt_list[0])
+	hdul['EVENTS'].data['RA'][hdul['EVENTS'].data['RA']==0]=1e-6
 	SRV_ev = np.array([get_srvmap(e0,e1) for e0,e1 in zip(hdul['EVENTS'].data['RA'], hdul['EVENTS'].data['DEC']) ])
 	to_replace = ( np.hstack((SRV_ev)) == sky_tile['SRVMAP'] )
 	ids_to_replace = np.arange(len(to_replace))[to_replace]
