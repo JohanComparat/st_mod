@@ -1,10 +1,23 @@
 """
 
-Pre-rpocess sixte event files to input eSASS
 
-Adapted from bash to python
+Documentation
 
-Based on the Script from Teng Liu
+Description of what the function does.
+Pre-process sixte event files to input eSASS
+
+Parameters
+----------
+	arg_1 : expected type of arg_1    Description of arg_1.
+	arg_2 : int, optional    Write optional when an argument has a default value.    Default=42.
+
+Returns
+-------
+
+The type of the return value
+Can include a description of the return value.
+Replace "Returns" with "Yields" if this function is a generator.
+
 
 """
 import os, sys, glob
