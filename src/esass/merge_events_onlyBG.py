@@ -21,7 +21,7 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1]:
 	print(sky_tile)
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
@@ -36,11 +36,11 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	path_2_simeventAGN_file = os.path.join(esass_dir, 'simAGNevt_'+str_field+'.fits')
 	path_2_simeventCLU_file = os.path.join(esass_dir, 'simCLUevt_'+str_field+'.fits')
 	path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_'+str_field+'.fits')
-	if len(evt_list)==0 or os.path.isfile(path_2_event_file):
-		print('continue', len(evt_list)==0, os.path.isfile(path_2_event_file))
-		continue
-	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG' ) # 'evt_particle_???.fits' )
-	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, 'evt_particle_???.fits' ) ) )
+	#if len(evt_list)==0 or os.path.isfile(path_2_event_file):
+		#print('continue', len(evt_list)==0, os.path.isfile(path_2_event_file))
+		#continue
+	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG2' ) # 'evt_particle_???.fits' )
+	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, '*.fits' ) ) )
 	if len(BG_evt_files)==0:
 		print('continue', len(BG_evt_files), 'no BG files')
 		continue
@@ -60,7 +60,14 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	to_replace = ( np.hstack((SRV_ev)) == sky_tile['SRVMAP'] )
 	ids_to_replace = np.arange(len(to_replace))[to_replace]
 	N_ev_OBS = len(ids_to_replace)
-	bg_all = vstack(([Table.read(el) for el in BG_evt_files]))
+	bg_all = []
+	for el in BG_evt_files:
+		tt0 = Table.read(el)
+		tt0['TM_NR'] = int(os.path.basename(el).split('_')[-2][-1])
+		tt0.keep_columns(['RA', 'DEC','RAWX', 'RAWY', 'PHA', 'SIGNAL', 'TM_NR'])
+		bg_all.append(tt0)
+	bg_all = vstack((bg_all))
+
 	if N_ev_OBS>len(bg_all):
 		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_OBS, 'are needed')
 		continue
@@ -85,7 +92,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	for fn in fi_up:
 		hdul['EVENTS'].data[fn][ids_to_replace] = data_B[fn]
 
-	hdul['EVENTS'].data['PI'][ids_to_replace] = data_B['ENERGY']
+	fn='SIGNAL'
+	hdul['EVENTS'].data['PI'][ids_to_replace] = 1000.*data_B[fn][:N_ev_OBS]
 
 	hdul.writeto(path_2_event_file, overwrite=True)
 	print(path_2_event_file)

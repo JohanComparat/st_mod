@@ -77,17 +77,30 @@ export OMP_NUM_THREADS=8
 # nohup python extract_erosita_tile_glist.py 24 > logs/extract_erosita_tile_24.log & # DONE 'z1p65',
 # nohup python extract_erosita_tile_glist.py 25 > logs/extract_erosita_tile_25.log & # DONE 'z1p77',
 # nohup python extract_erosita_tile_glist.py 26 > logs/extract_erosita_tile_26.log & # DONE 'z1p90',
-nohup python extract_erosita_tile_glist.py 27 > logs/extract_erosita_tile_27.log & # ONGOING 'z2p03',
-nohup python extract_erosita_tile_glist.py 28 > logs/extract_erosita_tile_28.log & # ONGOING 'z2p17',
-nohup python extract_erosita_tile_glist.py 29 > logs/extract_erosita_tile_29.log & # ONGOING 'z2p31',
-nohup python extract_erosita_tile_glist.py 30 > logs/extract_erosita_tile_30.log & # ONGOING 'z2p46',
-nohup python extract_erosita_tile_glist.py 31 > logs/extract_erosita_tile_31.log & # TODO 'z2p62',
-nohup python extract_erosita_tile_glist.py 32 > logs/extract_erosita_tile_32.log & # TODO 'z2p78',
-nohup python extract_erosita_tile_glist.py 33 > logs/extract_erosita_tile_33.log & # TODO 'z2p95',
-nohup python extract_erosita_tile_glist.py 34 > logs/extract_erosita_tile_34.log & # TODO 'z3p13',
-nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log & # TODO 'z3p32',
-nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log & # DONE 'z3p61',
+nohup python extract_erosita_tile_glist.py 27 > logs/extract_erosita_tile_27.log & # ONGOING job 1 sciserver 'z2p03',
+nohup python extract_erosita_tile_glist.py 28 > logs/extract_erosita_tile_28.log & # ONGOING job 1 sciserver 'z2p17',
+nohup python extract_erosita_tile_glist.py 29 > logs/extract_erosita_tile_29.log & # ONGOING job 1 sciserver 'z2p31',
+nohup python extract_erosita_tile_glist.py 30 > logs/extract_erosita_tile_30.log & # ONGOING job 1 sciserver 'z2p46',
+nohup python extract_erosita_tile_glist.py 31 > logs/extract_erosita_tile_31.log & # ONGOING job 2 sciserver 'z2p62',
+nohup python extract_erosita_tile_glist.py 32 > logs/extract_erosita_tile_32.log & # ONGOING job 2 sciserver 'z2p78',
+nohup python extract_erosita_tile_glist.py 33 > logs/extract_erosita_tile_33.log & # ONGOING job 2 sciserver 'z2p95',
+nohup python extract_erosita_tile_glist.py 34 > logs/extract_erosita_tile_34.log & # ONGOING job 2 sciserver 'z3p13',
+nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log & # ONGOING job 2 sciserver 'z3p32',
+nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log & # ONGOING job 2 sciserver 'z3p61',
 # nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log & # DONE 'z3p93',
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/sixte_GAS/
+export OMP_NUM_THREADS=8
+python extract_erosita_tile_glist.py 31
+python extract_erosita_tile_glist.py 32
+python extract_erosita_tile_glist.py 33
+python extract_erosita_tile_glist.py 34
+python extract_erosita_tile_glist.py 35
+python extract_erosita_tile_glist.py 36
+
 
 TODO : extract files with the cluster model computed
 

@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 nl = lambda sel : len(sel.nonzero()[0])
 
-agn_seed = sys.argv[1] # 1
+agn_seed =  sys.argv[1] # 1
 
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
@@ -39,8 +39,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	if len(evt_list)==0 or os.path.isfile(path_2_event_file):
 		print('continue', len(evt_list)==0, os.path.isfile(path_2_event_file))
 		continue
-	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG' ) # 'evt_particle_???.fits' )
-	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, 'evt_particle_???.fits' ) ) )
+	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG2' ) # 'evt_particle_???.fits' )
+	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, '*.fits' ) ) )
 	if len(BG_evt_files)==0:
 		print('continue', len(BG_evt_files), 'no BG files')
 		continue
@@ -61,8 +61,13 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	N_ev_OBS = len(ids_to_replace)
 	agn_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, "eRASS8_SEED_"+agn_seed.zfill(3) +"_events_AGN_2025_04" )
 
-	bg_all = vstack(([Table.read(el) for el in BG_evt_files]))
-	bg_all['TIME'].min()
+	bg_all = []
+	for el in BG_evt_files:
+		tt0 = Table.read(el)
+		tt0['TM_NR'] = int(os.path.basename(el).split('_')[-2][-1])
+		tt0.keep_columns(['RA', 'DEC','RAWX', 'RAWY', 'PHA', 'SIGNAL', 'TM_NR'])
+		bg_all.append(tt0)
+	bg_all = vstack((bg_all))
 
 	N_evs = []
 	for NCCD, tEXP in zip(n.arange(7)+1, texps):
@@ -115,7 +120,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		hdul['EVENTS'].data[fn][ids_to_replace] = np.hstack((data_A[fn], data_B[fn]))[:N_ev_OBS]
 
 	fn='SIGNAL'
-	hdul['EVENTS'].data['PI'][ids_to_replace] = 1000.*np.hstack((data_A[fn], data_B['ENERGY']/1000.))[:N_ev_OBS]
+	hdul['EVENTS'].data['PI'][ids_to_replace] = 1000.*np.hstack((data_A[fn], data_B[fn]))[:N_ev_OBS]
 
 	hdul.writeto(path_2_event_file, overwrite=True)
 	print(path_2_event_file)
