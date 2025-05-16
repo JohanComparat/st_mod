@@ -6,10 +6,10 @@ export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/sixte_fgbg/
 
-# ONGOING
+# Deprecated. Needs updating to input stars !
 # recast events into the erosita fields
-~/workspace/erosim/sixte_output_events/eRASS8_stars
-python extract_erosita_tile_stars.py # DONE
+# ~/workspace/erosim/sixte_output_events/eRASS8_stars
+# python extract_erosita_tile_stars.py # DONE
 # # re-casts these files :
 # simulated_photons_ccd1.fits
 # simulated_photons_ccd2.fits
@@ -19,22 +19,24 @@ python extract_erosita_tile_stars.py # DONE
 # simulated_photons_ccd6.fits
 # simulated_photons_ccd7.fits
 
-# ONGOING
-# recast events into the erosita fields
-# need to work per field, summary file would be too big
-cd ~/workspace/erosim/sixte_output_events/eRASS8_ParticleBackground
-rsync -avz joco@raven.mpcdf.mpg.de:/ptmp/joco/erosim/sixte_output_events/eRASS8_ParticleBackground/evt_particle_???.fits . # ONGOING
-python extract_erosita_tile_BG.py  # Deprecated
-python extract_erosita_tile_BG_v2.py  # DONE
+# # Deprecated
+# # recast events into the erosita fields
+# # need to work per field, summary file would be too big
+# cd ~/workspace/erosim/sixte_output_events/eRASS8_ParticleBackground
+# rsync -avz joco@raven.mpcdf.mpg.de:/ptmp/joco/erosim/sixte_output_events/eRASS8_ParticleBackground/evt_particle_???.fits . # ONGOING
+# python extract_erosita_tile_BG.py  # Deprecated
+
 
 
 #
-# ONGOING, generation of FG/BG events by re-sampling
+# DONE, generation of FG/BG events by re-sampling observations (source masked and interpolated in the mask)
 #
 ~/workspace/erosim/simput/bkg_erosita_simput_full_sky$
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/sixte_fgbg/
-# event generation ongoing
-# see readme_sixte_bg.sh
+# event generation :
+readme_sixte_bg.sh
+
+# DONE
