@@ -9,7 +9,7 @@ BG model files are here :
 catalog.fits has the full map
 
 # in any container with python
-nohup python merge_events_onlyBG.py  > logs/merge_events_onlyBG.log  & # TODO
+nohup python merge_events_onlyBG.py  > logs/merge_events_onlyBG.log  & # RUNNING job
 
 nohup python merge_events_e5.py 1 1     > logs/merge_events_1_1.log  & # TODO
 nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # TODO
