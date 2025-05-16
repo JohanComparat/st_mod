@@ -72,6 +72,7 @@ for p_2_catalogue in p_2_catalogues:
     t_in['RA'][t_in['RA']==360.]=359.999999
     t_in['RA'][t_in['RA']==0.]=0.000001
     t_in['DEC'][t_in['DEC']==90.]=89.999999
+    t_in['DEC'][t_in['DEC']==-90.]=-89.999999
     if len(t_in)>0:
         t_in['SRVMAP'] = np.array([get_srvmap(ra, dec)[0] for (ra, dec) in zip(t_in['RA'], t_in['DEC']) ])
         U_srvmap_val = np.unique(t_in['SRVMAP'])
