@@ -24,7 +24,8 @@ python extract_erosita_tile_stars.py # DONE
 # need to work per field, summary file would be too big
 cd ~/workspace/erosim/sixte_output_events/eRASS8_ParticleBackground
 rsync -avz joco@raven.mpcdf.mpg.de:/ptmp/joco/erosim/sixte_output_events/eRASS8_ParticleBackground/evt_particle_???.fits . # ONGOING
-python extract_erosita_tile_BG.py  # DONE first 95 tiles. Remaining ONGOING
+python extract_erosita_tile_BG.py  # Deprecated
+python extract_erosita_tile_BG_v2.py  # DONE
 
 
 #

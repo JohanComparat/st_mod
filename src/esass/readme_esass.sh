@@ -4,19 +4,85 @@ export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
 
+BG model files are here :
+~/workspace/erosim/simput/bkg_erosita_simput_full_sky
+catalog.fits has the full map
+
 # in any container with python
-nohup python merge_events_e5.py 1 1     > logs/merge_events_1_1.log  & # DELETE outputs and restart in jobs
-nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # DELETE outputs and restart in jobs
-nohup python merge_events_noAGN.py 1 > logs/merge_events_noAGN_1.log & # DELETE outputs and restart in jobs
-nohup python merge_events_onlyBG.py  > logs/merge_events_onlyBG.log  & # DELETE outputs and restart in jobs
+nohup python merge_events_onlyBG.py  > logs/merge_events_onlyBG.log  & # TODO
 
-nohup python merge_events_e5.py 2 2     > logs/merge_events_2_2.log  & # TO START IN JOBS
-nohup python merge_events_noCLU.py 2 > logs/merge_events_noCLU_2.log & # TO START IN JOBS
-nohup python merge_events_noAGN.py 2 > logs/merge_events_noAGN_2.log & # TO START IN JOBS
+nohup python merge_events_e5.py 1 1     > logs/merge_events_1_1.log  & # TODO
+nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # TODO
+nohup python merge_events_noAGN.py 1 > logs/merge_events_noAGN_1.log & # TODO
 
-nohup python merge_events_e5.py 3 3     > logs/merge_events_3_3.log  & # TO START IN JOBS
-nohup python merge_events_noCLU.py 3 > logs/merge_events_noCLU_3.log & # TO START IN JOBS
-nohup python merge_events_noAGN.py 3 > logs/merge_events_noAGN_3.log & # TO START IN JOBS
+nohup python merge_events_e5.py 2 2     > logs/merge_events_2_2.log  & # TODO
+nohup python merge_events_noCLU.py 2 > logs/merge_events_noCLU_2.log & # TODO
+nohup python merge_events_noAGN.py 2 > logs/merge_events_noAGN_2.log & # TODO
+
+nohup python merge_events_e5.py 3 3     > logs/merge_events_3_3.log  & # TODO
+nohup python merge_events_noCLU.py 3 > logs/merge_events_noCLU_3.log & # TODO
+nohup python merge_events_noAGN.py 3 > logs/merge_events_noAGN_3.log & # TODO
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_onlyBG.py
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_e5.py 1 1
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_noCLU.py 1
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_noAGN.py 1
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_e5.py 2 2
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_noCLU.py 2
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_noAGN.py 2
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_e5.py 3 3
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_noAGN.py 3
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python merge_events_noAGN.py 3
+
 
 
 GE_e4_merge_AGNseed001_SimBKG : AGN + BKG
