@@ -36,9 +36,9 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	path_2_simeventAGN_file = os.path.join(esass_dir, 'simAGNevt_'+str_field+'.fits')
 	path_2_simeventCLU_file = os.path.join(esass_dir, 'simCLUevt_'+str_field+'.fits')
 	path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_'+str_field+'.fits')
-	#if len(evt_list)==0 or os.path.isfile(path_2_event_file):
-		#print('continue', len(evt_list)==0, os.path.isfile(path_2_event_file))
-		#continue
+	if len(evt_list)==0 or os.path.isfile(path_2_event_file):
+		print('continue', len(evt_list)==0, os.path.isfile(path_2_event_file))
+		continue
 	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG2' ) # 'evt_particle_???.fits' )
 	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, '*.fits' ) ) )
 	if len(BG_evt_files)==0:

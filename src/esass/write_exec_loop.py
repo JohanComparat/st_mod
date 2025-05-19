@@ -5,7 +5,11 @@ from astropy.table import Table, vstack
 import astropy.io.fits as fits
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
-GE_names = ['GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG']
+GE_names = ['GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001',
+            'GE_e4_merge_AGNseed002_SimBKG', 'GE_e4_merge_AGNseed002_SimBKG_CLUseed002', 'GE_e4_merge_SimBKG_CLUseed002',
+            'GE_e4_merge_AGNseed003_SimBKG', 'GE_e4_merge_AGNseed003_SimBKG_CLUseed003', 'GE_e4_merge_SimBKG_CLUseed003',
+            'GE_e4_merge_SimBKG',
+            ]
 SKYMAP = {}
 for GE_name in GE_names:
     SKYMAP[GE_name] = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+GE_name+'.fits'))
