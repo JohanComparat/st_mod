@@ -85,7 +85,7 @@ nohup python extract_erosita_tile_XGAS.py 19 > logs/extract_erosita_tile_XGAS_19
 nohup python extract_erosita_tile_XGAS.py 20 > logs/extract_erosita_tile_XGAS_20.log & # DONE
 nohup python extract_erosita_tile_XGAS.py 21 > logs/extract_erosita_tile_XGAS_21.log & # DONE
 nohup python extract_erosita_tile_XGAS.py 22 > logs/extract_erosita_tile_XGAS_22.log & # DONE
-python merge_erosita_tile_XGAS.py # TODO
+python merge_erosita_tile_XGAS.py # DONE
 
 
 
@@ -134,7 +134,7 @@ nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log
 nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log & # ONGOING 'z3p61',
 # nohup python extract_erosita_tile_glist.py 37 > logs/extract_erosita_tile_37.log & # DONE 'z3p93',
 
-python merge_erosita_tile_glist.py # TODO
+python merge_erosita_tile_glist.py # DONE until z<2.5
 
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
