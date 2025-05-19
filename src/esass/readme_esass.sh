@@ -144,6 +144,13 @@ sh GE_e4_merge_SimBKG_CLUseed001_processing_0000.sh             > logs/GE_e4_mer
 sh GE_e4_merge_SimBKG_processing_0000.sh                        > logs/GE_e4_merge_SimBKG_processing_0000.log                       & # running
 
 
+cd /home/idies/workspace/erosim/Uchuu/LCerass/121048/GE_e4_merge_AGNseed001_SimBKG_CLUseed001/eSASS
+sh 121048_pipeline_img1.sh
+sh 121048_pipeline_det1.sh
+sh 121048_pipeline_Src1.sh
+cd /home/idies/workspace/erosim/software/st_mod/src/esass
+python photon_matching_RS.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001 121048
+
 
 # test field
 # execute eSASS commands on test field:

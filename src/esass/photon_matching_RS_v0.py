@@ -1,11 +1,3 @@
-'''
-Photon based input output matches for erosita simulations
-Takes simulation directory and tile number as input, for example:
-
-python photon_matching_RS.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001 121048
-
-R. Seppi (19.05.2025)
-'''
 import sys, os, glob
 import numpy as np
 from astropy.table import Table,vstack
@@ -13,7 +5,6 @@ from astropy.io import fits
 from sklearn.neighbors import BallTree
 from astropy.io import ascii
 from scipy import stats
-
 
 MinTotalCts = 2.
 poiss_ppf = 0.8
@@ -100,12 +91,12 @@ else:
 Evt_Bkg = None
 if os.path.isfile(p_2_evt_bkg):
     Evt_Bkg = Table.read(p_2_evt_bkg)
-    sel_bkg = (Evt_Bkg['SIGNAL'] > 0.2) & (Evt_Bkg['SIGNAL'] < 2.3)
+    sel_bkg = (Evt_Bkg['ENERGY'] / 1000. > 0.2) & (Evt_Bkg['ENERGY'] / 1000. < 2.3)
     Evt_Bkg = Evt_Bkg[sel_bkg]
 
 # Combine all events and assign SRC_ID = -1 to background
 if Evt_Src is not None and Evt_Bkg is not None:
-    event_energy = np.hstack((Evt_Src['SIGNAL'], Evt_Bkg['SIGNAL']))
+    event_energy = np.hstack((Evt_Src['SIGNAL'], Evt_Bkg['ENERGY'] / 1000.))
     event_src_id = np.hstack((Evt_Src['SRC_ID'].T[0], -1 * np.ones(len(Evt_Bkg))))
     event_ra     = np.hstack((Evt_Src['RA'], Evt_Bkg['RA']))
     event_dec    = np.hstack((Evt_Src['DEC'], Evt_Bkg['DEC']))
@@ -115,7 +106,7 @@ elif Evt_Src is not None:
     event_ra     = Evt_Src['RA']
     event_dec    = Evt_Src['DEC']
 elif Evt_Bkg is not None:
-    event_energy = Evt_Bkg['SIGNAL']
+    event_energy = Evt_Bkg['ENERGY'] / 1000.
     event_src_id = -1 * np.ones(len(Evt_Bkg))
     event_ra     = Evt_Bkg['RA']
     event_dec    = Evt_Bkg['DEC']
@@ -159,8 +150,8 @@ else:
 #Evt_Bkg = Evt_Bkg[sel_02_23]
 
 # group photons from sources and bkg, select the 0.2-2.3 keV, assign srcid=-1 to bkg
-event_energy = np.hstack((Evt_Src['SIGNAL'], Evt_Bkg['SIGNAL']))
-event_src_id = np.hstack((Evt_Src['SRC_ID'].T[0], -1 * np.ones_like(Evt_Bkg['SIGNAL'])))
+event_energy = np.hstack((Evt_Src['SIGNAL'], Evt_Bkg['ENERGY']/1000.))
+event_src_id = np.hstack((Evt_Src['SRC_ID'].T[0], -1 * np.ones_like(Evt_Bkg['ENERGY']/1000.)))
 event_ra = np.hstack((Evt_Src['RA'], Evt_Bkg['RA']))
 event_dec = np.hstack((Evt_Src['DEC'], Evt_Bkg['DEC']))
 
