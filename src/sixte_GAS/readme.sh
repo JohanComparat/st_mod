@@ -76,7 +76,7 @@ nohup python extract_erosita_tile_XGAS.py 10 > logs/extract_erosita_tile_XGAS_10
 nohup python extract_erosita_tile_XGAS.py 11 > logs/extract_erosita_tile_XGAS_11.log & # DONE
 nohup python extract_erosita_tile_XGAS.py 12 > logs/extract_erosita_tile_XGAS_12.log & # DONE
 nohup python extract_erosita_tile_XGAS.py 13 > logs/extract_erosita_tile_XGAS_13.log & # DONE
-nohup python extract_erosita_tile_XGAS.py 14 > logs/extract_erosita_tile_XGAS_14.log & # ONGOING
+nohup python extract_erosita_tile_XGAS.py 14 > logs/extract_erosita_tile_XGAS_14.log & # DONE
 nohup python extract_erosita_tile_XGAS.py 15 > logs/extract_erosita_tile_XGAS_15.log & # DONE
 nohup python extract_erosita_tile_XGAS.py 16 > logs/extract_erosita_tile_XGAS_16.log & # DONE
 nohup python extract_erosita_tile_XGAS.py 17 > logs/extract_erosita_tile_XGAS_17.log & # DONE
@@ -87,7 +87,8 @@ nohup python extract_erosita_tile_XGAS.py 21 > logs/extract_erosita_tile_XGAS_21
 nohup python extract_erosita_tile_XGAS.py 22 > logs/extract_erosita_tile_XGAS_22.log & # DONE
 python merge_erosita_tile_XGAS.py # TODO
 
-# makes the image library for the galaxy cluster Uchuu run
+
+
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
