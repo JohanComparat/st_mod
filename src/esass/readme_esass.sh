@@ -8,6 +8,9 @@ BG model files are here :
 ~/workspace/erosim/simput/bkg_erosita_simput_full_sky
 catalog.fits has the full map
 
+# make a sky map with input files
+python make_summarySimEvt_skymap.py
+
 # in any container with python
 nohup python merge_events_onlyBG.py  > logs/merge_events_onlyBG.log  & # DONE
 

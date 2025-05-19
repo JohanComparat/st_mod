@@ -23,10 +23,10 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][319:]:
-	print(sky_tile)
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][543:544]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
+	print(str_field)
 	evt_list = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's4_c030', '*_Image_c030.fits.gz' ) ) )
 	log_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'logs-erass8')
 	os.system('mkdir -p '+log_dir)
@@ -85,10 +85,10 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	f_BKG = 0.98
 	f_CLU = 0.02
 	NC, NB = np.transpose(N_evs).sum(axis=1)
-	N_ev_B = int(1. * N_ev_OBS/7)+1
+	N_ev_B = N_ev_OBS + 1
 	N_ev_C = int(f_CLU * N_ev_OBS/7)+1
 
-	if N_ev_B*7>len(bg_all):
+	if N_ev_B>len(bg_all):
 		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B*7, 'are needed')
 		continue
 
@@ -105,18 +105,23 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 			id_C = np.arange(len(hdu_C[1].data))
 		data_C.append( Table(hdu_C['EVENTS'].data[id_C]) )
 
-		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
-		if N_ev_B<len(bg_tm):
-			id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
-			data_B.append( bg_tm[id_B] )
-		else:
-			print('continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
-			continue
-
+	id_B = np.arange(len(bg_all))
+	np.random.shuffle(id_B)
+	if N_ev_B<len(bg_all):
+		id_B = np.random.choice(np.arange(len(bg_all)), size = N_ev_B, replace = False)
+		data_B.append( bg_all[id_B] )
+	else:
+		print('continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
+		data_B.append( bg_all )
+		continue
 
 	data_C = vstack((data_C))
 	data_B = vstack((data_B))
 	data_B = data_B[:N_ev_OBS-len(data_C)]
+
+	if len(np.hstack((data_C['RA'], data_B['RA'])))<N_ev_OBS:
+		print('continue', 'not enough events overall')
+		continue
 
 	fi_up = ['RA', 'DEC','RAWX', 'RAWY', 'PHA']#, 'X', 'Y']
 	for fn in fi_up:
