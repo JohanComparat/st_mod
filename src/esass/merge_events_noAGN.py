@@ -23,7 +23,7 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][543:544]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][544:]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
@@ -89,7 +89,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	N_ev_C = int(f_CLU * N_ev_OBS/7)+1
 
 	if N_ev_B>len(bg_all):
-		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B*7, 'are needed')
+		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B, 'are needed')
 		continue
 
 	data_C = []

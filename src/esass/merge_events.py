@@ -122,11 +122,11 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	f_CLU = 0.019
 	NA, NC, NB = np.transpose(N_evs).sum(axis=1)
 	N_ev_A = int(f_AGN * N_ev_OBS/7)+1
-	N_ev_B = int(1. * N_ev_OBS/7)+1
+	N_ev_B = N_ev_OBS + 1
 	N_ev_C = int(f_CLU * N_ev_OBS/7)+1
 	#frac_all = N_ev_OBS / np.sum(N_evs)+0.01
-	if N_ev_B*7>len(bg_all):
-		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B*7, 'are needed')
+	if N_ev_B>len(bg_all):
+		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B, 'are needed')
 		continue
 
 	data_A = []
@@ -159,14 +159,16 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		#id_S = np.random.choice(np.arange(len(hdu_S[1].data)), size = N_ev_S, replace = False)
 		#data_S.append( Table(hdu_S[1].data[id_S]) )
 
-		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
-		#N_ev_B = int(len(bg_tm) * frac_all) + 100
-		if len(bg_tm)>N_ev_B:
-			id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
-			data_B.append( bg_tm[id_B] )
-		else:
-			print('continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
-			continue
+	id_B = np.arange(len(bg_all))
+	np.random.shuffle(id_B)
+	if N_ev_B<len(bg_all):
+		id_B = np.random.choice(np.arange(len(bg_all)), size = N_ev_B, replace = False)
+		data_B.append( bg_all[id_B] )
+	else:
+		print('continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
+		data_B.append( bg_all )
+		continue
+
 
 	data_A = vstack((data_A))
 	data_C = vstack((data_C))
