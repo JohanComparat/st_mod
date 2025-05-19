@@ -86,7 +86,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	f_BKG = 0.90
 	NA, NB = np.transpose(N_evs).sum(axis=1)
 	N_ev_A = int(f_AGN * N_ev_OBS/7)+1
-	N_ev_B = int(0.95 * N_ev_OBS/7)+1
+	N_ev_B = int(1. * N_ev_OBS/7)+1
 
 	if N_ev_B*7>len(bg_all):
 		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B*7, 'are needed')
@@ -99,8 +99,11 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		agn_evt_files = n.array( glob.glob( os.path.join( agn_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
 
 		hdu_A = fits.open(agn_evt_files[0])
-		id_A = np.random.choice(np.arange(len(hdu_A[1].data)), size = N_ev_A, replace = False)
-		data_A.append( Table(hdu_A['EVENTS'].data[id_A]) )
+		if len(hdu_A[1].data) >= N_ev_A :
+			id_A = np.random.choice(np.arange(len(hdu_A[1].data)), size = N_ev_A, replace = False)
+			data_A.append( Table(hdu_A['EVENTS'].data[id_A]) )
+		else:
+			data_A.append( Table(hdu_A['EVENTS'].data) )
 
 		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
 		if N_ev_B<len(bg_tm):

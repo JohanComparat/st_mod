@@ -46,9 +46,9 @@ def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
 for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
-	print(sky_tile)
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
+	print(str_field)
 	evt_list = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's4_c030', '*_Image_c030.fits.gz' ) ) )
 	log_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'logs-erass8')
 	os.system('mkdir -p '+log_dir)
@@ -76,7 +76,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 			, np.sum(hdul_raw['GTI5'].data['STOP']-hdul_raw['GTI5'].data['START'])
 			, np.sum(hdul_raw['GTI6'].data['STOP']-hdul_raw['GTI6'].data['START'])
 			, np.sum(hdul_raw['GTI7'].data['STOP']-hdul_raw['GTI7'].data['START']) ])
-	N_ev_OBS = len(hdul_raw['EVENTS'].data)
+	#N_ev_OBS = len(hdul_raw['EVENTS'].data)
 	hdul = fits.open(evt_list[0])
 	hdul['EVENTS'].data['RA'][hdul['EVENTS'].data['RA']==0]=1e-6
 	SRV_ev = np.array([get_srvmap(e0,e1) for e0,e1 in zip(hdul['EVENTS'].data['RA'], hdul['EVENTS'].data['DEC']) ])
@@ -122,7 +122,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	f_CLU = 0.019
 	NA, NC, NB = np.transpose(N_evs).sum(axis=1)
 	N_ev_A = int(f_AGN * N_ev_OBS/7)+1
-	N_ev_B = int(0.95 * N_ev_OBS/7)+1
+	N_ev_B = int(1. * N_ev_OBS/7)+1
 	N_ev_C = int(f_CLU * N_ev_OBS/7)+1
 	#frac_all = N_ev_OBS / np.sum(N_evs)+0.01
 	if N_ev_B*7>len(bg_all):
@@ -140,16 +140,19 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		ST_evt_files = n.array( glob.glob( os.path.join( stars_dir, 'simulated_photons_ccd' + str(NCCD) + '.fits' ) ) )
 		hdu_A = fits.open(agn_evt_files[0])
 		#N_ev_A = int(len(hdu_A[1].data) * frac_all) + 20
-		id_A = np.random.choice(np.arange(len(hdu_A[1].data)), size = N_ev_A, replace = False)
-		data_A.append( Table(hdu_A['EVENTS'].data[id_A]) )
+		if len(hdu_A[1].data) >= N_ev_A :
+			id_A = np.random.choice(np.arange(len(hdu_A[1].data)), size = N_ev_A, replace = False)
+			data_A.append( Table(hdu_A['EVENTS'].data[id_A]) )
+		else:
+			data_A.append( Table(hdu_A['EVENTS'].data) )
 
 		hdu_C = fits.open(CL_evt_files[0])
 		#N_ev_C = int(len(hdu_C[1].data) * frac_all) + 20
-		if N_ev_C<=len(hdu_C[1].data):
+		if len(hdu_C[1].data) >= N_ev_C :
 			id_C = np.random.choice(np.arange(len(hdu_C[1].data)), size = N_ev_C, replace = False)
+			data_C.append( Table(hdu_C['EVENTS'].data[id_C]) )
 		else:
-			id_C = np.arange(len(hdu_C[1].data))
-		data_C.append( Table(hdu_C['EVENTS'].data[id_C]) )
+			data_C.append( Table(hdu_C['EVENTS'].data) )
 
 		#hdu_S = fits.open(ST_evt_files[0])
 		#N_ev_S = int(len(hdu_S[1].data) * frac_all) +1
@@ -158,7 +161,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
 		#N_ev_B = int(len(bg_tm) * frac_all) + 100
-		if N_ev_B<len(bg_tm):
+		if len(bg_tm)>N_ev_B:
 			id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
 			data_B.append( bg_tm[id_B] )
 		else:

@@ -66,7 +66,7 @@ python format_simput_AGN.py # DONE
 # simulates events with seed fixed to 001
 # only does the first tile : 121048
 python simulate_AGN_only_SEED_SKYMAP.py # DONE
-# DONE for seeds 1,2,3,4,5,6
+# DONE for seeds 1,2,3,4,5,6,7,8
 # ONGOING SEED 7, 8
 
 ls /home/idies/workspace/erosim/Uchuu/LCerass/??????/eRASS8_SEED_001_events_AGN_2025_04/t0erass_ccd1_evt.fits > list_agn_ccd1.list

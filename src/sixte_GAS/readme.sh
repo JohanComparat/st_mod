@@ -69,22 +69,22 @@ nohup python extract_erosita_tile_XGAS.py 3  > logs/extract_erosita_tile_XGAS_3.
 nohup python extract_erosita_tile_XGAS.py 4  > logs/extract_erosita_tile_XGAS_4.log  & # DONE
 nohup python extract_erosita_tile_XGAS.py 5  > logs/extract_erosita_tile_XGAS_5.log  & # DONE
 nohup python extract_erosita_tile_XGAS.py 6  > logs/extract_erosita_tile_XGAS_6.log  & # DONE
-nohup python extract_erosita_tile_XGAS.py 7  > logs/extract_erosita_tile_XGAS_7.log  & # ONGOING
-nohup python extract_erosita_tile_XGAS.py 8  > logs/extract_erosita_tile_XGAS_8.log  & # ONGOING
-nohup python extract_erosita_tile_XGAS.py 9  > logs/extract_erosita_tile_XGAS_9.log  & # ONGOING
-nohup python extract_erosita_tile_XGAS.py 10 > logs/extract_erosita_tile_XGAS_10.log & # ONGOING
-nohup python extract_erosita_tile_XGAS.py 11 > logs/extract_erosita_tile_XGAS_11.log & # ONGOING
-nohup python extract_erosita_tile_XGAS.py 12 > logs/extract_erosita_tile_XGAS_12.log & # ONGOING
-nohup python extract_erosita_tile_XGAS.py 13 > logs/extract_erosita_tile_XGAS_13.log & # ONGOING
+nohup python extract_erosita_tile_XGAS.py 7  > logs/extract_erosita_tile_XGAS_7.log  & # DONE
+nohup python extract_erosita_tile_XGAS.py 8  > logs/extract_erosita_tile_XGAS_8.log  & # DONE
+nohup python extract_erosita_tile_XGAS.py 9  > logs/extract_erosita_tile_XGAS_9.log  & # DONE
+nohup python extract_erosita_tile_XGAS.py 10 > logs/extract_erosita_tile_XGAS_10.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 11 > logs/extract_erosita_tile_XGAS_11.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 12 > logs/extract_erosita_tile_XGAS_12.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 13 > logs/extract_erosita_tile_XGAS_13.log & # DONE
 nohup python extract_erosita_tile_XGAS.py 14 > logs/extract_erosita_tile_XGAS_14.log & # ONGOING
-nohup python extract_erosita_tile_XGAS.py 15 > logs/extract_erosita_tile_XGAS_15.log & # ONGOING
-nohup python extract_erosita_tile_XGAS.py 16 > logs/extract_erosita_tile_XGAS_16.log & # TODO
-nohup python extract_erosita_tile_XGAS.py 17 > logs/extract_erosita_tile_XGAS_17.log & # TODO
-nohup python extract_erosita_tile_XGAS.py 18 > logs/extract_erosita_tile_XGAS_18.log & # TODO
-nohup python extract_erosita_tile_XGAS.py 19 > logs/extract_erosita_tile_XGAS_19.log & # TODO
-nohup python extract_erosita_tile_XGAS.py 20 > logs/extract_erosita_tile_XGAS_20.log & # TODO
-nohup python extract_erosita_tile_XGAS.py 21 > logs/extract_erosita_tile_XGAS_21.log & # TODO
-nohup python extract_erosita_tile_XGAS.py 22 > logs/extract_erosita_tile_XGAS_22.log & # TODO
+nohup python extract_erosita_tile_XGAS.py 15 > logs/extract_erosita_tile_XGAS_15.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 16 > logs/extract_erosita_tile_XGAS_16.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 17 > logs/extract_erosita_tile_XGAS_17.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 18 > logs/extract_erosita_tile_XGAS_18.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 19 > logs/extract_erosita_tile_XGAS_19.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 20 > logs/extract_erosita_tile_XGAS_20.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 21 > logs/extract_erosita_tile_XGAS_21.log & # DONE
+nohup python extract_erosita_tile_XGAS.py 22 > logs/extract_erosita_tile_XGAS_22.log & # DONE
 python merge_erosita_tile_XGAS.py # TODO
 
 # makes the image library for the galaxy cluster Uchuu run
@@ -124,10 +124,10 @@ nohup python extract_erosita_tile_glist.py 26 > logs/extract_erosita_tile_26.log
 nohup python extract_erosita_tile_glist.py 27 > logs/extract_erosita_tile_27.log & # DONE 'z2p03',
 nohup python extract_erosita_tile_glist.py 28 > logs/extract_erosita_tile_28.log & # DONE 'z2p17',
 nohup python extract_erosita_tile_glist.py 29 > logs/extract_erosita_tile_29.log & # DONE 'z2p31',
-nohup python extract_erosita_tile_glist.py 30 > logs/extract_erosita_tile_30.log & # ONGOING 'z2p46',
+nohup python extract_erosita_tile_glist.py 30 > logs/extract_erosita_tile_30.log & # DONE 'z2p46',
 nohup python extract_erosita_tile_glist.py 31 > logs/extract_erosita_tile_31.log & # ONGOING 'z2p62',
 nohup python extract_erosita_tile_glist.py 32 > logs/extract_erosita_tile_32.log & # ONGOING 'z2p78',
-nohup python extract_erosita_tile_glist.py 33 > logs/extract_erosita_tile_33.log & # ONGOING 'z2p95',
+nohup python extract_erosita_tile_glist.py 33 > logs/extract_erosita_tile_33.log & # DONE 'z2p95',
 nohup python extract_erosita_tile_glist.py 34 > logs/extract_erosita_tile_34.log & # ONGOING 'z3p13',
 nohup python extract_erosita_tile_glist.py 35 > logs/extract_erosita_tile_35.log & # ONGOING 'z3p32',
 nohup python extract_erosita_tile_glist.py 36 > logs/extract_erosita_tile_36.log & # ONGOING 'z3p61',
