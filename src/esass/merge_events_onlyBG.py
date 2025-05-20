@@ -68,25 +68,13 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		bg_all.append(tt0)
 	bg_all = vstack((bg_all))
 
-	if N_ev_OBS>len(bg_all):
+	if len(bg_all)<N_ev_OBS:
 		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_OBS, 'are needed')
 		continue
 
-	N_ev_B = int(N_ev_OBS/7)+5
-	data_B = []
-
-	for NCCD, tEXP in zip(n.arange(7)+1, texps):
-		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
-		if N_ev_B<len(bg_tm):
-			id_B = np.random.choice(np.arange(len(bg_tm)), size = N_ev_B, replace = False)
-			data_B.append( bg_tm[id_B] )
-		else:
-			print('continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
-			continue
-
-	data_B = vstack((data_B))
-	data_B = data_B[:N_ev_OBS]
-	#data_S = vstack((data_S))
+	if len(bg_all)>=N_ev_OBS:
+		id_B = np.random.choice(np.arange(len(bg_all)), size = N_ev_OBS, replace = False)
+		data_B = bg_all[id_B]
 
 	fi_up = ['RA', 'DEC','RAWX', 'RAWY', 'PHA']#, 'X', 'Y']
 	for fn in fi_up:
