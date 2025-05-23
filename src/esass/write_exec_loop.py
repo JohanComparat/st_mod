@@ -19,6 +19,7 @@ SKYMAP = {}
 for GE_name in GE_names:
     SKYMAP[GE_name] = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+GE_name+'.fits'))
 
+datata = []
 #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][2:48]:
 for GE_name in GE_names:
     print('='*100)
@@ -28,6 +29,7 @@ for GE_name in GE_names:
     already_done = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat'])
     print(len(sky_map_hdu[to_process]), 'tiles to process')
     print(len(sky_map_hdu[already_done]), 'tiles already done')
+    datata.append([len(sky_map_hdu[to_process]), len(sky_map_hdu[already_done])])
     if len(sky_map_hdu[to_process])>0:
         for kk in np.arange(0, len(sky_map_hdu[to_process]), 50):
             out_im1 = os.path.join(os.environ['GIT_STMOD'], 'src/esass', 'runs', GE_name + '_processing_'+str(kk).zfill(4)+'.sh')
@@ -54,4 +56,7 @@ for GE_name in GE_names:
             f_out.close()
             print(out_im1, 'written')
 
-
+print('='*100)
+print('fields')
+print(np.transpose(datata)[0].sum(), 'todo')
+print(np.transpose(datata)[1].sum(), 'done')
