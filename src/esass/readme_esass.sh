@@ -15,35 +15,35 @@ python make_summarySimEvt_skymap.py # DONE, OK, all files are there.
 nohup python merge_events_onlyBG.py  > logs/merge_events_onlyBG.log  & # ONGOING
 
 nohup python merge_events.py 1 1     > logs/merge_events_1_1.log  & # ONGOING
-nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # ONGOING
+# nohup python merge_events_noCLU.py 1 > logs/merge_events_noCLU_1.log & # DONE
 nohup python merge_events_noAGN.py 1 > logs/merge_events_noAGN_1.log & # ONGOING
 
 nohup python merge_events.py 2 2     > logs/merge_events_2_2.log  & # ONGOING
-nohup python merge_events_noCLU.py 2 > logs/merge_events_noCLU_2.log & # ONGOING
+# nohup python merge_events_noCLU.py 2 > logs/merge_events_noCLU_2.log & # DONE
 nohup python merge_events_noAGN.py 2 > logs/merge_events_noAGN_2.log & # ONGOING
 
 nohup python merge_events.py 3 3     > logs/merge_events_3_3.log  & # ONGOING
-nohup python merge_events_noCLU.py 3 > logs/merge_events_noCLU_3.log & # ONGOING
+# nohup python merge_events_noCLU.py 3 > logs/merge_events_noCLU_3.log & # DONE
 nohup python merge_events_noAGN.py 3 > logs/merge_events_noAGN_3.log & # ONGOING
 
 nohup python merge_events.py 4 4     > logs/merge_events_4_4.log  & # ONGOING
-nohup python merge_events_noCLU.py 4 > logs/merge_events_noCLU_4.log & # ONGOING
+# nohup python merge_events_noCLU.py 4 > logs/merge_events_noCLU_4.log & # DONE
 nohup python merge_events_noAGN.py 4 > logs/merge_events_noAGN_4.log & # ONGOING
 
 nohup python merge_events.py 5 5     > logs/merge_events_5_5.log  & # ONGOING
-nohup python merge_events_noCLU.py 5 > logs/merge_events_noCLU_5.log & # ONGOING
+# nohup python merge_events_noCLU.py 5 > logs/merge_events_noCLU_5.log & # DONE
 nohup python merge_events_noAGN.py 5 > logs/merge_events_noAGN_5.log & # ONGOING
 
 nohup python merge_events.py 6 6     > logs/merge_events_6_6.log  & # ONGOING
-nohup python merge_events_noCLU.py 6 > logs/merge_events_noCLU_6.log & # ONGOING
+# nohup python merge_events_noCLU.py 6 > logs/merge_events_noCLU_6.log & # DONE
 nohup python merge_events_noAGN.py 6 > logs/merge_events_noAGN_6.log & # ONGOING
 
 nohup python merge_events.py 7 7     > logs/merge_events_7_7.log  & # ONGOING
-nohup python merge_events_noCLU.py 7 > logs/merge_events_noCLU_7.log & # ONGOING
+# nohup python merge_events_noCLU.py 7 > logs/merge_events_noCLU_7.log & # DONE
 nohup python merge_events_noAGN.py 7 > logs/merge_events_noAGN_7.log & # ONGOING
 
 nohup python merge_events.py 8 8     > logs/merge_events_8_8.log  & # ONGOING
-nohup python merge_events_noCLU.py 8 > logs/merge_events_noCLU_8.log & # ONGOING
+# nohup python merge_events_noCLU.py 8 > logs/merge_events_noCLU_8.log & # DONE
 nohup python merge_events_noAGN.py 8 > logs/merge_events_noAGN_8.log & # ONGOING
 
 

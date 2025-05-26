@@ -73,6 +73,9 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	N_evs = []
 	for NCCD, tEXP in zip(n.arange(7)+1, texps):
 		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
+		if len(CL_evt_files)==0:
+			print(str_field, 'continuing, no cluster file continue')
+			continue
 		hdu_C = fits.open(CL_evt_files[0])
 		texp_C = np.sum(hdu_C[2].data['STOP']-hdu_C[2].data['START'])
 		frac_C = tEXP/texp_C
@@ -89,7 +92,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	N_ev_C = int(f_CLU * N_ev_OBS/7)+1
 
 	if N_ev_B>len(bg_all):
-		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B, 'are needed')
+		print(str_field, 'continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B, 'are needed')
 		continue
 
 	data_C = []
@@ -111,7 +114,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		id_B = np.random.choice(np.arange(len(bg_all)), size = N_ev_B, replace = False)
 		data_B.append( bg_all[id_B] )
 	else:
-		print('continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
+		print(str_field, 'continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
 		data_B.append( bg_all )
 		continue
 
