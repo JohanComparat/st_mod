@@ -56,27 +56,19 @@ validation_dir       = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'valid
 validation_dir_WPRP = os.path.join(validation_dir, 'XCORR')
 os.system('mkdir -p ' + validation_dir_WPRP       )
 
-sys.path.append( os.path.join(os.environ['GIT_STMOD'], 'src') )
-from models import GAL as GG
 
-z_dir = sys.argv[1]
-#LC_dir = sys.argv[2] # 'FullSky'
-C_GAL = GG.GAL(z_dir, LC_dir='FullSky')
-LC_dir='FullSky'
-
-def tabulate_wprp_clustering_noW(RA, DEC, Z, rand_RA , rand_DEC, rand_Z, out_file='test.fits', CV_frac=0.01, pimax = 100.0, N_JK=20 ):
+def get_wtheta(RA, DEC, rand_RA , rand_DEC ):
 	"""
-	wprp direct estimate
+	wtheta direct estimate
 	path_2_data : path to the catalogue to correlate
 	path_2_random
 	"""
 	#
-	CZ = Z * speed_light
-	rand_CZ = rand_Z * speed_light
+	t0 = time.time()
 	N = len(RA)
 	rand_N = len(rand_RA)
-	#print(N, rand_N, out_file, time.time()-t0)
-	bins = 10**np.arange(-1.6, 1.81, 0.2)
+	print(N, rand_N, time.time()-t0)
+	bins = 10**np.arange(-3.0, 1.4, 0.2)
 	nbins = len(bins)-1
 	#print('bins', bins, bins.shape)
 	x = (bins[1:]+bins[:-1])/2.
@@ -84,65 +76,134 @@ def tabulate_wprp_clustering_noW(RA, DEC, Z, rand_RA , rand_DEC, rand_Z, out_fil
 	nthreads = 16
 	# Auto pairs counts in DD
 	autocorr=1
-	DD_counts = DDrppi_mocks(autocorr, cosmology, nthreads, pimax, bins,
-								np.array(list(RA)).astype('float'),
-								np.array(list(DEC)).astype('float'),
-								np.array(list(CZ)).astype('float') )#, is_comoving_dist=True)
-	#print('DD',DD_counts['npairs'], DD_counts['npairs'].shape)
-	# Auto pairs counts in DR
+	DD_counts = DDtheta_mocks(autocorr, nthreads, bins, np.array(list(RA)).astype('float'), np.array(list(DEC)).astype('float'))
+	#print(DD_counts)
 	autocorr=0
-	DR_counts = DDrppi_mocks(autocorr, cosmology, nthreads, pimax, bins,
-							np.array(list(RA)).astype('float'),
-							np.array(list(DEC)).astype('float'),
-							np.array(list(CZ)).astype('float'),
-							RA2=rand_RA.astype('float'),
-							DEC2=rand_DEC.astype('float'),
-							CZ2=rand_CZ.astype('float'))
-	#print('DR',DR_counts['npairs'])
+	DR_counts = DDtheta_mocks(autocorr, nthreads, bins,
+													np.array(list(RA)).astype('float'),
+													np.array(list(DEC)).astype('float'),
+													RA2=rand_RA.astype('float'),
+													DEC2=rand_DEC.astype('float'))
 	# Auto pairs counts in RR
 	autocorr=1
-	RR_counts = DDrppi_mocks(autocorr, cosmology, nthreads, pimax, bins,
-							rand_RA.astype('float'),
-							rand_DEC.astype('float'),
-							rand_CZ.astype('float'))
-	#print('RR',RR_counts['npairs'])
+	RR_counts = DDtheta_mocks(autocorr, nthreads, bins,
+													rand_RA.astype('float'),
+													rand_DEC.astype('float'))
 	# All the pair counts are done, get the angular correlation function
-	wp = convert_rp_pi_counts_to_wp(N, N, rand_N, rand_N, DD_counts, DR_counts, DR_counts, RR_counts, nbins, pimax)
+	wtheta = convert_3d_counts_to_cf(N, N, rand_N, rand_N, DD_counts, DR_counts, DR_counts, RR_counts)
+	return wtheta
+
+def tabulate_wtheta_clustering_noW(RA, DEC, rand_RA , rand_DEC, out_file ):
+	"""
+	wtheta direct estimate
+	path_2_data : path to the catalogue to correlate
+	path_2_random
+	"""
+	#
+	t0 = time.time()
+	N = len(RA)
+	rand_N = len(rand_RA)
+	print(N, rand_N, out_file, time.time()-t0)
+	bins = 10**np.arange(-3.0, 1.4, 0.2)
+	nbins = len(bins)-1
+	#print('bins', bins, bins.shape)
+	x = (bins[1:]+bins[:-1])/2.
+	cosmology = 2
+	nthreads = 16
+	# Auto pairs counts in DD
+	autocorr=1
+	DD_counts = DDtheta_mocks(autocorr, nthreads, bins, np.array(list(RA)).astype('float'), np.array(list(DEC)).astype('float'))
+	#print(DD_counts)
+	autocorr=0
+	DR_counts = DDtheta_mocks(autocorr, nthreads, bins,
+							np.array(list(RA)).astype('float'),
+							np.array(list(DEC)).astype('float'),
+							RA2=rand_RA.astype('float'),
+							DEC2=rand_DEC.astype('float'))
+	# Auto pairs counts in RR
+	autocorr=1
+	RR_counts = DDtheta_mocks(autocorr, nthreads, bins,
+							rand_RA.astype('float'),
+							rand_DEC.astype('float'))
+	# All the pair counts are done, get the angular correlation function
+	wtheta = convert_3d_counts_to_cf(N, N, rand_N, rand_N, DD_counts, DR_counts, DR_counts, RR_counts)
 	t = Table()
-	t.add_column(Column(data = bins[:-1], name='rp_min', unit='Mpc'  ) )
-	t.add_column(Column(data = bins[1:], name='rp_max', unit='Mpc'  ) )
-	t.add_column(Column(data = x, name='rp_mid', unit='Mpc'  ) )
-	t.add_column(Column(data = wp, name='wprp', unit=''  ) )
+	t.add_column(Column(data = bins[:-1], name='theta_min', unit='deg'  ) )
+	t.add_column(Column(data = bins[1:], name='theta_max', unit='deg'  ) )
+	t.add_column(Column(data = x, name='theta_mid', unit='deg'  ) )
+	t.add_column(Column(data = wtheta, name='wtheta', unit=''  ) )
 	t.add_column(Column(data = np.ones_like(x) * N, name='N_data', unit=''  ) )
 	t.add_column(Column(data = np.ones_like(x) * rand_N, name='N_random', unit=''  ) )
-	t.add_column(Column(data = np.ones_like(x) * pimax, name='pimax', unit=''  ) )
-	t.add_column(Column(data = np.ones_like(x) * CV_frac, name='CV_frac', unit=''  ) )
-	# repeat when removing random 10%
-	wprp_JK = np.zeros((N_JK, len(wp)))
-	for jj in np.arange(N_JK):
-		s1=(np.random.random(len(RA))<0.9)
-		ra1, dec1, cz1 = np.array(list(RA)).astype('float')[s1], np.array(list(DEC)).astype('float')[s1], np.array(list(CZ)).astype('float')[s1]
-		# Auto pairs counts in DD
-		autocorr=1
-		DD_counts = DDrppi_mocks(autocorr, cosmology, nthreads, pimax, bins,  ra1, dec1, cz1)
-		# Auto pairs counts in DR
-		autocorr=0
-		DR_counts = DDrppi_mocks(autocorr, cosmology, nthreads, pimax, bins, ra1, dec1, cz1, RA2=rand_RA.astype('float'), DEC2=rand_DEC.astype('float'), CZ2=rand_CZ.astype('float'))
-		# Auto pairs counts in RR
-		autocorr=1
-		RR_counts = DDrppi_mocks(autocorr, cosmology, nthreads, pimax, bins, rand_RA.astype('float'), rand_DEC.astype('float'), rand_CZ.astype('float'))
-		# All the pair counts are done, get the angular correlation function
-		wprp_JK[jj] = convert_rp_pi_counts_to_wp(N, N, rand_N, rand_N, DD_counts, DR_counts, DR_counts, RR_counts, nbins, pimax)
-	#print ( "wprp_JK.mean(axis=0)", wprp_JK.mean(axis=0).shape, wprp_JK.mean(axis=0),  wprp_JK.mean(axis=0) / wp  )
-	#print ( "wprp_JK.std(axis=0) ", wprp_JK.std(axis=0) .shape, wprp_JK.std(axis=0),  wprp_JK.std(axis=0) / wp  )
-	#print ( "wp                ", wp                .shape, wp                  )
-	#t['wprp_JK'] = wprp_JK
-	t.add_column(Column(data = wprp_JK.mean(axis=0), name='wprp_JK_mean', unit=''  ) )
-	t.add_column(Column(data = wprp_JK.std(axis=0), name='wprp_JK_std', unit=''  ) )
-	print(out_file)
-	t.write(out_file, overwrite=True, format='fits')
-	print(out_file, time.time()-t0, 's')
+	t.add_column(Column(data = DD_counts['npairs'], name='DD_counts', unit=''  ) )
+	t.add_column(Column(data = DR_counts['npairs'], name='DR_counts', unit=''  ) )
+	t.add_column(Column(data = RR_counts['npairs'], name='RR_counts', unit=''  ) )
 
+	t.write(out_file, overwrite=True)
+	print(out_file, 'written', time.time()-t0, 's')
+
+
+def tabulate_XCORRwtheta_clustering_noW(RA, DEC, RA2, DEC2, rand_RA , rand_DEC, out_file ):
+	"""
+	wtheta direct estimate
+	path_2_data : path to the catalogue to correlate
+	path_2_random
+	"""
+	#
+	t0 = time.time()
+	N = len(RA)
+	N2 = len(RA2)
+	rand_N = len(rand_RA)
+	print(N, N2, rand_N, out_file, time.time()-t0)
+	bins = 10**np.arange(-3.0, 1.4, 0.2)
+	nbins = len(bins)-1
+	#print('bins', bins, bins.shape)
+	x = (bins[1:]+bins[:-1])/2.
+	cosmology = 2
+	nthreads = 16
+	# Auto pairs counts in DD
+	autocorr=1
+	DD_counts = DDtheta_mocks(autocorr, nthreads, bins, np.array(list(RA)).astype('float'), np.array(list(DEC)).astype('float'))
+	#print(DD_counts)
+	autocorr=0
+	D1D2_counts = DDtheta_mocks(autocorr, nthreads, bins,
+							np.array(list(RA)).astype('float'),
+							np.array(list(DEC)).astype('float'),
+							RA2=np.array(list(RA2)).astype('float'),
+							DEC2=np.array(list(DEC2)).astype('float'))
+
+	D1R_counts = DDtheta_mocks(autocorr, nthreads, bins,
+							np.array(list(RA)).astype('float'),
+							np.array(list(DEC)).astype('float'),
+							RA2=rand_RA.astype('float'),
+							DEC2=rand_DEC.astype('float'))
+
+	D2R_counts = DDtheta_mocks(autocorr, nthreads, bins,
+							np.array(list(RA2)).astype('float'),
+							np.array(list(DEC2)).astype('float'),
+							RA2=rand_RA.astype('float'),
+							DEC2=rand_DEC.astype('float'))
+	# Auto pairs counts in RR
+	autocorr=1
+	RR_counts = DDtheta_mocks(autocorr, nthreads, bins,
+							rand_RA.astype('float'),
+							rand_DEC.astype('float'))
+	# All the pair counts are done, get the angular correlation function
+	wtheta = convert_3d_counts_to_cf(N, N2, rand_N, rand_N, D1D2_counts, D1R_counts, D2R_counts, RR_counts)
+	t = Table()
+	t.add_column(Column(data = bins[:-1], name='theta_min', unit='deg'  ) )
+	t.add_column(Column(data = bins[1:], name='theta_max', unit='deg'  ) )
+	t.add_column(Column(data = x, name='theta_mid', unit='deg'  ) )
+	t.add_column(Column(data = wtheta, name='wtheta', unit=''  ) )
+	t.add_column(Column(data = np.ones_like(x) * N, name='N_data', unit=''  ) )
+	t.add_column(Column(data = np.ones_like(x) * N2, name='N2_data', unit=''  ) )
+	t.add_column(Column(data = np.ones_like(x) * rand_N, name='N_random', unit=''  ) )
+	t.add_column(Column(data = D1D2_counts['npairs'], name='D1D2_counts', unit=''  ) )
+	t.add_column(Column(data = D1R_counts['npairs'], name='D1R_counts', unit=''  ) )
+	t.add_column(Column(data = D2R_counts['npairs'], name='D2R_counts', unit=''  ) )
+	t.add_column(Column(data = RR_counts['npairs'], name='RR_counts', unit=''  ) )
+
+	t.write(out_file, overwrite=True)
+	print(out_file, 'written', time.time()-t0, 's')
 
 MsBds= n.array([9
 		,9.5
@@ -164,107 +225,10 @@ z2psf = n.array([ 0.07
 		, 0.5
 		, 0.5  ])
 
-for meta in C_GAL.LC_MetaData:#[(enough_area)&(small_difference_minmax_1)&(small_difference_minmax_2)]:
-	#
-	print(meta)
-	# retrieve the resulting catalogues and meta data
-	str_replic = 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz'])
-	p_2_catalogue = os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']), 'glist.fits')
-	p_2_catal_MAG = os.path.join(os.environ['UCHUU'], LC_dir, z_dir, 'replication_'+str(meta['jx'])+'_'+str(meta['jy'])+'_'+str(meta['jz']), 'Kmatch_mags.fits')
-	GAL = Table.read(p_2_catalogue)
-	#MAG = Table.read(p_2_catal_MAG)
-	#z_min, z_max = np.min(GAL['redshift_S']), np.max(GAL['redshift_S'])
-	#print('z_min, z_max=', z_min, z_max)
-	#volume_mock = (( cosmo.comoving_volume(z_max) - cosmo.comoving_volume(z_min) ) * meta['mean_area'] * np.pi / 129600.).value
-	#z_mean = np.mean(GAL['redshift_S'])
-	#z_mins = n.array([0.05])#, 0.1, 0.2, 0.3, 0.4])
-	#z_maxs = n.array([0.5 ])#, 0.2, 0.3, 0.4, 0.5])
-	#magr_maxs = n.array([17.77, 18, 19, 19.5, 20, 21])
-	for m0, m1, z_max in zip(MsMins, MsMaxs, z2psf):
-		M_str = 'Ms_gt_'+str(m0)
-		p_2_2PCF = os.path.join(validation_dir_WPRP, z_dir+'_'+M_str+'-wprp-pimax40-2pcf.fits' )
-		if os.path.isfile(p_2_2PCF)==False:
-			s_Z = ( n.log10(GAL['obs_sm'])>=m0 )
-			z0 = n.min(GAL['redshift_S'][s_Z])
-			z1 = n.max(GAL['redshift_S'][s_Z])
-			data = Table()
-			data['RA'] = GAL['RA'][s_Z]
-			data['DEC'] = GAL['DEC'][s_Z]
-			data['Z'] = GAL['redshift_S'][s_Z]
-			N_data = len(data)
-			if N_data>100:
-				x_low, x_high = n.min(GAL['x']), n.max(GAL['x'])
-				y_low, y_high = n.min(GAL['y']), n.max(GAL['y'])
-				z_low, z_high = n.min(GAL['z']), n.max(GAL['z'])
-
-				size = int(N_data*40)
-				uu = n.random.uniform(size=size)
-				dec_fs = n.arccos(1 - 2 * uu) * 180 / n.pi - 90.
-				ra_fs  = n.random.uniform(size=size) * 2 * n.pi * 180 / n.pi
-				z_fs = n.tile(data['Z'], int(size*1./N_data)+1)[:size]
-				RX, RY, RZ = get_xyz(ra_fs, dec_fs, z_fs)
-				selectionR = ( RX >= x_low ) & ( RX <= x_high ) & ( RY >= y_low ) & ( RY <= y_high ) & ( RZ >= z_low ) & ( RZ <= z_high )
-				rand = Table()
-				rand['RA'] = ra_fs[selectionR]
-				rand['DEC'] = dec_fs[selectionR]
-				rand['Z'] = z_fs[selectionR]
-				N_RD = len(rand['RA'])
-
-				tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF, CV_frac=0.01, pimax = 40.0, N_JK = 10 )
-
-
-		z_errs = n.array([0.005, 0.01, 0.02, 0.03, 0.05])
-		for z_err in z_errs:
-			out_str = 'Ms_gt_'+str(m0)+'_dz_'+str(int(1000*z_err)).zfill(4)
-			p_2_2PCF = os.path.join(validation_dir_WPRP, z_dir+'_'+out_str+'-wprp-pimax40-2pcf.fits' )
-			if os.path.isfile(p_2_2PCF)==False:
-				s_Z = ( n.log10(GAL['obs_sm'])>=m0 )
-				z0 = n.min(GAL['redshift_S'][s_Z])
-				z1 = n.max(GAL['redshift_S'][s_Z])
-				z_true = GAL['redshift_S'][s_Z]
-				new_z = norm.rvs(loc = z_true, scale = (1+z_true)*z_err, size=len(z_true))
-				s_Z2 = ( new_z>=z0 ) & ( new_z <=z1 )
-				data = Table()
-				data['RA'] = GAL['RA'][s_Z][s_Z2]
-				data['DEC'] = GAL['DEC'][s_Z][s_Z2]
-				data['Z'] = new_z[s_Z2]
-				N_data = len(data)
-				if N_data>100:
-
-					x_low, x_high = n.min(GAL['x']), n.max(GAL['x'])
-					y_low, y_high = n.min(GAL['y']), n.max(GAL['y'])
-					z_low, z_high = n.min(GAL['z']), n.max(GAL['z'])
-
-					size = int(N_data*40)
-					uu = n.random.uniform(size=size)
-					dec_fs = n.arccos(1 - 2 * uu) * 180 / n.pi - 90.
-					ra_fs  = n.random.uniform(size=size) * 2 * n.pi * 180 / n.pi
-					z_fs = n.tile(data['Z'], int(size*1./N_data)+1)[:size]
-					RX, RY, RZ = get_xyz(ra_fs, dec_fs, z_fs)
-					selectionR = ( RX >= x_low ) & ( RX <= x_high ) & ( RY >= y_low ) & ( RY <= y_high ) & ( RZ >= z_low ) & ( RZ <= z_high )
-					rand = Table()
-					rand['RA'] = ra_fs[selectionR]
-					rand['DEC'] = dec_fs[selectionR]
-					rand['Z'] = z_fs[selectionR]
-					N_RD = len(rand['RA'])
-
-					tabulate_wprp_clustering_noW(data['RA'], data['DEC'], data['Z'], rand['RA'] , rand['DEC'], rand['Z'],  out_file=p_2_2PCF, CV_frac=0.01, pimax = 40.0, N_JK = 10 )
-
-import os, sys, glob
-import numpy as n
-import astropy.io.fits as fits
-#import healpy
-import time
-t0 = time.time()
-from astropy.table import Table, vstack
-import numpy as np
-import matplotlib
-matplotlib.use('Agg')
-matplotlib.rcParams.update({'font.size': 14})
-import matplotlib.pyplot as plt
-agn_seed = sys.argv[1] # 1
-clu_seed = sys.argv[2] # 1
-
+agn_seed = '1' # sys.argv[1] # 1
+clu_seed = '1' # sys.argv[2] # 1
+LC_dir = 'LCerass'
+top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 nl = lambda sel : len(sel.nonzero()[0])
 
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
@@ -275,20 +239,141 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
+def get_srvmap_rev(ra, dec, sky_tile):
+    return (sky_tile['RA_MIN']<ra ) & ( sky_tile['RA_MAX'] >= ra ) & ( sky_tile['DE_MIN']<dec ) & ( sky_tile['DE_MAX'] >= dec)
+
+
+size = int(50e6)
+uu = np.random.uniform(size=size)
+dec_fs = np.arccos(1 - 2 * uu) * 180 / np.pi - 90.
+ra_fs = np.random.uniform(size=size) * 2 * np.pi * 180 / np.pi
+
 for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
-	evt_list = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's4_c030', '*_Image_c030.fits.gz' ) ) )
-	log_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'logs-erass8')
-	os.system('mkdir -p '+log_dir)
-	#esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'sim_evt_e4_merge')
-	esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'GE_e4_merge_AGNseed'+agn_seed.zfill(3)+'_SimBKG_CLUseed'+clu_seed.zfill(3))
-	os.system('mkdir -p '+esass_dir)
+	esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field,
+							 'GE_e4_merge_AGNseed' + agn_seed.zfill(3) + '_SimBKG_CLUseed' + clu_seed.zfill(3))
 
-	path_2_event_file = os.path.join(esass_dir, 'evt_'+str_field+'.fits')
+	dir_2pcf = os.path.join(esass_dir, 'XCORR')
+	os.system('mkdir -p ' + dir_2pcf)
+	path_2_event_file = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'glist.fits')
 	path_2_simeventAGN_file = os.path.join(esass_dir, 'simAGNevt_'+str_field+'.fits')
 	path_2_simeventCLU_file = os.path.join(esass_dir, 'simCLUevt_'+str_field+'.fits')
 	path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_'+str_field+'.fits')
+	s_R = get_srvmap_rev(ra_fs, dec_fs, sky_tile)
+	basename = 'GAL_m' + str(np.round(11.0, 1)) + '_evAGNevCLUevBKG'
+	p_2_2PCF = os.path.join(dir_2pcf, basename + '_CROSSCORR.wtheta.2pcf.fits')
 
-print('hello')
+	if os.path.isfile(path_2_event_file) and os.path.isfile(path_2_simeventBKG_file) and os.path.isfile(path_2_simeventCLU_file) and os.path.isfile(path_2_simeventAGN_file) and not os.path.isfile(p_2_2PCF):
+		GAL = Table.read(path_2_event_file)
+		evBKG = Table.read(path_2_simeventBKG_file)
+		evAGN = Table.read(path_2_simeventAGN_file)
+		evCLU = Table.read(path_2_simeventCLU_file)
+		m0 = 10.0
+		z1 = 0.18
+		s10 = (np.log10(GAL['obs_sm'])>=m0) & (GAL['redshift_S']>0.05) & (GAL['redshift_S']<z1)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evGAS'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evBKG'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evBKG['RA'], evBKG['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGN'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evAGN['RA'], evAGN['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLU'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLUevBKG'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+
+		m0 = 10.5
+		z1 = 0.26
+		s10 = (np.log10(GAL['obs_sm'])>=m0) & (GAL['redshift_S']>0.05) & (GAL['redshift_S']<z1)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evGAS'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evBKG'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evBKG['RA'], evBKG['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGN'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evAGN['RA'], evAGN['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLU'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLUevBKG'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+
+
+
+		m0 = 11.0
+		z1 = 0.35
+		s10 = (np.log10(GAL['obs_sm'])>=m0) & (GAL['redshift_S']>0.05) & (GAL['redshift_S']<z1)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evGAS'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evBKG'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evBKG['RA'], evBKG['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGN'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(evAGN['RA'], evAGN['DEC'],
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLU'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLUevBKG'
+		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR.wtheta.2pcf.fits' )
+		if not os.path.isfile(p_2_2PCF):
+			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
+											GAL['RA'][s10], GAL['DEC'][s10],
+											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
+
+
+
+
