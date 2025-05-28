@@ -286,3 +286,82 @@ plt.savefig(p_2_2PCF_figure)
 plt.clf()
 print(p_2_2PCF_figure, 'written')
 
+
+m0 = 10.5
+z1 = 0.26
+m0_str = str(np.round(m0,1))
+z1_str = str(np.round(z1,2))
+str_title = r'$z<$'+z1_str+', '+m0_str+r'$<\log_{10}(M*[M_\odot])$'
+
+p_2_2PCF_figure = os.path.join(dir_fig, 'GALxEVT_m'+m0_str+'.png')
+plt.figure(33, (6.5,6.))
+
+WTH = XCORR['m10.5']
+plt.errorbar(WTH['theta'], WTH['wtheta'], yerr= WTH['wtheta']*0.05, label='Obs', lw=3, color='black', marker='*')
+
+WTH = PRED['m10.5_GxG'  ]
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxG', lw=1)
+WTH = PRED['m10.5_GxB'  ]
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxB', lw=1)
+WTH = PRED['m10.5_GxA'  ]
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxA', lw=1)
+WTH = PRED['m10.5_GxGA' ]
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGA', lw=1)
+WTH = PRED['m10.5_GxGAB']
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGAB', lw=1)
+# yerr =  abs(WTH['wtheta'] * (0.01**2 + WTH['D1D2_counts']**-1. + WTH['D1R2_counts']**-1. + WTH['D2R1_counts']**-1. + WTH['R1R2_counts']**-1. )**0.5)
+
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.xscale('log')
+plt.yscale('log')
+#plt.ylim((1e-3, 2e3))
+#plt.xlim((8e-4, 3))
+plt.legend(loc='lower left', ncol=2, fontsize=10, title=str_title)
+plt.xlabel(r'$\theta$ (deg)',fontsize=18)
+plt.ylabel(r'$w(\theta)$',fontsize=18)
+plt.title('Correlation Galaxies x 0.5-2 keV events')
+plt.tight_layout()
+plt.savefig(p_2_2PCF_figure)
+plt.clf()
+print(p_2_2PCF_figure, 'written')
+
+m0 = 11.0
+z1 = 0.35
+m0_str = str(np.round(m0,1))
+z1_str = str(np.round(z1,2))
+str_title = r'$z<$'+z1_str+', '+m0_str+r'$<\log_{10}(M*[M_\odot])$'
+
+p_2_2PCF_figure = os.path.join(dir_fig, 'GALxEVT_m'+m0_str+'.png')
+plt.figure(33, (6.5,6.))
+
+WTH = XCORR['m11.0']
+plt.errorbar(WTH['theta'], WTH['wtheta'], yerr= WTH['wtheta']*0.05, label='Obs', lw=3, color='black', marker='*')
+
+WTH = PRED['m11.0_GxG'  ]
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxG', lw=1)
+WTH = PRED['m11.0_GxB'  ]
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxB', lw=1)
+WTH = PRED['m11.0_GxA'  ]
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxA', lw=1)
+WTH = PRED['m11.0_GxGA' ]
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGA', lw=1)
+WTH = PRED['m11.0_GxGAB']
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGAB', lw=1)
+# yerr =  abs(WTH['wtheta'] * (0.01**2 + WTH['D1D2_counts']**-1. + WTH['D1R2_counts']**-1. + WTH['D2R1_counts']**-1. + WTH['R1R2_counts']**-1. )**0.5)
+
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.xscale('log')
+plt.yscale('log')
+#plt.ylim((1e-3, 2e3))
+#plt.xlim((8e-4, 3))
+plt.legend(loc='lower left', ncol=2, fontsize=10, title=str_title)
+plt.xlabel(r'$\theta$ (deg)',fontsize=18)
+plt.ylabel(r'$w(\theta)$',fontsize=18)
+plt.title('Correlation Galaxies x 0.5-2 keV events')
+plt.tight_layout()
+plt.savefig(p_2_2PCF_figure)
+plt.clf()
+print(p_2_2PCF_figure, 'written')
+
