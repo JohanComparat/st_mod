@@ -32,8 +32,8 @@ import matplotlib
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 14})
 import matplotlib.pyplot as plt
-agn_seed = sys.argv[1] # 1
-clu_seed = sys.argv[2] # 1
+agn_seed = '1' #sys.argv[1] # 1
+clu_seed = '1' #sys.argv[2] # 1
 
 nl = lambda sel : len(sel.nonzero()[0])
 
@@ -45,7 +45,7 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][::-1]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
@@ -99,22 +99,21 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		agn_evt_files = n.array( glob.glob( os.path.join( agn_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
 		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
 		#ST_evt_files = n.array( glob.glob( os.path.join( stars_dir, 'simulated_photons_ccd' + str(NCCD) + '.fits' ) ) )
-		if len(CL_evt_files)==0:
-			print(str_field, 'continuing, no cluster file continue')
-			continue
 
 		hdu_A = fits.open(agn_evt_files[0])
 		texp_A = np.sum(hdu_A[2].data['STOP']-hdu_A[2].data['START'])
 		frac_A = tEXP/texp_A
 		N_ev_A = len(hdu_A[1].data)
 
-		hdu_C = fits.open(CL_evt_files[0])
-		texp_C = np.sum(hdu_C[2].data['STOP']-hdu_C[2].data['START'])
-		frac_C = tEXP/texp_C
-		N_ev_C = len(hdu_C[1].data)
-
-		#hdu_S = fits.open(ST_evt_files[0])
-		#N_ev_S = len(hdu_S[1].data)
+		if len(CL_evt_files)>0:
+			hdu_C = fits.open(CL_evt_files[0])
+			texp_C = np.sum(hdu_C[2].data['STOP']-hdu_C[2].data['START'])
+			frac_C = tEXP/texp_C
+			N_ev_C = len(hdu_C[1].data)
+		else:
+			N_ev_C = 0
+			print(str_field, 'continuing, no cluster file continue')
+			# continue
 
 		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
 		N_BG = len(bg_tm)
@@ -123,7 +122,11 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	f_AGN = 0.123
 	f_BKG = 0.858
 	f_CLU = 0.019
+
 	NA, NC, NB = np.transpose(N_evs).sum(axis=1)
+	if NC==0:
+		print(str_field, 'continuing, no cluster events')
+		continue
 	N_ev_A = int(f_AGN * N_ev_OBS/7)+1
 	N_ev_B = N_ev_OBS + 1
 	N_ev_C = int(f_CLU * N_ev_OBS/7)+1

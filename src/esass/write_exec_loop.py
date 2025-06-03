@@ -3,6 +3,12 @@ import numpy as n
 import numpy as np
 from astropy.table import Table, vstack
 import astropy.io.fits as fits
+
+import matplotlib
+matplotlib.use('Agg')
+matplotlib.rcParams.update({'font.size': 14})
+import matplotlib.pyplot as plt
+
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
 GE_names = ['GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001',
@@ -30,6 +36,14 @@ for GE_name in GE_names:
     print(len(sky_map_hdu[to_process]), 'tiles to process')
     print(len(sky_map_hdu[already_done]), 'tiles already done')
     datata.append([len(sky_map_hdu[to_process]), len(sky_map_hdu[already_done])])
+    p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
+    plt.plot(sky_map_hdu['RA_CEN'][((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))], sky_map_hdu['DE_CEN'][((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))], 'k,', label='eRO DE')
+    plt.plot(sky_map_hdu['RA_CEN'][already_done], sky_map_hdu['DE_CEN'][already_done], 'k+', label=str(len(sky_map_hdu['DE_CEN'][already_done]))+' done')
+    plt.plot(sky_map_hdu['RA_CEN'][to_process], sky_map_hdu['DE_CEN'][to_process], 'rx', label=str(len(sky_map_hdu['DE_CEN'][to_process]))+' todo')
+    plt.legend(loc=0)
+    plt.title(GE_name)
+    plt.savefig(p2fig)
+    plt.clf()
     if len(sky_map_hdu[to_process])>0:
         for kk in np.arange(0, len(sky_map_hdu[to_process]), 50):
             out_im1 = os.path.join(os.environ['GIT_STMOD'], 'src/esass', 'runs', GE_name + '_processing_'+str(kk).zfill(4)+'.sh')

@@ -132,133 +132,117 @@ nohup python make_summary_skymap.py GE_e4_merge_SimBKG_CLUseed008            > l
 
 # write all commands for the list of folders above.
 python write_exec_loop.py # > exec.sh # TODO
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/runs
 
 # execute all commands of interest in an eSASS loaded container
 
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0000.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0000.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0050.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0050.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0100.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0100.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0150.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0150.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0200.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0200.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0250.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0250.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0300.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0300.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0350.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0350.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0400.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0400.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0450.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0450.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0500.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0500.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0550.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0550.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0600.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0600.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0650.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0650.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0700.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0700.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0750.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0750.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0800.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0800.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0000.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0000.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0050.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0050.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0100.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0100.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0150.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0150.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0200.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0200.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0250.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0250.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0300.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0300.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0350.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0350.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0400.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0400.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0450.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0450.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0500.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0500.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0550.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0550.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0600.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0600.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0650.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0650.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0700.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0700.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0750.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0750.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0800.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0800.log & # ONGOING
-# nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0850.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0850.log & # ONGOING
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0000.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0000.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0050.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0050.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0100.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0100.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0150.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0150.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0200.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0200.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0250.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0250.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0300.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0300.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0350.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0350.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0400.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0400.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0450.sh  > logs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0450.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0000.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0000.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0050.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0050.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0100.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0100.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0150.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0150.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0200.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0200.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0250.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0250.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0300.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0300.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0350.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0350.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0400.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0400.log &
-nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0450.sh             > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0450.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0000.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0000.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0050.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0050.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0100.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0100.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0150.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0150.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0200.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0200.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0250.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0250.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0300.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0300.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0350.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0350.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0400.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0400.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0450.sh  > logs/GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0450.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0000.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0000.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0050.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0050.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0100.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0100.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0150.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0150.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0200.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0200.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0250.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0250.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0300.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0300.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0350.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0350.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0400.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0400.log &
-nohup sh GE_e4_merge_AGNseed003_SimBKG_processing_0450.sh             > logs/GE_e4_merge_AGNseed003_SimBKG_processing_0450.log &
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0000.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0000.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0050.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0050.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0100.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0100.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0150.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0150.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0200.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0200.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0250.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0250.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0300.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0300.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0350.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0350.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0400.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0400.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0450.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0450.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0500.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0500.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0550.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0550.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0600.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0600.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0650.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0650.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0700.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0700.log & # ONGOING
-# nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0750.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0750.log & # ONGOING
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0000.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0000.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0050.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0050.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0100.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0100.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0150.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0150.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0200.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0200.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0250.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0250.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0300.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0300.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0350.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0350.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0400.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0400.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0450.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0450.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0500.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0500.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0550.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0550.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed002_processing_0600.sh             > logs/GE_e4_merge_SimBKG_CLUseed002_processing_0600.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed003_processing_0000.sh             > logs/GE_e4_merge_SimBKG_CLUseed003_processing_0000.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed003_processing_0050.sh             > logs/GE_e4_merge_SimBKG_CLUseed003_processing_0050.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed003_processing_0100.sh             > logs/GE_e4_merge_SimBKG_CLUseed003_processing_0100.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed003_processing_0150.sh             > logs/GE_e4_merge_SimBKG_CLUseed003_processing_0150.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed003_processing_0200.sh             > logs/GE_e4_merge_SimBKG_CLUseed003_processing_0200.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed003_processing_0250.sh             > logs/GE_e4_merge_SimBKG_CLUseed003_processing_0250.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed003_processing_0300.sh             > logs/GE_e4_merge_SimBKG_CLUseed003_processing_0300.log &
-nohup sh GE_e4_merge_SimBKG_CLUseed003_processing_0350.sh             > logs/GE_e4_merge_SimBKG_CLUseed003_processing_0350.log &
+nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0000.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0000.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0050.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0050.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0100.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0100.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0150.sh  > logs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0150.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0000.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0000.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0050.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0050.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0100.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0100.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0150.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0150.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0200.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0200.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0250.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0250.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0300.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0300.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0350.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0350.log & # DONE
+nohup sh GE_e4_merge_AGNseed001_SimBKG_processing_0400.sh             > logs/GE_e4_merge_AGNseed001_SimBKG_processing_0400.log & # DONE
+nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0000.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0000.log & # DONE
+nohup sh GE_e4_merge_SimBKG_CLUseed001_processing_0050.sh             > logs/GE_e4_merge_SimBKG_CLUseed001_processing_0050.log & # DONE
+
+
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0000.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0000.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0050.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0050.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0100.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0100.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0150.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0150.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0200.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0200.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0250.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0250.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0300.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0300.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0350.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0350.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0400.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0400.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0450.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0450.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0500.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0500.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0550.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0550.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0600.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0600.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0650.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0650.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0700.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0700.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0750.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0750.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0800.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0800.log & # DONE
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0850.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0850.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0900.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0900.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0950.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0950.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1000.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1000.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1050.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1050.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1100.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1100.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1150.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1150.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1200.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1200.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1250.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1250.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1300.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1300.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1350.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1350.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1400.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1400.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1450.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1450.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_1500.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_1500.log & # ONGOING
+
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0000.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0000.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0050.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0050.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0100.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0100.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0150.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0150.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0200.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0200.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0250.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0250.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0300.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0300.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0350.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0350.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0400.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0400.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0450.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0450.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0500.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0500.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0550.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0550.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0600.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0600.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0650.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0650.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0700.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0700.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0750.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0750.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0800.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0800.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0850.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0850.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0900.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0900.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_0950.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_0950.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1000.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1000.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1050.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1050.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1100.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1100.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1150.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1150.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1200.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1200.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1250.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1250.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1300.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1300.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1350.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1350.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1400.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1400.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1450.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1450.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed003_SimBKG_CLUseed003_processing_1500.sh > logs/AGNseed003_SimBKG_CLUseed003_processing_1500.log & # ONGOING
 
 
 
-nohup sh GE_e4_merge_SimBKG_processing_0000.sh > GE_e4_merge_SimBKG_processing_0000.log &
-nohup sh GE_e4_merge_SimBKG_processing_0050.sh > GE_e4_merge_SimBKG_processing_0050.log &
-nohup sh GE_e4_merge_SimBKG_processing_0100.sh > GE_e4_merge_SimBKG_processing_0100.log &
-nohup sh GE_e4_merge_SimBKG_processing_0150.sh > GE_e4_merge_SimBKG_processing_0150.log &
-nohup sh GE_e4_merge_SimBKG_processing_0200.sh > GE_e4_merge_SimBKG_processing_0200.log &
+
+
+nohup sh GE_e4_merge_SimBKG_processing_0000.sh > GE_e4_merge_SimBKG_processing_0000.log & # DONE
+nohup sh GE_e4_merge_SimBKG_processing_0050.sh > GE_e4_merge_SimBKG_processing_0050.log & # DONE
+nohup sh GE_e4_merge_SimBKG_processing_0100.sh > GE_e4_merge_SimBKG_processing_0100.log & # DONE
+nohup sh GE_e4_merge_SimBKG_processing_0150.sh > GE_e4_merge_SimBKG_processing_0150.log & # DONE
+
+
+
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+
 
 python create_summary_files_RS.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001
-
+python create_summary_files_RS.py GE_e4_merge_SimBKG_CLUseed001
+python create_summary_files_RS.py GE_e4_merge_AGNseed001_SimBKG
+python create_summary_files_RS.py GE_e4_merge_SimBKG # DOES not work !
 
 
 

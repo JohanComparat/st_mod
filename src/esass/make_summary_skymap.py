@@ -46,6 +46,9 @@ sky_map_hdu['has_ApeSen_eef0.75'] = np.ones(len(sky_map_hdu))==0
 sky_map_hdu['has_ApeCat_eef0.75'] = np.ones(len(sky_map_hdu))==0
 sky_map_hdu['has_srcAUTOreg']     = np.ones(len(sky_map_hdu))==0
 sky_map_hdu['has_bkgAUTOreg']     = np.ones(len(sky_map_hdu))==0
+MinTotalCts = 2
+sky_map_hdu['has_IDMatch_Uniq_Tot'+ str(MinTotalCts)] = np.ones(len(sky_map_hdu))==0
+
 LC_dir = "LCerass"
 
 for jj, sky_tile_value in enumerate(sky_map_hdu['SRVMAP']):
@@ -54,6 +57,7 @@ for jj, sky_tile_value in enumerate(sky_map_hdu['SRVMAP']):
     str_field = sky_tile_id.zfill(6)
 
     esass_dir = os.path.join("/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, GE_name, 'eSASS')
+    GE_dir = os.path.join("/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, GE_name)
     VerBand = str(4)
     outprefix = str_field + "_"  # ""
     #bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG' ) # 'evt_particle_???.fits' )
@@ -81,5 +85,6 @@ for jj, sky_tile_value in enumerate(sky_map_hdu['SRVMAP']):
     sky_map_hdu['has_ApeCat_eef0.75'] [jj] = os.path.isfile(os.path.join(esass_dir, f"{outprefix}02{VerBand}_ApeCat_eef0.75.fits"))
     sky_map_hdu['has_srcAUTOreg']     [jj] = os.path.isfile(os.path.join(esass_dir, f"{outprefix}_02_23_srcAUTO.reg"))
     sky_map_hdu['has_bkgAUTOreg']     [jj] = os.path.isfile(os.path.join(esass_dir, f"{outprefix}_02_23_bkgAUTO.reg"))
+    sky_map_hdu['has_IDMatch_Uniq_Tot' + str(MinTotalCts)][jj] = os.path.isfile(os.path.join(GE_dir, f'Sc1_' + str_field + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.fits'))
 
 sky_map_hdu.write(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+GE_name+'.fits'), overwrite = True)
