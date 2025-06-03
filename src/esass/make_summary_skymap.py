@@ -1,21 +1,3 @@
-"""
-This script resambles https://gitlab.mpcdf.mpg.de/joco/erosita_sxrbg/-/blob/main/esass/erassX_write_scripts.py
-It creates 3 scripts:
-1) create images
-2) start detection: 3 loops of erbox and erbackmap
-3) finish detection: ermldet, apetool, srctool
-/data26s/mpecl/eRASS1/??????/c946
-/data26s/mpecl/eRASS1/358144/c946
-/data26s/mpecl/eRASS1/358144/c946/*events*
-
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_img.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_img_RS.log &
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_det1.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_det1_RS.log &
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_det2.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/086066/086066_pipeline_det2_RS.log &
-
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_img.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_img_RS.log &
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_det1.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_det1_RS.log &
-nohup bash /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_det2.sh > /data26s/comparat/simulations/erosim/eRASS1_UNIT_fA1i_2021_10_12_SKYMAP/092084/092084_pipeline_det2_RS.log &
-"""
 # !/usr/bin/env python
 import sys, os, glob
 import numpy as n
