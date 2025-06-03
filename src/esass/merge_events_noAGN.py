@@ -23,7 +23,7 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][::-1]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
@@ -73,13 +73,15 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	N_evs = []
 	for NCCD, tEXP in zip(n.arange(7)+1, texps):
 		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
-		if len(CL_evt_files)==0:
+		if len(CL_evt_files)>0:
+			hdu_C = fits.open(CL_evt_files[0])
+			texp_C = np.sum(hdu_C[2].data['STOP']-hdu_C[2].data['START'])
+			frac_C = tEXP/texp_C
+			N_ev_C = len(hdu_C[1].data)
+		else:
+			N_ev_C = 0
 			print(str_field, 'continuing, no cluster file continue')
-			continue
-		hdu_C = fits.open(CL_evt_files[0])
-		texp_C = np.sum(hdu_C[2].data['STOP']-hdu_C[2].data['START'])
-		frac_C = tEXP/texp_C
-		N_ev_C = len(hdu_C[1].data)
+			# continue
 
 		bg_tm = bg_all[bg_all['TM_NR']==NCCD]
 		N_BG = len(bg_tm)
