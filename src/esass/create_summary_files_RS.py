@@ -7,7 +7,7 @@ from astropy.coordinates import SkyCoord
 from sklearn.neighbors import BallTree
 from tqdm import tqdm
 from astropy.cosmology import FlatLambdaCDM
-
+import healpy as hp
 
 '''
 Creates summmary files in /home/idies/workspace/erosim/Uchuu/LCerass/SummaryFiles
@@ -33,13 +33,20 @@ p_2_eSASS_matched = os.path.join(basedir, 'SummaryFiles', 'LC_eRASS_eSASS_Output
 
 
 #prepare to select unique area in esass catalogues
-sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'],
-                                      'data/models/eROSITA', 'SKYMAPS.fits'))
+#sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'],
+#                                      'data/models/eROSITA', 'SKYMAPS.fits'))
+sky_map_hdu = Table.read('SKYMAPS.fits')
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN'] < ra) & (
             sky_map_hdu['RA_MAX'] >= ra) & (sky_map_hdu['DE_MIN'] < dec) & (
                                                sky_map_hdu['DE_MAX'] >= dec)]
 
+
+p2bkg_simput = os.path.join(os.environ['HOME'], 'workspace/erosim/simput/bkg_erosita_simput_full_sky', 'catalogue.fits')
+bkg_simput = Table.read(p2bkg_simput, memmap=True)
+sel_BG_feature = bkg_simput['FLUX']>2e-11
+high_BKG_ids = bkg_simput['SRC_ID'][sel_BG_feature]
+nside = 128
 
 clu_all = []
 eSASS_all = []
@@ -162,32 +169,38 @@ for p2uniq in tqdm(p_2_match_cats):
     eSASS_offset[seldet] = coord1.separation(coord2).arcsecond
     XGAS_filtered['eSASS_offset'] = eSASS_offset
     XGAS_filtered['eSASS_offset'].units = 'arcsec'
-
+    ipix = hp.ang2pix(nside, XGAS_filtered['RA'], XGAS_filtered['DEC'], nest=True, lonlat=True)
+    in_good_region = ~np.isin(ipix, high_BKG_ids)
+    XGAS_filtered['in_good_region'] = in_good_region
     clu_all.append(XGAS_filtered)
 
 
 
     # Now do eSASS
     SRV_value = np.array([get_srvmap(e0, e1) for e0, e1 in zip(Uniq['RA'], Uniq['DEC'])])
-    sel_area = SRV_value == tile
+    sel_area = np.isin(SRV_value.T[0], int(tile))
     Uniq = Uniq[sel_area]
     # unique counterpart of AGN or Star
     PNT_sel =  (Uniq['ID_uniq'] >= 0) & (Uniq['ID_uniq'] < 1e5)
     # unique counterpart of cluster
-    EXT_sel = (Uniq['ID_uniq'] >= 1e8)
+    EXT_sel = (Uniq['ID_uniq'] >= 1e6)
     # no unique counterpart and linked to agn or star
     PNT2_sel = ((Uniq['ID_uniq'] < 0) & ((Uniq['ID_Any'] >= 0) & (Uniq['ID_Any'] < 1e5)))
     # no unique counterpart and linked to cluster
-    EXT2_sel = (Uniq['ID_uniq'] < 0) & (Uniq['ID_Any'] >= 1e8)
+    EXT2_sel = (Uniq['ID_uniq'] < 0) & (Uniq['ID_Any'] >= 1e6)
     # BKG/FG feature
     # spurious, not linked to anything
     BKG_sel = (Uniq['ID_Any'] < 0)  # & (~sel_BG_feature)
 
+    #Uniq['SRVMAP'] = SRV_value[sel_area]
     Uniq['class_PNT'] = PNT_sel
     Uniq['class_PNT2'] = PNT2_sel
     Uniq['class_EXT'] = EXT_sel
     Uniq['class_EXT2'] = EXT2_sel
     Uniq['class_BKG'] = BKG_sel
+    ipix = hp.ang2pix(nside, Uniq['RA'], Uniq['DEC'], nest=True, lonlat=True)
+    in_good_region = ~np.isin(ipix, high_BKG_ids)
+    Uniq['in_good_region'] = in_good_region
 
     eSASS_all.append(Uniq)
 
