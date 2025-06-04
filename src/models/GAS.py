@@ -616,8 +616,10 @@ class GAS:
         shape_i = YY_z.shape
         matrix_2d = itp_frac_obs.reshape(shape_i)
         attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
-
-        k_correction_2d = attenuation_2d( np.transpose([self.CAT['CLUSTER_kT'], self.CAT['redshift_S']]))
+        kt_min = 1.01*ZZ_kt.min()
+        KT_padded = self.CAT['CLUSTER_kT']
+        KT_padded[KT_padded<kt_min]=kt_min
+        k_correction_2d = attenuation_2d( np.transpose([KT_padded, self.CAT['redshift_S']]))
 
         dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
         self.CAT['CLUSTER_LX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_RF_R500c'] - np.log10( k_correction_2d )
@@ -700,7 +702,10 @@ class GAS:
         matrix_2d = itp_frac_obs.reshape(shape_i)
         attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
 
-        k_correction_2d = attenuation_2d( np.transpose([self.CAT['CLUSTER_kT'], self.CAT['redshift_S']]))
+        kt_min = 1.01*ZZ_kt.min()
+        KT_padded = self.CAT['CLUSTER_kT']
+        KT_padded[KT_padded<kt_min]=kt_min
+        k_correction_2d = attenuation_2d( np.transpose([KT_padded, self.CAT['redshift_S']]))
 
         dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
         self.CAT['CLUSTER_LX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_RF_R500c'] - np.log10( k_correction_2d )

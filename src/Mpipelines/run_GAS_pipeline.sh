@@ -58,6 +58,30 @@ python GAS_pipeline.py z1p32 FullSky # DONE
 python GAS_pipeline.py z1p43 FullSky # DONE
 python GAS_pipeline.py z1p54 FullSky # DONE
 
+python GAS_pipeline_ktMod.py z0p00 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p02 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p05 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p09 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p14 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p19 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p25 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p30 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p36 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p43 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p49 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p56 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p63 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p70 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p78 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p86 FullSky # DONE
+python GAS_pipeline_ktMod.py z0p94 FullSky # DONE
+python GAS_pipeline_ktMod.py z1p03 FullSky # DONE
+python GAS_pipeline_ktMod.py z1p12 FullSky # DONE
+python GAS_pipeline_ktMod.py z1p22 FullSky # DONE
+python GAS_pipeline_ktMod.py z1p32 FullSky # DONE
+python GAS_pipeline_ktMod.py z1p43 FullSky # DONE
+python GAS_pipeline_ktMod.py z1p54 FullSky # DONE
+
 #
 python GAS_pipeline.py z0p00 LC0002 # DONE
 python GAS_pipeline.py z0p02 LC0002 # DONE
