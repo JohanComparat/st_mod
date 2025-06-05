@@ -79,7 +79,7 @@ for p_2_catalogue in p_2_catalogues:
             N_selected = nl(s2)
             dir_4_out = os.path.join(os.environ['UCHUU'], LC_dir, str_field, z_dir , p_2_catalogue.split('/')[-2])
             os.system('mkdir -p ' + dir_4_out)
-            p_2_catalogue_out = os.path.join( dir_4_out, 'Xgas_bHS0.8_simput.fits')
+            p_2_catalogue_out = os.path.join( dir_4_out, basename +'_simput.fits')
             t_in[s2].write(p_2_catalogue_out, overwrite = True)
             print(N_selected, p_2_catalogue_out, 'written')
             N_tot.append(N_selected)
