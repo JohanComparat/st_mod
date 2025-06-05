@@ -19,34 +19,83 @@ result stored here :
 # implement flux cut
 # import numpy as np
 # for kk in np.arange(24):
-#     print("nohup python extract_erosita_tile.py "+str(kk)+" > logs/extract_erosita_tile_"+str(kk)+".log &")
+#     print("nohup python extract_erosita_tile_simput.py "+str(kk)+" > logs/extract_erosita_tile_"+str(kk)+".log &")
 
 # takes <1h
 #
-# # nohup python extract_erosita_tile.py 0 > logs/extract_erosita_tile_0.log & # DO NOT extract z=0. Skip it !
-nohup python extract_erosita_tile.py 1  > logs/extract_erosita_tile_1.log  & # DONE
-nohup python extract_erosita_tile.py 2  > logs/extract_erosita_tile_2.log  & # DONE
-nohup python extract_erosita_tile.py 3  > logs/extract_erosita_tile_3.log  & # DONE
-nohup python extract_erosita_tile.py 4  > logs/extract_erosita_tile_4.log  & # DONE
-nohup python extract_erosita_tile.py 5  > logs/extract_erosita_tile_5.log  & # DONE
-nohup python extract_erosita_tile.py 6  > logs/extract_erosita_tile_6.log  & # DONE
-nohup python extract_erosita_tile.py 7  > logs/extract_erosita_tile_7.log  & # DONE
-nohup python extract_erosita_tile.py 8  > logs/extract_erosita_tile_8.log  & # DONE
-nohup python extract_erosita_tile.py 9  > logs/extract_erosita_tile_9.log  & # DONE
-nohup python extract_erosita_tile.py 10 > logs/extract_erosita_tile_10.log & # DONE
-nohup python extract_erosita_tile.py 11 > logs/extract_erosita_tile_11.log & # DONE
-nohup python extract_erosita_tile.py 12 > logs/extract_erosita_tile_12.log & # DONE
-nohup python extract_erosita_tile.py 13 > logs/extract_erosita_tile_13.log & # DONE
-nohup python extract_erosita_tile.py 14 > logs/extract_erosita_tile_14.log & # DONE
-nohup python extract_erosita_tile.py 15 > logs/extract_erosita_tile_15.log & # DONE
-nohup python extract_erosita_tile.py 16 > logs/extract_erosita_tile_16.log & # DONE
-nohup python extract_erosita_tile.py 17 > logs/extract_erosita_tile_17.log & # DONE
-nohup python extract_erosita_tile.py 18 > logs/extract_erosita_tile_18.log & # DONE
-nohup python extract_erosita_tile.py 19 > logs/extract_erosita_tile_19.log & # DONE
-nohup python extract_erosita_tile.py 20 > logs/extract_erosita_tile_20.log & # DONE
-nohup python extract_erosita_tile.py 21 > logs/extract_erosita_tile_21.log & # DONE
-nohup python extract_erosita_tile.py 22 > logs/extract_erosita_tile_22.log & # DONE
-python merge_erosita_tile.py # DONE
+# # nohup python extract_erosita_tile_simput.py 0 > logs/extract_erosita_tile_0.log & # DO NOT extract z=0. Skip it !
+nohup python extract_erosita_tile_simput.py 1  "Xgas_bHS0.8" > logs/extract_erosita_tile_1.log  & # DONE
+nohup python extract_erosita_tile_simput.py 2  "Xgas_bHS0.8" > logs/extract_erosita_tile_2.log  & # DONE
+nohup python extract_erosita_tile_simput.py 3  "Xgas_bHS0.8" > logs/extract_erosita_tile_3.log  & # DONE
+nohup python extract_erosita_tile_simput.py 4  "Xgas_bHS0.8" > logs/extract_erosita_tile_4.log  & # DONE
+nohup python extract_erosita_tile_simput.py 5  "Xgas_bHS0.8" > logs/extract_erosita_tile_5.log  & # DONE
+nohup python extract_erosita_tile_simput.py 6  "Xgas_bHS0.8" > logs/extract_erosita_tile_6.log  & # DONE
+nohup python extract_erosita_tile_simput.py 7  "Xgas_bHS0.8" > logs/extract_erosita_tile_7.log  & # DONE
+nohup python extract_erosita_tile_simput.py 8  "Xgas_bHS0.8" > logs/extract_erosita_tile_8.log  & # DONE
+nohup python extract_erosita_tile_simput.py 9  "Xgas_bHS0.8" > logs/extract_erosita_tile_9.log  & # DONE
+nohup python extract_erosita_tile_simput.py 10 "Xgas_bHS0.8" > logs/extract_erosita_tile_10.log & # DONE
+nohup python extract_erosita_tile_simput.py 11 "Xgas_bHS0.8" > logs/extract_erosita_tile_11.log & # DONE
+nohup python extract_erosita_tile_simput.py 12 "Xgas_bHS0.8" > logs/extract_erosita_tile_12.log & # DONE
+nohup python extract_erosita_tile_simput.py 13 "Xgas_bHS0.8" > logs/extract_erosita_tile_13.log & # DONE
+nohup python extract_erosita_tile_simput.py 14 "Xgas_bHS0.8" > logs/extract_erosita_tile_14.log & # DONE
+nohup python extract_erosita_tile_simput.py 15 "Xgas_bHS0.8" > logs/extract_erosita_tile_15.log & # DONE
+nohup python extract_erosita_tile_simput.py 16 "Xgas_bHS0.8" > logs/extract_erosita_tile_16.log & # DONE
+nohup python extract_erosita_tile_simput.py 17 "Xgas_bHS0.8" > logs/extract_erosita_tile_17.log & # DONE
+nohup python extract_erosita_tile_simput.py 18 "Xgas_bHS0.8" > logs/extract_erosita_tile_18.log & # DONE
+nohup python extract_erosita_tile_simput.py 19 "Xgas_bHS0.8" > logs/extract_erosita_tile_19.log & # DONE
+nohup python extract_erosita_tile_simput.py 20 "Xgas_bHS0.8" > logs/extract_erosita_tile_20.log & # DONE
+nohup python extract_erosita_tile_simput.py 21 "Xgas_bHS0.8" > logs/extract_erosita_tile_21.log & # DONE
+nohup python extract_erosita_tile_simput.py 22 "Xgas_bHS0.8" > logs/extract_erosita_tile_22.log & # DONE
+python merge_erosita_tile.py "Xgas_bHS0.8" # DONE
+
+nohup python extract_erosita_tile_simput.py 1  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_1.log  & # DONE
+nohup python extract_erosita_tile_simput.py 2  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_2.log  & # DONE
+nohup python extract_erosita_tile_simput.py 3  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_3.log  & # DONE
+nohup python extract_erosita_tile_simput.py 4  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_4.log  & # DONE
+nohup python extract_erosita_tile_simput.py 5  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_5.log  & # DONE
+nohup python extract_erosita_tile_simput.py 6  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_6.log  & # DONE
+nohup python extract_erosita_tile_simput.py 7  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_7.log  & # DONE
+nohup python extract_erosita_tile_simput.py 8  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_8.log  & # DONE
+nohup python extract_erosita_tile_simput.py 9  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_9.log  & # DONE
+nohup python extract_erosita_tile_simput.py 10 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_10.log & # DONE
+nohup python extract_erosita_tile_simput.py 11 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_11.log & # DONE
+nohup python extract_erosita_tile_simput.py 12 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_12.log & # DONE
+nohup python extract_erosita_tile_simput.py 13 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_13.log & # DONE
+nohup python extract_erosita_tile_simput.py 14 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_14.log & # DONE
+nohup python extract_erosita_tile_simput.py 15 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_15.log & # DONE
+nohup python extract_erosita_tile_simput.py 16 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_16.log & # DONE
+nohup python extract_erosita_tile_simput.py 17 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_17.log & # DONE
+nohup python extract_erosita_tile_simput.py 18 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_18.log & # DONE
+nohup python extract_erosita_tile_simput.py 19 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_19.log & # DONE
+nohup python extract_erosita_tile_simput.py 20 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_20.log & # DONE
+nohup python extract_erosita_tile_simput.py 21 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_21.log & # DONE
+nohup python extract_erosita_tile_simput.py 22 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_22.log & # DONE
+python merge_erosita_tile.py "Xgas_bHS0.8_kts070" # DONE
+
+nohup python extract_erosita_tile_simput.py 1  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_1.log  & # DONE
+nohup python extract_erosita_tile_simput.py 2  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_2.log  & # DONE
+nohup python extract_erosita_tile_simput.py 3  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_3.log  & # DONE
+nohup python extract_erosita_tile_simput.py 4  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_4.log  & # DONE
+nohup python extract_erosita_tile_simput.py 5  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_5.log  & # DONE
+nohup python extract_erosita_tile_simput.py 6  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_6.log  & # DONE
+nohup python extract_erosita_tile_simput.py 7  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_7.log  & # DONE
+nohup python extract_erosita_tile_simput.py 8  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_8.log  & # DONE
+nohup python extract_erosita_tile_simput.py 9  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_9.log  & # DONE
+nohup python extract_erosita_tile_simput.py 10 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_10.log & # DONE
+nohup python extract_erosita_tile_simput.py 11 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_11.log & # DONE
+nohup python extract_erosita_tile_simput.py 12 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_12.log & # DONE
+nohup python extract_erosita_tile_simput.py 13 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_13.log & # DONE
+nohup python extract_erosita_tile_simput.py 14 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_14.log & # DONE
+nohup python extract_erosita_tile_simput.py 15 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_15.log & # DONE
+nohup python extract_erosita_tile_simput.py 16 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_16.log & # DONE
+nohup python extract_erosita_tile_simput.py 17 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_17.log & # DONE
+nohup python extract_erosita_tile_simput.py 18 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_18.log & # DONE
+nohup python extract_erosita_tile_simput.py 19 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_19.log & # DONE
+nohup python extract_erosita_tile_simput.py 20 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_20.log & # DONE
+nohup python extract_erosita_tile_simput.py 21 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_21.log & # DONE
+nohup python extract_erosita_tile_simput.py 22 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_22.log & # DONE
+python merge_erosita_tile.py "Xgas_bHS0.8_kts065" # DONE
+
 
 # create links for the images and spectra in each folder
 # python create_links_per_tile.py # DONE
@@ -110,6 +159,30 @@ nohup python extract_erosita_tile_XGAS_ktMod.py 20 Xgas_bHS0.8_kts070 > logs/ext
 nohup python extract_erosita_tile_XGAS_ktMod.py 21 Xgas_bHS0.8_kts070 > logs/extract_erosita_tile_XGAS_21.log & # DONE
 nohup python extract_erosita_tile_XGAS_ktMod.py 22 Xgas_bHS0.8_kts070 > logs/extract_erosita_tile_XGAS_22.log & # DONE
 python merge_erosita_tile_XGAS_ktMod.py Xgas_bHS0.8_kts070 # DONE
+
+nohup python extract_erosita_tile_XGAS_ktMod.py 1  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_1.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 2  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_2.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 3  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_3.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 4  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_4.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 5  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_5.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 6  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_6.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 7  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_7.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 8  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_8.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 9  Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_9.log  & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 10 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_10.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 11 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_11.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 12 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_12.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 13 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_13.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 14 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_14.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 15 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_15.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 16 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_16.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 17 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_17.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 18 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_18.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 19 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_19.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 20 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_20.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 21 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_21.log & # DONE
+nohup python extract_erosita_tile_XGAS_ktMod.py 22 Xgas_bHS0.8_kts065 > logs/extract_erosita_tile_XGAS_22.log & # DONE
+python merge_erosita_tile_XGAS_ktMod.py Xgas_bHS0.8_kts065 # DONE
 
 
 

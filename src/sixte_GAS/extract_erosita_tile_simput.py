@@ -8,7 +8,7 @@ nl = lambda sel : len(sel.nonzero()[0])
 
 log10FXmin = -15.7
 jj_zdir = int(sys.argv[1])
-
+basename = sys.argv[2] # 'Xgas_bHS0.8'
 all_z_dirs = np.array([  'z0p00',
                     'z0p02',
                     'z0p05',
@@ -63,7 +63,7 @@ z_dir = z_dirs[jj_zdir]
 print('='*100)
 print(z_dir)
 print('='*100)
-p_2_catalogues = np.array( glob.glob( os.path.join(os.environ['UCHUU'], 'FullSky', z_dir, 'replication_*_*_*', 'Xgas_bHS0.8_simput.fits') ) )
+p_2_catalogues = np.array( glob.glob( os.path.join(os.environ['UCHUU'], 'FullSky', z_dir, 'replication_*_*_*', basename + '_simput.fits') ) )
 p_2_catalogues.sort()
 for p_2_catalogue in p_2_catalogues:
     t_in = Table.read(p_2_catalogue)
