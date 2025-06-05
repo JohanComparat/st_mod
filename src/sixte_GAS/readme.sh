@@ -46,7 +46,7 @@ nohup python extract_erosita_tile_simput.py 19 "Xgas_bHS0.8" > logs/extract_eros
 nohup python extract_erosita_tile_simput.py 20 "Xgas_bHS0.8" > logs/extract_erosita_tile_20.log & # DONE
 nohup python extract_erosita_tile_simput.py 21 "Xgas_bHS0.8" > logs/extract_erosita_tile_21.log & # DONE
 nohup python extract_erosita_tile_simput.py 22 "Xgas_bHS0.8" > logs/extract_erosita_tile_22.log & # DONE
-python merge_erosita_tile.py "Xgas_bHS0.8" # DONE
+python merge_erosita_tile_simput.py "Xgas_bHS0.8" # DONE
 python format_simput_xgas.py "Xgas_bHS0.8" # DONE
 
 nohup python extract_erosita_tile_simput.py 1  "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_1.log  & # ONGoing
@@ -71,7 +71,7 @@ nohup python extract_erosita_tile_simput.py 19 "Xgas_bHS0.8_kts070" > logs/extra
 nohup python extract_erosita_tile_simput.py 20 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_20.log & # ONGoing
 nohup python extract_erosita_tile_simput.py 21 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_21.log & # ONGoing
 nohup python extract_erosita_tile_simput.py 22 "Xgas_bHS0.8_kts070" > logs/extract_erosita_tile_22.log & # ONGoing
-python merge_erosita_tile.py "Xgas_bHS0.8_kts070" # TODO
+python merge_erosita_tile_simput.py "Xgas_bHS0.8_kts070" # TODO
 python format_simput_xgas.py "Xgas_bHS0.8_kts070" # TODO
 
 nohup python extract_erosita_tile_simput.py 1  "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_1.log  & # TODO
@@ -96,7 +96,7 @@ nohup python extract_erosita_tile_simput.py 19 "Xgas_bHS0.8_kts065" > logs/extra
 nohup python extract_erosita_tile_simput.py 20 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_20.log & # TODO
 nohup python extract_erosita_tile_simput.py 21 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_21.log & # TODO
 nohup python extract_erosita_tile_simput.py 22 "Xgas_bHS0.8_kts065" > logs/extract_erosita_tile_22.log & # TODO
-python merge_erosita_tile.py "Xgas_bHS0.8_kts065" # TODO
+python merge_erosita_tile_simput.py "Xgas_bHS0.8_kts065" # TODO
 python format_simput_xgas.py "Xgas_bHS0.8_kts065" # TODO
 
 
