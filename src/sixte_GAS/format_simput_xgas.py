@@ -4,7 +4,7 @@ import os, glob, sys
 from astropy.table import Table, vstack
 import numpy as np
 import astropy.io.fits as fits
-
+basename = sys.argv[1]
 nl = lambda sel : len(sel.nonzero()[0])
 
 LC_dir = 'LCerass'
@@ -16,7 +16,7 @@ sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models
 for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][10:]:
     t0 = time.time()
     str_field = str(srv_val).zfill(6)
-    t_in = Table.read( os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput.fits') )
+    t_in = Table.read( os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput.fits') )
     print(len(t_in))
     temperature = np.array([ int(el.split('_')[4])/10000 for el in t_in['SPECTRUM']  ])
     t_in = t_in[temperature>=0.1]
@@ -25,7 +25,7 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
     #lowz = (zdirs=="z0.022")#|(zdirs=="z0.045")
     #t_all = t_in[lowz==False]
     #print(len(t_in), 'after lowZ cut')
-    p2_simput_out = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput_final.fits')
+    p2_simput_out = os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits')
     N_clu_all = len(t_in)
     hdu_cols = fits.ColDefs([
         fits.Column(name="SRC_ID",  format='K',    unit='',    array=(t_in['SRC_ID']).astype('int')),

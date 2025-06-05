@@ -215,7 +215,9 @@ class Simulator:
 #erosim Simput=/home/idies/workspace/erosim/Uchuu/LCerass/164087/Xgas_bHS0.8_simput_N_000.fits Prefix=/home/idies/workspace/erosim/Uchuu/LCerass/164087/eRASS8_SEED_001_events_cluster_2025_04/t0erass_ Attitude=/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits RA=163.5 Dec=3.000512456781548 GTIFile=/home/idies/workspace/erosim/Uchuu/LCerass/164087/eRASS8_SEED_001_events_cluster_2025_04/erass.gti TSTART=617943605.0 Exposure=126230400.0 MJDREF=51543.875 dt=0.5 Seed=1 clobber=yes chatter=3 Background=no
 
 if __name__ == '__main__':
-    seed = 9
+    # seed = 9
+    basename = sys.argv[1]
+    seed = int(sys.argv[2])
     LC_dir = 'LCerass'
     #erass_option = "eRASS4"
     #erass_option = "eRASS5"
@@ -238,8 +240,8 @@ if __name__ == '__main__':
         #simput_files_all.sort()
         print(sky_tile_id)#, simput_files_all)
         #for simput_file_i in simput_files_all[:1]:
-        simput_files = np.array([os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput_final.fits'), ])
-        data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, erass_option + "_sixte_"+ sixte_version+ "_SEED_"+str(seed).zfill(3) +"_events_cluster" )
+        simput_files = np.array([os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits'), ])
+        data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, erass_option + "_sixte_"+ sixte_version+ "_SEED_"+str(seed).zfill(3) +"_events_cluster_"+basename )
         print('outputs here',data_dir)
         os.system('mkdir -p '+data_dir )
         if erass_option=='Att_eRASS8':
