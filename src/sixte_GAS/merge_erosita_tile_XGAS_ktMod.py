@@ -24,5 +24,5 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
             full_cat.append(Table.read(el))
 
         merge_cat = vstack(( full_cat ))
-        merge_cat.write(os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'XGAS.fits'), overwrite = True )
-        print(os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'XGAS.fits'), 'written, time spent=', time.time()-t0)
+        merge_cat.write(os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_XGAS.fits'), overwrite = True )
+        print(os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_XGAS.fits'), 'written, time spent=', time.time()-t0)
