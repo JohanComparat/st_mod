@@ -242,6 +242,10 @@ export OMP_NUM_THREADS=8
 # after the merging is finished (it deletes temporary files, careful !)
 # python clean_erosita_tile.py # TODO AT THE END, or not at all.
 
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/sixte_GAS/
 
 # simulates events with seed fixed
 python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8" 1 # DONE
@@ -253,6 +257,8 @@ python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8" 6 # DONE
 python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8" 7 # DONE
 python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8" 8 # DONE
 python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8" 9 # DONE
+
+python format_simput_xgas.py "Xgas_bHS0.8_kts065" # DONE
 
 python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8_kts065" 1 # TODO
 python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8_kts065" 2 # TODO

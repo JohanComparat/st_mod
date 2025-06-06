@@ -13,7 +13,7 @@ sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models
 
 # merge catalog
 # for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==1)]:
-for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][10:]:
+for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
     t0 = time.time()
     str_field = str(srv_val).zfill(6)
     t_in = Table.read( os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput.fits') )
