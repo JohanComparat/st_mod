@@ -248,7 +248,7 @@ uu = np.random.uniform(size=size)
 dec_fs = np.arccos(1 - 2 * uu) * 180 / np.pi - 90.
 ra_fs = np.random.uniform(size=size) * 2 * np.pi * 180 / np.pi
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][1:]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
@@ -264,22 +264,22 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	s_R = get_srvmap_rev(ra_fs, dec_fs, sky_tile)
 	basename = 'GAL_m' + str(np.round(11.0, 1)) + '_evAGNevCLUevBKG'
 	p_2_2PCF = os.path.join(dir_2pcf, basename + '_CROSSCORR_05E20.wtheta.2pcf.fits')
-
-	if os.path.isfile(path_2_event_file) and os.path.isfile(path_2_simeventBKG_file) and os.path.isfile(path_2_simeventCLU_file) and os.path.isfile(path_2_simeventAGN_file) and not os.path.isfile(p_2_2PCF):
+	#  and not os.path.isfile(p_2_2PCF)
+	if os.path.isfile(path_2_event_file) and os.path.isfile(path_2_simeventBKG_file) and os.path.isfile(path_2_simeventCLU_file) and os.path.isfile(path_2_simeventAGN_file):
 		GAL = Table.read(path_2_event_file)
 		evBKG = Table.read(path_2_simeventBKG_file)
 		evBKG = evBKG[(evBKG['SIGNAL']>=0.5)&(evBKG['SIGNAL']<=2.0)]
 		evAGN = Table.read(path_2_simeventAGN_file)
 		evAGN = evAGN[(evAGN['SIGNAL']>=0.5)&(evAGN['SIGNAL']<=2.0)]
 		evCLU = Table.read(path_2_simeventCLU_file)
-		evBKG = evBKG[(evBKG['SIGNAL']>=0.5)&(evBKG['SIGNAL']<=2.0)]
+		evCLU = evCLU[(evCLU['SIGNAL']>=0.5)&(evCLU['SIGNAL']<=2.0)]
 		m0 = 10.0
 		z1 = 0.18
 		s10 = (np.log10(GAL['obs_sm'])>=m0) & (GAL['redshift_S']>0.05) & (GAL['redshift_S']<z1)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evGAS'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evBKG'
@@ -296,14 +296,14 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLU'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLUevBKG'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 
@@ -312,8 +312,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		s10 = (np.log10(GAL['obs_sm'])>=m0) & (GAL['redshift_S']>0.05) & (GAL['redshift_S']<z1)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evGAS'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evBKG'
@@ -330,14 +330,14 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLU'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLUevBKG'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 
@@ -348,8 +348,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		s10 = (np.log10(GAL['obs_sm'])>=m0) & (GAL['redshift_S']>0.05) & (GAL['redshift_S']<z1)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evGAS'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(evCLU['RA'], evCLU['DEC'],
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evBKG'
@@ -366,14 +366,14 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLU'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'])), np.hstack((evCLU['DEC'],evAGN['DEC'])),
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 		basename = 'GAL_m'+str(np.round(m0,1))+'_evAGNevCLUevBKG'
 		p_2_2PCF = os.path.join(dir_2pcf, basename +'_CROSSCORR_05E20.wtheta.2pcf.fits' )
-		if not os.path.isfile(p_2_2PCF):
-			tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
+		# if not os.path.isfile(p_2_2PCF):
+		tabulate_XCORRwtheta_clustering_noW(np.hstack((evCLU['RA'], evAGN['RA'], evBKG['RA'])), np.hstack((evCLU['DEC'], evAGN['DEC'], evBKG['DEC'])),
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 

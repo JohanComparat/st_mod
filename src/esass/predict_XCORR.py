@@ -8,6 +8,8 @@ import numpy as np
 from astropy.table import Table, Column, vstack, hstack
 from astropy.cosmology import FlatLambdaCDM
 import astropy.units as u
+from scipy.optimize import curve_fit
+from scipy.interpolate import interp1d
 cosmoUNIT = FlatLambdaCDM(H0=67.74 * u.km / u.s / u.Mpc, Om0=0.308900)
 h = 0.6774
 L_box = 1000.0 / h
@@ -247,6 +249,9 @@ dir_fig = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/validation/validatio
 os.system('mkdir -p '+dir_fig)
 
 
+# mix = lambda f_A, f_B, f_G : (PRED['m11.0_GxA']['wtheta']*f_A*PRED['m11.0_GxA']['N_data']+  PRED['m11.0_GxB']['wtheta']*f_B*PRED['m11.0_GxB']['N_data'] + PRED['m11.0_GxG']['wtheta']*f_G*PRED['m11.0_GxG']['N_data'])/PRED['m11.0_GxGAB']['N_data']
+# mix (1,1,1)
+
 m0 = 10.0
 z1 = 0.18
 m0_str = str(np.round(m0,1))
@@ -258,6 +263,32 @@ plt.figure(33, (6.5,6.))
 
 WTH = XCORR['m10.0']
 plt.errorbar(WTH['theta'], WTH['wtheta'], yerr= WTH['wtheta']*0.05, label='Obs', lw=3, color='black', marker='*')
+x_fit = XCORR['m10.0']['theta'][2:]
+y_fit = XCORR['m10.0']['wtheta'][2:]
+plt.plot(x_fit, y_fit, ls='', color='red', marker='*', zorder=80)
+
+def mix_fit(x_fit, f_A, f_B, f_G):
+	N_tot = f_A * PRED['m10.0_GxA']['N_data'] + f_B * PRED['m10.0_GxB']['N_data'] + f_G * PRED['m10.0_GxG']['N_data']
+	out = (PRED['m10.0_GxA']['wtheta'] * f_A * PRED['m10.0_GxA']['N_data'] + PRED['m10.0_GxB']['wtheta'] * f_B *
+	 PRED['m10.0_GxB']['N_data'] + PRED['m10.0_GxG']['wtheta'] * f_G * PRED['m10.0_GxG']['N_data']) / N_tot
+	itp = interp1d(PRED['m10.0_GxG'  ]['theta_mid'], out)
+	return itp(x_fit)
+
+popt, pcov = curve_fit(mix_fit, x_fit, y_fit, bounds=(0, 1))
+
+mix_f = lambda f_A, f_B : (PRED['m10.0_GxA']['wtheta']*f_A*PRED['m10.0_GxA']['N_data']+  PRED['m10.0_GxB']['wtheta']*f_B*PRED['m10.0_GxB']['N_data'] + PRED['m10.0_GxG']['wtheta']*f_A*PRED['m10.0_GxG']['N_data'])/PRED['m10.0_GxGAB']['N_data']
+mix_N = lambda n_A, n_B, n_G : (PRED['m10.0_GxA']['wtheta']*n_A+  PRED['m10.0_GxB']['wtheta']*n_B + PRED['m10.0_GxG']['wtheta']*n_G)/PRED['m10.0_GxGAB']['N_data']
+f_A = 4
+#f_B = 0.91
+n_A = f_A*(PRED['m10.0_GxA']['N_data'][0]+PRED['m10.0_GxG']['N_data'][0])
+n_B = PRED['m10.0_GxGAB']['N_data'][0] - n_A
+f_B = n_B/PRED['m10.0_GxB']['N_data'][0]
+#f_B*PRED['m10.0_GxB']['N_data'][0]
+#n_G = PRED['m10.0_GxGAB']['N_data'][0]-n_B-n_A
+print(f_A, f_B)
+out = mix_f(f_A, f_B)
+# print(out/PRED['m10.0_GxGAB']['wtheta'])
+
 
 WTH = PRED['m10.0_GxG'  ]
 plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxG', lw=1)
@@ -268,9 +299,42 @@ plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxA', lw=1)
 WTH = PRED['m10.0_GxGA' ]
 plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGA', lw=1)
 WTH = PRED['m10.0_GxGAB']
-plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGAB', lw=1)
-# yerr =  abs(WTH['wtheta'] * (0.01**2 + WTH['D1D2_counts']**-1. + WTH['D1R2_counts']**-1. + WTH['D2R1_counts']**-1. + WTH['R1R2_counts']**-1. )**0.5)
 
+plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGAB', lw=1)
+#
+# mix_f = lambda f_A, f_B : (PRED['m10.0_GxA']['wtheta']*f_A*PRED['m10.0_GxA']['N_data']+  PRED['m10.0_GxB']['wtheta']*f_B*PRED['m10.0_GxB']['N_data'] + PRED['m10.0_GxG']['wtheta']*f_A*PRED['m10.0_GxG']['N_data'])/PRED['m10.0_GxGAB']['N_data']
+# f_A = 2
+# n_A = f_A*(PRED['m10.0_GxA']['N_data'][0]+PRED['m10.0_GxG']['N_data'][0])
+# n_B = PRED['m10.0_GxGAB']['N_data'][0] - n_A
+# f_B = n_B/PRED['m10.0_GxB']['N_data'][0]
+# out = mix_f(f_A, f_B)
+# plt.plot(WTH['theta_mid'], out, label='GxGA('+str(np.round(f_A,2))+')B('+str(np.round(f_B,2))+')', lw=2)
+# f_A = 3
+# n_A = f_A*(PRED['m10.0_GxA']['N_data'][0]+PRED['m10.0_GxG']['N_data'][0])
+# n_B = PRED['m10.0_GxGAB']['N_data'][0] - n_A
+# f_B = n_B/PRED['m10.0_GxB']['N_data'][0]
+# out = mix_f(f_A, f_B)
+# plt.plot(WTH['theta_mid'], out, label='GxGA('+str(np.round(f_A,2))+')B('+str(np.round(f_B,2))+')', lw=2)
+# f_A = 4
+# n_A = f_A*(PRED['m10.0_GxA']['N_data'][0]+PRED['m10.0_GxG']['N_data'][0])
+# n_B = PRED['m10.0_GxGAB']['N_data'][0] - n_A
+# f_B = n_B/PRED['m10.0_GxB']['N_data'][0]
+# out = mix_f(f_A, f_B)
+# plt.plot(WTH['theta_mid'], out, label='GxGA('+str(np.round(f_A,2))+')B('+str(np.round(f_B,2))+')', lw=2)
+
+f_A_nat = PRED['m10.0_GxA']['N_data'][0]/ PRED['m10.0_GxGAB']['N_data'][0]
+f_B_nat = PRED['m10.0_GxB']['N_data'][0]/ PRED['m10.0_GxGAB']['N_data'][0]
+f_G_nat = PRED['m10.0_GxG']['N_data'][0]/ PRED['m10.0_GxGAB']['N_data'][0]
+
+n_tot_fit = popt[0]*PRED['m10.0_GxA']['N_data'][0] + popt[1]*PRED['m10.0_GxB']['N_data'][0] + popt[2]*PRED['m10.0_GxG']['N_data'][0]
+f_A_fit = popt[0]*PRED['m10.0_GxA']['N_data'][0]/ n_tot_fit
+f_B_fit = popt[1]*PRED['m10.0_GxB']['N_data'][0]/ n_tot_fit
+f_G_fit = popt[2]*PRED['m10.0_GxG']['N_data'][0]/ n_tot_fit
+print('AGN',f_A_nat, f_A_fit)
+print('BKG',f_B_nat, f_B_fit)
+print('GAS',f_G_nat, f_G_fit)
+
+plt.plot(x_fit, mix_fit(x_fit, *popt), ls='--', color='darkred', lw=3, zorder=100, label='fit')#: f_A=%5.3f, f_B=%5.3f, f_G=%5.3f' % tuple(popt))
 plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
 plt.xscale('log')
@@ -285,6 +349,8 @@ plt.tight_layout()
 plt.savefig(p_2_2PCF_figure)
 plt.clf()
 print(p_2_2PCF_figure, 'written')
+
+
 
 
 m0 = 10.5
@@ -299,6 +365,33 @@ plt.figure(33, (6.5,6.))
 WTH = XCORR['m10.5']
 plt.errorbar(WTH['theta'], WTH['wtheta'], yerr= WTH['wtheta']*0.05, label='Obs', lw=3, color='black', marker='*')
 
+x_fit = XCORR['m10.5']['theta'][2:]
+y_fit = XCORR['m10.5']['wtheta'][2:]
+plt.plot(x_fit, y_fit, ls='', color='red', marker='*', zorder=80)
+
+def mix_fit(x_fit, f_A, f_B, f_G):
+	N_tot = f_A * PRED['m10.5_GxA']['N_data'] + f_B * PRED['m10.5_GxB']['N_data'] + f_G * PRED['m10.5_GxG']['N_data']
+	out = (PRED['m10.5_GxA']['wtheta'] * f_A * PRED['m10.5_GxA']['N_data'] + PRED['m10.5_GxB']['wtheta'] * f_B *
+	 PRED['m10.5_GxB']['N_data'] + PRED['m10.5_GxG']['wtheta'] * f_G * PRED['m10.5_GxG']['N_data']) / N_tot
+	itp = interp1d(PRED['m10.5_GxG'  ]['theta_mid'], out)
+	return itp(x_fit)
+
+popt, pcov = curve_fit(mix_fit, x_fit, y_fit, bounds=(0, 1))
+
+f_A_nat = PRED['m10.5_GxA']['N_data'][0]/ PRED['m10.5_GxGAB']['N_data'][0]
+f_B_nat = PRED['m10.5_GxB']['N_data'][0]/ PRED['m10.5_GxGAB']['N_data'][0]
+f_G_nat = PRED['m10.5_GxG']['N_data'][0]/ PRED['m10.5_GxGAB']['N_data'][0]
+
+n_tot_fit = popt[0]*PRED['m10.5_GxA']['N_data'][0] + popt[1]*PRED['m10.5_GxB']['N_data'][0] + popt[2]*PRED['m10.5_GxG']['N_data'][0]
+f_A_fit = popt[0]*PRED['m10.5_GxA']['N_data'][0]/ n_tot_fit
+f_B_fit = popt[1]*PRED['m10.5_GxB']['N_data'][0]/ n_tot_fit
+f_G_fit = popt[2]*PRED['m10.5_GxG']['N_data'][0]/ n_tot_fit
+print('AGN',f_A_nat, f_A_fit)
+print('BKG',f_B_nat, f_B_fit)
+print('GAS',f_G_nat, f_G_fit)
+
+plt.plot(x_fit, mix_fit(x_fit, *popt), ls='--', color='darkred', lw=3, zorder=100, label='fit')#: f_A=%5.3f, f_B=%5.3f, f_G=%5.3f' % tuple(popt))
+
 WTH = PRED['m10.5_GxG'  ]
 plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxG', lw=1)
 WTH = PRED['m10.5_GxB'  ]
@@ -309,7 +402,6 @@ WTH = PRED['m10.5_GxGA' ]
 plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGA', lw=1)
 WTH = PRED['m10.5_GxGAB']
 plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGAB', lw=1)
-# yerr =  abs(WTH['wtheta'] * (0.01**2 + WTH['D1D2_counts']**-1. + WTH['D1R2_counts']**-1. + WTH['D2R1_counts']**-1. + WTH['R1R2_counts']**-1. )**0.5)
 
 plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
@@ -326,17 +418,49 @@ plt.savefig(p_2_2PCF_figure)
 plt.clf()
 print(p_2_2PCF_figure, 'written')
 
+
+
+
+
 m0 = 11.0
 z1 = 0.35
 m0_str = str(np.round(m0,1))
 z1_str = str(np.round(z1,2))
 str_title = r'$z<$'+z1_str+', '+m0_str+r'$<\log_{10}(M*[M_\odot])$'
 
+
 p_2_2PCF_figure = os.path.join(dir_fig, 'GALxEVT_m'+m0_str+'.png')
 plt.figure(33, (6.5,6.))
 
 WTH = XCORR['m11.0']
 plt.errorbar(WTH['theta'], WTH['wtheta'], yerr= WTH['wtheta']*0.05, label='Obs', lw=3, color='black', marker='*')
+
+x_fit = XCORR['m11.0']['theta'][2:]
+y_fit = XCORR['m11.0']['wtheta'][2:]
+plt.plot(x_fit, y_fit, ls='', color='red', marker='*', zorder=80)
+
+def mix_fit(x_fit, f_A, f_B, f_G):
+	N_tot = f_A * PRED['m11.0_GxA']['N_data'] + f_B * PRED['m11.0_GxB']['N_data'] + f_G * PRED['m11.0_GxG']['N_data']
+	out = (PRED['m11.0_GxA']['wtheta'] * f_A * PRED['m11.0_GxA']['N_data'] + PRED['m11.0_GxB']['wtheta'] * f_B *
+	 PRED['m11.0_GxB']['N_data'] + PRED['m11.0_GxG']['wtheta'] * f_G * PRED['m11.0_GxG']['N_data']) / N_tot
+	itp = interp1d(PRED['m11.0_GxG'  ]['theta_mid'], out)
+	return itp(x_fit)
+
+popt, pcov = curve_fit(mix_fit, x_fit, y_fit, bounds=(0, 1))
+
+f_A_nat = PRED['m11.0_GxA']['N_data'][0]/ PRED['m11.0_GxGAB']['N_data'][0]
+f_B_nat = PRED['m11.0_GxB']['N_data'][0]/ PRED['m11.0_GxGAB']['N_data'][0]
+f_G_nat = PRED['m11.0_GxG']['N_data'][0]/ PRED['m11.0_GxGAB']['N_data'][0]
+
+n_tot_fit = popt[0]*PRED['m11.0_GxA']['N_data'][0] + popt[1]*PRED['m11.0_GxB']['N_data'][0] + popt[2]*PRED['m11.0_GxG']['N_data'][0]
+f_A_fit = popt[0]*PRED['m11.0_GxA']['N_data'][0]/ n_tot_fit
+f_B_fit = popt[1]*PRED['m11.0_GxB']['N_data'][0]/ n_tot_fit
+f_G_fit = popt[2]*PRED['m11.0_GxG']['N_data'][0]/ n_tot_fit
+print('AGN',f_A_nat, f_A_fit)
+print('BKG',f_B_nat, f_B_fit)
+print('GAS',f_G_nat, f_G_fit)
+
+plt.plot(x_fit, mix_fit(x_fit, *popt), ls='--', color='darkred', lw=3, zorder=100, label='fit')#: f_A=%5.3f, f_B=%5.3f, f_G=%5.3f' % tuple(popt))
 
 WTH = PRED['m11.0_GxG'  ]
 plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxG', lw=1)
@@ -349,6 +473,26 @@ plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGA', lw=1)
 WTH = PRED['m11.0_GxGAB']
 plt.plot(WTH['theta_mid'], WTH['wtheta'], label='GxGAB', lw=1)
 # yerr =  abs(WTH['wtheta'] * (0.01**2 + WTH['D1D2_counts']**-1. + WTH['D1R2_counts']**-1. + WTH['D2R1_counts']**-1. + WTH['R1R2_counts']**-1. )**0.5)
+
+# mix_f = lambda f_A, f_B : (PRED['m11.0_GxA']['wtheta']*f_A*PRED['m11.0_GxA']['N_data']+  PRED['m11.0_GxB']['wtheta']*f_B*PRED['m11.0_GxB']['N_data'] + PRED['m11.0_GxG']['wtheta']*f_A*PRED['m11.0_GxG']['N_data'])/PRED['m11.0_GxGAB']['N_data']
+# f_A = 1.2
+# n_A = f_A*(PRED['m11.0_GxA']['N_data'][0]+PRED['m11.0_GxG']['N_data'][0])
+# n_B = PRED['m11.0_GxGAB']['N_data'][0] - n_A
+# f_B = n_B/PRED['m11.0_GxB']['N_data'][0]
+# out = mix_f(f_A, f_B)
+# plt.plot(WTH['theta_mid'], out, label='GxGA('+str(np.round(f_A,2))+')B('+str(np.round(f_B,2))+')', lw=2)
+# f_A = 1.5
+# n_A = f_A*(PRED['m11.0_GxA']['N_data'][0]+PRED['m11.0_GxG']['N_data'][0])
+# n_B = PRED['m11.0_GxGAB']['N_data'][0] - n_A
+# f_B = n_B/PRED['m11.0_GxB']['N_data'][0]
+# out = mix_f(f_A, f_B)
+# plt.plot(WTH['theta_mid'], out, label='GxGA('+str(np.round(f_A,2))+')B('+str(np.round(f_B,2))+')', lw=2)
+# f_A = 2
+# n_A = f_A*(PRED['m11.0_GxA']['N_data'][0]+PRED['m11.0_GxG']['N_data'][0])
+# n_B = PRED['m11.0_GxGAB']['N_data'][0] - n_A
+# f_B = n_B/PRED['m11.0_GxB']['N_data'][0]
+# out = mix_f(f_A, f_B)
+# plt.plot(WTH['theta_mid'], out, label='GxGA('+str(np.round(f_A,2))+')B('+str(np.round(f_B,2))+')', lw=2)
 
 plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
