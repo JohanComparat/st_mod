@@ -248,7 +248,7 @@ uu = np.random.uniform(size=size)
 dec_fs = np.arccos(1 - 2 * uu) * 180 / np.pi - 90.
 ra_fs = np.random.uniform(size=size) * 2 * np.pi * 180 / np.pi
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][1:]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][::-1]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
