@@ -10,6 +10,8 @@ conda activate stmod
 cd $GIT_STMOD/src/Mpipelines
 conda activate clustering
 
+nohup python GasGal_validation_XCORR.py > GasGal_validation_XCORR.log &
+
 nohup python GAS_validation_WPRP.py z0p14 > logs/wprpGASz0p14.log & # DONE
 nohup python GAS_validation_WPRP.py z0p19 > logs/wprpGASz0p19.log & # DONE
 nohup python GAS_validation_WPRP.py z0p25 > logs/wprpGASz0p25.log & # DONE
