@@ -260,9 +260,9 @@ python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8" 9 # DONE
 
 python format_simput_xgas.py "Xgas_bHS0.8_kts065" # DONE
 
-python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8_kts065" 1 # TODO
+python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8_kts065" 1 # ONGOING
 python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8_kts065" 2 # TODO
-python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8_kts070" 1 # TODO
+python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8_kts070" 1 # ONGOING
 python simulate_cluster_only_SEED_SKYMAP.py "Xgas_bHS0.8_kts070" 2 # TODO
 # DONE for seeds 1,2,3,4,5,6,7,8,9
 
