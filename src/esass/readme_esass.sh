@@ -88,7 +88,7 @@ nohup python eRASSX_write_scripts.py GE_e4_merge_AGNseed008_SimBKG_CLUseed008 > 
 nohup python eRASSX_write_scripts.py GE_e4_merge_SimBKG_CLUseed008            > logs/eRASSX_write_scripts_GE_e4_merge_SimBKG_CLUseed008.log            & # DONE
 
 
-
+monitor
 # monitor progress
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
@@ -258,6 +258,48 @@ nohup sh GE_e4_merge_AGNseed005_SimBKG_CLUseed005_processing_1300.sh > logs/AGNs
 nohup sh GE_e4_merge_AGNseed005_SimBKG_CLUseed005_processing_1350.sh > logs/AGNseed005_SimBKG_CLUseed005_processing_1350.log & # ONGOING
 nohup sh GE_e4_merge_AGNseed005_SimBKG_CLUseed005_processing_1400.sh > logs/AGNseed005_SimBKG_CLUseed005_processing_1400.log & # ONGOING
 nohup sh GE_e4_merge_AGNseed005_SimBKG_CLUseed005_processing_1450.sh > logs/AGNseed005_SimBKG_CLUseed005_processing_1450.log & # ONGOING
+
+
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0000.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0000.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0050.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0050.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0100.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0100.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0150.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0150.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0200.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0200.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0250.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0250.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0300.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0300.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0350.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0350.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0400.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0400.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0450.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0450.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0500.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0500.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0550.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0550.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0600.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0600.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0650.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0650.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0700.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0700.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0750.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0750.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0800.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0800.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0850.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0850.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0900.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0900.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_0950.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_0950.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1000.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1000.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1050.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1050.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1100.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1100.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1150.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1150.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1200.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1200.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1250.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1250.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1300.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1300.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1350.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1350.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1400.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1400.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1450.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1450.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1500.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1500.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1550.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1550.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1600.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1600.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1650.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1650.log & # ONGOING
+nohup sh GE_e4_merge_AGNseed002_SimBKG_processing_1700.sh > logs/GE_e4_merge_AGNseed002_SimBKG_processing_1700.log & # ONGOING
+
+export UCHUU='/home/idies/workspace/erosim/Uchuu'                         
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'           
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data' 
+cd $GIT_STMOD/src/esass/runs                                              
 
 
 # TODO

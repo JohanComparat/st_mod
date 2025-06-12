@@ -52,7 +52,7 @@ LC_dir = 'LCerass'
 
 dir_2pcf = os.path.join(os.environ['UCHUU'], LC_dir, '??????',
                          'GE_e4_merge_AGNseed' + agn_seed.zfill(3) + '_SimBKG_CLUseed' + clu_seed.zfill(3), 'XCORR')
-
+"""
 m0 = 10.0
 z1 = 0.18
 m0_str = str(np.round(m0,1))
@@ -319,7 +319,7 @@ p_2_2PCF_GALxEVTc030singleRRDR10 = os.path.join(benchmark_dir, 'LS10_VLIM_ANY_10
 Merge.write(p_2_2PCF_GALxEVTc030singleRRDR10, overwrite = True)
 print(p_2_2PCF_GALxEVTc030singleRRDR10)
 
-
+"""
 
 m0 = 11.0
 z1 = 0.35
