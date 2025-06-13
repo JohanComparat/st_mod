@@ -6,7 +6,6 @@ import numpy as np
 
 nl = lambda sel : len(sel.nonzero()[0])
 
-log10FXmin = -15.7
 jj_zdir = int(sys.argv[1])
 
 all_z_dirs = np.array([  'z0p00',
@@ -68,8 +67,6 @@ p_2_catalogues.sort()
 for p_2_catalogue in p_2_catalogues:
     print(p_2_catalogue)
     t_in = Table.read(p_2_catalogue)
-    #selection = (t_in['FLUX']>=log10FXmin)
-    #t_in = t_in[selection]
     print(len(t_in))
     if len(t_in)>0:
         t_in['RA'][t_in['RA']==360.]=359.9999

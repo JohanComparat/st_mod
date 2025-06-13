@@ -120,7 +120,7 @@ BG_val = 6.693*10**(36)*(1+z_mean)**2
 cv_r = cosmo.kpc_proper_per_arcmin(z_mean).to(u.kpc/u.deg).value
 
 
-def make_fit_and_fig(m0_str, BG_val, cv_r):
+def make_fit_and_fig(m0_str, BG_val, cv_r, str_title):
 	p_2_2PCF_figure = os.path.join(dir_fig, 'GALxEVT_m'+m0_str+'.png')
 	plt.figure(11, (6.5,5.5))
 
@@ -231,7 +231,7 @@ def make_fit_and_fig(m0_str, BG_val, cv_r):
 	plt.ylabel(r'$S_x$ (erg/kpc2/s)',fontsize=18)
 	plt.title('Correlation Galaxies x 0.5-2 keV events')
 	plt.tight_layout()
-	plt.savefig(p_2_2PCF_figure)
+	plt.savefig(p_2_2PCF_figure, transparent = True)
 	plt.clf()
 	print(p_2_2PCF_figure, 'written')
 
@@ -245,7 +245,7 @@ str_title = r'$z<$'+z1_str+', '+m0_str+r'$<\log_{10}(M*[M_\odot])$'
 z_mean = 0.136
 BG_val = 6.859*10**(36)*(1+z_mean)**2
 cv_r = cosmo.kpc_proper_per_arcmin(z_mean).to(u.kpc/u.deg).value
-make_fit_and_fig(m0_str, BG_val, cv_r)
+make_fit_and_fig(m0_str, BG_val, cv_r, str_title)
 
 m0 = 10.5
 z1 = 0.26
@@ -255,7 +255,7 @@ str_title = r'$z<$'+z1_str+', '+m0_str+r'$<\log_{10}(M*[M_\odot])$'
 z_mean = 0.191
 BG_val = 6.772*10**(36)*(1+z_mean)**2
 cv_r = cosmo.kpc_proper_per_arcmin(z_mean).to(u.kpc/u.deg).value
-make_fit_and_fig(m0_str, BG_val, cv_r)
+make_fit_and_fig(m0_str, BG_val, cv_r, str_title)
 
 m0 = 11.0
 z1 = 0.35
@@ -263,5 +263,6 @@ m0_str = str(np.round(m0,1))
 z1_str = str(np.round(z1,2))
 z_mean = 0.252
 BG_val = 6.693*10**(36)*(1+z_mean)**2
+str_title = r'$z<$'+z1_str+', '+m0_str+r'$<\log_{10}(M*[M_\odot])$'
 cv_r = cosmo.kpc_proper_per_arcmin(z_mean).to(u.kpc/u.deg).value
-make_fit_and_fig(m0_str, BG_val, cv_r)
+make_fit_and_fig(m0_str, BG_val, cv_r, str_title)
