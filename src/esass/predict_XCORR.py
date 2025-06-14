@@ -17,7 +17,8 @@ cosmo = cosmoUNIT
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 is_eroDE = ( (sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0) ) & ( abs(sky_map_hdu['GLAT_CEN']) > 20 ) #& ( sky_map_hdu['DE_CEN'] <= 32 )
 SRVMAP_exGAL_eroDE = sky_map_hdu['SRVMAP'][is_eroDE]
-benchmark_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/benchmark/xcorr_comparat_2025' )
+benchmark_data_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/benchmark/xcorr_comparat_2025' )
+benchmark_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/benchmark/xcorr_comparat_2025' , 'XCORR_SHELLzlt04')
 
 agn_seed = '1' # sys.argv[1] # 1
 clu_seed = '1' # sys.argv[2] # 1
@@ -27,9 +28,9 @@ dir_2pcf = os.path.join(os.environ['UCHUU'], LC_dir, '??????',
                          'GE_e4_merge_AGNseed' + agn_seed.zfill(3) + '_SimBKG_CLUseed' + clu_seed.zfill(3), 'XCORR')
 
 XCORR = {}
-XCORR['m10.0'] = Table.read( os.path.join(benchmark_dir, 'LS10_VLIM_ANY_10.0_Mstar_12.0_0.05_z_0.18_N_2759238_GALxEVT_wtheta.fits' ) )
-XCORR['m10.5'] = Table.read( os.path.join(benchmark_dir, 'LS10_VLIM_ANY_10.5_Mstar_12.0_0.05_z_0.26_N_3263228_GALxEVT_wtheta.fits' ) )
-XCORR['m11.0'] = Table.read( os.path.join(benchmark_dir, 'LS10_VLIM_ANY_11.0_Mstar_12.0_0.05_z_0.35_N_1619838_GALxEVT_wtheta.fits' ) )
+XCORR['m10.0'] = Table.read( os.path.join(benchmark_data_dir, 'LS10_VLIM_ANY_10.0_Mstar_12.0_0.05_z_0.18_N_2759238_GALxEVT_wtheta.fits' ) )
+XCORR['m10.5'] = Table.read( os.path.join(benchmark_data_dir, 'LS10_VLIM_ANY_10.5_Mstar_12.0_0.05_z_0.26_N_3263228_GALxEVT_wtheta.fits' ) )
+XCORR['m11.0'] = Table.read( os.path.join(benchmark_data_dir, 'LS10_VLIM_ANY_11.0_Mstar_12.0_0.05_z_0.35_N_1619838_GALxEVT_wtheta.fits' ) )
 
 PRED = {}
 
@@ -90,7 +91,7 @@ PRED['m11.0S_GxGA' ] = Table.read( os.path.join(benchmark_dir, 'LS10_VLIM_ANY_11
 PRED['m11.0S_GxGAB'] = Table.read( os.path.join(benchmark_dir, 'LS10_VLIM_ANY_11.0_Mstar_12.0_0.05_z_0.35_N_1619838_GALSATxEVT_wtheta_prediction_GxGAB.fits'))
 
 
-dir_fig = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GasGal/XCORR' )
+dir_fig = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GasGal/XCORR_SHELL' )
 os.system('mkdir -p '+dir_fig)
 
 m0 = 10.0

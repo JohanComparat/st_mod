@@ -32,8 +32,8 @@ import matplotlib
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 14})
 import matplotlib.pyplot as plt
-agn_seed = '1' #sys.argv[1] # 1
-clu_seed = '1' #sys.argv[2] # 1
+agn_seed = sys.argv[1] # 1
+clu_seed = sys.argv[2] # 1
 
 nl = lambda sel : len(sel.nonzero()[0])
 

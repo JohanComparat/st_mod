@@ -6,7 +6,9 @@ from astropy.table import Table
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 is_eroDE = ( (sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0) ) & ( abs(sky_map_hdu['GLAT_CEN']) > 20 ) #& ( sky_map_hdu['DE_CEN'] <= 32 )
 SRVMAP_exGAL_eroDE = sky_map_hdu['SRVMAP'][is_eroDE]
-benchmark_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/benchmark/xcorr_comparat_2025' )
+benchmark_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/benchmark/xcorr_comparat_2025', 'XCORR_SHELLzlt04' )
+os.system('mkdir -p ' + benchmark_dir)
+
 
 def get_merge_wth(p_2_Apcf):
 	print('merging', len(p_2_Apcf), 'tiles')
@@ -51,8 +53,8 @@ clu_seed = '1' # sys.argv[2] # 1
 LC_dir = 'LCerass'
 
 dir_2pcf = os.path.join(os.environ['UCHUU'], LC_dir, '??????',
-                         'GE_e4_merge_AGNseed' + agn_seed.zfill(3) + '_SimBKG_CLUseed' + clu_seed.zfill(3), 'XCORR')
-"""
+                         'GE_e4_merge_AGNseed' + agn_seed.zfill(3) + '_SimBKG_CLUseed' + clu_seed.zfill(3), 'XCORR_SHELLzlt04')
+
 m0 = 10.0
 z1 = 0.18
 m0_str = str(np.round(m0,1))
@@ -319,7 +321,7 @@ p_2_2PCF_GALxEVTc030singleRRDR10 = os.path.join(benchmark_dir, 'LS10_VLIM_ANY_10
 Merge.write(p_2_2PCF_GALxEVTc030singleRRDR10, overwrite = True)
 print(p_2_2PCF_GALxEVTc030singleRRDR10)
 
-"""
+
 
 m0 = 11.0
 z1 = 0.35
@@ -375,7 +377,7 @@ print(p_2_2PCF_GALxEVTc030singleRRDR10)
 
 
 
-"""
+
 m0 = 10.0
 z1 = 0.18
 m0_str = str(np.round(m0,1))
@@ -534,4 +536,4 @@ Merge = get_merge_wth( p_2_all_xcorr['GxGAB'][np.isin(p_2_all_srvval['GxGAB'], S
 p_2_2PCF_GALxEVTc030singleRRDR10 = os.path.join(benchmark_dir, 'LS10_VLIM_ANY_11.0_Mstar_12.0_0.05_z_0.35_N_1619838_GALxEVT_wtheta_prediction_GxGAB.fits')
 Merge.write(p_2_2PCF_GALxEVTc030singleRRDR10, overwrite = True)
 print(p_2_2PCF_GALxEVTc030singleRRDR10)
-"""
+
