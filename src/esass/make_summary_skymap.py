@@ -3,6 +3,11 @@ import sys, os, glob
 import numpy as n
 from astropy.table import Table, vstack
 import astropy.io.fits as fits
+
+os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
+os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
+os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
+
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 import numpy as np
 GE_name = sys.argv[1]
