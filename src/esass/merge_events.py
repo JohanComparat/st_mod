@@ -45,7 +45,9 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN']<ra ) & ( sky_map_hdu['RA_MAX'] >= ra ) & ( sky_map_hdu['DE_MIN']<dec ) & ( sky_map_hdu['DE_MAX'] >= dec)]
 
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][::-1]:
+# for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][::-1]:
+fails = []
+for sky_tile in out[todo]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
@@ -62,11 +64,13 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_'+str_field+'.fits')
 	if len(evt_list)==0 or os.path.isfile(path_2_event_file):
 		print('continue', len(evt_list)==0, os.path.isfile(path_2_event_file))
+		fails.append(1)
 		continue
 	bg_dir      = os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG2' ) # 'evt_particle_???.fits' )
 	BG_evt_files = n.array( glob.glob( os.path.join( bg_dir, '*.fits' ) ) )
 	if len(BG_evt_files)==0:
 		print('continue', len(BG_evt_files), 'no BG files')
+		fails.append(2)
 		continue
 	hdul_raw = fits.open(evt_list[0])
 	texps = np.array([ np.sum(hdul_raw['GTI1'].data['STOP']-hdul_raw['GTI1'].data['START'])
@@ -126,6 +130,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	NA, NC, NB = np.transpose(N_evs).sum(axis=1)
 	if NC==0:
 		print(str_field, 'continuing, no cluster events')
+		fails.append(3)
 		continue
 	N_ev_A = int(f_AGN * N_ev_OBS/7)+1
 	N_ev_B = N_ev_OBS + 1
@@ -133,6 +138,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	#frac_all = N_ev_OBS / np.sum(N_evs)+0.01
 	if N_ev_B>len(bg_all):
 		print('continue', 'not enough BG events', len(bg_all), 'when ', N_ev_B, 'are needed')
+		fails.append(4)
 		continue
 
 	data_A = []
@@ -173,6 +179,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	else:
 		print('continue', 'not enough BG events', len(bg_tm), 'when ', N_ev_B, 'are needed')
 		data_B.append( bg_all )
+		fails.append(5)
 		continue
 
 

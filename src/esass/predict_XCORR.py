@@ -169,7 +169,10 @@ def make_fit_and_fig(m0_str, BG_val, cv_r, str_title):
 	# plt.plot(PRED['m'+m0_str+'_GxB']['theta_mid']*cv_r, BG_val * (out2), label='GxB', lw=1, color='green')
 	# plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out3), label='Gxg', lw=1, color='purple')
 	# plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out1+out2+out3), label='Sum', lw=1, color='grey')
-	plt.plot(PRED['m'+m0_str+'_GxGAB']['theta_mid']*cv_r, BG_val * PRED['m'+m0_str+'_GxGAB']['wtheta'], label='GxBAG', lw=1, color='red', ls='dashed')
+	plt.plot(PRED['m'+m0_str+'_GxGAB']['theta_mid']*cv_r, BG_val * PRED['m'+m0_str+'_GxGAB']['wtheta'], label='d GxBAG', lw=1, color='red', ls='dashed')
+	# plt.plot(PRED['m'+m0_str+'C_GxA']['theta_mid']*cv_r, BG_val * PRED['m'+m0_str+'C_GxA']['wtheta'], label='d GCxA', lw=1, color='orange', ls='dashed')
+	# plt.plot(PRED['m'+m0_str+'C_GxG']['theta_mid']*cv_r, BG_val * PRED['m'+m0_str+'C_GxG']['wtheta'], label='d GCxG', lw=1, color='purple', ls='dashed')
+	# plt.plot(PRED['m'+m0_str+'S_GxG']['theta_mid']*cv_r, BG_val * PRED['m'+m0_str+'S_GxG']['wtheta'], label='d GSxG', lw=1, color='grey', ls='dashed')
 	#
 	# def mix_fit_FULL(x_fit, f_AC, f_AS, f_B, f_GC, f_GS):
 	# 	N_tot = f_AC * PRED['m10.5C_GxA']['N_data'] + f_AS * PRED['m10.5S_GxA']['N_data'] + f_B * PRED['m'+m0_str+'_GxB']['N_data'] + f_GC * PRED['m10.5C_GxG']['N_data'] + f_GS * PRED['m10.5S_GxG']['N_data']
@@ -213,12 +216,12 @@ def make_fit_and_fig(m0_str, BG_val, cv_r, str_title):
 	print('err', np.sqrt(np.diag(pcov)))
 
 	out1, out2, out3, out4 = mix_fit_components_FULL(x_fit, *popt)
-	plt.plot(PRED['m'+m0_str+'_GxA']['theta_mid']*cv_r, BG_val * (out1), label='GCxA', lw=1, color='orange', ls='solid')
+	plt.plot(PRED['m'+m0_str+'_GxA']['theta_mid']*cv_r, BG_val * (out1), label='f GCxA', lw=1, color='orange', ls='solid')
 	# plt.plot(PRED['m'+m0_str+'_GxB']['theta_mid']*cv_r, BG_val * (out2), label='GSxA', lw=1, color='grey', ls='dotted')
-	plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out2), label='GxB' , lw=1, color='green', ls='dashed')
-	plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out3), label='GCxG', lw=3, color='purple', ls='solid')
-	plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out4), label='GSxG', lw=2, color='grey', ls='solid')
-	plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out1+out2+out3+out4), label='Sum', lw=1, color='grey', ls='dashed')
+	plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out2), label='f GxB' , lw=1, color='green', ls='solid')
+	plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out3), label='f GCxG', lw=3, color='purple', ls='solid')
+	plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out4), label='f GSxG', lw=2, color='grey', ls='solid')
+	plt.plot(PRED['m'+m0_str+'_GxG']['theta_mid']*cv_r, BG_val * (out1+out2+out3+out4), label='Sum', lw=1, color='k', ls='dashed')
 
 	# plt.plot(x_fit, mix_fit(x_fit, *popt), ls='--', color='darkred', lw=3, zorder=100, label='fit')#: f_A=%5.3f, f_B=%5.3f, f_G=%5.3f' % tuple(popt))
 	plt.xticks(fontsize=14)

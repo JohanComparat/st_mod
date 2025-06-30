@@ -28,13 +28,12 @@ for GE_name in GE_names:
 datata = []
 #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][2:48]:
 for GE_name in GE_names:
-    print('='*100)
+    # print('='*100)
     sky_map_hdu = SKYMAP[GE_name]
-    print(GE_name)
     to_process = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat']==False)
     already_done = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat'])
-    print(len(sky_map_hdu[to_process]), 'tiles to process')
-    print(len(sky_map_hdu[already_done]), 'tiles already done')
+    print(len(sky_map_hdu[to_process]), len(sky_map_hdu[already_done]), GE_name)
+    print(GE_name, len(sky_map_hdu[to_process]), 'tiles to process', len(sky_map_hdu[already_done]), 'tiles already done')
     datata.append([len(sky_map_hdu[to_process]), len(sky_map_hdu[already_done])])
     p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
     plt.plot(sky_map_hdu['RA_CEN'][((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))], sky_map_hdu['DE_CEN'][((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))], 'k,', label='eRO DE')
