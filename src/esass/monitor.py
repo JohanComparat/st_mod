@@ -6,7 +6,6 @@ from select import select
 # Start two subprocesses
 procs = [
     subprocess.Popen(["bash", "summary_file_run.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "summary_file_run.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True)
 ]
 
 # Continuously monitor output
