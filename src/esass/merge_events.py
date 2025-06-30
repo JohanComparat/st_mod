@@ -21,9 +21,13 @@ Replace "Returns" with "Yields" if this function is a generator.
 
 """
 import os, sys, glob
+
+os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
+os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
+os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
+
 import numpy as n
 import astropy.io.fits as fits
-#import healpy
 import time
 t0 = time.time()
 from astropy.table import Table, vstack
