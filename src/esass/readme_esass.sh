@@ -194,11 +194,23 @@ python write_exec_loop.py # > exec.sh # TODO
 
 # TODO
 
+source activate heasoft
+[ -r /home/idies/.healpix/3_50_Linux/config ] && . /home/idies/.healpix/3_50_Linux/config
+source /opt/esass/bin/esass-init.sh
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
-cd $GIT_STMOD/src/esass/runs
+cd $GIT_STMOD/src/esass/
 python monitor_esass_run_001.py #
+
+source activate heasoft
+[ -r /home/idies/.healpix/3_50_Linux/config ] && . /home/idies/.healpix/3_50_Linux/config
+source /opt/esass/bin/esass-init.sh
+export UCHUU='/home/idies/workspace/erosim/Uchuu'
+export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+cd $GIT_STMOD/src/esass/
+python monitor_esass_run_002.py
 
 # execute all commands of interest in an eSASS loaded container
 # in a monitor script !

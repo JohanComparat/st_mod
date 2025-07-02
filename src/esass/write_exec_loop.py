@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
 GE_names = [
-            # 'GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001',
+            'GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001',
             'GE_e4_merge_AGNseed002_SimBKG', 'GE_e4_merge_AGNseed002_SimBKG_CLUseed002', 'GE_e4_merge_SimBKG_CLUseed002',
             # 'GE_e4_merge_AGNseed003_SimBKG', 'GE_e4_merge_AGNseed003_SimBKG_CLUseed003', 'GE_e4_merge_SimBKG_CLUseed003',
             # 'GE_e4_merge_AGNseed004_SimBKG', 'GE_e4_merge_AGNseed004_SimBKG_CLUseed004', 'GE_e4_merge_SimBKG_CLUseed004',
@@ -49,7 +49,8 @@ for GE_name in GE_names:
             out_im1 = os.path.join(os.environ['GIT_STMOD'], 'src/esass', 'runs', GE_name + '_processing_'+str(kk).zfill(4)+'.sh')
             f_out = open(out_im1, 'w')
             f_out.write("""#!/bin/bash/ \n""")
-            f_out.write(" \n ")
+            f_out.write("source /opt/eSASSusers_211214/eSASS/bin/esass-init.sh \n")
+            f_out.write("source activate heasoft \n")
 
             for sky_tile in sky_map_hdu[to_process][kk: kk+50]:
                 sky_tile_id = str(sky_tile['SRVMAP'])
