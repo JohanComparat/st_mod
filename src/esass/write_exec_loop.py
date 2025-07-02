@@ -11,15 +11,16 @@ import matplotlib.pyplot as plt
 
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
-GE_names = ['GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001',
+GE_names = [
+            # 'GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001',
             'GE_e4_merge_AGNseed002_SimBKG', 'GE_e4_merge_AGNseed002_SimBKG_CLUseed002', 'GE_e4_merge_SimBKG_CLUseed002',
-            'GE_e4_merge_AGNseed003_SimBKG', 'GE_e4_merge_AGNseed003_SimBKG_CLUseed003', 'GE_e4_merge_SimBKG_CLUseed003',
-            'GE_e4_merge_AGNseed004_SimBKG', 'GE_e4_merge_AGNseed004_SimBKG_CLUseed004', 'GE_e4_merge_SimBKG_CLUseed004',
-            'GE_e4_merge_AGNseed005_SimBKG', 'GE_e4_merge_AGNseed005_SimBKG_CLUseed005', 'GE_e4_merge_SimBKG_CLUseed005',
-            'GE_e4_merge_AGNseed006_SimBKG', 'GE_e4_merge_AGNseed006_SimBKG_CLUseed006', 'GE_e4_merge_SimBKG_CLUseed006',
-            'GE_e4_merge_AGNseed007_SimBKG', 'GE_e4_merge_AGNseed007_SimBKG_CLUseed007', 'GE_e4_merge_SimBKG_CLUseed007',
-            'GE_e4_merge_AGNseed008_SimBKG', 'GE_e4_merge_AGNseed008_SimBKG_CLUseed008', 'GE_e4_merge_SimBKG_CLUseed008',
-            'GE_e4_merge_SimBKG',
+            # 'GE_e4_merge_AGNseed003_SimBKG', 'GE_e4_merge_AGNseed003_SimBKG_CLUseed003', 'GE_e4_merge_SimBKG_CLUseed003',
+            # 'GE_e4_merge_AGNseed004_SimBKG', 'GE_e4_merge_AGNseed004_SimBKG_CLUseed004', 'GE_e4_merge_SimBKG_CLUseed004',
+            # 'GE_e4_merge_AGNseed005_SimBKG', 'GE_e4_merge_AGNseed005_SimBKG_CLUseed005', 'GE_e4_merge_SimBKG_CLUseed005',
+            # 'GE_e4_merge_AGNseed006_SimBKG', 'GE_e4_merge_AGNseed006_SimBKG_CLUseed006', 'GE_e4_merge_SimBKG_CLUseed006',
+            # 'GE_e4_merge_AGNseed007_SimBKG', 'GE_e4_merge_AGNseed007_SimBKG_CLUseed007', 'GE_e4_merge_SimBKG_CLUseed007',
+            # 'GE_e4_merge_AGNseed008_SimBKG', 'GE_e4_merge_AGNseed008_SimBKG_CLUseed008', 'GE_e4_merge_SimBKG_CLUseed008',
+            # 'GE_e4_merge_SimBKG',
             ]
 SKYMAP = {}
 for GE_name in GE_names:
@@ -33,7 +34,7 @@ for GE_name in GE_names:
     to_process = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat']==False)
     already_done = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat'])
     print(len(sky_map_hdu[to_process]), len(sky_map_hdu[already_done]), GE_name)
-    print(GE_name, len(sky_map_hdu[to_process]), 'tiles to process', len(sky_map_hdu[already_done]), 'tiles already done')
+    # print(GE_name, len(sky_map_hdu[to_process]), 'tiles to process', len(sky_map_hdu[already_done]), 'tiles already done')
     datata.append([len(sky_map_hdu[to_process]), len(sky_map_hdu[already_done])])
     p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
     plt.plot(sky_map_hdu['RA_CEN'][((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))], sky_map_hdu['DE_CEN'][((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))], 'k,', label='eRO DE')
