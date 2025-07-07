@@ -212,6 +212,70 @@ export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
 python monitor_esass_run_002.py
 
+-rw-r--r--. 1 idies idies 9.9K Jul  7 14:21 GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0000.sh
+-rw-r--r--. 1 idies idies 9.9K Jul  7 14:21 GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0030.sh
+-rw-r--r--. 1 idies idies 2.2K Jul  7 14:21 GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0060.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:21 GE_e4_merge_AGNseed001_SimBKG_processing_0000.sh
+-rw-r--r--. 1 idies idies 8.1K Jul  7 14:21 GE_e4_merge_AGNseed001_SimBKG_processing_0030.sh
+-rw-r--r--. 1 idies idies 9.9K Jul  7 14:22 GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0000.sh
+-rw-r--r--. 1 idies idies 9.9K Jul  7 14:22 GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0030.sh
+-rw-r--r--. 1 idies idies 1.2K Jul  7 14:22 GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0060.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_AGNseed002_SimBKG_processing_0000.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_AGNseed002_SimBKG_processing_0030.sh
+-rw-r--r--. 1 idies idies 7.5K Jul  7 14:22 GE_e4_merge_AGNseed002_SimBKG_processing_0060.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:21 GE_e4_merge_SimBKG_CLUseed001_processing_0000.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0000.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0030.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0060.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0090.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0120.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0150.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0180.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0210.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0240.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0270.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0300.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0330.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0360.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0390.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0420.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0450.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0480.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0510.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:22 GE_e4_merge_SimBKG_CLUseed002_processing_0540.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0570.sh
+#-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0600.sh
+#-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0630.sh
+#-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0660.sh
+#-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0690.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0720.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0750.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0780.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0810.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0840.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0870.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0900.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0930.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0960.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_0990.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_1020.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_1050.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_1080.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:23 GE_e4_merge_SimBKG_CLUseed002_processing_1110.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1140.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1170.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1200.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1230.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1260.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1290.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1320.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1350.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1380.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1410.sh
+-rw-r--r--. 1 idies idies 9.3K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1440.sh
+-rw-r--r--. 1 idies idies 9.0K Jul  7 14:24 GE_e4_merge_SimBKG_CLUseed002_processing_1470.sh
+
+
 # execute all commands of interest in an eSASS loaded container
 # in a monitor script !
 nohup sh GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0000.sh > logs/AGNseed002_SimBKG_CLUseed002_processing_0000.log & # ONGOING
