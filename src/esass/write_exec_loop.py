@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
 GE_names = [
-            # 'GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001',
-            # 'GE_e4_merge_AGNseed002_SimBKG', 'GE_e4_merge_AGNseed002_SimBKG_CLUseed002', 'GE_e4_merge_SimBKG_CLUseed002',
+            'GE_e4_merge_AGNseed001_SimBKG', 'GE_e4_merge_AGNseed001_SimBKG_CLUseed001', 'GE_e4_merge_SimBKG_CLUseed001',
+            'GE_e4_merge_AGNseed002_SimBKG', 'GE_e4_merge_AGNseed002_SimBKG_CLUseed002', 'GE_e4_merge_SimBKG_CLUseed002',
             'GE_e4_merge_AGNseed003_SimBKG', 'GE_e4_merge_AGNseed003_SimBKG_CLUseed003', 'GE_e4_merge_SimBKG_CLUseed003',
             'GE_e4_merge_AGNseed004_SimBKG', 'GE_e4_merge_AGNseed004_SimBKG_CLUseed004', 'GE_e4_merge_SimBKG_CLUseed004',
             # 'GE_e4_merge_AGNseed005_SimBKG', 'GE_e4_merge_AGNseed005_SimBKG_CLUseed005', 'GE_e4_merge_SimBKG_CLUseed005',

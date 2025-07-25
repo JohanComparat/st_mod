@@ -105,13 +105,13 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 	for NCCD, tEXP in zip(n.arange(7)+1, texps):
 		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
-
-		hdu_C = fits.open(CL_evt_files[0])
-		if N_ev_C<=len(hdu_C[1].data):
-			id_C = np.random.choice(np.arange(len(hdu_C[1].data)), size = N_ev_C, replace = False)
-		else:
-			id_C = np.arange(len(hdu_C[1].data))
-		data_C.append( Table(hdu_C['EVENTS'].data[id_C]) )
+		if len(CL_evt_files)>0:
+			hdu_C = fits.open(CL_evt_files[0])
+			if N_ev_C<=len(hdu_C[1].data):
+				id_C = np.random.choice(np.arange(len(hdu_C[1].data)), size = N_ev_C, replace = False)
+			else:
+				id_C = np.arange(len(hdu_C[1].data))
+			data_C.append( Table(hdu_C['EVENTS'].data[id_C]) )
 
 	id_B = np.arange(len(bg_all))
 	np.random.shuffle(id_B)
