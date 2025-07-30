@@ -56,7 +56,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	evt_list = np.array(glob.glob(os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030', '*_Image_c030.fits.gz' ) ) )
 	log_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'logs-erass8')
 	os.system('mkdir -p '+log_dir)
-	esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'GE_e5_merge_AGNseed'+agn_seed.zfill(3)+'_SimBKG_CLUseed'+clu_seed.zfill(3))
+	esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'GE_e5_mergefagn0p15_AGNseed'+agn_seed.zfill(3)+'_SimBKG_CLUseed'+clu_seed.zfill(3))
 	os.system('mkdir -p '+esass_dir)
 
 	path_2_event_file = os.path.join(esass_dir, 'evt_'+str_field+'.fits')
@@ -124,9 +124,9 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 		N_BG = len(bg_tm)
 		N_evs.append([N_ev_A, N_ev_C, N_BG])
 
-	f_AGN = 0.123
-	f_BKG = 0.858
-	f_CLU = 0.019
+	f_AGN = 0.15
+	f_BKG = 0.82
+	f_CLU = 0.03
 
 	NA, NC, NB = np.transpose(N_evs).sum(axis=1)
 	if NC==0:

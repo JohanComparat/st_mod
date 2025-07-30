@@ -28,20 +28,27 @@ rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s4_c030/0????
 #  	print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's4_eSASS') )
 
 cd ~/workspace/erosim/Uchuu/LCerass
-rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/2????? . # ONGOING
-rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/0????? . # ONGOING
+rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/2????? . # DONE
+rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/0????? . # DONE
 
-# TODO after :
+# DONE
+import os, sys, glob
+from astropy.table import Table, vstack
+import numpy as np
+
 out=Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
 ero_de = (out['OWNER']==2)|(out['OWNER']==0)
 todo = (ero_de)
 tosync_srv_map = out['SRVMAP'][todo]
+LC_dir="LCerass"
 for el in tosync_srv_map:
   str_field = str(el).zfill(6)
   print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030') )
+  os.system('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030') )
 for el in tosync_srv_map:
   str_field = str(el).zfill(6)
   print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_eSASS') )
+  os.system('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_eSASS') )
 
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
@@ -60,6 +67,7 @@ export UCHUU='/home/idies/workspace/erosim/Uchuu'
 export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
+python monitor_merge_e5.py # DONE
 python monitor_merge.py # DONE
 
 export UCHUU='/home/idies/workspace/erosim/Uchuu'
