@@ -314,5 +314,10 @@ for sky_tile in out[todo]:
 ##)
 
 
-
-
+N_A = len(data_A[(data_A['SIGNAL']>=0.2)&(data_A['SIGNAL']<=2)])
+N_C = len(data_C[(data_C['SIGNAL']>=0.2)&(data_C['SIGNAL']<=2)])
+N_B = len(bg_all[(bg_all['SIGNAL']>=0.2)&(bg_all['SIGNAL']<=2)])
+N_T = N_A+N_C+N_B
+print('AGN',N_A, np.round(100*N_A/N_T,1))
+print('CLU',N_C, np.round(100*N_C/N_T,1))
+print('BKG',N_B, np.round(100*N_B/N_T,1))
