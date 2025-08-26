@@ -4,11 +4,9 @@ export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
 
-szr16jdjsgpd:q5=v0jJ
-
-cd ~/workspace/erosim/Uchuu/LCerass
-rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s4_c030/2????? . # DONE
-rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s4_c030/0????? . # DONE
+#cd ~/workspace/erosim/Uchuu/LCerass
+#rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s4_c030/2????? . # DONE
+#rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s4_c030/0????? . # DONE
 #
 # out=Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+'GE_e4_merge_AGNseed001_SimBKG_CLUseed001'+'.fits'))
 # ero_de = (out['OWNER']==2)|(out['OWNER']==0)
@@ -27,34 +25,34 @@ rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s4_c030/0????
 #  	str_field = str(el).zfill(6)
 #  	print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's4_eSASS') )
 
-cd ~/workspace/erosim/Uchuu/LCerass
-rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/2????? . # DONE
-rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/0????? . # DONE
+#cd ~/workspace/erosim/Uchuu/LCerass
+#rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/2????? . # DONE
+#rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/0????? . # DONE
 
 # DONE
-import os, sys, glob
-from astropy.table import Table, vstack
-import numpy as np
+#import os, sys, glob
+#from astropy.table import Table, vstack
+#import numpy as np
+#
+#out=Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
+#ero_de = (out['OWNER']==2)|(out['OWNER']==0)
+#todo = (ero_de)
+#tosync_srv_map = out['SRVMAP'][todo]
+#LC_dir="LCerass"
+#for el in tosync_srv_map:
+#  str_field = str(el).zfill(6)
+#  print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030') )
+#  os.system('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030') )
+#for el in tosync_srv_map:
+#  str_field = str(el).zfill(6)
+#  print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_eSASS') )
+#  os.system('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_eSASS') )
 
-out=Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
-ero_de = (out['OWNER']==2)|(out['OWNER']==0)
-todo = (ero_de)
-tosync_srv_map = out['SRVMAP'][todo]
-LC_dir="LCerass"
-for el in tosync_srv_map:
-  str_field = str(el).zfill(6)
-  print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030') )
-  os.system('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030') )
-for el in tosync_srv_map:
-  str_field = str(el).zfill(6)
-  print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_eSASS') )
-  os.system('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_eSASS') )
-
-export UCHUU='/home/idies/workspace/erosim/Uchuu'
-export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
-export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
-cd $GIT_STMOD/src/esass/
-sh mv_data.sh
+#export UCHUU='/home/idies/workspace/erosim/Uchuu'
+#export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
+#export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
+#cd $GIT_STMOD/src/esass/
+#sh mv_data.sh
 
 BG model files are here :
 ~/workspace/erosim/simput/bkg_erosita_simput_full_sky

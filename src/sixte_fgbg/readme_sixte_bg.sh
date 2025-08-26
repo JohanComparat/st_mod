@@ -9,8 +9,7 @@ python create_images.py # DONE (previously)
 # 196608 images
 python map_to_simput_catalogue.py # DONE (previously)
 # simput catalogues are here :
-~/workspace/erosim/simput/bkg_erosita_simput_full_sky
-catalog.fits has the full map
+~/workspace/erosim/simput/bkg_erosita_simput_full_sky/catalog.fits has the full map
 
 
 # on sciserver

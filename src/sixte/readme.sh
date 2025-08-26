@@ -1,3 +1,14 @@
+# code from the eRASS:1 digital twin
+# not to be used on uchuu
+# just a guideline on how we did previously
+#
+
+
+
+
+
+
+
 # installation of sixte done on sciserver
 
 # makes the image library for the galaxy cluster Uchuu run

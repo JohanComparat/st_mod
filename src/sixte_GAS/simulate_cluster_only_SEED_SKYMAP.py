@@ -1,5 +1,8 @@
 """
 Simulate eROSITA event data from sky model using SIXTE.
+Uses sixte version 2.7
+
+To use sixte version 3.0, this needs a significant upgrade
 
 """
 import subprocess
