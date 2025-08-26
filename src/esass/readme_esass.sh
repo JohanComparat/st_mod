@@ -4,56 +4,6 @@ export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
 
-#cd ~/workspace/erosim/Uchuu/LCerass
-#rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s4_c030/2????? . # DONE
-#rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s4_c030/0????? . # DONE
-#
-# out=Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+'GE_e4_merge_AGNseed001_SimBKG_CLUseed001'+'.fits'))
-# ero_de = (out['OWNER']==2)|(out['OWNER']==0)
-# to_process = ((out['OWNER'] == 2) | (out['OWNER'] == 0)) & (out['has_merged_events']) & (out['has_Sc1Cat'] == False)
-# already_done = ((out['OWNER'] == 2) | (out['OWNER'] == 0)) & (out['has_merged_events']) & (out['has_Sc1Cat'])
-# todo = (ero_de)&(to_process==False)&(already_done==False)
-# out['fail'] = 0
-# out['fail'][todo] = np.array(fails)
-# out.write(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+'GE_e4_merge_AGNseed001_SimBKG_CLUseed001'+'_withFailReason.fits'), overwrite = True)
-# out = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+'GE_e4_merge_AGNseed001_SimBKG_CLUseed001'+'_withFailReason.fits'))
-# tosync_srv_map = out['SRVMAP'][(out['fail']==1)]
-# for el in tosync_srv_map:
-#  	str_field = str(el).zfill(6)
-#  	print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's4_c030') )
-# for el in tosync_srv_map:
-#  	str_field = str(el).zfill(6)
-#  	print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's4_eSASS') )
-
-#cd ~/workspace/erosim/Uchuu/LCerass
-#rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/2????? . # DONE
-#rsync -avz joco@raven.mpcdf.mpg.de:~/ptmp_joco/mpecl/comparat/data_s5_c030/0????? . # DONE
-
-# DONE
-#import os, sys, glob
-#from astropy.table import Table, vstack
-#import numpy as np
-#
-#out=Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
-#ero_de = (out['OWNER']==2)|(out['OWNER']==0)
-#todo = (ero_de)
-#tosync_srv_map = out['SRVMAP'][todo]
-#LC_dir="LCerass"
-#for el in tosync_srv_map:
-#  str_field = str(el).zfill(6)
-#  print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030') )
-#  os.system('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'c030', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_c030') )
-#for el in tosync_srv_map:
-#  str_field = str(el).zfill(6)
-#  print('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_eSASS') )
-#  os.system('mv ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'eSASS', '*') + ' ' + os.path.join(os.environ['UCHUU'], LC_dir, str_field, 's5_eSASS') )
-
-#export UCHUU='/home/idies/workspace/erosim/Uchuu'
-#export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
-#export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
-#cd $GIT_STMOD/src/esass/
-#sh mv_data.sh
-
 BG model files are here :
 ~/workspace/erosim/simput/bkg_erosita_simput_full_sky
 catalog.fits has the full map
@@ -253,14 +203,6 @@ export GIT_STMOD='/home/idies/workspace/erosim/software/st_mod'
 export GIT_STMOD_DATA='/home/idies/workspace/erosim/software/st_mod_data'
 cd $GIT_STMOD/src/esass/
 python monitor_esass_run_002.py
-
-GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0000.sh
-GE_e4_merge_AGNseed001_SimBKG_processing_0000.sh
-GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0000.sh
-GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0030.sh
-GE_e4_merge_AGNseed002_SimBKG_processing_0000.sh
-GE_e4_merge_SimBKG_CLUseed001_processing_0000.sh
-GE_e4_merge_SimBKG_CLUseed002_processing_0000.sh
 
 # execute all commands of interest in an eSASS loaded container
 # in a monitor script !

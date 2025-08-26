@@ -1,0 +1,221 @@
+# in the test directory :
+cd ~/workspace/erosim/Uchuu/LCerass/121048
+ls -lh
+
+## UniverseMachine file (full sky):
+#
+glist.fits # merged light cone in the field (up to redshift ~4)
+
+
+## AGN files (full sky)
+============
+AGN_list_sigma_0.8_fsat_8.0.fits    # file containing the AGN model
+AGN_list_sigma_0.8_fsat_8.0_GRAHSP.fits # in progress test to improve the AGN model. Not used
+AGN_list_sigma_0.8_fsat_8.0_simput.fits  # file containing the AGN model in a simput format to crate events with sixte2.7
+AGNspectra_V2 -> /home/idies/workspace/erosim/simput/AGNspectra_V2  # link to the AGN X-ray spectra for sixte2.7
+eRASS8_SEED_001_events_AGN_2025_04 # folder containing the events of the sixte run seed number 1, model file AGN_list_sigma_0.8_fsat_8.0_simput.fits
+eRASS8_SEED_002_events_AGN_2025_04 # seed 2 ...
+eRASS8_SEED_003_events_AGN_2025_04 # seed 3 ...
+eRASS8_SEED_004_events_AGN_2025_04 # ...
+eRASS8_SEED_005_events_AGN_2025_04 # ...
+eRASS8_SEED_006_events_AGN_2025_04
+eRASS8_SEED_007_events_AGN_2025_04
+eRASS8_SEED_008_events_AGN_2025_04
+eRASS8_SEED_009_events_AGN_2025_04
+
+## HOT GAS files (full sky)
+================
+# fiducial models
+XGAS.fits : fiducial hot gas model file
+Xgas_bHS0.8_simput.fits : fiducial hot gas model file simput (intermediate file, sixte data types not enforced)
+Xgas_bHS0.8_simput_final.fits : fiducial hot gas model file simput final file for sitxte2.7 (data types enforced)
+cluster_Xspectra -> /home/idies/workspace/erosim/Uchuu/cluster_Xspectra : link to the clusters X-ray spectra for sixte2.7
+cluster_images -> /home/idies/workspace/erosim/Uchuu/cluster_images : link to the clusters X-ray images for sixte2.7
+
+# secondary models
+Xgas_bHS0.8_kts065_XGAS.fits : hot gas model file with a different parametrization slope of the M-kT relation of 0.65
+Xgas_bHS0.8_kts065_simput.fits : ...
+Xgas_bHS0.8_kts065_simput_final.fits : ...
+Xgas_bHS0.8_kts070_XGAS.fits : hot gas model file with a different parametrization slope of the M-kT relation of 0.7
+Xgas_bHS0.8_kts070_simput.fits : ...
+Xgas_bHS0.8_kts070_simput_final.fits : ...
+
+# full sky event simulation :
+Att_eRASS8_sixte_v27_SEED_001_events_cluster # folder containing the events of the sixte run seed number 1, model file XGAS.fits, Xgas_bHS0.8_simput_final.fits
+Att_eRASS8_sixte_v27_SEED_001_events_cluster_Xgas_bHS0.8_kts065 # folder containing the events of the sixte run seed number 1, model file Xgas_bHS0.8_kts065_XGAS.fits and Xgas_bHS0.8_kts065_simput_final.fits
+Att_eRASS8_sixte_v27_SEED_001_events_cluster_Xgas_bHS0.8_kts070 # ...
+Att_eRASS8_sixte_v27_SEED_002_events_cluster
+Att_eRASS8_sixte_v27_SEED_002_events_cluster_Xgas_bHS0.8_kts065
+Att_eRASS8_sixte_v27_SEED_002_events_cluster_Xgas_bHS0.8_kts070
+Att_eRASS8_sixte_v27_SEED_003_events_cluster
+Att_eRASS8_sixte_v27_SEED_004_events_cluster
+Att_eRASS8_sixte_v27_SEED_005_events_cluster
+Att_eRASS8_sixte_v27_SEED_006_events_cluster
+Att_eRASS8_sixte_v27_SEED_007_events_cluster
+Att_eRASS8_sixte_v27_SEED_008_events_cluster
+Att_eRASS8_sixte_v27_SEED_009_events_cluster
+
+# foreground and background (full sky)
+===========================
+pBG2 : events generated for the FG and BG
+
+# stars (full sky)
+===========================
+stars : events generated for the stars. Not USED.
+
+## results of the merging of the events into gedanken experiments
+## only exist where eROSITA_DE data exists
+## the merge routine can be modified to also simulate eROSITA_RU
+================================================
+
+** GE_e4_merge_AGNseed001_SimBKG_CLUseed001
+    merges s4_c030 (e4) +
+    eRASS8_SEED_001_events_AGN_2025_04 (AGNseed001) +
+    Att_eRASS8_sixte_v27_SEED_001_events_cluster (CLUseed001) +
+    pBG2 (SimBKG)
+using these fractions :
+    f_AGN = 0.123
+    f_BKG = 0.858
+    f_CLU = 0.019
+with merge_events.py (merge)
+
+** GE_e4_merge_AGNseed001_SimBKG
+    merges s4_c030 (e4) +
+    eRASS8_SEED_001_events_AGN_2025_04 (AGNseed001) +
+    pBG2 (SimBKG)
+using these fractions :
+	f_AGN = 0.14
+	f_BKG = 0.90
+with merge_events_noCLU.py
+
+** GE_e4_merge_SimBKG_CLUseed001
+    merges s4_c030 (e4) +
+    Att_eRASS8_sixte_v27_SEED_001_events_cluster (CLUseed001) +
+    pBG2 (SimBKG)
+using these fractions :
+	f_BKG = 0.98
+	f_CLU = 0.02
+with merge_events_noAGN.py
+
+** GE_e4_merge_SimBKG
+    merges s4_c030 (e4) +
+    pBG2 (SimBKG)
+using these fractions :
+	f_BKG = 1
+with merge_events_onlyBG.py
+
+variations with : merge_e5_fagn0p15.py (mergefagn0p15) and merge_events_e5.py (e5_merge)
+
+# List of all other GE created so far :
+# this list is to be used in the monitor.py, and then generate scripts and execute them
+
+GE_e4_merge_AGNseed002_SimBKG
+GE_e4_merge_AGNseed002_SimBKG_CLUseed002
+GE_e4_merge_AGNseed003_SimBKG
+GE_e4_merge_AGNseed003_SimBKG_CLUseed003
+GE_e4_merge_AGNseed004_SimBKG
+GE_e4_merge_AGNseed004_SimBKG_CLUseed004
+GE_e4_merge_AGNseed005_SimBKG
+GE_e4_merge_AGNseed005_SimBKG_CLUseed005
+GE_e4_merge_AGNseed006_SimBKG
+GE_e4_merge_AGNseed006_SimBKG_CLUseed006
+GE_e4_merge_AGNseed007_SimBKG
+GE_e4_merge_AGNseed007_SimBKG_CLUseed007
+GE_e4_merge_AGNseed008_SimBKG
+GE_e4_merge_AGNseed008_SimBKG_CLUseed008
+GE_e4_merge_SimBKG_CLUseed002
+GE_e4_merge_SimBKG_CLUseed003
+GE_e4_merge_SimBKG_CLUseed004
+GE_e4_merge_SimBKG_CLUseed005
+GE_e4_merge_SimBKG_CLUseed006
+GE_e4_merge_SimBKG_CLUseed007
+GE_e4_merge_SimBKG_CLUseed008
+GE_e4_mergefagn0p15_AGNseed001_SimBKG_CLUseed001
+GE_e4_mergefagn0p15_AGNseed002_SimBKG_CLUseed002
+GE_e4_mergefagn0p15_AGNseed003_SimBKG_CLUseed003
+GE_e4_mergefagn0p15_AGNseed004_SimBKG_CLUseed004
+GE_e4_mergefagn0p15_AGNseed005_SimBKG_CLUseed005
+GE_e4_mergefagn0p15_AGNseed006_SimBKG_CLUseed006
+GE_e4_mergefagn0p15_AGNseed007_SimBKG_CLUseed007
+GE_e4_mergefagn0p15_AGNseed008_SimBKG_CLUseed008
+GE_e5_merge_AGNseed001_SimBKG_CLUseed001
+GE_e5_merge_AGNseed002_SimBKG_CLUseed002
+GE_e5_merge_AGNseed003_SimBKG_CLUseed003
+GE_e5_merge_AGNseed004_SimBKG_CLUseed004
+GE_e5_merge_AGNseed005_SimBKG_CLUseed005
+GE_e5_merge_AGNseed006_SimBKG_CLUseed006
+GE_e5_merge_AGNseed007_SimBKG_CLUseed007
+GE_e5_merge_AGNseed008_SimBKG_CLUseed008
+GE_e5_mergefagn0p15_AGNseed001_SimBKG_CLUseed001
+GE_e5_mergefagn0p15_AGNseed002_SimBKG_CLUseed002
+GE_e5_mergefagn0p15_AGNseed003_SimBKG_CLUseed003
+GE_e5_mergefagn0p15_AGNseed004_SimBKG_CLUseed004
+GE_e5_mergefagn0p15_AGNseed005_SimBKG_CLUseed005
+GE_e5_mergefagn0p15_AGNseed006_SimBKG_CLUseed006
+GE_e5_mergefagn0p15_AGNseed007_SimBKG_CLUseed007
+GE_e5_mergefagn0p15_AGNseed008_SimBKG_CLUseed008
+
+figures : in process checking stuff by hand, probably not in every tile
+
+# residuals from the conversion from the light cone to the LCerass field structure
+# contains the model files in the z?p??/replications_*/ structure
+z0p02
+z0p05
+.
+.
+.
+
+
+================================
+================================
+Next Level down, in a GE folder
+================================
+================================
+
+cd GE_e4_merge_AGNseed001_SimBKG_CLUseed001
+ls -lh
+# merged events:
+evt_121048.fits : merged event file from a merge.py routine, input to eSASS. Digital twin with information loss.
+simAGNevt_121048.fits : simulated events used in the merged file above coming from AGN. Full information from the sim is propagated.
+simBKGevt_121048.fits : simulated events used in the merged file above coming from BKG. Full information from the sim is propagated.
+simCLUevt_121048.fits : simulated events used in the merged file above coming from CLU. Full information from the sim is propagated.
+
+# result form the eSASS runs in the folder
+eSASS
+
+121048_pipeline_img1.sh # eSASS that are executed, written by the erASSX_write_scripts.py
+121048_pipeline_det1.sh # eSASS that are executed, written by the erASSX_write_scripts.py
+121048_pipeline_Src1.sh # eSASS that are executed, written by the erASSX_write_scripts.py
+121048_024_EvtImg.fits # eSASS result: Image
+121048_024_ExpMap.fits # eSASS result: exposure map
+121048_024_DetMsk.fits # eSASS result: mask
+121048_024_Bo1Cat.fits # eSASS result: box catalog 1
+121048_024_Bg1Map.fits # eSASS result: background map 1
+121048_024_Bo2Cat.fits # eSASS result: box catalog 2
+121048_024_Bg2Map.fits # eSASS result: background map 2
+121048_024_Bo3Cat.fits # eSASS result: box catalog 3
+121048_024_Bg3Map.fits # eSASS result: background map 3
+121048_024_CheMsk.fits # eSASS result: cheese mask
+121048_024_ML1Cat.fits # eSASS result: ML catalog.
+121048_024_Src1Map.fits # eSASS result: map of the sources
+121048_024_Sc1Cat.fits # eSASS result: source catalog. output of ERMLDET ! most important product.
+121048_024_PSFMap_eef0.75.fits # eSASS result: PSF map
+121048_024_ApeSen_eef0.75.fits # eSASS result: sensitivity map
+121048_024_ApeCat_eef0.75.fits # eSASS result: aperture catalog (apetool), best for point sources
+121048__02_23_srcAUTO.reg # eSASS result: region mask for sources
+121048__02_23_bkgAUTO.reg # eSASS result: region mask for background
+121048_024_EvtImg_testmask.fits # test, ignore
+121048_024_ExpMap_testmask.fits # test, ignore
+121048_024_EvtImg2.fits # test, ignore
+121048_024_ExpMap2.fits # test, ignore
+
+# result of the cross-matching procedure from RS :
+ID_contam_121048.fits
+Sc1_121048_IDMatch_Any_Tot2.0.fits
+Sc1_121048_IDMatch_Uniq_Tot2.0.fits
+simput_srccts_121048.fits
+
+# trying to reproduce Comparat et al. 2025' measurement,
+XCORR # prediction of the event galaxy cross-correlation
+XCORR_SHELLzlt04  # prediction of the event galaxy cross-correlation for shells below redshift z<0.4
+

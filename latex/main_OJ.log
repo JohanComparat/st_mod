@@ -1,0 +1,743 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.4)  26 AUG 2025 15:29
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**./main_OJ.tex
+(main_OJ.tex
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-04-29>
+(openjournal.cls
+Document Class: openjournal 
+\bibbaselineskip=\skip49
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/revtex4\revtex
+4.cls
+Document Class: revtex4 2020/09/30 v4.0a (http://publish.aps.org/revtex4/ for d
+ocumentation)
+ Copyright (c) 2001 The American Physical Society.
+ mailto:revtex@aps.org
+ Licensed under the LPPL:
+http://www.ctan.org/tex-archive/macros/latex/base/lppl.txt
+ Arthur Ogawa <ogawa@teleport.com>
+ Based on work by David Carlisle <david@dcarlisle.demon.co.uk>.
+ltxutil: portions licensed from W. E. Baxter (web@superscript.com)
+Class revtex4 Info: Repairing broken LateX \@sect on input line 640.
+\intertabularlinepenalty=\count272
+\@tbpen=\count273
+\@arstrutbox@hline=\box53
+Class revtex4 Info: Repairing broken LaTeX \@xbitor on input line 1654.
+ltxgrid: portions licensed from W. E. Baxter (web@superscript.com)
+\c@linecount=\count274
+\output=\toks17
+\@protection@box=\box54
+\@topmark@saved=\toks18
+\footins@saved=\box55
+\pagesofar=\box56
+\footbox=\box57
+\pagegrid@col=\count275
+Class revtex4 Info: Incorporating package {textcase}  [1998/11/12 v0.06 Text on
+ly upper/lower case changing (DPC)]. on input line 3736.
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+\c@affil=\count276
+\absbox=\box58
+\c@part=\count277
+\c@section=\count278
+\c@subsection=\count279
+\c@subsubsection=\count280
+\c@paragraph=\count281
+\c@subparagraph=\count282
+\abovecaptionskip=\skip50
+\belowcaptionskip=\skip51
+\c@figure=\count283
+\c@table=\count284
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/natbib\natbib.
+sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip52
+\bibsep=\skip53
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count285
+)
+\widetext@top=\box59
+\widetext@bot=\box60
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/revtex4\revsym
+b.sty
+Package: revsymb 2020/09/30 v4.0a (http://publish.aps.org/revtex4/ for document
+ation)
+LaTeX Info: Redefining \REV@mathfrak on input line 118.
+))
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/revtex4\aps.rt
+x
+File: aps.rtx 2020/09/30 v4.0a (http://publish.aps.org/revtex4/ for documentati
+on)
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/revtex4\10pt.r
+tx
+File: 10pt.rtx 2020/09/30 v4.0a (http://publish.aps.org/revtex4/ for documentat
+ion)
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/base\latexsym.
+sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 52.
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graph
+icx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyva
+l.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks19
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graph
+ics.sty
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.
+sty
+Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\g
+raphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 106.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\p
+dftex.def
+File: pdftex.def 2024/04/13 v1.2c Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen146
+\Gin@req@width=\dimen147
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssy
+mb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfo
+nts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks20
+\symAMSa=\mathgroup5
+\symAMSb=\mathgroup6
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+LaTeX Info: Redefining \frak on input line 111.
+LaTeX Info: Redefining \Bbb on input line 113.
+))
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtabl
+e.sty
+Package: longtable 2024-10-27 v4.22 Multi-page Table package (DPC)
+\LTleft=\skip54
+\LTright=\skip55
+\LTpre=\skip56
+\LTpost=\skip57
+\LTchunksize=\count286
+\LTcapwidth=\dimen148
+\LT@head=\box61
+\LT@firsthead=\box62
+\LT@foot=\box63
+\LT@lastfoot=\box64
+\LT@gbox=\box65
+\LT@cols=\count287
+\LT@rows=\count288
+\c@LT@tables=\count289
+\c@LT@chunks=\count290
+\LT@p@ftn=\toks21
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/epsf\epsf.sty
+This is `epsf.tex' v2.7.4 <14 February 2011>
+\epsffilein=\read2
+\epsfframemargin=\dimen149
+\epsfframethickness=\dimen150
+\epsfrsize=\dimen151
+\epsftmp=\dimen152
+\epsftsize=\dimen153
+\epsfxsize=\dimen154
+\epsfysize=\dimen155
+\pspoints=\dimen156
+)
+\c@front@matter@foot@note=\count291
+\alt@affil@toks=\toks22
+\alt@affil@toks@count=\toks23
+\keys@width=\skip58
+\c@lastfootnote=\count292
+\c@remember@figure@num=\count293
+\c@remember@table@num=\count294
+\bibindent=\dimen157
+\plot@width=\skip59
+\c@table@save=\count295
+\table@note@skip=\skip60
+\deluxe@table@width=\skip61
+\@d@t@a=\skip62
+\c@deluxe@table@num=\count296
+\abovedeluxetableskip=\skip63
+\belowdeluxetableskip=\skip64
+\lastrowheight=\dimen158
+\DT@p@ftn=\toks24
+\pt@column=\count297
+\pt@ncol=\count298
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\txfont
+s.sty
+Package: txfonts 2008/01/22 v3.2.1
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 21.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/txr/m/n on input line 21.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/txr/m/n on input line 21.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/txr/m/n --> OT1/txr/bx/n on input line 22.
+\symitalic=\mathgroup7
+LaTeX Font Info:    Overwriting symbol font `italic' in version `bold'
+(Font)                  OT1/txr/m/it --> OT1/txr/bx/it on input line 26.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/txr/bx/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/txr/bx/n on input line 29.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 30.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/txr/m/it on input line 30.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/txr/m/it on input line 30.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/txr/m/it --> OT1/txr/bx/it on input line 31.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 40.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/txss/m/n on input line 40.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/txss/m/n on input line 40.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/txss/m/n --> OT1/txss/b/n on input line 41.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 50.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/txtt/m/n on input line 50.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/txtt/m/n on input line 50.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/txtt/m/n --> OT1/txtt/b/n on input line 51.
+LaTeX Font Info:    Redeclaring symbol font `letters' on input line 58.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/txmi/m/it on input line 58.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/txmi/m/it on input line 58.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/txmi/m/it --> OML/txmi/bx/it on input line 59.
+\symlettersA=\mathgroup8
+LaTeX Font Info:    Overwriting symbol font `lettersA' in version `bold'
+(Font)                  U/txmia/m/it --> U/txmia/bx/it on input line 67.
+LaTeX Font Info:    Redeclaring math alphabet \mathfrak on input line 70.
+LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 77.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/txsy/m/n on input line 77.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/txsy/m/n on input line 77.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/txsy/m/n --> OMS/txsy/bx/n on input line 78.
+LaTeX Font Info:    Redeclaring symbol font `AMSa' on input line 93.
+LaTeX Font Info:    Overwriting symbol font `AMSa' in version `normal'
+(Font)                  U/msa/m/n --> U/txsya/m/n on input line 93.
+LaTeX Font Info:    Overwriting symbol font `AMSa' in version `bold'
+(Font)                  U/msa/m/n --> U/txsya/m/n on input line 93.
+LaTeX Font Info:    Overwriting symbol font `AMSa' in version `bold'
+(Font)                  U/txsya/m/n --> U/txsya/bx/n on input line 94.
+LaTeX Font Info:    Redeclaring symbol font `AMSb' on input line 102.
+LaTeX Font Info:    Overwriting symbol font `AMSb' in version `normal'
+(Font)                  U/msb/m/n --> U/txsyb/m/n on input line 102.
+LaTeX Font Info:    Overwriting symbol font `AMSb' in version `bold'
+(Font)                  U/msb/m/n --> U/txsyb/m/n on input line 102.
+LaTeX Font Info:    Overwriting symbol font `AMSb' in version `bold'
+(Font)                  U/txsyb/m/n --> U/txsyb/bx/n on input line 103.
+\symsymbolsC=\mathgroup9
+LaTeX Font Info:    Overwriting symbol font `symbolsC' in version `bold'
+(Font)                  U/txsyc/m/n --> U/txsyc/bx/n on input line 113.
+LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 120.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/txex/m/n on input line 120.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/txex/m/n on input line 120.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/txex/m/n --> OMX/txex/bx/n on input line 121.
+\symlargesymbolsA=\mathgroup10
+LaTeX Font Info:    Overwriting symbol font `largesymbolsA' in version `bold'
+(Font)                  U/txexa/m/n --> U/txexa/bx/n on input line 129.
+LaTeX Font Info:    Redeclaring math symbol \mathsterling on input line 164.
+LaTeX Info: Redefining \not on input line 1043.
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyper
+ref.sty
+Package: hyperref 2025-05-20 v7.01m Hypertext links for LaTeX
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.
+sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvse
+tkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys
+\kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pd
+fescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxc
+mds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\p
+dftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\in
+fwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+))
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolo
+r.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\namer
+ef.sty
+Package: nameref 2023-11-26 v2.56 Cross-referencing by name of section
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refco
+unt.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestri
+ng\gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvop
+tions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+))
+
+Package nameref Warning: The definition of \label has changed! 
+(nameref)                Check your packages! 
+(nameref)                Replacing it with the kernel definition on input line 
+149.
+
+\c@section@level=\count299
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etool
+box.sty
+Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count300
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\st
+ringenc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\@linkdim=\dimen159
+\Hy@linkcounter=\count301
+\Hy@pagecounter=\count302
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1en
+c.def
+File: pd1enc.def 2025-05-20 v7.01m Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intc
+alc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+\Hy@SavedSpaceFactor=\count303
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc
+.def
+File: puenc.def 2025-05-20 v7.01m Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 4040.
+Package hyperref Info: Hyper figures OFF on input line 4157.
+Package hyperref Info: Link nesting OFF on input line 4162.
+Package hyperref Info: Hyper index ON on input line 4165.
+Package hyperref Info: Plain pages OFF on input line 4172.
+Package hyperref Info: Backreferencing OFF on input line 4177.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4424.
+\c@Hy@tempcnt=\count304
+LaTeX Info: Redefining \url on input line 4763.
+\XeTeXLinkMargin=\dimen160
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitse
+t.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\b
+igintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count305
+\Field@Width=\dimen161
+\Fld@charsize=\dimen162
+Package hyperref Info: Hyper figures OFF on input line 6042.
+Package hyperref Info: Link nesting OFF on input line 6047.
+Package hyperref Info: Hyper index ON on input line 6050.
+Package hyperref Info: backreferencing OFF on input line 6057.
+Package hyperref Info: Link coloring ON on input line 6060.
+Package hyperref Info: Link coloring with OCG OFF on input line 6067.
+Package hyperref Info: PDF/A mode OFF on input line 6072.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/base\atbegshi-
+ltx.sty
+Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
+package with kernel methods
+)
+\Hy@abspage=\count306
+\c@Item=\count307
+\c@Hfootnote=\count308
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdft
+ex.def
+File: hpdftex.def 2025-05-20 v7.01m Hyperref driver for pdfTeX
+\Fld@listcount=\count309
+\c@bookmark@seq@number=\count310
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck
+\rerunfilecheck.sty
+Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/base\atveryend
+-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
+kage
+with kernel methods
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/generic/uniquecounte
+r\uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+85.
+)
+\Hy@SectionHShift=\skip65
+)
+LaTeX Font Info:    Trying to load font information for OT1+txr on input line 1
+3.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\ot1txr
+.fd
+File: ot1txr.fd 2000/12/15 v3.1
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3ba
+ckend-pdftex.def
+File: l3backend-pdftex.def 2025-04-14 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count311
+) (main_OJ.aux)
+\openout1 = `main_OJ.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/txmi/m/it on input line 13.
+LaTeX Font Info:    Trying to load font information for OML+txmi on input line 
+13.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\omltxm
+i.fd
+File: omltxmi.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/txsy/m/n on input line 13.
+LaTeX Font Info:    Trying to load font information for OMS+txsy on input line 
+13.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\omstxs
+y.fd
+File: omstxsy.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/txex/m/n on input line 13.
+LaTeX Font Info:    Trying to load font information for OMX+txex on input line 
+13.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\omxtxe
+x.fd
+File: omxtxex.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/txexa/m/n on input line 13.
+LaTeX Font Info:    Trying to load font information for U+txexa on input line 1
+3.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\utxexa
+.fd
+File: utxexa.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+Class revtex4 Info: Unrecognized LaTeX tabular. Please update this document cla
+ss! (Proceeding with fingers crossed.) on input line 13.
+Class revtex4 Info: Patching unrecognized longtable package. (Proceeding with f
+ingers crossed) on input line 13.
+Class revtex4 Info: cite was not loaded (OK!) on input line 13.
+Class revtex4 Info: multicol was not loaded (OK!) on input line 13.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\su
+pp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count312
+\scratchdimen=\dimen163
+\scratchbox=\box66
+\nofMPsegments=\count313
+\nofMParguments=\count314
+\everyMPshowfont=\toks25
+\MPscratchCnt=\count315
+\MPscratchDim=\dimen164
+\MPnumerator=\count316
+\makeMPintoPDFobject=\count317
+\everyMPtoPDFconversion=\toks26
+)
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\e
+pstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epsto
+pdf-sys.cfg
+File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
+))
+
+Package hyperref Warning: Height of page (\paperheight) is invalid (0.0pt),
+(hyperref)                using 11in.
+
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color
+.sty
+Package: color 2024/06/23 v1.3e Standard LaTeX Color (DPC)
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\c
+olor.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 149.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathc
+olor.ltx))
+Package hyperref Info: Link coloring ON on input line 13.
+ (main_OJ.out) (main_OJ.out)
+\@outlinefile=\write3
+\openout3 = `main_OJ.out'.
+
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 38
+.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/base\ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+LaTeX Font Info:    Trying to load font information for U+txsya on input line 3
+8.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\utxsya
+.fd
+File: utxsya.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    Trying to load font information for U+txsyb on input line 3
+8.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\utxsyb
+.fd
+File: utxsyb.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    Trying to load font information for U+txmia on input line 3
+8.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\utxmia
+.fd
+File: utxmia.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    Trying to load font information for U+txsyc on input line 3
+8.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\utxsyc
+.fd
+File: utxsyc.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    Trying to load font information for OT1+txtt on input line 
+38.
+
+(C:\Users\Johan Comparat\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\ot1txt
+t.fd
+File: ot1txtt.fd 2000/12/15 v3.1
+) [1{C:/Users/Johan Comparat/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{
+C:/Users/Johan Comparat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.e
+nc}]
+Overfull \hbox (6.73274pt too wide) in paragraph at lines 112--112
+[]\OT1/txtt/m/n/10 t_sim_gal['upid']==-1)&(t_sim_gal['Mvir']>=5e11)[] 
+ []
+
+
+Overfull \hbox (1.01823pt too wide) detected at line 121
+[][][]\OT1/txr/m/n/10 (\OML/txmi/m/it/10 L[]E\OT1/txr/m/n/10 (\OML/txmi/m/it/10
+ z\OT1/txr/m/n/10 )[] [\OML/txmi/m/it/10 erg s[]\OT1/txr/m/n/10 ]) = 44\OML/txm
+i/m/it/10 :\OT1/txr/m/n/10 7 + 1\OML/txmi/m/it/10 :\OT1/txr/m/n/10 61([][](\OML
+/txmi/m/it/10 M[]=M[]\OT1/txr/m/n/10 ) \OMS/txsy/m/n/10 ^^@ \OT1/txr/m/n/10 15)
+[]
+ []
+
+<figures_GAS/M500c_LX.png, id=124, 397.485pt x 361.35pt>
+File: figures_GAS/M500c_LX.png Graphic file (type png)
+<use figures_GAS/M500c_LX.png>
+Package pdftex.def Info: figures_GAS/M500c_LX.png  used on input line 130.
+(pdftex.def)             Requested size: 233.00244pt x 211.82724pt.
+LaTeX Font Info:    Font shape `OT1/txr/b/n' in size <8> not available
+(Font)              Font shape `OT1/txr/bx/n' tried instead on input line 134.
+<figures_GAS/Ms_LX.png, id=154, 397.485pt x 361.35pt>
+File: figures_GAS/Ms_LX.png Graphic file (type png)
+<use figures_GAS/Ms_LX.png>
+Package pdftex.def Info: figures_GAS/Ms_LX.png  used on input line 142.
+(pdftex.def)             Requested size: 233.00244pt x 211.82724pt.
+<figures_GAS/M500-kt.png, id=172, 397.485pt x 361.35pt>
+File: figures_GAS/M500-kt.png Graphic file (type png)
+<use figures_GAS/M500-kt.png>
+Package pdftex.def Info: figures_GAS/M500-kt.png  used on input line 166.
+(pdftex.def)             Requested size: 233.00244pt x 211.82724pt.
+<figures_GAS/FullSky_zlt_z0p30_logNlogS.png, id=188, 433.62pt x 433.62pt>
+File: figures_GAS/FullSky_zlt_z0p30_logNlogS.png Graphic file (type png)
+<use figures_GAS/FullSky_zlt_z0p30_logNlogS.png>
+Package pdftex.def Info: figures_GAS/FullSky_zlt_z0p30_logNlogS.png  used on in
+put line 184.
+(pdftex.def)             Requested size: 196.21396pt x 196.2123pt.
+<figures_GAS/LC1800_zlt_z0p94_logNlogS.png, id=189, 433.62pt x 433.62pt>
+File: figures_GAS/LC1800_zlt_z0p94_logNlogS.png Graphic file (type png)
+<use figures_GAS/LC1800_zlt_z0p94_logNlogS.png>
+Package pdftex.def Info: figures_GAS/LC1800_zlt_z0p94_logNlogS.png  used on inp
+ut line 185.
+(pdftex.def)             Requested size: 196.21396pt x 196.2123pt.
+<figures_GAS/LC1800_zlt_z2p03_logNlogS.png, id=190, 433.62pt x 433.62pt>
+File: figures_GAS/LC1800_zlt_z2p03_logNlogS.png Graphic file (type png)
+<use figures_GAS/LC1800_zlt_z2p03_logNlogS.png>
+Package pdftex.def Info: figures_GAS/LC1800_zlt_z2p03_logNlogS.png  used on inp
+ut line 186.
+(pdftex.def)             Requested size: 196.21396pt x 196.2123pt.
+[2 <./figures_GAS/M500c_LX.png> <./figures_GAS/Ms_LX.png>]
+
+LaTeX Warning: A float is stuck (cannot be placed) on input line 200.
+
+
+LaTeX Warning: A float is stuck (cannot be placed) on input line 200.
+
+
+Class revtex4 Warning: Deferred float stuck during \clearpage processing.
+
+<figures_GAS/ra-dec-hotgas-events.png, id=237, 397.485pt x 397.485pt>
+File: figures_GAS/ra-dec-hotgas-events.png Graphic file (type png)
+<use figures_GAS/ra-dec-hotgas-events.png>
+Package pdftex.def Info: figures_GAS/ra-dec-hotgas-events.png  used on input li
+ne 217.
+(pdftex.def)             Requested size: 233.00244pt x 233.00996pt.
+[3 <./figures_GAS/M500-kt.png> <./figures_GAS/FullSky_zlt_z0p30_logNlogS.png> <
+./figures_GAS/LC1800_zlt_z0p94_logNlogS.png> <./figures_GAS/LC1800_zlt_z2p03_lo
+gNlogS.png>]
+
+LaTeX Warning: A float is stuck (cannot be placed) on input line 224.
+
+
+Class revtex4 Warning: Deferred float stuck during \clearpage processing.
+
+[4 <./figures_GAS/ra-dec-hotgas-events.png>]
+<figures_AGN/LSAR_z025.png, id=273, 433.62pt x 433.62pt>
+File: figures_AGN/LSAR_z025.png Graphic file (type png)
+<use figures_AGN/LSAR_z025.png>
+Package pdftex.def Info: figures_AGN/LSAR_z025.png  used on input line 241.
+(pdftex.def)             Requested size: 233.00244pt x 233.00665pt.
+<figures_AGN/DC_z025.png, id=285, 433.62pt x 433.62pt>
+File: figures_AGN/DC_z025.png Graphic file (type png)
+<use figures_AGN/DC_z025.png>
+Package pdftex.def Info: figures_AGN/DC_z025.png  used on input line 255.
+(pdftex.def)             Requested size: 233.00244pt x 233.00665pt.
+<figures_AGN/SMF_z025.png, id=297, 433.62pt x 433.62pt>
+File: figures_AGN/SMF_z025.png Graphic file (type png)
+<use figures_AGN/SMF_z025.png>
+Package pdftex.def Info: figures_AGN/SMF_z025.png  used on input line 269.
+(pdftex.def)             Requested size: 233.00244pt x 233.00665pt.
+<figures_AGN/XLF_soft_z025.png, id=303, 433.62pt x 433.62pt>
+File: figures_AGN/XLF_soft_z025.png Graphic file (type png)
+<use figures_AGN/XLF_soft_z025.png>
+Package pdftex.def Info: figures_AGN/XLF_soft_z025.png  used on input line 285.
+
+(pdftex.def)             Requested size: 233.00244pt x 233.00665pt.
+<figures_AGN/logNlogS_AGN_zupto4.png, id=311, 433.62pt x 433.62pt>
+File: figures_AGN/logNlogS_AGN_zupto4.png Graphic file (type png)
+<use figures_AGN/logNlogS_AGN_zupto4.png>
+Package pdftex.def Info: figures_AGN/logNlogS_AGN_zupto4.png  used on input lin
+e 299.
+(pdftex.def)             Requested size: 233.00244pt x 233.00665pt.
+ [5 <./figures_AGN/LSAR_z025.png> <./figures_AGN/DC_z025.png> <./figures_AGN/SM
+F_z025.png>]
+
+LaTeX Warning: A float is stuck (cannot be placed) on input line 306.
+
+
+LaTeX Warning: A float is stuck (cannot be placed) on input line 306.
+
+
+Class revtex4 Warning: Deferred float stuck during \clearpage processing.
+
+[6 <./figures_AGN/XLF_soft_z025.png> <./figures_AGN/logNlogS_AGN_zupto4.png>]
+[7] [8] (main_OJ.bbl) [9] (main_OJ.aux)
+ ***********
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-04-29>
+ ***********
+Package rerunfilecheck Info: File `main_OJ.out' has not changed.
+(rerunfilecheck)             Checksum: B2FE7E027BEBF2DDEF7B93AB4390D89E;1657.
+ ) 
+Here is how much of TeX's memory you used:
+ 12240 strings out of 469923
+ 190806 string characters out of 5464779
+ 602971 words of memory out of 5000000
+ 38811 multiletter control sequences out of 15000+600000
+ 668220 words of font info for 141 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 75i,6n,79p,1196b,463s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/Johan Comparat/AppData/Local/Programs/MiKTeX/fonts/type1/public/txf
+onts/rtxmi.pfb><C:/Users/Johan Comparat/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/txfonts/rtxr.pfb><C:/Users/Johan Comparat/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/txfonts/rtxsc.pfb><C:/Users/Johan Comparat/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/txfonts/txsy.pfb><C:/Users/Johan Comparat/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/txtt.pfb><C:/Users/Johan
+ Comparat/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Us
+ers/Johan Comparat/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.p
+fb><C:/Users/Johan Comparat/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times
+/utmri8a.pfb>
+Output written on main_OJ.pdf (9 pages, 731485 bytes).
+PDF statistics:
+ 429 PDF objects out of 1000 (max. 8388607)
+ 74 named destinations out of 1000 (max. 500000)
+ 149 words of extra memory for PDF output out of 10000 (max. 10000000)
+
