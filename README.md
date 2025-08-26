@@ -1,6 +1,6 @@
 # stack_models
 
-## Genral statements
+## General statements
 
 This repository contains the models used to fit X-ray stacks around galaxies. 
 

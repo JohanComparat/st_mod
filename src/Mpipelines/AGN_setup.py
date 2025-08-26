@@ -130,168 +130,168 @@ def tabulate_AGN(z_bins_i = z_bins[0]):
 	# output table
 	#t_out['z'] = z
 	t_out['LX_hard'] = X_luminosities_sorted[selected]
-	##lx = t_out['LX_hard']
-	##print('hard LX computed, dt=', time.time() - t0)
+	lx = t_out['LX_hard']
+	print('hard LX computed, dt=', time.time() - t0)
 
-	###=============================
-	### Obscured fractions
-	### ===============================
-	### model from equations 4-11, 12-15 of Comparat et al. 2019
+	#=============================
+	# Obscured fractions
+	# ===============================
+	# model from equations 4-11, 12-15 of Comparat et al. 2019
 
-	### too many CTK at high luminosity
-	### Eq. 4
-	###def f_thick(LXhard, z): return 0.30
-	##def thick_LL(z, lx0 = 41.5): return lx0 + np.arctan(z*5)*1.5
-	##def f_thick(LXhard, z): return 0.30 * (0.5 + 0.5 * erf((thick_LL(z) - LXhard) / 0.25))
+	# too many CTK at high luminosity
+	# Eq. 4
+	#def f_thick(LXhard, z): return 0.30
+	def thick_LL(z, lx0 = 41.5): return lx0 + np.arctan(z*5)*1.5
+	def f_thick(LXhard, z): return 0.30 * (0.5 + 0.5 * erf((thick_LL(z) - LXhard) / 0.25))
 
-	### too many absorbed ones
-	### Eq. 7
-	##def f_2(LXhard, z): return 0.9 * (41 / LXhard)**0.5
+	# too many absorbed ones
+	# Eq. 7
+	def f_2(LXhard, z): return 0.9 * (41 / LXhard)**0.5
 
-	### fiducial
-	### Eq. 8
-	##def f_1(LXhard, z): return f_thick(LXhard, z) + 0.01 + erf(z / 4.) * 0.3
+	# fiducial
+	# Eq. 8
+	def f_1(LXhard, z): return f_thick(LXhard, z) + 0.01 + erf(z / 4.) * 0.3
 
-	### Eq. 10
-	##def LL(z, lx0 = 43.2): return lx0 + erf(z) * 1.2
+	# Eq. 10
+	def LL(z, lx0 = 43.2): return lx0 + erf(z) * 1.2
 
-	### Eq. 5,6
-	##def fraction_ricci(LXhard, z, width = 0.6): return f_1(LXhard,z) + (f_2(LXhard, z) - f_1(LXhard,z)) * (0.5 + 0.5 * erf((LL(z) - LXhard) / width))
+	# Eq. 5,6
+	def fraction_ricci(LXhard, z, width = 0.6): return f_1(LXhard,z) + (f_2(LXhard, z) - f_1(LXhard,z)) * (0.5 + 0.5 * erf((LL(z) - LXhard) / width))
 
-	### initializes logNH
-	##logNH = np.zeros(n_agn)
+	# initializes logNH
+	logNH = np.zeros(n_agn)
 
-	### obscuration, after the equations above
-	##randomNH = np.random.rand(n_agn)
+	# obscuration, after the equations above
+	randomNH = np.random.rand(n_agn)
 
-	### unobscured 20-22
-	###frac_thin = fraction_ricci(lsar, z)
-	##frac_thin = fraction_ricci(lx, z)
-	##thinest = (randomNH >= frac_thin)
+	# unobscured 20-22
+	#frac_thin = fraction_ricci(lsar, z)
+	frac_thin = fraction_ricci(lx, z)
+	thinest = (randomNH >= frac_thin)
 
-	### thick obscuration, 24-26
-	##thick = (randomNH < f_thick(lx, z))
-	###thick = (randomNH < thick_fraction)
+	# thick obscuration, 24-26
+	thick = (randomNH < f_thick(lx, z))
+	#thick = (randomNH < thick_fraction)
 
-	### obscured 22-24
-	##obscured = (thinest == False) & (thick == False)
+	# obscured 22-24
+	obscured = (thinest == False) & (thick == False)
 
-	### assigns logNH values randomly :
-	##logNH[thick] = np.random.uniform(24, 26, len(logNH[thick]))
-	##logNH[obscured] = np.random.uniform(22, 24, len(logNH[obscured]))
-	##logNH[thinest] = np.random.uniform(20, 22, len(logNH[thinest]))
-	##print('logNH computed, dt=', time.time() - t0)
+	# assigns logNH values randomly :
+	logNH[thick] = np.random.uniform(24, 26, len(logNH[thick]))
+	logNH[obscured] = np.random.uniform(22, 24, len(logNH[obscured]))
+	logNH[thinest] = np.random.uniform(20, 22, len(logNH[thinest]))
+	print('logNH computed, dt=', time.time() - t0)
 
-	###print('=====================  AGN fractions and numbers vs NH values =================')
-	###print(n_agn,
-		###len(thick.nonzero()[0]) * 1. / n_agn,
-		###len(obscured.nonzero()[0]) * 1. / n_agn,
-		###len(thinest.nonzero()[0]) * 1. / n_agn)
+	#print('=====================  AGN fractions and numbers vs NH values =================')
+	#print(n_agn,
+		#len(thick.nonzero()[0]) * 1. / n_agn,
+		#len(obscured.nonzero()[0]) * 1. / n_agn,
+		#len(thinest.nonzero()[0]) * 1. / n_agn)
 
-	### ===============================
-	### Assigns flux
-	### ===============================
+	# ===============================
+	# Assigns flux
+	# ===============================
 
-	##NHS = np.arange(20, 26 + 0.05, 0.4)
-	### hard X-ray 2-10 keV rest-frame ==>> 2-10 obs frame
-	##obscuration_z_grid, obscuration_nh_grid, obscuration_fraction_obs_erosita = np.loadtxt(
-		##path_2_RF_obs_hard, unpack=True)
+	NHS = np.arange(20, 26 + 0.05, 0.4)
+	# hard X-ray 2-10 keV rest-frame ==>> 2-10 obs frame
+	obscuration_z_grid, obscuration_nh_grid, obscuration_fraction_obs_erosita = np.loadtxt(
+		path_2_RF_obs_hard, unpack=True)
 
-	##xy = np.c_[obscuration_z_grid, obscuration_nh_grid]
-	##obscuration_itp_H_H = LinearNDInterpolator(xy, obscuration_fraction_obs_erosita)
-	####obscuration_itp_H_H_itp2d = interp2d(
-		####obscuration_z_grid,
-		####obscuration_nh_grid,
-		####obscuration_fraction_obs_erosita)
+	xy = np.c_[obscuration_z_grid, obscuration_nh_grid]
+	obscuration_itp_H_H = LinearNDInterpolator(xy, obscuration_fraction_obs_erosita)
+	##obscuration_itp_H_H_itp2d = interp2d(
+		##obscuration_z_grid,
+		##obscuration_nh_grid,
+		##obscuration_fraction_obs_erosita)
 
-	##percent_observed_itp = interp1d(
-		##np.hstack((20 - 0.1, NHS, 26 + 0.1)),
-		##np.hstack((
-			##obscuration_itp_H_H(z_mean, 20.),
-			##np.array([obscuration_itp_H_H(z_i, logNH_i) for z_i, logNH_i in zip(z_mean * np.ones_like(NHS), NHS)]),
-			##obscuration_itp_H_H(z_mean, 26.))))
-	##percent_observed_H_H = percent_observed_itp(logNH)
+	percent_observed_itp = interp1d(
+		np.hstack((20 - 0.1, NHS, 26 + 0.1)),
+		np.hstack((
+			obscuration_itp_H_H(z_mean, 20.),
+			np.array([obscuration_itp_H_H(z_i, logNH_i) for z_i, logNH_i in zip(z_mean * np.ones_like(NHS), NHS)]),
+			obscuration_itp_H_H(z_mean, 26.))))
+	percent_observed_H_H = percent_observed_itp(logNH)
 
-	##lx_obs_frame_2_10 = np.log10(10**lx * percent_observed_H_H)
-	##fx_2_10 = 10**(lx_obs_frame_2_10) / (4 * np.pi * (dl_cm)**2.) # / h**3
-	##print('flux 2-10 computed, dt=', time.time() - t0)
-
-
-	##def fraction_22p21_merloni(lx): return (
-		##0.5 + 0.5 * erf((-lx + 44.) / 0.9)) * 0.69 + 0.26
+	lx_obs_frame_2_10 = np.log10(10**lx * percent_observed_H_H)
+	fx_2_10 = 10**(lx_obs_frame_2_10) / (4 * np.pi * (dl_cm)**2.) # / h**3
+	print('flux 2-10 computed, dt=', time.time() - t0)
 
 
-	##def compute_agn_type(z, lx, logNH, fbins=fbins, n_agn=n_agn):
-		##"""
-		##Assigns a type to an AGN population
-
-		##parameters:
-		##- z: redshift
-		##- lx: hard X-ray luminosity (log10)
-		##- logNH: nH value (log10)
-
-		##return: array of AGN types
-		##"""
-		### boundary between the 22 and the 21 populations
-		##limit = fraction_22p21_merloni((fbins[1:] + fbins[:-1]) * 0.5)
-		### selection per obscuration intensity
-		##nh_21 = (logNH <= 22.)
-		##nh_23 = (logNH > 22.)  # &(logNH<=26.)
-		### initiate columns to compute
-		##opt_type = np.zeros(n_agn).astype('int')
-		##rd = np.random.rand(n_agn)
-		### compute histograms of LX for different obscurations
-		##nall = np.histogram(lx, fbins)[0]       # all
-		##nth = np.histogram(lx[nh_23], fbins)[0]  # thin
-		##nun = np.histogram(lx[nh_21], fbins)[0]  # unobscured
-		##fr_thk = nth * 1. / nall  # fraction of obscured
-		##fr_un = nun * 1. / nall  # fraction of unobscured
-		### first get the type 12: NH absorption but optically unobscured
-		### to be chosen in obscured population
-		##n_per_bin_12 = (fr_thk - limit) * nall
-		##sel_12 = (np.ones(len(z)) == 0)
-		##for bin_low, bin_high, num_needed, nn_un in zip(
-				##fbins[:-1], fbins[1:], n_per_bin_12.astype('int'), nth):
-			##if num_needed > 0 and nn_un > 0:
-				##frac_needed = num_needed * 1. / nn_un
-				##sel_12 = (sel_12) | (
-					##(lx > bin_low) & (
-						##lx < bin_high) & (nh_23) & (
-						##rd < frac_needed))
-		##t_12 = (nh_23) & (sel_12)
-		### second the types 21
-		### to be chosen in nun
-		##n_per_bin_21 = (-fr_thk + limit) * nall
-		##sel_21 = (np.ones(len(z)) == 0)
-		##for bin_low, bin_high, num_needed, nn_un in zip(
-				##fbins[:-1], fbins[1:], n_per_bin_21.astype('int'), nun):
-			##if num_needed > 0 and nn_un > 0:
-				##frac_needed = num_needed * 1. / nn_un
-				##sel_21 = (sel_21) | (
-					##(lx > bin_low) & (
-						##lx < bin_high) & (nh_21) & (
-						##rd < frac_needed))
-		##t_21 = (nh_21) & (sel_21)
-		### finally the types 11 and 22
-		##t_11 = (nh_21) & (t_21 == False)
-		##t_22 = (nh_23) & (t_12 == False)
-		##opt_type[t_22] = 22
-		##opt_type[t_12] = 12
-		##opt_type[t_11] = 11
-		##opt_type[t_21] = 21
-		##return opt_type
+	def fraction_22p21_merloni(lx): return (
+		0.5 + 0.5 * erf((-lx + 44.) / 0.9)) * 0.69 + 0.26
 
 
-	##opt_type = compute_agn_type(z, lx, logNH)
-	##print('type added, dt=', time.time() - t0)
+	def compute_agn_type(z, lx, logNH, fbins=fbins, n_agn=n_agn):
+		"""
+		Assigns a type to an AGN population
 
-	### ===============================
-	### Writing results
-	### ===============================
+		parameters:
+		- z: redshift
+		- lx: hard X-ray luminosity (log10)
+		- logNH: nH value (log10)
 
-	##t_out['FX_hard'] = fx_2_10
-	##t_out['logNH'] = logNH
-	##t_out['agn_type'] = opt_type
+		return: array of AGN types
+		"""
+		# boundary between the 22 and the 21 populations
+		limit = fraction_22p21_merloni((fbins[1:] + fbins[:-1]) * 0.5)
+		# selection per obscuration intensity
+		nh_21 = (logNH <= 22.)
+		nh_23 = (logNH > 22.)  # &(logNH<=26.)
+		# initiate columns to compute
+		opt_type = np.zeros(n_agn).astype('int')
+		rd = np.random.rand(n_agn)
+		# compute histograms of LX for different obscurations
+		nall = np.histogram(lx, fbins)[0]       # all
+		nth = np.histogram(lx[nh_23], fbins)[0]  # thin
+		nun = np.histogram(lx[nh_21], fbins)[0]  # unobscured
+		fr_thk = nth * 1. / nall  # fraction of obscured
+		fr_un = nun * 1. / nall  # fraction of unobscured
+		# first get the type 12: NH absorption but optically unobscured
+		# to be chosen in obscured population
+		n_per_bin_12 = (fr_thk - limit) * nall
+		sel_12 = (np.ones(len(z)) == 0)
+		for bin_low, bin_high, num_needed, nn_un in zip(
+				fbins[:-1], fbins[1:], n_per_bin_12.astype('int'), nth):
+			if num_needed > 0 and nn_un > 0:
+				frac_needed = num_needed * 1. / nn_un
+				sel_12 = (sel_12) | (
+					(lx > bin_low) & (
+						lx < bin_high) & (nh_23) & (
+						rd < frac_needed))
+		t_12 = (nh_23) & (sel_12)
+		# second the types 21
+		# to be chosen in nun
+		n_per_bin_21 = (-fr_thk + limit) * nall
+		sel_21 = (np.ones(len(z)) == 0)
+		for bin_low, bin_high, num_needed, nn_un in zip(
+				fbins[:-1], fbins[1:], n_per_bin_21.astype('int'), nun):
+			if num_needed > 0 and nn_un > 0:
+				frac_needed = num_needed * 1. / nn_un
+				sel_21 = (sel_21) | (
+					(lx > bin_low) & (
+						lx < bin_high) & (nh_21) & (
+						rd < frac_needed))
+		t_21 = (nh_21) & (sel_21)
+		# finally the types 11 and 22
+		t_11 = (nh_21) & (t_21 == False)
+		t_22 = (nh_23) & (t_12 == False)
+		opt_type[t_22] = 22
+		opt_type[t_12] = 12
+		opt_type[t_11] = 11
+		opt_type[t_21] = 21
+		return opt_type
+
+
+	opt_type = compute_agn_type(z, lx, logNH)
+	print('type added, dt=', time.time() - t0)
+
+	# ===============================
+	# Writing results
+	# ===============================
+
+	t_out['FX_hard'] = fx_2_10
+	t_out['logNH'] = logNH
+	t_out['agn_type'] = opt_type
 	t_out.write( p_2_out, overwrite = True )
 	print(p_2_out, 'written in ', time.time() - t0, 's')
 
