@@ -760,7 +760,7 @@ class GAS:
         ra_array = CAT['RA']
         dec_array = CAT['DEC']
         redshift = CAT['redshift_S']
-        flux_array = CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] * np.log10(frac_flux_rescale)
+        flux_array = CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] + np.log10(frac_flux_rescale)
         kT = CAT['CLUSTER_kT']
         galactic_nh = np.max([CAT['nH'], np.ones_like(CAT['nH'])*10**19.9], axis=0)
         galNH = (10*np.log10(galactic_nh)).astype('int')/10.
