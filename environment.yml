@@ -2,7 +2,7 @@ name: stmod
 channels:
   - conda-forge
   #- http://ssb.stsci.edu/astroconda
-  - defaults
+  #- defaults
 dependencies:
   - python=3.11
   - numpy
