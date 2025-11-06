@@ -9,7 +9,7 @@ dependencies:
   - scipy
   - matplotlib
   - astropy
-  #- healpy
+  - healpy
   - pandas
   - pip
   - setuptools
