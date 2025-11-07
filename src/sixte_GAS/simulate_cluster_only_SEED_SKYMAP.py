@@ -21,6 +21,62 @@ sky_map_hdu['ID'] = np.arange(len(sky_map_hdu))
 #eRASS_ply = os.path.join(os.environ['GIT_ERASS_SIM'], 'data', 'eRASS_SKYMAPS.ply' )
 #mng = pymangle.Mangle( eRASS_ply )
 
+def split_simput(input_simput, max_per=1000):
+    """
+    Split a SIMPUT file into multiple parts with at most `max_per` sources each.
+    Returns a list of output file paths.
+    """
+    clu_simput = Table.read(input_simput)
+
+    n = len(clu_simput)
+
+    # If already small enough, don't do anything
+    if n < max_per:
+        return [input_simput]
+
+    # Number of parts e.g. 2600 clu/1000 = 3 simput
+    n_parts = int(np.ceil(n / float(max_per)))
+
+    # Build edges e.g. [0, 1000, 2000, 3000]
+    edges = (np.arange(n_parts + 1) * max_per).astype(int)
+    edges[-1] = n  # e.g. [0, 1000, 2000, 2600]
+
+    # prepare clu simput list
+    clu_simput_list = []
+
+    for i in range(n_parts):
+        lo, hi = edges[i], edges[i + 1]
+
+        hdu_cols = fits.ColDefs([
+            fits.Column(name="SRC_ID", format='K', unit='', array=(clu_simput[lo:hi]['SRC_ID']).astype('int')),
+            fits.Column(name="RA", format='D', unit='deg', array=clu_simput[lo:hi]["RA"]),
+            fits.Column(name="DEC", format='D', unit='deg', array=clu_simput[lo:hi]["DEC"]),
+            fits.Column(name="E_MIN", format='D', unit='keV', array=np.ones(len(clu_simput[lo:hi])) * 0.5),
+            fits.Column(name="E_MAX", format='D', unit='keV', array=np.ones(len(clu_simput[lo:hi])) * 2.0),
+            fits.Column(name="FLUX", format='D', unit='erg/s/cm**2', array=clu_simput[lo:hi]["FLUX"]),
+            fits.Column(name="IMAGE", format='100A', unit='', array=clu_simput[lo:hi]["IMAGE"]),
+            fits.Column(name="SPECTRUM", format='100A', unit='', array=clu_simput[lo:hi]["SPECTRUM"]),
+            fits.Column(name="IMGROTA", format='D', unit='deg', array=clu_simput[lo:hi]["IMGROTA"]),
+            fits.Column(name="IMGSCAL", format='D', unit='', array=clu_simput[lo:hi]["IMGSCAL"])
+        ])
+        hdu = fits.BinTableHDU.from_columns(hdu_cols)
+        hdu.name = 'SRC_CAT'
+        hdu.header['HDUCLASS'] = 'HEASARC/SIMPUT'
+        hdu.header['HDUCLAS1'] = 'SRC_CAT'
+        hdu.header['HDUVERS'] = '1.1.0'
+        hdu.header['RADESYS'] = 'FK5'
+        hdu.header['EQUINOX'] = 2000.0
+        outf = fits.HDUList([fits.PrimaryHDU(), hdu])  # ,  ])
+        # if os.path.isfile(p2_simput_out):
+        # os.system("rm " + p2_simput_out)
+        p2out = os.path.join('/'.join(input_simput.split('/')[:-1]),
+                             input_simput.split('/')[-1].split('.fits')[0] + '_splitP%d.fits' % i)
+        outf.writeto(p2out, overwrite=True)  # save trimmed table
+        clu_simput_list.append(p2out)  # append to list to provide in output
+
+    return clu_simput_list
+
+
 class Simulator:
     """
     SIXTE simulator for eROSITA observations.
@@ -243,7 +299,10 @@ if __name__ == '__main__':
         #simput_files_all.sort()
         print(sky_tile_id)#, simput_files_all)
         #for simput_file_i in simput_files_all[:1]:
-        simput_files = np.array([os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits'), ])
+        #Next line was problematic on 07.11.2025, rseppi added split_simput to handle simput files larger than 1000
+        #simput_files = np.array([os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits'), ])
+        simput_file = os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits')
+        simput_files = split_simput(simput_file)
         data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, erass_option + "_sixte_"+ sixte_version+ "_SEED_"+str(seed).zfill(3) +"_events_cluster_"+basename )
         print('outputs here',data_dir)
         os.system('mkdir -p '+data_dir )
