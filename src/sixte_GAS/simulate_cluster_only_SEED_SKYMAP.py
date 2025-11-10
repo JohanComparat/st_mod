@@ -5,14 +5,17 @@ Uses sixte version 2.7
 To use sixte version 3.0, this needs a significant upgrade
 
 """
-import subprocess
+#import subprocess
+from multiprocessing import Pool
+from functools import partial
 import os
-import errno
+#import errno
 import sys, glob
-import healpy
+#import healpy
 import numpy as np
 from astropy.io import fits
 from astropy.table import Table, Column
+
 #pix_ids = np.arange(healpy.nside2npix(8) )
 #ra_cen_s, dec_cen_s = healpy.pix2ang(8, pix_ids, nest=True, lonlat=True)
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
@@ -21,6 +24,80 @@ sky_map_hdu['ID'] = np.arange(len(sky_map_hdu))
 #eRASS_ply = os.path.join(os.environ['GIT_ERASS_SIM'], 'data', 'eRASS_SKYMAPS.ply' )
 #mng = pymangle.Mangle( eRASS_ply )
 
+#One iteration for subprocess
+def one_iter_func(sky_tile, other_elements):
+    """
+    Single iteration of loop function over healpix pixels. Writes the files to path_2_eRO_catalog.
+
+    Input:
+
+    - sky_tile
+    - other_elements: list containing basename, seed, LC_dir, erass_option, sixte_version
+    """
+
+    #Splits other_elements into relevant quantities
+    basename, seed, LC_dir, erass_option, sixte_version, log_fn_for_check = other_elements
+    print(seed, LC_dir, erass_option)#, env, erass_option)
+
+    #Loop as usual
+    sky_tile_id = str(sky_tile['SRVMAP'])
+    str_field = str(sky_tile['SRVMAP']).zfill(6)
+    ra_cen = sky_tile['RA_CEN']
+    dec_cen = sky_tile['DE_CEN']
+    #simput_files_all = np.array(glob.glob( os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput_N_???.fits')))
+    #simput_files_all.sort()
+    print(sky_tile_id)#, simput_files_all)
+    #for simput_file_i in simput_files_all[:1]:
+    #Next line was problematic on 07.11.2025, rseppi added split_simput to handle simput files larger than 1000
+    #simput_files = np.array([os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits'), ])
+    simput_file = os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits')
+    simput_files = split_simput(simput_file)
+    data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, erass_option + "_sixte_"+ sixte_version+ "_SEED_"+str(seed).zfill(3) +"_events_cluster_"+basename )
+    print('outputs here',data_dir)
+    os.system('mkdir -p '+data_dir )
+    if erass_option=='Att_eRASS8':
+        p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
+        t_starts = np.array([ 617943605 ])
+        t_stops = np.array([ 744174005 ])
+    #ccd1_files = os.path.join( data_dir, 't0erass_ccd?_???.fits' )
+    #os.system('rm ' + ccd1_files)
+    #if os.path.isfile(ccd1_file)==False:
+    #break
+    for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+        print('STEP', jj, (t0, t1))
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++')
+        bkg = 0
+        t_start = t0 # 617943605.0
+        exposure = t1 - t0 # 31536000 * 4 # = 4 years  # 31536000 = 1year # 15750000 = 1/2 year
+        # Launch...
+        # 3 files
+        #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
+        # 2 files
+        try:
+            Simulator(
+            jj,
+            bkg,
+            t_start,
+            exposure,
+            int(seed),
+            simput_files,
+            data_dir,
+            ra_cen,
+            dec_cen,
+            p_2_att_file).run_all()
+        except(FileNotFoundError):
+            print('missing file for field ', str_field)
+
+    #Save the tile_id to the logfile to mark that it is done
+    with open(log_fn_for_check, 'a') as lffc:
+        lffc.write('{0}\n'.format(str_field))    
+
+# =============================================================================
+
+#Splits SIMPUT file into multiple parts
 def split_simput(input_simput, max_per=1000):
     """
     Split a SIMPUT file into multiple parts with at most `max_per` sources each.
@@ -76,6 +153,7 @@ def split_simput(input_simput, max_per=1000):
 
     return clu_simput_list
 
+# =============================================================================
 
 class Simulator:
     """
@@ -274,9 +352,9 @@ class Simulator:
 #erosim Simput=/home/idies/workspace/erosim/Uchuu/LCerass/164087/Xgas_bHS0.8_simput_N_000.fits Prefix=/home/idies/workspace/erosim/Uchuu/LCerass/164087/eRASS8_SEED_001_events_cluster_2025_04/t0erass_ Attitude=/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits RA=163.5 Dec=3.000512456781548 GTIFile=/home/idies/workspace/erosim/Uchuu/LCerass/164087/eRASS8_SEED_001_events_cluster_2025_04/erass.gti TSTART=617943605.0 Exposure=126230400.0 MJDREF=51543.875 dt=0.5 Seed=1 clobber=yes chatter=3 Background=no
 
 if __name__ == '__main__':
-    # seed = 9
     basename = sys.argv[1]
     seed = int(sys.argv[2])
+
     LC_dir = 'LCerass'
     #erass_option = "eRASS4"
     #erass_option = "eRASS5"
@@ -287,57 +365,59 @@ if __name__ == '__main__':
     print(seed, LC_dir, erass_option)#, env, erass_option)
     #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==1)] :
     #for sky_tile in sky_map_hdu[2224:2224+1]:#[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1] :
-    for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
-        """
-        Loops over healpix pixels and writes the files to path_2_eRO_catalog
-        """
-        sky_tile_id = str(sky_tile['SRVMAP'])
-        str_field = str(sky_tile['SRVMAP']).zfill(6)
-        ra_cen = sky_tile['RA_CEN']
-        dec_cen = sky_tile['DE_CEN']
-        #simput_files_all = np.array(glob.glob( os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'Xgas_bHS0.8_simput_N_???.fits')))
-        #simput_files_all.sort()
-        print(sky_tile_id)#, simput_files_all)
-        #for simput_file_i in simput_files_all[:1]:
-        #Next line was problematic on 07.11.2025, rseppi added split_simput to handle simput files larger than 1000
-        #simput_files = np.array([os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits'), ])
-        simput_file = os.path.join(os.environ['UCHUU'], LC_dir, str_field, basename+'_simput_final.fits')
-        simput_files = split_simput(simput_file)
-        data_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, erass_option + "_sixte_"+ sixte_version+ "_SEED_"+str(seed).zfill(3) +"_events_cluster_"+basename )
-        print('outputs here',data_dir)
-        os.system('mkdir -p '+data_dir )
-        if erass_option=='Att_eRASS8':
-            p_2_att_file = "/home/idies/workspace/erosim/erosita_attitude/eRASS_4yr_epc85_att.fits"
-            t_starts = np.array([ 617943605 ])
-            t_stops = np.array([ 744174005 ])
-        #ccd1_files = os.path.join( data_dir, 't0erass_ccd?_???.fits' )
-        #os.system('rm ' + ccd1_files)
-        #if os.path.isfile(ccd1_file)==False:
-        #break
-        for jj, (t0, t1) in enumerate( zip( t_starts, t_stops ) ):
-            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-            print('STEP', jj, (t0, t1))
-            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-            print('+++++++++++++++++++++++++++++++++++++++++++++++++')
-            bkg = 0
-            t_start = t0 # 617943605.0
-            exposure = t1 - t0 # 31536000 * 4 # = 4 years  # 31536000 = 1year # 15750000 = 1/2 year
-            # Launch...
-            # 3 files
-            #Simulator(bkg, t_start, exposure, seed, simput_file_1, simput_file, simput_file_2).run_all()
-            # 2 files
-            try:
-                Simulator(
-                jj,
-                bkg,
-                t_start,
-                exposure,
-                int(seed),
-                simput_files,
-                data_dir,
-                ra_cen,
-                dec_cen,
-                p_2_att_file).run_all()
-            except(FileNotFoundError):
-                print('missing file for field ', str_field)
+    
+    #Number of cores to run task
+    ncores = int(sys.argv[3])
+
+    #Log file - stores tile IDs of tiles already processed. INFORMATION IS ONLY APPENDED
+    log_fn_for_check = sys.argv[4]
+
+    #Open logfile and read what's on it
+    if os.path.exists(log_fn_for_check):
+        av_tile_id_list_int = np.loadtxt(log_fn_for_check, dtype = int, unpack = True)
+        av_tile_id_list = [str(x).zfill(6) for x in av_tile_id_list_int]
+        #Cycle sky_tiles as usual
+        tiles_to_consider = []
+        for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+            str_field = str(sky_tile['SRVMAP']).zfill(6)
+            if (str_field in av_tile_id_list) | (np.abs(sky_tile['GLAT_CEN']) <= 15.):
+                print('Sky tile ID {0} already done or in galactic plane: skipping it.'.format(str_field))    
+            else:
+                tiles_to_consider.append(sky_tile)
+    else:
+        lfcf = open(log_fn_for_check, 'w')
+        lfcf.close
+        #Cycle sky_tiles as usual
+        tiles_to_consider = []
+        for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+            str_field = str(sky_tile['SRVMAP']).zfill(6)
+            if np.abs(sky_tile['GLAT_CEN']) <= 15.:
+                print('Sky tile ID {0} in galactic plane: skipping it.'.format(str_field))
+            else:
+                tiles_to_consider.append(sky_tile)
+    
+    #Define function for multiprocessing
+    onepool_func = partial(one_iter_func, other_elements = [basename, seed, LC_dir, erass_option, sixte_version, log_fn_for_check])
+
+    #Map to cores    
+    with Pool(ncores) as p:
+        p.map(onepool_func, tiles_to_consider)
+
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+        
