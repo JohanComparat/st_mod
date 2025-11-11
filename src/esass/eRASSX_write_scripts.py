@@ -212,11 +212,13 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     # output files
 
     SrcMapFiles = {n: os.path.join(outdir, f"{outprefix}02{VerBand}_Src{n:d}Map.fits") for n in (1, 2, 3)}
+    SrcMapFiles_Lext0 = os.path.join(outdir, f"{outprefix}02{VerBand}_SrcMap_Lext0.fits")
     BkgMapFiles = {n: os.path.join(outdir, f"{outprefix}02{VerBand}_Bg{n:d}Map.fits") for n in (1, 2, 3)}
     CheMskFiles = os.path.join(outdir, f"{outprefix}02{VerBand}_CheMsk.fits")
 
     BoxCats = {n: os.path.join(outdir, f"{outprefix}02{VerBand}_Bo{n:d}Cat.fits") for n in (1, 2, 3, 4, 5)}
     MLCats = {n: os.path.join(outdir, f"{outprefix}02{VerBand}_ML{n}Cat.fits") for n in (1, 2, 'A')} #uses only 1
+    MLcat_Lext0 = os.path.join(outdir,f"{outprefix}02{VerBand}_MLCat_Lext0.fits" )
     ExtCat = os.path.join(outdir, f"{outprefix}02{VerBand}_ExtCat.fits")
     MLinCat = {1: BoxCats[Nmlin], 2: os.path.join(outdir, f"{outprefix}02{VerBand}_ML1Cat.fits"),
             'A': os.path.join(outdir, f"{outprefix}02{VerBand}_ML2Cat.fits")}
@@ -224,6 +226,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     ApeSenFiles = lambda eef: os.path.join(outdir, f"{outprefix}02{VerBand}_ApeSen_eef" + eef + ".fits")
     PSFMapFiles = lambda eef: os.path.join(outdir, f"{outprefix}02{VerBand}_PSFMap_eef" + eef + ".fits")
     SrcCats = {n: os.path.join(outdir, f"{outprefix}02{VerBand}_Sc{n:d}Cat.fits") for n in (1, 2, 3)} #only use 1
+    SrcCat_Lext0 = os.path.join(outdir, f"{outprefix}02{VerBand}_ScCat_Lext0.fits")
 
     f_out.write("# BACKGROUND and BOX detection c030 \n")
 
@@ -481,6 +484,70 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     f_out.write("\n")
 
     f_out.write("catprep infile=" + MLCats[1] + " outfile=" + SrcCats[1] + " \\\n")
+    f_out.write("clobber=N \\\n")
+    f_out.write("det_algo=ML \\\n")
+    f_out.write("p_srcdensity=10 \\\n")
+    f_out.write("owner=2 \\\n")
+    f_out.write("flux_threshold=0.0 \\\n")
+    f_out.write("detuid_prefix=eRO \n")
+
+    f_out.write("\n")
+    f_out.write("\n")
+
+    #Now extlikemin = 0
+    f_out.write("# DETECTION, ermldet c030 with extlikemin=0 \n")
+
+    f_out.write("\n")
+    f_out.write(
+        "# ermldet creates  " + MLcat_Lext0 + " and " + SrcMapFiles_Lext0 + " \n")
+    f_out.write("# it starts from  " + os.path.basename(MLinCat[1]) + " and " + os.path.basename(
+        BkgMapFiles[3]) + " and all other image products \n")
+
+    f_out.write("\n")
+
+    f_out.write("ermldet \\\n")
+    f_out.write("boxlist=\"" + MLinCat[1] + "\" \\\n")
+    f_out.write("mllist=\"" + MLcat_Lext0 + "\" \\\n")
+    f_out.write("images=\"" + EvtImgFiles + "\" \\\n")
+    f_out.write("expimages=\"" + ExpMapFiles + "\" \\\n")
+    f_out.write("bkgimages=\"" + BkgMapFiles[3] + "\" \\\n")
+    f_out.write("detmasks=\"" + DetMask + "\" \\\n")
+    f_out.write("srcimages=\"" + SrcMapFiles_Lext0 + "\" \\\n")
+    f_out.write("likemin=" + ERML_likemin + " \\\n")
+    f_out.write("extlikemin=" + str(0) + " \\\n")
+    f_out.write("cutrad=" + ERML_CUTRAD + " \\\n")
+    f_out.write("multrad=" + ERML_MULTRAD + " \\\n")
+    f_out.write("compress_flag=N \\\n")
+    f_out.write("extmin=" + ERML_extmin + " \\\n")
+    f_out.write("extmax=" + ERML_extmax + " \\\n")
+    f_out.write("expima_flag=Y  \\\n")
+    f_out.write("detmask_flag=Y  \\\n")
+    f_out.write("extentmodel=beta  \\\n")
+    f_out.write("thres_flag=Y  \\\n")
+    f_out.write("thres_col=scts  \\\n")
+    f_out.write("thres_val=25.  \\\n")
+    f_out.write("nmaxfit=4  \\\n")
+    f_out.write("nmulsou=2  \\\n")
+    f_out.write("fitext_flag=yes  \\\n")
+    f_out.write("srcima_flag=Y  \\\n")
+    f_out.write("shapelet_flag=Y \\\n")
+    f_out.write("photon_flag=Y \\\n")
+    if Sixte:
+        f_out.write("sixte_flag=Y \\\n")
+    else:
+        f_out.write("sixte_flag=N \\\n")
+    f_out.write("hrdef= \\\n")
+    f_out.write("fitpos_flag=Y \\\n")
+    f_out.write("twostage_flag=Y \\\n")
+    f_out.write("""extlike_slope="0.0 0.0"  \\\n""")
+    f_out.write("ecf=" + """\"""" + ecfstr + """\" \\\n""")
+    f_out.write("emin=" + """\"""" + eminstr + """\" \\\n""")
+    f_out.write("emax=" + """\"""" + emaxstr + """\" \n """)
+
+    f_out.write("\n")
+    f_out.write("\n")
+
+    f_out.write("catprep infile=" + MLcat_Lext0 + " outfile=" + SrcCat_Lext0 + " \\\n")
     f_out.write("clobber=N \\\n")
     f_out.write("det_algo=ML \\\n")
     f_out.write("p_srcdensity=10 \\\n")
