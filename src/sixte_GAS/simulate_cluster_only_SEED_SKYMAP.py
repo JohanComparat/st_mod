@@ -393,11 +393,12 @@ if __name__ == '__main__':
     #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==1)] :
     #for sky_tile in sky_map_hdu[2224:2224+1]:#[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][:1] :
     
-    #Number of cores to run task
+    #Number of cores to run task and joblabel
     ncores = int(sys.argv[3])
+    joblabel = int(sys.argv[4])
 
     #Log file - stores tile IDs of tiles already processed. INFORMATION IS ONLY APPENDED
-    log_fn_for_check = sys.argv[4]
+    log_fn_for_check = sys.argv[5]
 
     #Open logfile and read what's on it
     if os.path.exists(log_fn_for_check):
@@ -428,9 +429,12 @@ if __name__ == '__main__':
 
     #Map to cores    
     with Pool(ncores) as p:
-        p.map(onepool_func, tiles_to_consider)
-
-
+        if joblabel == 1:
+            p.map(onepool_func, tiles_to_consider[:int(round((len(tiles_to_consider)-1)/2))])
+        elif joblabel == 2:
+            p.map(onepool_func, tiles_to_consider[int(round((len(tiles_to_consider)-1)/2)):])
+        elif joblabel == 3:
+            p.map(onepool_func, tiles_to_consider)
 
 
 
