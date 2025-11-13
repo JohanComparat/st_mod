@@ -98,43 +98,46 @@ def one_iter_func(sky_tile, other_elements):
 # =============================================================================
 
 #Splits SIMPUT file into multiple parts
-def split_simput(input_simput, max_per=1000):
+def split_simput(input_simput, max_per=1000, flux_min=8e-16):
     """
     Split a SIMPUT file into multiple parts with at most `max_per` sources each.
     Returns a list of output file paths.
     """
     clu_simput = Table.read(input_simput)
 
+    # Apply flux cut
+    mask = clu_simput["FLUX"] > flux_min
+    clu_simput = clu_simput[mask]
+
     n = len(clu_simput)
 
-    # If already small enough, don't do anything
-    if n < max_per:
-        return [input_simput]
+    # Output directory and base name
+    base_dir = os.path.dirname(input_simput)
+    base_name = os.path.basename(input_simput).replace(".fits", "")
 
-    # Number of parts e.g. 2600 clu/1000 = 3 simput
-    n_parts = int(np.ceil(n / float(max_per)))
-
-    # Build edges e.g. [0, 1000, 2000, 3000]
-    edges = (np.arange(n_parts + 1) * max_per).astype(int)
-    edges[-1] = n  # e.g. [0, 1000, 2000, 2600]
-
-    # prepare clu simput list
-    clu_simput_list = []
-
-    for i in range(n_parts):
-        lo, hi = edges[i], edges[i + 1]
-
+    def make_hdul(subtab):
+        """Build a SIMPUT HDUList from a subset table."""
         hdu_cols = fits.ColDefs([
-            fits.Column(name="SRC_ID", format='K', unit='', array=(clu_simput[lo:hi]['SRC_ID']).astype('int')),
-            fits.Column(name="RA", format='D', unit='deg', array=clu_simput[lo:hi]["RA"]),
-            fits.Column(name="DEC", format='D', unit='deg', array=clu_simput[lo:hi]["DEC"]),
-            fits.Column(name="E_MIN", format='D', unit='keV', array=np.ones(len(clu_simput[lo:hi])) * 0.5),
-            fits.Column(name="E_MAX", format='D', unit='keV', array=np.ones(len(clu_simput[lo:hi])) * 2.0),
-            fits.Column(name="FLUX", format='D', unit='erg/s/cm**2', array=clu_simput[lo:hi]["FLUX"]),
-            fits.Column(name="IMAGE", format='100A', unit='', array=clu_simput[lo:hi]["IMAGE"]),
-            fits.Column(name="SPECTRUM", format='100A', unit='', array=clu_simput[lo:hi]["SPECTRUM"]),
-            fits.Column(name="IMGROTA", format='D', unit='deg', array=clu_simput[lo:hi]["IMGROTA"]),
-            fits.Column(name="IMGSCAL", format='D', unit='', array=clu_simput[lo:hi]["IMGSCAL"])
+            fits.Column(name="SRC_ID", format='K', unit='',
+                        array=subtab["SRC_ID"].astype(int)),
+            fits.Column(name="RA", format='D', unit='deg',
+                        array=subtab["RA"]),
+            fits.Column(name="DEC", format='D', unit='deg',
+                        array=subtab["DEC"]),
+            fits.Column(name="E_MIN", format='D', unit='keV',
+                        array=np.ones(len(subtab)) * 0.5),
+            fits.Column(name="E_MAX", format='D', unit='keV',
+                        array=np.ones(len(subtab)) * 2.0),
+            fits.Column(name="FLUX", format='D', unit='erg/s/cm**2',
+                        array=subtab["FLUX"]),
+            fits.Column(name="IMAGE", format='100A', unit='',
+                        array=subtab["IMAGE"]),
+            fits.Column(name="SPECTRUM", format='100A', unit='',
+                        array=subtab["SPECTRUM"]),
+            fits.Column(name="IMGROTA", format='D', unit='deg',
+                        array=subtab["IMGROTA"]),
+            fits.Column(name="IMGSCAL", format='D', unit='',
+                        array=subtab["IMGSCAL"]),
         ])
         hdu = fits.BinTableHDU.from_columns(hdu_cols)
         hdu.name = 'SRC_CAT'
@@ -143,15 +146,39 @@ def split_simput(input_simput, max_per=1000):
         hdu.header['HDUVERS'] = '1.1.0'
         hdu.header['RADESYS'] = 'FK5'
         hdu.header['EQUINOX'] = 2000.0
-        outf = fits.HDUList([fits.PrimaryHDU(), hdu])  # ,  ])
-        # if os.path.isfile(p2_simput_out):
-        # os.system("rm " + p2_simput_out)
-        p2out = os.path.join('/'.join(input_simput.split('/')[:-1]),
-                             input_simput.split('/')[-1].split('.fits')[0] + '_splitP%d.fits' % i)
-        outf.writeto(p2out, overwrite=True)  # save trimmed table
-        clu_simput_list.append(p2out)  # append to list to provide in output
+        return fits.HDUList([fits.PrimaryHDU(), hdu])
 
-    return clu_simput_list
+    outfiles = []
+
+    # Case 1: everything fits into a single SIMPUT file
+    if n <= max_per:
+        hdul = make_hdul(clu_simput)
+        out_path = os.path.join(
+            base_dir,
+            f"{base_name}_fluxcut.fits"
+        )
+        hdul.writeto(out_path, overwrite=True)
+        outfiles.append(out_path)
+        return outfiles
+
+    # Case 2: need to split into multiple parts
+    n_parts = int(np.ceil(n / float(max_per)))
+    edges = (np.arange(n_parts + 1) * max_per).astype(int)
+    edges[-1] = n  # ensure last edge matches exactly
+
+    for i in range(n_parts):
+        lo, hi = edges[i], edges[i + 1]
+        subtab = clu_simput[lo:hi]
+
+        hdul = make_hdul(subtab)
+        out_path = os.path.join(
+            base_dir,
+            f"{base_name}_fluxcut_part{i}.fits"
+        )
+        hdul.writeto(out_path, overwrite=True)
+        outfiles.append(out_path)
+
+    return outfiles
 
 # =============================================================================
 
