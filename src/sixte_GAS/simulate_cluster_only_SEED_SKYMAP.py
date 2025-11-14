@@ -408,8 +408,8 @@ if __name__ == '__main__':
         tiles_to_consider = []
         for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
             str_field = str(sky_tile['SRVMAP']).zfill(6)
-            if (str_field in av_tile_id_list) | (np.abs(sky_tile['GLAT_CEN']) <= 15.):
-                print('Sky tile ID {0} already done or in galactic plane: skipping it.'.format(str_field))    
+            if str_field in av_tile_id_list:
+                print('Sky tile ID {0} already done: skipping it.'.format(str_field))    
             else:
                 tiles_to_consider.append(sky_tile)
     else:
@@ -419,10 +419,7 @@ if __name__ == '__main__':
         tiles_to_consider = []
         for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
             str_field = str(sky_tile['SRVMAP']).zfill(6)
-            if np.abs(sky_tile['GLAT_CEN']) <= 15.:
-                print('Sky tile ID {0} in galactic plane: skipping it.'.format(str_field))
-            else:
-                tiles_to_consider.append(sky_tile)
+            tiles_to_consider.append(sky_tile)
     
     #Define function for multiprocessing
     onepool_func = partial(one_iter_func, other_elements = [basename, seed, LC_dir, erass_option, sixte_version, log_fn_for_check])
