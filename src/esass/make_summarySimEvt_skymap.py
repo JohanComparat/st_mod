@@ -48,7 +48,7 @@ LC_dir = "LCerass"
 for jj, sky_tile_value in enumerate(sky_map_hdu['SRVMAP']):
     sky_tile_id = str(sky_tile_value)
     str_field = sky_tile_id.zfill(6)
-    sky_map_hdu['N_files_BG'][jj] = len(n.array( glob.glob( os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG2', '*.fits' ) ) ))
+    sky_map_hdu['N_files_BG'][jj] = len(np.array( glob.glob( os.path.join( os.environ['UCHUU'], LC_dir, str_field, 'pBG2', '*.fits' ) ) ))
     sky_map_hdu['N_files_Att_eRASS8_sixte_v27_SEED_001_events_cluster'] = len(np.array( glob.glob( os.path.join( "/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, 'Att_eRASS8_sixte_v27_SEED_001_events_cluster_Xgas_bHS0.8', '*.fits' ) ) ))
     sky_map_hdu['N_files_Att_eRASS8_sixte_v27_SEED_002_events_cluster'] = len(np.array( glob.glob( os.path.join( "/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, 'Att_eRASS8_sixte_v27_SEED_002_events_cluster_Xgas_bHS0.8', '*.fits' ) ) ))
     sky_map_hdu['N_files_Att_eRASS8_sixte_v27_SEED_003_events_cluster'] = len(np.array( glob.glob( os.path.join( "/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, 'Att_eRASS8_sixte_v27_SEED_003_events_cluster_Xgas_bHS0.8', '*.fits' ) ) ))
@@ -67,7 +67,7 @@ for jj, sky_tile_value in enumerate(sky_map_hdu['SRVMAP']):
     sky_map_hdu['N_files_eRASS8_SEED_007_events_AGN_2025_04'] = len(np.array( glob.glob( os.path.join( "/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, 'eRASS8_SEED_007_events_AGN_2025_04', '*.fits' ) ) ))
     sky_map_hdu['N_files_eRASS8_SEED_008_events_AGN_2025_04'] = len(np.array( glob.glob( os.path.join( "/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, 'eRASS8_SEED_008_events_AGN_2025_04', '*.fits' ) ) ))
     sky_map_hdu['N_files_eRASS8_SEED_009_events_AGN_2025_04'] = len(np.array( glob.glob( os.path.join( "/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, 'eRASS8_SEED_009_events_AGN_2025_04', '*.fits' ) ) ))
-    sky_map_hdu['N_files_stars'] = len(n.array( glob.glob( os.path.join( "/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, 'stars', '*.fits' ) ) ))
+    sky_map_hdu['N_files_stars'] = len(np.array( glob.glob( os.path.join( "/home/idies/workspace/erosim/Uchuu/", LC_dir, str_field, 'stars', '*.fits' ) ) ))
     print(sky_tile_value)
 p_2_out = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_event_simulated.fits')
 sky_map_hdu.write(p_2_out, overwrite = True)
