@@ -34,6 +34,7 @@ if not os.path.isdir(os.path.join(basedir, tile, subdir)):
 
 # Paths
 p_2_esass = os.path.join(basedir, tile, subdir, 'eSASS', tile + '_024_Sc1Cat.fits')
+p_2_esass_Lext0 = os.path.join(basedir, tile, subdir, 'eSASS', tile + '_024_ScCat_Lext0.fits')
 p_2_evt_clu  = os.path.join(basedir, tile, subdir, 'simCLUevt_'+tile+'.fits')
 p_2_evt_agn  = os.path.join(basedir, tile, subdir, 'simAGNevt_'+tile+'.fits')
 p_2_evt_sta  = os.path.join(basedir, tile, subdir, 'simSTAevt_'+tile+'.fits')
@@ -384,6 +385,138 @@ if not os.path.isfile(
                    format='fast_csv', delimiter=' ')
     if a.columns[0].name[0] == '#': a.columns[0].name = a.columns[0].name[1:]
     a.write(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.fits'),
+            overwrite=True)
+
+os.system('rm ' + basedir+'/' + tile + '/' + subdir + '/ID_*csv')  # remove the csv files
+os.system('rm ' + basedir+'/' + tile + '/' + subdir + '/Sc1_*csv')
+
+
+
+
+
+#Now repeat the matching using the extlikemin=0 run
+print('Now matching to extlikemin=0 run...')
+#open source catalog
+hdu = fits.open(p_2_esass_Lext0)#, memmap=True)
+SrcCat = Table(hdu[1].data)
+
+#To do the matching
+AperRad = 20 * np.ones(len(SrcCat))
+AperRad[np.where(SrcCat['EXT_LIKE'] > 0)] = 60
+
+SrcCoord = np.transpose([SrcCat['DEC'] * np.pi / 180, SrcCat['RA'] * np.pi / 180])
+EvtInd4Cat = EvtTree.query_radius(SrcCoord, r=AperRad * np.pi / 180 / 3600)
+EvtInd4Cat_bkg = EvtTreeBkg.query_radius(SrcCoord,
+                                         r=AperRad * np.pi / 180 / 3600)  # array of arrays. Index of bkg photons around each source
+SrcCat_N_Bkg = [len(arr) for arr in EvtInd4Cat_bkg]  # N of bkg photons around each detection
+
+if not os.path.isfile(
+        os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.fits.cp')):
+    SrcID = np.zeros(len(SrcCoord), dtype=np.int64) - 1
+    SrcApeCts = np.zeros(len(SrcCoord), dtype=np.int32)  # Aperture counts
+    SrcID2 = np.zeros(len(SrcCoord), dtype=np.int64) - 1
+    SrcApeCts2 = np.zeros(len(SrcCoord), dtype=np.int32)
+    ftmp = open('tmp.dat', 'w')
+    for n in range(len(SrcCat)):  # Each detected source
+        if len(EvtInd4Cat[n]) > 0:  # if there are photons around that entry:
+            print(SrcCat['ID_SRC'][n], np.unique(EvtSrcID[EvtInd4Cat[n]]),
+                  file=ftmp)  # esassid, id of source photons <AperRad from detection
+            ok = np.array([EvtSrcTotCts.get(i, 0) for i in EvtSrcID[EvtInd4Cat[
+                n]]]) >= MinTotalCts  # select photons from sources that have at least 3 photons observed
+            u, inv, photoncts = np.unique(EvtSrcID[EvtInd4Cat[n][ok]], return_inverse=True, return_counts=True)
+            uc = np.array([[u[i], photoncts[i]] for i in range(len(u)) if photoncts[
+                i] >= MinAperCts])  # ID of simput source related to this entry and cts from it
+            apebkg = SrcCat_N_Bkg[n]
+            if len(uc) == 0: print('no', [[u[i], photoncts[i]] for i in range(len(u))],
+                                   file=ftmp)  # no simput corresponding to detection
+            if len(uc) == 1:  # one simput correspponding to detection
+                if uc[0, 1] + apebkg > stats.poisson.ppf(0.97725, apebkg): SrcID[n], SrcApeCts[n] = uc[
+                    0]  # if the simput is significant over the bkg, associate it to the esass detection with the simput id and its counts
+                # else: SrcID2[n],SrcApeCts2[n]=uc[0] #NO, don't keep it
+                # print('1',SrcID[n],SrcApeCts[n],file=ftmp)
+            elif len(uc) > 1:  # more than one simput corresponding to detection
+                print('>1', uc, file=ftmp)
+                uc = uc[np.argsort(uc[:, 1])]  # sort the simput corresponding to detection by number of counts
+                if uc[-1, 1] + apebkg > stats.poisson.ppf(0.97725,
+                                                          apebkg):  # select the one that contributes the largest number of events
+                    # if uc[-1][1]==1: print(uc[-1][1],apebkg,stats.poisson.ppf(0.97725,apebkg))
+                    SrcID[n], SrcApeCts[n] = uc[-1]
+                    if uc[-2, 1] + apebkg > stats.poisson.ppf(0.97725, apebkg): SrcID2[n], SrcApeCts2[n] = uc[
+                        -2]  # also save the one with second highest counts
+        else:  # these are clearly bkg fluctuations
+            print(SrcCat['ID_SRC'][n], np.unique(EvtSrcID[EvtInd4Cat[n]]), len(EvtInd4Cat[n]), n,
+                  SrcCat['RA'][n], SrcCat['DEC'][n], SrcCoord[n], file=ftmp)
+
+    ftmp.close()
+
+    ok = SrcID >= 0  # esass detections with a simput counterpart
+    SrcID[~ok] = -99
+    SrcApeCts[~ok] = -99
+    ok = SrcID2 >= 0  # esass detections with secondary simput counterpart
+    SrcID2[~ok] = -99
+    SrcApeCts2[~ok] = -99
+    outdata = np.transpose(
+        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
+         SrcCat['ML_CTS_0'], SrcCat['ML_RATE_0'], SrcCat['ML_FLUX_0'], SrcID, SrcApeCts, SrcID2, SrcApeCts2])
+    print('>>', os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'))
+    np.savetxt(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'), outdata,
+               fmt='%d %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d %d',
+               delimiter=' ',
+               header='ID_cat RA DEC DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts ID_simput_2 aperture_counts_2',
+               comments='#')
+    a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'),
+                   format='fast_csv', delimiter=' ')
+    if a.columns[0].name[0] == '#': a.columns[0].name = a.columns[0].name[1:]
+    a.write(os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.fits'),
+            overwrite=True)
+
+if not os.path.isfile(
+        os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.fits.cp')):
+    selected = np.zeros(len(SrcCoord), dtype=bool)
+    s = np.argsort(SrcApeCts)[::-1]  # sort by counts the simput associated to esass detection
+    _uID, ind = np.unique(SrcID[s],
+                          return_index=True)  # identify esass detection with ONE single simput counterpart, save the srcid and the first time they appear (ind)
+    selected[s[ind]] = True  # save the ones that appear only once
+    selected[SrcApeCts <= 0] = False  # save the esass detections that have no simput counterpart
+
+    # find non-selected with detected counts
+    for n in np.where(~selected & (SrcApeCts2 > 0))[
+        0]:  # consider multiple detections pointing to the same simput and with a secondary match
+        assert SrcApeCts[n] > 0
+        assert SrcID[n] in SrcID[selected]
+        # if np.sum((SrcID==SrcID[n])&selected)>1: print(np.where(SrcID==SrcID[n])) print(selected[SrcID==SrcID[n]]) print(SrcID[n],np.sum((SrcID==SrcID[n])&selected), SrcApeCts[(SrcID==SrcID[n])&selected])
+        assert SrcApeCts[(SrcID == SrcID[n]) & selected] >= SrcApeCts[
+            n]  # if the id_any is not unique and id_any2 has not been assigned already, take id_any2 as unique counterpart
+        if SrcID2[n] not in SrcID[selected]:
+            SrcID[n], SrcApeCts[n] = SrcID2[n], SrcApeCts2[n]
+            SrcID2[n], SrcApeCts2[n] = 0, 0
+            selected[n] = True
+
+    def matchlines(list1, list2):
+        list2 = dict((r, i) for i, r in enumerate(list2))
+        return np.array([list2.get(x, -1) for x in list1])
+
+    ind = matchlines(SrcID[selected], SimputSrcID)
+    ok = (SrcID[selected] != SimputSrcID[ind])
+    assert all(SrcID[selected] == SimputSrcID[ind])
+    SrcTotCts = np.zeros(len(SrcCoord), dtype=np.int32)
+    SrcTotCts[selected] = SimputSrcTotCts[ind]
+
+    SrcID[~selected] = -99
+    SrcApeCts[~selected] = -99
+    outdata = np.transpose(
+        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
+         SrcCat['ML_CTS_0'], SrcCat['ML_RATE_0'], SrcCat['ML_FLUX_0'], SrcID, SrcApeCts, SrcTotCts])
+    print('>>', os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'))
+    np.savetxt(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'), outdata,
+               fmt='%d %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d',
+               delimiter=' ',
+               header='ID_cat RA DEC DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts total_counts',
+               comments='#')
+    a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'),
+                   format='fast_csv', delimiter=' ')
+    if a.columns[0].name[0] == '#': a.columns[0].name = a.columns[0].name[1:]
+    a.write(os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.fits'),
             overwrite=True)
 
 os.system('rm ' + basedir+'/' + tile + '/' + subdir + '/ID_*csv')  # remove the csv files
