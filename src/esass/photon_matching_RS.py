@@ -4,7 +4,7 @@ Takes simulation directory and tile number as input, for example:
 
 python photon_matching_RS.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001 121048
 
-R. Seppi (19.05.2025)
+R. Seppi (19.11.2025)
 '''
 import sys, os, glob
 import numpy as np
@@ -411,7 +411,7 @@ EvtInd4Cat_bkg = EvtTreeBkg.query_radius(SrcCoord,
 SrcCat_N_Bkg = [len(arr) for arr in EvtInd4Cat_bkg]  # N of bkg photons around each detection
 
 if not os.path.isfile(
-        os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.fits.cp')):
+        os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.fits.cp')):
     SrcID = np.zeros(len(SrcCoord), dtype=np.int64) - 1
     SrcApeCts = np.zeros(len(SrcCoord), dtype=np.int32)  # Aperture counts
     SrcID2 = np.zeros(len(SrcCoord), dtype=np.int64) - 1
@@ -458,20 +458,20 @@ if not os.path.isfile(
     outdata = np.transpose(
         [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
          SrcCat['ML_CTS_0'], SrcCat['ML_RATE_0'], SrcCat['ML_FLUX_0'], SrcID, SrcApeCts, SrcID2, SrcApeCts2])
-    print('>>', os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'))
-    np.savetxt(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'), outdata,
+    print('>>', os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'))
+    np.savetxt(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'), outdata,
                fmt='%d %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d %d',
                delimiter=' ',
                header='ID_cat RA DEC DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts ID_simput_2 aperture_counts_2',
                comments='#')
-    a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'),
+    a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'),
                    format='fast_csv', delimiter=' ')
     if a.columns[0].name[0] == '#': a.columns[0].name = a.columns[0].name[1:]
-    a.write(os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.fits'),
+    a.write(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.fits'),
             overwrite=True)
 
 if not os.path.isfile(
-        os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.fits.cp')):
+        os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.fits.cp')):
     selected = np.zeros(len(SrcCoord), dtype=bool)
     s = np.argsort(SrcApeCts)[::-1]  # sort by counts the simput associated to esass detection
     _uID, ind = np.unique(SrcID[s],
@@ -507,17 +507,18 @@ if not os.path.isfile(
     outdata = np.transpose(
         [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
          SrcCat['ML_CTS_0'], SrcCat['ML_RATE_0'], SrcCat['ML_FLUX_0'], SrcID, SrcApeCts, SrcTotCts])
-    print('>>', os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'))
-    np.savetxt(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'), outdata,
+    print('>>', os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'))
+    np.savetxt(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'), outdata,
                fmt='%d %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d',
                delimiter=' ',
                header='ID_cat RA DEC DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts total_counts',
                comments='#')
-    a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'),
+    a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'),
                    format='fast_csv', delimiter=' ')
     if a.columns[0].name[0] == '#': a.columns[0].name = a.columns[0].name[1:]
-    a.write(os.path.join(basedir, tile, subdir, f'Sc_Lext0' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.fits'),
+    a.write(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.fits'),
             overwrite=True)
 
 os.system('rm ' + basedir+'/' + tile + '/' + subdir + '/ID_*csv')  # remove the csv files
 os.system('rm ' + basedir+'/' + tile + '/' + subdir + '/Sc1_*csv')
+os.system('rm ' + basedir+'/' + tile + '/' + subdir + '/Sc_Lext0_*csv')

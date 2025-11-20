@@ -21,7 +21,7 @@ takes the desired experiment directory as input, for example:
 
 python create_summary_files_RS.py GE_e4_merge_AGNseed001_SimBKG_CLUseed001
 
-R. Seppi (19.05.2025)
+R. Seppi (19.11.2025)
 '''
 
 deg_to_rad = np.pi/180.
@@ -201,9 +201,13 @@ def predict_ctr_xspec(Lx_erg_s, z, Z_solar, kT_keV,
     return rate_cts_per_s
 
 #prepare to select unique area in esass catalogues
-#sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'],
-#                                      'data/models/eROSITA', 'SKYMAPS.fits'))
-sky_map_hdu = Table.read('SKYMAPS.fits')
+#sky_map_hdu = Table.read('SKYMAPS.fits')
+try:
+    sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'],
+                                          'data/models/eROSITA', 'SKYMAPS.fits'))
+except:
+    sky_map_hdu = Table.read('/home/idies/workspace/erosim/software/st_mod_data/data/models/eROSITA/SKYMAPS.fits')
+
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[(sky_map_hdu['RA_MIN'] < ra) & (
             sky_map_hdu['RA_MAX'] >= ra) & (sky_map_hdu['DE_MIN'] < dec) & (
