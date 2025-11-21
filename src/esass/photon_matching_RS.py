@@ -324,13 +324,13 @@ if not os.path.isfile(
     SrcID2[~ok] = -99
     SrcApeCts2[~ok] = -99
     outdata = np.transpose(
-        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
+        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['RADEC_ERR'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
          SrcCat['ML_CTS_0'], SrcCat['ML_RATE_0'], SrcCat['ML_FLUX_0'], SrcID, SrcApeCts, SrcID2, SrcApeCts2])
     print('>>', os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'))
     np.savetxt(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'), outdata,
-               fmt='%d %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d %d',
+               fmt='%d %.5f %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d %d',
                delimiter=' ',
-               header='ID_cat RA DEC DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts ID_simput_2 aperture_counts_2',
+               header='ID_cat RA DEC RADEC_ERR DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts ID_simput_2 aperture_counts_2',
                comments='#')
     a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'),
                    format='fast_csv', delimiter=' ')
@@ -373,13 +373,13 @@ if not os.path.isfile(
     SrcID[~selected] = -99
     SrcApeCts[~selected] = -99
     outdata = np.transpose(
-        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
+        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['RADEC_ERR'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
          SrcCat['ML_CTS_0'], SrcCat['ML_RATE_0'], SrcCat['ML_FLUX_0'], SrcID, SrcApeCts, SrcTotCts])
     print('>>', os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'))
     np.savetxt(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'), outdata,
-               fmt='%d %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d',
+               fmt='%d %.5f %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d',
                delimiter=' ',
-               header='ID_cat RA DEC DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts total_counts',
+               header='ID_cat RA DEC RADEC_ERR DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts total_counts',
                comments='#')
     a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc1_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'),
                    format='fast_csv', delimiter=' ')
@@ -456,13 +456,13 @@ if not os.path.isfile(
     SrcID2[~ok] = -99
     SrcApeCts2[~ok] = -99
     outdata = np.transpose(
-        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
+        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['RADEC_ERR'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
          SrcCat['ML_CTS_0'], SrcCat['ML_RATE_0'], SrcCat['ML_FLUX_0'], SrcID, SrcApeCts, SrcID2, SrcApeCts2])
     print('>>', os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'))
     np.savetxt(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'), outdata,
-               fmt='%d %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d %d',
+               fmt='%d %.5f %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d %d',
                delimiter=' ',
-               header='ID_cat RA DEC DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts ID_simput_2 aperture_counts_2',
+               header='ID_cat RA DEC RADEC_ERR DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts ID_simput_2 aperture_counts_2',
                comments='#')
     a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Any_Tot' + str(MinTotalCts) + '.csv'),
                    format='fast_csv', delimiter=' ')
@@ -505,13 +505,13 @@ if not os.path.isfile(
     SrcID[~selected] = -99
     SrcApeCts[~selected] = -99
     outdata = np.transpose(
-        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
+        [SrcCat['ID_SRC'], SrcCat['RA'], SrcCat['DEC'], SrcCat['RADEC_ERR'], SrcCat['DET_LIKE_0'], SrcCat['EXT'], SrcCat['EXT_LIKE'],
          SrcCat['ML_CTS_0'], SrcCat['ML_RATE_0'], SrcCat['ML_FLUX_0'], SrcID, SrcApeCts, SrcTotCts])
     print('>>', os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'))
     np.savetxt(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'), outdata,
-               fmt='%d %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d',
+               fmt='%d %.5f %.5f %.5f %.3f %.3f %.3f %.4f %.7f %.7g %d %d %d',
                delimiter=' ',
-               header='ID_cat RA DEC DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts total_counts',
+               header='ID_cat RA DEC RADEC_ERR DET_LIKE_0 EXT EXT_LIKE ML_CTS_0 ML_RATE_0 ML_FLUX_0 ID_simput aperture_counts total_counts',
                comments='#')
     a = ascii.read(os.path.join(basedir, tile, subdir, f'Sc_Lext0_' + tile + '_IDMatch_Uniq_Tot' + str(MinTotalCts) + '.csv'),
                    format='fast_csv', delimiter=' ')
