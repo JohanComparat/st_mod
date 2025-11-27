@@ -3,13 +3,13 @@ import time
 import sys, os, glob
 from astropy.table import Table
 import numpy as np
-from models import GAS as GG
 
 #Starting time
 t0 = time.time()
 
 #Directory for code
 sys.path.append(os.path.join(os.environ['GIT_STMOD'], 'src'))
+from models import GAS as GG
 
 z_dir = sys.argv[1]
 LC_dir = sys.argv[2] # 'FullSky'
