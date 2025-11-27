@@ -38,7 +38,7 @@ from colossus.halo import concentration
 
 class GAS:
     def __init__(self, z_dir, b_HS=0.8, logM500c_min=11., logFX_min=-18, LC_dir='FullSky'):
-        print('Initiates a GAS class model')
+        print('Initializes a GAS class model')
         print('------------------------------------------------')
         print('------------------------------------------------')
         self.z_dir = z_dir
@@ -535,6 +535,9 @@ class GAS:
         matrix_2d = itp_frac_obs.reshape(shape_i)
         attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
 
+        self.CAT['CLUSTER_kT'] = np.where(self.CAT['CLUSTER_kT'] <= np.amin(kT_vals), np.amin(kT_vals), self.CAT['CLUSTER_kT'])
+        self.CAT['CLUSTER_kT'] = np.where(self.CAT['CLUSTER_kT'] >= np.amax(kT_vals), np.amax(kT_vals), self.CAT['CLUSTER_kT'])
+        
         k_correction_2d = attenuation_2d( np.transpose([self.CAT['CLUSTER_kT'], self.CAT['redshift_S']]))
 
         dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
@@ -568,8 +571,9 @@ class GAS:
         np.random.shuffle(ellipticity_values)
         self.CAT['ellipticity'] = ellipticity_values[:len(self.CAT)]
         OUT = np.unique(self.CAT['ellipticity'], return_counts=True)
-        print(OUT)
-        print(OUT[1]/len(self.CAT))
+        print('Ellipticity values: {0}'.format(OUT[0]))
+        print('Number of clusters with same ellipticity value {0}'.format(OUT[1]))
+        print('Fraction of clusters with same ellipticity value {0}'.format(OUT[1]/len(self.CAT)))
 
 
     def populate_cat_kts070(self, p_2_profiles):
