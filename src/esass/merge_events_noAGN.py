@@ -75,7 +75,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 	N_evs = []
 	for NCCD, tEXP in zip(n.arange(7)+1, texps):
-		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
+		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass*ccd' + str(NCCD) + '_evt.fits' ) ) )
 		if len(CL_evt_files)>0:
 			hdu_C = fits.open(CL_evt_files[0])
 			texp_C = np.sum(hdu_C[2].data['STOP']-hdu_C[2].data['START'])
@@ -104,7 +104,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	data_B = []
 
 	for NCCD, tEXP in zip(n.arange(7)+1, texps):
-		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
+		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass*ccd' + str(NCCD) + '_evt.fits' ) ) )
 		if len(CL_evt_files)>0:
 			hdu_C = fits.open(CL_evt_files[0])
 			if N_ev_C<=len(hdu_C[1].data):

@@ -292,8 +292,19 @@ class Simulator:
                     ####"clobber=yes",
                     ####"chatter=3"
                     #]
+            if self._with_bkg_par:
+                cmd.append("Background=yes")
+            else:
+                cmd.append("Background=no")
 
-        if self._N_simputs>=2:
+            command = " ".join(cmd)
+            print('=========================================')
+            print(command)
+            print('=========================================')
+            os.system(command)
+            return  # we're done
+
+        elif (self._N_simputs >= 2) and (self._N_simputs <= 6):
             cmd = ["erosim", "Simput=%s" % self._simput[0] ]
             for jj in np.arange(len(self._simput))[1:]:
                 cmd.append("Simput"+str(int(jj+1))+"=%s" % self._simput[jj])
@@ -313,15 +324,89 @@ class Simulator:
             for el in cmd_end:
                 cmd.append(el)
 
-        if self._with_bkg_par is True:
-            cmd.append("Background=yes")
-        else:
-            cmd.append("Background=no")
-        command = " ".join(cmd)
-        print('=========================================')
-        print(command)
-        print('=========================================')
-        os.system(command)
+            if self._with_bkg_par is True:
+                cmd.append("Background=yes")
+            else:
+                cmd.append("Background=no")
+            command = " ".join(cmd)
+            print('=========================================')
+            print(command)
+            print('=========================================')
+            os.system(command)
+
+        # ---------- >6 SIMPUTS: two runs ----------
+        elif self._N_simputs > 6:
+            # ---- First run: first 6 SIMPUTs ----
+            cmd = ["erosim", "Simput=%s" % self._simput[0]]
+            # add Simput2..Simput6 with indices 1..5
+            for jj in np.arange(1, 6):
+                cmd.append("Simput" + str(int(jj + 1)) + "=%s" % self._simput[jj])
+
+            cmd_end = [
+                "Prefix=%s" % prefix,
+                "Attitude=%s" % self._p_2_att_file,
+                "RA=%s" % self._ra_cen,
+                "Dec=%s" % self._dec_cen,
+                "GTIFile=%s/erass.gti" % self._data_dir,
+                "TSTART=%s" % self._t_start,
+                "Exposure=%s" % self._exposure,
+                "MJDREF=51543.875",
+                "dt=0.5",
+                "Seed=%s" % self._seed,
+                "clobber=yes",
+                "chatter=3"
+            ]
+            cmd.extend(cmd_end)
+
+            if self._with_bkg_par:
+                cmd.append("Background=yes")
+            else:
+                cmd.append("Background=no")
+
+            command = " ".join(cmd)
+            print('=========================================')
+            print('FIRST erosim run (SIMPUT 1–6)')
+            print(command)
+            print('=========================================')
+            os.system(command)
+
+            # ---- Second run: remaining SIMPUTs (6,7,...) ----
+            remaining = self._simput[6:]
+            prefix2 = os.path.join(self._data_dir, self._block_id + "erass_run2_")
+
+            # first file in this run is "Simput="
+            cmd1 = ["erosim", "Simput=%s" % remaining[0]]
+            # then Simput2, Simput3, ... for the rest
+            for k, simput_path in enumerate(remaining[1:], start=2):
+                cmd1.append("Simput%d=%s" % (k, simput_path))
+
+            cmd_end1 = [
+                "Prefix=%s" % prefix2,
+                "Attitude=%s" % self._p_2_att_file,
+                "RA=%s" % self._ra_cen,
+                "Dec=%s" % self._dec_cen,
+                "GTIFile=%s/erass.gti" % self._data_dir,
+                "TSTART=%s" % self._t_start,
+                "Exposure=%s" % self._exposure,
+                "MJDREF=51543.875",
+                "dt=0.5",
+                "Seed=%s" % self._seed,
+                "clobber=yes",
+                "chatter=3"
+            ]
+            cmd1.extend(cmd_end1)
+
+            if self._with_bkg_par:
+                cmd1.append("Background=yes")
+            else:
+                cmd1.append("Background=no")
+
+            command1 = " ".join(cmd1)
+            print('=========================================')
+            print('SECOND erosim run (SIMPUT 7+ )')
+            print(command1)
+            print('=========================================')
+            os.system(command1)
 
     def run_all(self):
         """
