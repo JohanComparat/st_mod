@@ -535,10 +535,11 @@ class GAS:
         matrix_2d = itp_frac_obs.reshape(shape_i)
         attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
 
-        self.CAT['CLUSTER_kT'] = np.where(self.CAT['CLUSTER_kT'] <= np.amin(kT_vals), np.amin(kT_vals), self.CAT['CLUSTER_kT'])
-        self.CAT['CLUSTER_kT'] = np.where(self.CAT['CLUSTER_kT'] >= np.amax(kT_vals), np.amax(kT_vals), self.CAT['CLUSTER_kT'])
+        self.CAT['CLUSTER_kT'] = np.where(self.CAT['CLUSTER_kT'] < np.amin(kT_vals), np.amin(kT_vals), self.CAT['CLUSTER_kT'])
+        self.CAT['CLUSTER_kT'] = np.where(self.CAT['CLUSTER_kT'] > np.amax(kT_vals), np.amax(kT_vals), self.CAT['CLUSTER_kT'])
         
         k_correction_2d = attenuation_2d( np.transpose([self.CAT['CLUSTER_kT'], self.CAT['redshift_S']]))
+        k_correction_2d = np.clip(k_correction_2d, 1e-10, None)
 
         dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
         self.CAT['CLUSTER_LX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_RF_R500c'] - np.log10( k_correction_2d )
@@ -547,16 +548,19 @@ class GAS:
         attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt2p0.txt"), unpack=True )
         itp_attenuation_kt2p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
         attenuation = itp_attenuation_kt2p0( np.log10( self.CAT['nH'] ) )
+        attenuation = np.clip(attenuation, 1e-10, None)
         self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] = self.CAT['CLUSTER_FX_soft_OBS_R500c'] + np.log10( attenuation )
 
         attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt1p0.txt"), unpack=True )
         itp_attenuation_kt1p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
         attenuation1p0 = itp_attenuation_kt1p0( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=1.5)]
+        attenuation1p0 = np.clip(attenuation1p0, 1e-10, None)
         self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=1.5)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=1.5)] + np.log10( attenuation1p0 )
 
         attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt0p5.txt"), unpack=True )
         itp_attenuation_kt0p5 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
         attenuation0p5 = itp_attenuation_kt0p5( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=0.7)]
+        attenuation0p5 = np.clip(attenuation0p5, 1e-10, None)
         self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=0.7)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=0.7)] + np.log10( attenuation0p5 )
 
         frac_ell = np.array([0.22, 0.30, 0.25, 0.23]) # fraction of objects at a given ellipticity
