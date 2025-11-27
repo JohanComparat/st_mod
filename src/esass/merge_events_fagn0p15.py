@@ -105,7 +105,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 	N_evs = []
 	for NCCD, tEXP in zip(n.arange(7)+1, texps):
 		agn_evt_files = n.array( glob.glob( os.path.join( agn_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
-		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
+		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass*ccd' + str(NCCD) + '_evt.fits' ) ) )
 		#ST_evt_files = n.array( glob.glob( os.path.join( stars_dir, 'simulated_photons_ccd' + str(NCCD) + '.fits' ) ) )
 
 		hdu_A = fits.open(agn_evt_files[0])
@@ -152,7 +152,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 
 	for NCCD, tEXP in zip(n.arange(7)+1, texps):
 		agn_evt_files = n.array( glob.glob( os.path.join( agn_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
-		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits' ) ) )
+		CL_evt_files = n.array( glob.glob( os.path.join( cluster_dir, 't0erass*ccd' + str(NCCD) + '_evt.fits' ) ) )
 		#ST_evt_files = n.array( glob.glob( os.path.join( stars_dir, 'simulated_photons_ccd' + str(NCCD) + '.fits' ) ) )
 		hdu_A = fits.open(agn_evt_files[0])
 		#N_ev_A = int(len(hdu_A[1].data) * frac_all) + 20

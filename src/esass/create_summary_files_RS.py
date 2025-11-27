@@ -123,6 +123,7 @@ def ctr_factor_xspec(z, Z_solar, kT_keV,
         print("y", file=f)
 
     os.system(f"xspec - {xcm_file} > /dev/null 2>&1")
+    os.system('rm temp.pi')
 
     L_at_norm_1 = None
     rate_at_norm_1 = None
@@ -154,7 +155,7 @@ def predict_ctr_from_factor(Lx_erg_s, ecf):
 
 # Define your grid
 kT_grid = np.arange(0.1, 13.1, 0.2)   # keV
-z_grid  = np.arange(0.0, 1.51, 0.02)  # redshift
+z_grid  = np.arange(0.01, 1.51, 0.02)  # redshift
 
 p2ecf_grid = "/home/idies/workspace/erosim/software/st_mod_data/data/ecf_grid.npz"
 
@@ -216,6 +217,8 @@ for p2uniq in tqdm(p_2_match_cats):
     Any['ID_simput'] = Any['ID_simput'].astype(np.int32)
     Uniq.rename_column('ID_simput', 'ID_uniq')
     Uniq['ID_Any'] = Any['ID_simput']
+    ra_esass, dec_esass = [get_srvmap(r, d) for (r,d) in zip(Uniq['RA'], Uniq['DEC'])]
+
 
     clu = Table.read(os.path.join(basedir, tile, 'Xgas_bHS0.8_simput_final.fits'), memmap=True)
     XGAS = Table.read(os.path.join(basedir, tile, 'XGAS.fits'), memmap=True)
@@ -411,6 +414,9 @@ if len(clu_all)>0:
     clu_all_table['CTR_R500c_unabs'] = CTR_R500c
     clu_all_table['CTR_4R500c_unabs'] = CTR_4R500c
 
+    clu_all_table.write(p_2_clu_matched, overwrite=True)
+
+
     print('done!')
 
     print('Written', p_2_clu_matched, 'and', p_2_eSASS_matched, 'using', len(clu_all), 'tiles')
@@ -428,7 +434,7 @@ eSASS_all = []
 for p2uniq in tqdm(p_2_match_cats_Lext0):
     tile = p2uniq.split('/')[-3]
     print(tile)
-    Any = Table.read(os.path.join(basedir, tile, subdir, 'Sc_Lext0'+tile+'_IDMatch_Any_Tot2.0.fits'), memmap=True)
+    Any = Table.read(os.path.join(basedir, tile, subdir, 'Sc_Lext0_'+tile+'_IDMatch_Any_Tot2.0.fits'), memmap=True)
     Uniq = Table.read(p2uniq, memmap=True)
     Uniq['ID_simput'] = Uniq['ID_simput'].astype(np.int32)
     Any['ID_simput'] = Any['ID_simput'].astype(np.int32)
