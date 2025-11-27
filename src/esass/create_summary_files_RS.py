@@ -5,6 +5,7 @@ from astropy.wcs import WCS
 from astropy.table import Table, join, vstack, Column
 from astropy.coordinates import SkyCoord
 from sklearn.neighbors import BallTree
+from scipy.interpolate import RegularGridInterpolator
 from tqdm import tqdm
 from astropy.cosmology import FlatLambdaCDM
 import healpy as hp
@@ -79,126 +80,110 @@ rsp_path="/home/idies/workspace/erosim/software/st_mod_data/data/onaxis_tm0_rmf_
 arf_path="/home/idies/workspace/erosim/software/st_mod_data/data/survey_tm0_arf_filter_2023-01-17.fits"
 
 
-def predict_ctr_xspec(Lx_erg_s, z, Z_solar, kT_keV,
-                      rsp_path, arf_path,
-                      band_rest_keV=(0.5, 2.0),
-                      abund='aspl'):
+def ctr_factor_xspec(z, Z_solar, kT_keV,
+                     rsp_path, arf_path,
+                     band_rest_keV=(0.5, 2.0),
+                     abund='aspl'):
     """
-    Predict observed count rate (cts/s) for a tbabs*apec model normalized to
-    intrinsic source-frame luminosity Lx using a single-run XSPEC
+    For given kT,Z,z, response, compute:
+        ECF = (count rate) / (intrinsic Lx)
+    in the rest-frame band band_rest_keV.
     """
+    import os
 
     E1_rest, E2_rest = band_rest_keV
+    xcm_file = 'temp_Lx_rate.xcm'
+    log_file = 'temp_Lx_rate.log'
 
-    # --- STEP 1: Calculate L_intrinsic for norm=1.0 ---
-    # We use a temporary model file and log file
-    xcm_file_1 = 'temp_Lx_1.xcm'
-    log_file_1 = 'temp_Lx_1.log'
+    with open(xcm_file, 'w') as f:
+        print(f"abund {abund}", file=f)
+        print("model apec", file=f)
+        print(f"{kT_keV:.4f}", file=f)   # kT
+        print(f"{Z_solar:.4f}", file=f)  # Z
+        print(f"{z:.4f}", file=f)        # z
+        print("1.0", file=f)             # norm = 1
 
-    with open(xcm_file_1, 'w') as f:
-        # XSPEC Setup
-        print('abund %s' % abund, file=f)
-
-        # Define Model with norm=1.0 (This must be done first)
-        print('model apec', file=f)
-        print('%.4f' % kT_keV, file=f)  # kT
-        print('%.4f' % Z_solar, file=f)  # Abundanc
-        print('%.4f' % z, file=f)  # Redshift
-        print('1.0', file=f)  # Norm = 1.0
-
-        # Fakeit to load the response (RMF/ARF)
-        print('fakeit none', file=f)
+        # Load response for the rate
+        print("fakeit none", file=f)
         print(rsp_path, file=f)
         print(arf_path, file=f)
-        print('', file=f)  # No background file
-        print('', file=f)  # No back exposure
-        print('temp.pi', file=f)  # Temporary PHA file
-        print('1.0', file=f)  # Exposure (1.0s)
-        print('\n', file=f)
+        print("", file=f)           # no background
+        print("", file=f)           # no back exposure
+        print("temp.pi", file=f)    # PHA
+        print("1.0", file=f)        # exposure 1 s
+        print("", file=f)
 
-        # Calculate L_intrinsic for the current model (norm=1.0) and log it
-        print('log %s' % log_file_1, file=f)
-        # lumin E1 E2 z (This correctly gives the intrinsic Lx)
-        print('lumin %.2f %.2f %.4f' % (E1_rest, E2_rest, z), file=f)
-        print('log none', file=f)
-        print('quit', file=f)
-        print('y', file=f)
+        print(f"log {log_file}", file=f)
+        # intrinsic luminosity in rest-frame band
+        print(f"lumin {E1_rest:.2f} {E2_rest:.2f} {z:.4f}", file=f)
+        # predicted count rate with norm=1
+        print("show rate", file=f)
+        print("log none", file=f)
+        print("quit", file=f)
+        print("y", file=f)
 
-    # Execute XSPEC
-    os.system(f'xspec - {xcm_file_1} > /dev/null 2>&1')
+    os.system(f"xspec - {xcm_file} > /dev/null 2>&1")
 
-    # Read L_at_norm_1 from the log file
-    L_at_norm_1 = 0.0
+    L_at_norm_1 = None
+    rate_at_norm_1 = None
+
     try:
-        with open(log_file_1, 'r') as f:
+        with open(log_file, "r") as f:
             for line in f:
-                if 'Model Luminosity' in line:
+                if "Model Luminosity" in line:
+                    # e.g. "Model Luminosity   1   2.345E+43 ..."
                     L_at_norm_1 = float(line.split()[2])
-                    break
-    except FileNotFoundError:
-        print("XSPEC log file not found. Check XSPEC installation/paths.")
-        return 0.0
-    # Clean up first run files
-    os.system(f'rm {xcm_file_1} temp.pi {log_file_1}')
+                if "Model predicted rate:" in line:
+                    # e.g. "Model predicted rate:   0.1234 cts/s"
+                    rate_at_norm_1 = float(line.split()[4])
 
-    if L_at_norm_1 <= 0.0:
-        raise ValueError(f"Intrinsic luminosity calculated for norm=1.0 is zero ({L_at_norm_1:.2e}). Check kT/Z/band.")
+    finally:
+        os.system(f"rm -f {xcm_file} {log_file} temp.pi")
 
-    # Calculate final norm in Python
-    final_norm = Lx_erg_s / L_at_norm_1
+    if (L_at_norm_1 is None) or (L_at_norm_1 <= 0.0):
+        raise RuntimeError(f"Bad L_at_norm_1: {L_at_norm_1}")
+    if (rate_at_norm_1 is None) or (rate_at_norm_1 < 0.0):
+        raise RuntimeError(f"Bad rate_at_norm_1: {rate_at_norm_1}")
 
-    # --- STEP 2: Rerun XSPEC with final norm and read rate ---
-    xcm_file_2 = 'temp_rate_2.xcm'
-    log_file_2 = 'temp_rate_2.log'
+    # conversion factor [cts/s per erg/s]
+    return rate_at_norm_1 / L_at_norm_1
 
-    with open(xcm_file_2, 'w') as f:
-        # XSPEC Setup (same as before)
-        print('abund %s' % abund, file=f)
+def predict_ctr_from_factor(Lx_erg_s, ecf):
+    return Lx_erg_s * ecf
 
-        # Define Model with the new, scaled norm
-        print('model apec', file=f)
-        print('newpar 1 %.4f' % kT_keV, file=f)
-        print('newpar 2 %.4f' % Z_solar, file=f)
-        print('newpar 3 %.4f' % z, file=f)
-        print('newpar 4 %.8e' % final_norm, file=f)  # Set the final, correct norm
 
-        # Fakeit to load the response (RMF/ARF)
-        print('fakeit none', file=f)
-        print(rsp_path, file=f)
-        print(arf_path, file=f)
-        print('', file=f)
-        print('', file=f)
-        print('temp.pi', file=f)
-        print('1.0', file=f)
-        print('\n', file=f)
+# Define your grid
+kT_grid = np.arange(0.1, 13.1, 0.2)   # keV
+z_grid  = np.arange(0.0, 1.51, 0.02)  # redshift
 
-        # Show rate and log it
-        print('log %s' % log_file_2, file=f)
-        # This rate is now the final, absorbed count rate
-        print('show rate', file=f)
-        print('log none', file=f)
+p2ecf_grid = "/home/idies/workspace/erosim/software/st_mod_data/data/ecf_grid.npz"
 
-        print('quit', file=f)
-        print('y', file=f)
+def build_ecf_grid(kT_grid, z_grid, rsp_path, arf_path,
+                   band_rest_keV=(0.5, 2.0), Z_solar=0.3,
+                   abund='aspl', out_file='ecf_grid.npz'):
+    print('Building ECF grid in', out_file)
 
-    # Execute XSPEC
-    os.system(f'xspec - {xcm_file_2} > /dev/null 2>&1')
+    ecf = np.zeros((len(kT_grid), len(z_grid)), dtype=float)
 
-    # Read the final rate
-    rate_cts_per_s = 0.0
-    try:
-        with open(log_file_2, 'r') as f:
-            for line in f:
-                if 'Model predicted rate:' in line:
-                    rate_cts_per_s = float(line.split()[4])
-                    break
-    except FileNotFoundError:
-        print("Final XSPEC log file not found.")
+    for i, kT in enumerate(tqdm(kT_grid)):
+        for j, z in enumerate(z_grid):
+            ecf[i, j] = ctr_factor_xspec(
+                z=z,
+                Z_solar=Z_solar,
+                kT_keV=kT,
+                rsp_path=rsp_path,
+                arf_path=arf_path,
+                band_rest_keV=band_rest_keV,
+                abund=abund
+            )
 
-    # Clean up all temporary files
-    os.system(f'rm {xcm_file_2} temp.pi {log_file_2}')
+    np.savez(out_file, kT_grid=kT_grid, z_grid=z_grid, ecf=ecf)
+    print(f"Saved ECF grid to {out_file}")
+    return ecf
 
-    return rate_cts_per_s
+if not os.path.isfile(p2ecf_grid):
+    build_ecf_grid(kT_grid, z_grid, rsp_path, arf_path, out_file=p2ecf_grid)
+
 
 #prepare to select unique area in esass catalogues
 #sky_map_hdu = Table.read('SKYMAPS.fits')
@@ -315,7 +300,7 @@ for p2uniq in tqdm(p_2_match_cats):
     XGAS_filtered['Bg3Map_eSASS'] = BgMap
 
     #Add eSASS detections
-    eSASS_names = ['RA', 'DEC', 'DET_LIKE_0', 'EXT', 'EXT_LIKE', 'ML_CTS_0', 'ML_RATE_0', 'ML_FLUX_0']
+    eSASS_names = ['ID_cat', 'RA', 'DEC', 'RADEC_ERR', 'DET_LIKE_0', 'EXT', 'EXT_LIKE', 'ML_CTS_0', 'ML_RATE_0', 'ML_FLUX_0']
     for col in eSASS_names:
         if col in ['RA', 'DEC']:
             XGAS_filtered[col+'_eSASS'] = np.ones(len(XGAS_filtered))*-99.
@@ -395,28 +380,33 @@ if len(clu_all)>0:
     clu_all_table['CLUSTER_LX_soft_RF_4R500c'] = CLUSTER_LX_soft_RF_4R500c
 
     print('Now adding the unabsorbed count rate...')
-    CTR_R500c = np.zeros(len(clu_all_table))
-    CTR_4R500c = np.zeros(len(clu_all_table))
-    for jj, cl in enumerate(tqdm(clu_all_table)):
-        CTR_R500c[jj] = predict_ctr_xspec(
-            Lx_erg_s=np.power(10, cl['CLUSTER_LX_soft_RF_R500c']),  # intrinsic Lx in rest 0.5–2 keV
-            z=cl['redshift_S'],
-            Z_solar=0.3,
-            kT_keV=cl['CLUSTER_kT'],
-            rsp_path=rsp_path,
-            arf_path=arf_path,
-            band_rest_keV=(0.5, 2.0)
-        )
+    ecf_data = np.load(p2ecf_grid)
+    kT_grid = ecf_data['kT_grid']
+    z_grid = ecf_data['z_grid']
+    ecf_grid = ecf_data['ecf']
 
-        CTR_4R500c[jj] = predict_ctr_xspec(
-            Lx_erg_s=np.power(10, cl['CLUSTER_LX_soft_RF_4R500c']),  # intrinsic Lx in rest 0.5–2 keV
-            z=cl['redshift_S'],
-            Z_solar=0.3,
-            kT_keV=cl['CLUSTER_kT'],
-            rsp_path=rsp_path,
-            arf_path=arf_path,
-            band_rest_keV=(0.5, 2.0)
-        )
+    # Interpolator: axes are (kT, z)
+    ecf_interp = RegularGridInterpolator(
+        (kT_grid, z_grid),
+        ecf_grid,
+        bounds_error=False, #allow extrpolation
+        fill_value=None  # extrapolates linearly outside grid; or set a default
+    )
+    kT_arr = clu_all_table['CLUSTER_kT'].astype(float)
+    z_arr = clu_all_table['redshift_S'].astype(float)
+
+    # Points for interpolation: shape (N, 2)
+    points = np.column_stack([kT_arr, z_arr])
+
+    # Interpolated ECF for each cluster
+    ecf_arr = ecf_interp(points)  # cts/s per erg/s
+
+    # Compute rates
+    Lx_R500c = 10 ** clu_all_table['CLUSTER_LX_soft_RF_R500c']
+    Lx_4R500c = 10 ** clu_all_table['CLUSTER_LX_soft_RF_4R500c']
+
+    CTR_R500c = Lx_R500c * ecf_arr
+    CTR_4R500c = Lx_4R500c * ecf_arr
 
     clu_all_table['CTR_R500c_unabs'] = CTR_R500c
     clu_all_table['CTR_4R500c_unabs'] = CTR_4R500c
@@ -528,7 +518,7 @@ for p2uniq in tqdm(p_2_match_cats_Lext0):
     XGAS_filtered['Bg3Map_eSASS'] = BgMap
 
     #Add eSASS detections
-    eSASS_names = ['RA', 'DEC', 'DET_LIKE_0', 'EXT', 'EXT_LIKE', 'ML_CTS_0', 'ML_RATE_0', 'ML_FLUX_0']
+    eSASS_names = ['ID_cat', 'RA', 'DEC', 'DET_LIKE_0', 'EXT', 'EXT_LIKE', 'ML_CTS_0', 'ML_RATE_0', 'ML_FLUX_0']
     for col in eSASS_names:
         if col in ['RA', 'DEC']:
             XGAS_filtered[col+'_eSASS'] = np.ones(len(XGAS_filtered))*-99.
