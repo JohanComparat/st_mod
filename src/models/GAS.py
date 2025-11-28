@@ -559,7 +559,7 @@ class GAS:
         itp_attenuation_kt2p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
 
         #Clip nH map to avoid negative values
-        minval_cat_nh = self.CAT['nH'][self.CAT['nH']>0]
+        minval_cat_nh = np.amin(self.CAT['nH'][self.CAT['nH']>0])
         self.CAT['nH'] = np.clip(self.CAT['nH'], minval_cat_nh, None)
 
         #Interpolate and clip attenuation
