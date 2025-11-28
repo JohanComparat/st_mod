@@ -33,7 +33,7 @@ for p2ci, p_2_catalogue in enumerate(C_GAS.p_2_catalogues[is_cat]):
 	# assigns
 	# simulated objects as attribute to the class
 	p_2_catalogue_out = os.path.join( os.path.dirname(p_2_catalogue), 'Xgas_bHS0.8.fits')
-	C_GAS.populate_cat( p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits') )
+	C_GAS.populate_cat( p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits'), kt_m_slope = 0.6, kt_m_intercept = -8. )
 	C_GAS.CAT.write(p_2_catalogue_out, overwrite = True)
 	print('Output written to {0}\nProcessing the replication took {1} seconds'.format(p_2_catalogue_out, time.time()-t0))
 	C_GAS.make_simput( p_2_catalogue_out,

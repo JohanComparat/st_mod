@@ -27,7 +27,7 @@ for p_2_catalogue in C_GAS.p_2_catalogues[is_cat]:
 	# assigns
 	# simulated objects as attribute to the class
 	p_2_catalogue_out = os.path.join( os.path.dirname(p_2_catalogue), 'Xgas_bHS0.8_kts070.fits')
-	C_GAS.populate_cat_kts070( p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits') )
+	C_GAS.populate_cat( p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits'), kt_m_slope = 0.7, kt_m_intercept = -9.4 )
 	C_GAS.CAT.write(p_2_catalogue_out, overwrite = True)
 	print(p_2_catalogue_out, 'written, t=', time.time()-t0)
 	C_GAS.make_simput( p_2_catalogue_out,
@@ -37,7 +37,7 @@ for p_2_catalogue in C_GAS.p_2_catalogues[is_cat]:
 				   )
 
 	p_2_catalogue_out = os.path.join( os.path.dirname(p_2_catalogue), 'Xgas_bHS0.8_kts065.fits')
-	C_GAS.populate_cat_kts065( p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits') )
+	C_GAS.populate_cat( p_2_profiles = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/model_GAS', 'profiles_010z015_1e14M2e14.fits'), kt_m_slope = 0.65, kt_m_intercept = -8.7 )
 	C_GAS.CAT.write(p_2_catalogue_out, overwrite = True)
 	print(p_2_catalogue_out, 'written, t=', time.time()-t0)
 	C_GAS.make_simput( p_2_catalogue_out,

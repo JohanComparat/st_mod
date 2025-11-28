@@ -489,25 +489,38 @@ class GAS:
         # attenuation grid should cover down to 0.05 keV
         #itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_AGN_MOCK'], "data", "xray_k_correction", "fraction_observed_clusters.txt"), unpack=True )
 
-    def populate_cat(self, p_2_profiles):
+    # =============================================================================
+
+    def populate_cat(self, p_2_profiles, kt_m_slope = 0.6, kt_m_intercept = -8.):
         """
         Assigns to each catalog entry a vector of quantities drawn by the draw_simulated_values function
             - finds the nearest neighbour in redshift and M500c
 
         Compared to previous incarnations of the algorithm, it ignores the halo dynamical state (Xoff). Indeed Xoff is not available in the Uchuu light cone.
 
+        Parameters
+        ----------
+        self: object
+            Class object.
+        p_2_profiles: string
+            Path to the folder hosting the profiles table.
+        kt_m_slope: float
+            Slope of the kT-M temperature-mass relation. Default is 0.6.
+        kt_m_intercept: float
+            Intercept of the kT-M relation. Default is -8.
+        
+        Returns
+        -------
+        None
         """
+
         t_prof = Table.read(p_2_profiles)
         # intrinsic scatter
-        #sigma_kT_int = np.random.normal(loc=0.0, scale=0.15, size=len(self.CAT))
-        #sigma_LXX_int = 0.25 / 0.15 * sigma_kT_int
-        #sigma_var  = np.random.normal(loc=0.0, scale=0.02, size=len(self.CAT))
-        #sigma_var2 = np.random.normal(loc=0.0, scale=0.02, size=len(self.CAT))
         # Matching log10(LX_05_20/EZ) = 1.5 log10(M500c EZ) + 22
         fun_M_L =  lambda log10M500c : 44.7 + 1.61 * (log10M500c-15)
         sigma_LX = 0.3
         # Matching log10(kT/EZ^(2/3)) = 0.6 log10(M500c) - 8
-        fun_M_T =  lambda log10M500c : 0.6 * log10M500c - 8.
+        fun_M_T =  lambda log10M500c : kt_m_slope * log10M500c + kt_m_intercept
         sigma_kT = 0.2
         # covariance
         rho = 0.95
@@ -525,20 +538,17 @@ class GAS:
         self.CAT['idx_profile'] = np.random.random_integers(0, high=len(t_prof)-1, size=len(self.CAT))
 
         # convert to fluxes
-        #itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters.txt"), unpack=True )
         itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters_no_nH.txt"), unpack=True )
-        #nh_vals = 10**np.arange(-2,4+0.01,0.5)#0.05)
         kT_vals = 10**np.arange(-2.09,1.8,0.01)
         z_vals = np.hstack((np.array([0.]), np.arange(0.001, 0.01, 0.001), 10**np.arange(np.log10(0.01), np.log10(6.1), 0.01)))
         YY_z, ZZ_kt = np.meshgrid(z_vals, kT_vals)
         shape_i = YY_z.shape
         matrix_2d = itp_frac_obs.reshape(shape_i)
         attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
-
-        self.CAT['CLUSTER_kT'] = np.where(self.CAT['CLUSTER_kT'] < np.amin(kT_vals), np.amin(kT_vals), self.CAT['CLUSTER_kT'])
-        self.CAT['CLUSTER_kT'] = np.where(self.CAT['CLUSTER_kT'] > np.amax(kT_vals), np.amax(kT_vals), self.CAT['CLUSTER_kT'])
-        
-        k_correction_2d = attenuation_2d( np.transpose([self.CAT['CLUSTER_kT'], self.CAT['redshift_S']]))
+        kt_min = 1.01*ZZ_kt.min()
+        KT_padded = self.CAT['CLUSTER_kT']
+        KT_padded[KT_padded<kt_min]=kt_min
+        k_correction_2d = attenuation_2d( np.transpose([KT_padded, self.CAT['redshift_S']]))        
         k_correction_2d = np.clip(k_correction_2d, 1e-10, None)
 
         dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
@@ -548,26 +558,11 @@ class GAS:
         attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt2p0.txt"), unpack=True )
         itp_attenuation_kt2p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
 
+        #Clip nH map to avoid negative values
+        minval_cat_nh = self.CAT['nH'][self.CAT['nH']>0]
+        self.CAT['nH'] = np.clip(self.CAT['nH'], minval_cat_nh, None)
 
-
-
-
-
-
-
-
-        print(np.amin(self.CAT['nH']), np.amin(self.CAT['nH'][np.where(self.CAT['nH'] > 0)[0]]), np.amax(self.CAT['nH']), np.nanmedian(self.CAT['nH']))
-#        self.CAT['nH'] = np.clip(self.CAT['nH'], 1e-19, None)
-
-
-
-
-
-
-
-
-
-
+        #Interpolate and clip attenuation
         attenuation = itp_attenuation_kt2p0( np.log10( self.CAT['nH'] ) )
         attenuation = np.clip(attenuation, 1e-10, None)
         self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] = self.CAT['CLUSTER_FX_soft_OBS_R500c'] + np.log10( attenuation )
@@ -596,179 +591,11 @@ class GAS:
         np.random.shuffle(ellipticity_values)
         self.CAT['ellipticity'] = ellipticity_values[:len(self.CAT)]
         OUT = np.unique(self.CAT['ellipticity'], return_counts=True)
-        print('Ellipticity values: {0}'.format(OUT[0]))
+        print('Ellipticity values: {0}'.format(list(OUT[0])))
         print('Number of clusters with same ellipticity value {0}'.format(OUT[1]))
         print('Fraction of clusters with same ellipticity value {0}'.format(OUT[1]/len(self.CAT)))
 
-
-    def populate_cat_kts070(self, p_2_profiles):
-        """
-        Assigns to each catalog entry a vector of quantities drawn by the draw_simulated_values function
-            - finds the nearest neighbour in redshift and M500c
-
-        Compared to previous incarnations of the algorithm, it ignores the halo dynamical state (Xoff). Indeed Xoff is not available in the Uchuu light cone.
-
-        """
-        t_prof = Table.read(p_2_profiles)
-        # intrinsic scatter
-        #sigma_kT_int = np.random.normal(loc=0.0, scale=0.15, size=len(self.CAT))
-        #sigma_LXX_int = 0.25 / 0.15 * sigma_kT_int
-        #sigma_var  = np.random.normal(loc=0.0, scale=0.02, size=len(self.CAT))
-        #sigma_var2 = np.random.normal(loc=0.0, scale=0.02, size=len(self.CAT))
-        # Matching log10(LX_05_20/EZ) = 1.5 log10(M500c EZ) + 22
-        fun_M_L =  lambda log10M500c : 44.7 + 1.61 * (log10M500c-15)
-        sigma_LX = 0.3
-        fun_M_T =  lambda log10M500c : 0.7 * log10M500c - 9.4
-        sigma_kT = 0.2
-        # covariance
-        rho = 0.95
-        cov_kT_LX = np.array([[sigma_kT**2, rho*sigma_kT*sigma_LX ],[rho*sigma_kT*sigma_LX, sigma_LX**2]])
-        # generates means
-        EZ = cosmo.efunc(self.CAT['redshift_S'])
-        self.CAT['kT_Mean_oEzm23'] = ( fun_M_T(np.log10(self.CAT['M500c'])) ) #+ 2./3. * np.log10(EZ)
-        self.CAT['LX_Mean_eZm2'] = fun_M_L( np.log10(self.CAT['M500c']) ) #+ 2*np.log10(EZ)
-        # generate values with correlated scatter
-        corr_scat = np.random.multivariate_normal([0,0], cov_kT_LX, size=len(self.CAT))
-        corr_scat_kT = corr_scat.T[0]
-        corr_scat_LX = corr_scat.T[1]
-        self.CAT['CLUSTER_kT'] = 10**( self.CAT['kT_Mean_oEzm23'] + corr_scat_kT + 2./3. * np.log10(EZ) )
-        self.CAT['CLUSTER_LX_soft_RF_R500c'] = self.CAT['LX_Mean_eZm2'] + corr_scat_LX + 2*np.log10(EZ)
-        self.CAT['idx_profile'] = np.random.random_integers(0, high=len(t_prof)-1, size=len(self.CAT))
-
-        # convert to fluxes
-        #itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters.txt"), unpack=True )
-        itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters_no_nH.txt"), unpack=True )
-        #nh_vals = 10**np.arange(-2,4+0.01,0.5)#0.05)
-        kT_vals = 10**np.arange(-2.09,1.8,0.01)
-        z_vals = np.hstack((np.array([0.]), np.arange(0.001, 0.01, 0.001), 10**np.arange(np.log10(0.01), np.log10(6.1), 0.01)))
-        YY_z, ZZ_kt = np.meshgrid(z_vals, kT_vals)
-        shape_i = YY_z.shape
-        matrix_2d = itp_frac_obs.reshape(shape_i)
-        attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
-        kt_min = 1.01*ZZ_kt.min()
-        KT_padded = self.CAT['CLUSTER_kT']
-        KT_padded[KT_padded<kt_min]=kt_min
-        k_correction_2d = attenuation_2d( np.transpose([KT_padded, self.CAT['redshift_S']]))
-
-        dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
-        self.CAT['CLUSTER_LX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_RF_R500c'] - np.log10( k_correction_2d )
-        self.CAT['CLUSTER_FX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_OBS_R500c'] - np.log10( (4 * np.pi * dL_cm**2.) )
-
-        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt2p0.txt"), unpack=True )
-        itp_attenuation_kt2p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
-        attenuation = itp_attenuation_kt2p0( np.log10( self.CAT['nH'] ) )
-        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] = self.CAT['CLUSTER_FX_soft_OBS_R500c'] + np.log10( attenuation )
-
-        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt1p0.txt"), unpack=True )
-        itp_attenuation_kt1p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
-        attenuation1p0 = itp_attenuation_kt1p0( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=1.5)]
-        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=1.5)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=1.5)] + np.log10( attenuation1p0 )
-
-        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt0p5.txt"), unpack=True )
-        itp_attenuation_kt0p5 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
-        attenuation0p5 = itp_attenuation_kt0p5( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=0.7)]
-        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=0.7)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=0.7)] + np.log10( attenuation0p5 )
-
-        frac_ell = np.array([0.22, 0.30, 0.25, 0.23]) # fraction of objects at a given ellipticity
-        ell_val = [0.55, 0.65, 0.75, 0.85] # corresponding ellipcity value
-        N_tot = (len(self.CAT) * 2 * frac_ell).astype('int')
-        ellipticity_values = np.hstack((
-            np.ones(N_tot[0])*ell_val[0],
-            np.ones(N_tot[1])*ell_val[1],
-            np.ones(N_tot[2])*ell_val[2],
-            np.ones(N_tot[3])*ell_val[3]
-            ))
-        np.random.shuffle(ellipticity_values)
-        self.CAT['ellipticity'] = ellipticity_values[:len(self.CAT)]
-        OUT = np.unique(self.CAT['ellipticity'], return_counts=True)
-        print(OUT)
-        print(OUT[1]/len(self.CAT))
-
-
-    def populate_cat_kts065(self, p_2_profiles):
-        """
-        Assigns to each catalog entry a vector of quantities drawn by the draw_simulated_values function
-            - finds the nearest neighbour in redshift and M500c
-
-        Compared to previous incarnations of the algorithm, it ignores the halo dynamical state (Xoff). Indeed Xoff is not available in the Uchuu light cone.
-
-        """
-        t_prof = Table.read(p_2_profiles)
-        # intrinsic scatter
-        #sigma_kT_int = np.random.normal(loc=0.0, scale=0.15, size=len(self.CAT))
-        #sigma_LXX_int = 0.25 / 0.15 * sigma_kT_int
-        #sigma_var  = np.random.normal(loc=0.0, scale=0.02, size=len(self.CAT))
-        #sigma_var2 = np.random.normal(loc=0.0, scale=0.02, size=len(self.CAT))
-        # Matching log10(LX_05_20/EZ) = 1.5 log10(M500c EZ) + 22
-        fun_M_L =  lambda log10M500c : 44.7 + 1.61 * (log10M500c-15)
-        sigma_LX = 0.3
-        # Matching log10(kT/EZ^(2/3)) = 0.6 log10(M500c) - 8
-        fun_M_T =  lambda log10M500c : 0.65 * log10M500c - 8.7
-        sigma_kT = 0.2
-        # covariance
-        rho = 0.95
-        cov_kT_LX = np.array([[sigma_kT**2, rho*sigma_kT*sigma_LX ],[rho*sigma_kT*sigma_LX, sigma_LX**2]])
-        # generates means
-        EZ = cosmo.efunc(self.CAT['redshift_S'])
-        self.CAT['kT_Mean_oEzm23'] = ( fun_M_T(np.log10(self.CAT['M500c'])) ) #+ 2./3. * np.log10(EZ)
-        self.CAT['LX_Mean_eZm2'] = fun_M_L( np.log10(self.CAT['M500c']) ) #+ 2*np.log10(EZ)
-        # generate values with correlated scatter
-        corr_scat = np.random.multivariate_normal([0,0], cov_kT_LX, size=len(self.CAT))
-        corr_scat_kT = corr_scat.T[0]
-        corr_scat_LX = corr_scat.T[1]
-        self.CAT['CLUSTER_kT'] = 10**( self.CAT['kT_Mean_oEzm23'] + corr_scat_kT + 2./3. * np.log10(EZ) )
-        self.CAT['CLUSTER_LX_soft_RF_R500c'] = self.CAT['LX_Mean_eZm2'] + corr_scat_LX + 2*np.log10(EZ)
-        self.CAT['idx_profile'] = np.random.random_integers(0, high=len(t_prof)-1, size=len(self.CAT))
-
-        # convert to fluxes
-        #itp_logNH, itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters.txt"), unpack=True )
-        itp_z, itp_kt, itp_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "fraction_observed_clusters_no_nH.txt"), unpack=True )
-        #nh_vals = 10**np.arange(-2,4+0.01,0.5)#0.05)
-        kT_vals = 10**np.arange(-2.09,1.8,0.01)
-        z_vals = np.hstack((np.array([0.]), np.arange(0.001, 0.01, 0.001), 10**np.arange(np.log10(0.01), np.log10(6.1), 0.01)))
-        YY_z, ZZ_kt = np.meshgrid(z_vals, kT_vals)
-        shape_i = YY_z.shape
-        matrix_2d = itp_frac_obs.reshape(shape_i)
-        attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
-
-        kt_min = 1.01*ZZ_kt.min()
-        KT_padded = self.CAT['CLUSTER_kT']
-        KT_padded[KT_padded<kt_min]=kt_min
-        k_correction_2d = attenuation_2d( np.transpose([KT_padded, self.CAT['redshift_S']]))
-
-        dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
-        self.CAT['CLUSTER_LX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_RF_R500c'] - np.log10( k_correction_2d )
-        self.CAT['CLUSTER_FX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_OBS_R500c'] - np.log10( (4 * np.pi * dL_cm**2.) )
-
-        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt2p0.txt"), unpack=True )
-        itp_attenuation_kt2p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
-        attenuation = itp_attenuation_kt2p0( np.log10( self.CAT['nH'] ) )
-        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] = self.CAT['CLUSTER_FX_soft_OBS_R500c'] + np.log10( attenuation )
-
-        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt1p0.txt"), unpack=True )
-        itp_attenuation_kt1p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
-        attenuation1p0 = itp_attenuation_kt1p0( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=1.5)]
-        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=1.5)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=1.5)] + np.log10( attenuation1p0 )
-
-        attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt0p5.txt"), unpack=True )
-        itp_attenuation_kt0p5 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
-        attenuation0p5 = itp_attenuation_kt0p5( np.log10( self.CAT['nH'] ) )[(self.CAT['CLUSTER_kT']<=0.7)]
-        self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'][(self.CAT['CLUSTER_kT']<=0.7)] = self.CAT['CLUSTER_FX_soft_OBS_R500c'][(self.CAT['CLUSTER_kT']<=0.7)] + np.log10( attenuation0p5 )
-
-        frac_ell = np.array([0.22, 0.30, 0.25, 0.23]) # fraction of objects at a given ellipticity
-        ell_val = [0.55, 0.65, 0.75, 0.85] # corresponding ellipcity value
-        N_tot = (len(self.CAT) * 2 * frac_ell).astype('int')
-        ellipticity_values = np.hstack((
-            np.ones(N_tot[0])*ell_val[0],
-            np.ones(N_tot[1])*ell_val[1],
-            np.ones(N_tot[2])*ell_val[2],
-            np.ones(N_tot[3])*ell_val[3]
-            ))
-        np.random.shuffle(ellipticity_values)
-        self.CAT['ellipticity'] = ellipticity_values[:len(self.CAT)]
-        OUT = np.unique(self.CAT['ellipticity'], return_counts=True)
-        print(OUT)
-        print(OUT[1]/len(self.CAT))
+    # =============================================================================
 
     def make_simput( self, p_2_catalogue_out, p_2_profiles, dir_2_simput, simput_file_name ):
         """
