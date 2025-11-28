@@ -556,7 +556,7 @@ class GAS:
 
 
 
-        print(np.amin(self.CAT['nH']), np.amax(self.CAT['nH']), np.nanmedian(self.CAT['nH']))
+        print(np.amin(self.CAT['nH']), np.amin(self.CAT['nH'][np.where(self.CAT['nH'] > 0)[0]]), np.amax(self.CAT['nH']), np.nanmedian(self.CAT['nH']))
 #        self.CAT['nH'] = np.clip(self.CAT['nH'], 1e-19, None)
 
 
