@@ -547,6 +547,27 @@ class GAS:
 
         attenuate_X_logNH, attenuate_Y_frac_obs = np.loadtxt( os.path.join( os.environ['GIT_STMOD_DATA'], "data", "models/model_GAS/xray_k_correction", "nh_attenuation_clusters_kt2p0.txt"), unpack=True )
         itp_attenuation_kt2p0 = interp1d(attenuate_X_logNH, attenuate_Y_frac_obs)
+
+
+
+
+
+
+
+
+
+        print(np.amin(self.CAT['nH']), np.amax(self.CAT['nH']), np.nanmedian(self.CAT['nH']))
+#        self.CAT['nH'] = np.clip(self.CAT['nH'], 1e-19, None)
+
+
+
+
+
+
+
+
+
+
         attenuation = itp_attenuation_kt2p0( np.log10( self.CAT['nH'] ) )
         attenuation = np.clip(attenuation, 1e-10, None)
         self.CAT['CLUSTER_FX_soft_OBS_R500c_nHattenuated'] = self.CAT['CLUSTER_FX_soft_OBS_R500c'] + np.log10( attenuation )
