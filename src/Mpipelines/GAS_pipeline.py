@@ -12,34 +12,29 @@ import numpy as np
 from multiprocessing import Pool
 
 #List of redshift slices for FullSky lightcone
-#redshift_slices_list = ['z0p00',
-#						'z0p02',
-#						'z0p05',
-#						'z0p09',
-#						'z0p14',
-#						'z0p19',
-#						'z0p25',
-#						'z0p30',
-#						'z0p36',
-#						'z0p43',
-#						'z0p49',
-#						'z0p56',
-#						'z0p63',
-#						'z0p70',
-#						'z0p78',
-#						'z0p86',
-#						'z0p94',
-#						'z1p03',
-#						'z1p12',
-#						'z1p22',
-#						'z1p32',
-#						'z1p43',
-#						'z1p54']
-
-redshift_slices_list = ['z0p36',
+redshift_slices_list = ['z0p00',
+						'z0p02',
+						'z0p05',
+						'z0p09',
+						'z0p14',
+						'z0p19',
+						'z0p25',
+						'z0p30',
+						'z0p36',
 						'z0p43',
 						'z0p49',
-						'z0p56']
+						'z0p56',
+						'z0p63',
+						'z0p70',
+						'z0p78',
+						'z0p86',
+						'z0p94',
+						'z1p03',
+						'z1p12',
+						'z1p22',
+						'z1p32',
+						'z1p43',
+						'z1p54']
 
 #Directory for code
 sys.path.append(os.path.join(os.environ['GIT_STMOD'], 'src'))

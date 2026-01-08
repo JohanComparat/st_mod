@@ -545,11 +545,13 @@ class GAS:
         shape_i = YY_z.shape
         matrix_2d = itp_frac_obs.reshape(shape_i)
         attenuation_2d = RegularGridInterpolator((kT_vals, z_vals), matrix_2d)
-        kt_min = 1.01*ZZ_kt.min()
+        #kt_min = 1.01*ZZ_kt.min()
+        kt_min = 0.1 #keV, only used for K correction
         KT_padded = self.CAT['CLUSTER_kT']
         KT_padded[KT_padded<kt_min]=kt_min
-        k_correction_2d = attenuation_2d( np.transpose([KT_padded, self.CAT['redshift_S']]))        
-        k_correction_2d = np.clip(k_correction_2d, 1e-10, None)
+        k_correction_2d = attenuation_2d( np.transpose([KT_padded, self.CAT['redshift_S']]))
+        kcorr_padded = matrix_2d[matrix_2d > 0].min()
+        k_correction_2d = np.clip(k_correction_2d, kcorr_padded, None)
 
         dL_cm = (cosmo.luminosity_distance(self.CAT['redshift_S']).to(u.cm)).value
         self.CAT['CLUSTER_LX_soft_OBS_R500c'] = self.CAT['CLUSTER_LX_soft_RF_R500c'] - np.log10( k_correction_2d )
@@ -591,7 +593,7 @@ class GAS:
         np.random.shuffle(ellipticity_values)
         self.CAT['ellipticity'] = ellipticity_values[:len(self.CAT)]
         OUT = np.unique(self.CAT['ellipticity'], return_counts=True)
-        print('Ellipticity values: {0}'.format(list(OUT[0])))
+        print('Ellipticity values: {0}'.format([float(vaal) for vaal in OUT[0]]))
         print('Number of clusters with same ellipticity value {0}'.format(OUT[1]))
         print('Fraction of clusters with same ellipticity value {0}'.format(OUT[1]/len(self.CAT)))
 
