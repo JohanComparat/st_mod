@@ -13,6 +13,10 @@ os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
 # os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
 os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
 
+#will be used to get local Bg and ExpMap to rescale pdet
+p2erass1clu = '/home/idies/workspace/erosim/eRASS1_mock_input_CLUSTERS_extlike3.fits'
+erass1_clu = Table.read(p2erass1clu, memmap=True)
+
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 14})
 # import matplotlib.pyplot as plt
@@ -24,7 +28,6 @@ if exp_name == 'e4':
 elif exp_name == 'e5':
     real_data_name = 's5'
 mergeType = 'SB'
-texp_factor_to_e1 = float(exp_name[-1])
 
 nl = lambda sel: len(sel.nonzero()[0])
 
@@ -114,7 +117,14 @@ def remove_events_binned(evlist, blacklist, nbins=400, emin=None, emax=None, rng
     rng.shuffle(kept_idx)
     return evlist[kept_idx]
 
-def ctr_BKG_10percent_detection(bg_cts_per_pix, b, a):
+def ctr_BKG_percent_detection(bg_cts_per_pix, b, a):
+    '''
+    from erass1 mock
+    AGN 10% -0.86810338809034, -4.02348244025905
+    CLU 10% -0.74810338809034, -3.29348244025905
+    AGN 50% -0.76810338809034,-3.62348244025905
+    CLU 50% -0.59810338809034,-2.39348244025905
+    '''
     return 10 ** a * bg_cts_per_pix ** b
 
 fails = []
@@ -125,6 +135,16 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     evt_list = np.array(glob.glob(
         os.path.join(os.environ['UCHUU'], LC_dir, str_field, '{0}_c030'.format(real_data_name),
                      '*_Image_c030.fits.gz')))
+
+    p2_real_BgMap = os.path.join(os.environ['UCHUU'], LC_dir, str_field, '{0}_eSASS'.format(real_data_name),
+                     str_field+'_024_Bg3Map.fits')
+    p2_real_ExpMap = os.path.join(os.environ['UCHUU'], LC_dir, str_field, '{0}_eSASS'.format(real_data_name),
+                     str_field+'_024_ExpMap.fits')
+
+    real_BgMap = fits.open(p2_real_BgMap)[0].data
+    real_ExpMap = fits.open(p2_real_ExpMap)[0].data
+
+
     esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field,
                              mergeType + '_{0}_merge_AGNseed'.format(exp_name) + agn_seed.zfill(
                                  3) + '_SimBKG_CLUseed' + clu_seed.zfill(3))
@@ -297,17 +317,24 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     local_BKG = np.median(bg3mapD[0].data)
     local_EXP = np.median(expmap[0].data)
 
+    sel_local = erass1_clu['tile'] == str_field
+    local_BKG_erass1 = np.median(erass1_clu['BG3Model'][sel_local])
+    local_EXP_erass1 = np.median(erass1_clu['TexpModel'][sel_local])
+
     # select events that will belong top detected sources
     # deduce events that will belong to the background
-    A_DetLimit_eRASS1 = ctr_BKG_10percent_detection(local_BKG / texp_factor_to_e1, -0.86810338809034, -4.02348244025905) * local_EXP / texp_factor_to_e1
-    C_DetLimit_eRASS1 = ctr_BKG_10percent_detection(local_BKG / texp_factor_to_e1, -0.74810338809034, -3.29348244025905) * local_EXP / texp_factor_to_e1
+    texp_factor_to_e1 = float(local_EXP/local_EXP_erass1)
+    print('texp_factor_to_e1:', texp_factor_to_e1)
+
+    A_DetLimit_eRASS1 = ctr_BKG_percent_detection(local_BKG / texp_factor_to_e1, -0.76810338809034,-3.62348244025905) * local_EXP / texp_factor_to_e1
+    C_DetLimit_eRASS1 = ctr_BKG_percent_detection(local_BKG / texp_factor_to_e1, -0.59810338809034,-2.39348244025905) * local_EXP / texp_factor_to_e1
     print('A_DetLimit_eRASS1:', A_DetLimit_eRASS1)
     print('C_DetLimit_eRASS1:', C_DetLimit_eRASS1)
 
     # To erass4 the SNR of count rate goes down by sqrt(4): you get higher counts by a factor of 2, but BG increased by 4, so effectively SNR went down.
     # A source at the limit producing 1 ct in erass1 will produce for counts in erass4, where the limit is now 2 counts, so you need more counts in erass4 than erass1 but the same source has higher significance in erass4 than erass1
-    A_DetLimit_eRASSn = ctr_BKG_10percent_detection(local_BKG / texp_factor_to_e1, -0.86810338809034, -4.02348244025905) / np.sqrt(texp_factor_to_e1) * local_EXP
-    C_DetLimit_eRASSn = ctr_BKG_10percent_detection(local_BKG / texp_factor_to_e1, -0.74810338809034, -3.29348244025905) / np.sqrt(texp_factor_to_e1) * local_EXP
+    A_DetLimit_eRASSn = ctr_BKG_percent_detection(local_BKG / texp_factor_to_e1, -0.76810338809034,-3.62348244025905) / np.sqrt(texp_factor_to_e1) * local_EXP
+    C_DetLimit_eRASSn = ctr_BKG_percent_detection(local_BKG / texp_factor_to_e1, -0.59810338809034,-2.39348244025905) / np.sqrt(texp_factor_to_e1) * local_EXP
     print('A_DetLimit_eRASSn:', A_DetLimit_eRASSn)
     print('C_DetLimit_eRASSn:', C_DetLimit_eRASSn)
 
