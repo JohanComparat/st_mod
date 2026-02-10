@@ -20,14 +20,14 @@ erass1_clu = Table.read(p2erass1clu, memmap=True)
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 14})
 # import matplotlib.pyplot as plt
-agn_seed = '1'  # sys.argv[1] # Seed for the AGN realization
-clu_seed = '1'  # sys.argv[2] # Seed for the CLU realization
-exp_name = 'e4'  # sys.argv[3] # Type of the experiment, whether e4 or e5
+agn_seed = sys.argv[1] # Seed for the AGN realization e.g. 1
+clu_seed = sys.argv[2] # Seed for the CLU realization e.g. 1
+exp_name = sys.argv[3] # Type of the experiment, whether e4 or e5
 if exp_name == 'e4':
     real_data_name = 's4'
 elif exp_name == 'e5':
     real_data_name = 's5'
-mergeType = 'SB'
+mergeType = 'GE'
 
 nl = lambda sel: len(sel.nonzero()[0])
 
@@ -128,7 +128,7 @@ def ctr_BKG_percent_detection(bg_cts_per_pix, b, a):
     return 10 ** a * bg_cts_per_pix ** b
 
 fails = []
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)][:1]:
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]:#[:1]:
     sky_tile_id = str(sky_tile['SRVMAP'])
     str_field = str(sky_tile['SRVMAP']).zfill(6)
     print('\nNow processing tile: {0}'.format(str_field))
@@ -152,10 +152,10 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         os.system('mkdir -p ' + esass_dir)
     # esass_GE_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'GE_{0}_merge_AGNseed'.format(exp_name)+agn_seed.zfill(3)+'_SimBKG_CLUseed'+clu_seed.zfill(3))
 
-    path_2_event_file = os.path.join(esass_dir, 'evt_' + str_field + '_RS.fits')
-    path_2_simeventAGN_file = os.path.join(esass_dir, 'simAGNevt_' + str_field + '_RS.fits')
-    path_2_simeventCLU_file = os.path.join(esass_dir, 'simCLUevt_' + str_field + '_RS.fits')
-    path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_' + str_field + '_RS.fits')
+    path_2_event_file = os.path.join(esass_dir, 'evt_' + str_field + '.fits')
+    path_2_simeventAGN_file = os.path.join(esass_dir, 'simAGNevt_' + str_field + '.fits')
+    path_2_simeventCLU_file = os.path.join(esass_dir, 'simCLUevt_' + str_field + '.fits')
+    path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_' + str_field + '.fits')
     if len(evt_list) == 0 or os.path.isfile(path_2_event_file):
         print(
             'Tile not processed. Reason:\n no real data event file: {0}\n merged simulated event file exists: {1}'.format(
