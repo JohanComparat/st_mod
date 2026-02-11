@@ -47,7 +47,7 @@ LC_dir = 'FullSky'
 def one_process_func(z_dir):
 
 	#Create name for log file from z_dir and other hardcoded parts, can be changed in the future
-	log_fn = '/home/idies/workspace/erosim/logs/GAS_pipeline_2025_11_28/GAS_pipeline_{0}_{1}.log'.format(z_dir, LC_dir)
+	log_fn = '/home/idies/workspace/erosim/logs/GAS_pipeline_2025_02_11/GAS_pipeline_{0}_{1}.log'.format(z_dir, LC_dir)
 
 	#Redirect print statements to file for logging, there may be too many hidden in the depths of the code
 	with open(log_fn, 'w') as sys.stdout:
@@ -86,7 +86,7 @@ def one_process_func(z_dir):
 						)
 
 #Map to cores    
-with Pool(5) as p:
+with Pool(18) as p:
 	p.map(one_process_func, redshift_slices_list)
 
 
