@@ -593,7 +593,7 @@ class GAS:
         np.random.shuffle(ellipticity_values)
         self.CAT['ellipticity'] = ellipticity_values[:len(self.CAT)]
         OUT = np.unique(self.CAT['ellipticity'], return_counts=True)
-        print('Ellipticity values: {0}'.format([float(vaal) for vaal in OUT[0]]))
+        print('Ellipticity values {0}'.format([float(vaal) for vaal in OUT[0]]))
         print('Number of clusters with same ellipticity value {0}'.format(OUT[1]))
         print('Fraction of clusters with same ellipticity value {0}'.format(OUT[1]/len(self.CAT)))
 
