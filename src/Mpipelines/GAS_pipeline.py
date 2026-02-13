@@ -86,7 +86,7 @@ def one_process_func(z_dir):
 						)
 
 #Map to cores    
-with Pool(18) as p:
+with Pool(12) as p:
 	p.map(one_process_func, redshift_slices_list)
 
 
