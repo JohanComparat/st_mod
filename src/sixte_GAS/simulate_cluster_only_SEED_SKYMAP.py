@@ -31,7 +31,7 @@ def one_iter_func(sky_tile, other_elements):
 
     #Splits other_elements into relevant quantities
     basename, seed, LC_dir, erass_option, sixte_version, log_fn_for_check = other_elements
-    print('\nTile {0} - seed: {1} LC_dir: {2} eRASS option: {2}'.format(str_field, seed, LC_dir, erass_option))
+    print('\nTile {0} - seed: {1} LC_dir: {2} eRASS option: {3}'.format(str_field, seed, LC_dir, erass_option))
 
     #Loop as usual
     ra_cen = sky_tile['RA_CEN']
