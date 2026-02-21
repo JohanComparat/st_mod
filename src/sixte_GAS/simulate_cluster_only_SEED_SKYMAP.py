@@ -222,8 +222,20 @@ class Simulator:
 
         command = " ".join(cmd)
         print('\nTile {0} - Compute GTI with command:\n{1}'.format(self._str_field, command))
+
+
+
         os.system(command)
+        
+        print('qui')
+        
+        
         hd=fits.open(gti_file)
+
+
+        print('qui2')
+
+
         number_of_lines = hd[1].header['NAXIS2']
         print('\nTile {0} - GTI file has {1} lines'.format(self._str_field, number_of_lines))
         if number_of_lines==0:
@@ -372,6 +384,11 @@ class Simulator:
         
         #Compute GTI file
         print('\nTile {0} - Compute gti with ero_vis'.format(self._str_field))
+
+
+        print('self._N_simputs', self._N_simputs, self._str_field)
+
+
         if self._N_simputs==1:
             path_to_gti = os.path.join(self._data_dir, "erass.gti")
             self.compute_gti(self._simput[0], path_to_gti)
