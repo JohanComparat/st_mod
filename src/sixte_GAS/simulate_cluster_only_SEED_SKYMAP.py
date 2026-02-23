@@ -221,7 +221,7 @@ class Simulator:
         command = " ".join(cmd)
         print('\nTile {0} - Compute GTI with command:\n{1}'.format(self._str_field, command))
 #        os.system(command) #Offending line in NEW SciServer?
-        sp.run(cmd)
+        sp.run(command, shell = True, stdout = sp.PIPE, stderr = sp.STDOUT, text = True)
         hd=fits.open(gti_file)
         number_of_lines = hd[1].header['NAXIS2']
         print('\nTile {0} - GTI file has {1} lines'.format(self._str_field, number_of_lines))
@@ -229,7 +229,7 @@ class Simulator:
             cmd_del = ['rm', gti_file]
             command_del = " ".join(cmd_del)
             print('\nTile {0} - Removing GTI file with command:\n{1}'.format(self._str_field, command_del))
-            sp.run(cmd_del)
+            sp.run(command_del, shell = True, stdout = sp.PIPE, stderr = sp.STDOUT, text = True)
 
     def run_sixte(self):
         """
@@ -261,7 +261,7 @@ class Simulator:
 
             command = " ".join(cmd)
             print('\nTile {0} - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            sp.run(cmd)
+            sp.run(command, shell = True, stdout = sp.PIPE, stderr = sp.STDOUT, text = True)
             return  # we're done
 
         elif (self._N_simputs >= 2) and (self._N_simputs <= 6):
@@ -290,7 +290,7 @@ class Simulator:
                 cmd.append("Background=no")
             command = " ".join(cmd)
             print('\nTile {0} - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            sp.run(cmd)
+            sp.run(command, shell = True, stdout = sp.PIPE, stderr = sp.STDOUT, text = True)
 
         # ---------- >6 SIMPUTS: two runs ----------
         elif self._N_simputs > 6:
@@ -323,7 +323,7 @@ class Simulator:
 
             command = " ".join(cmd)
             print('\nTile {0} - FIRST SIXTE RUN (SIMPUT 1–6) - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            sp.run(cmd)
+            sp.run(command, shell = True, stdout = sp.PIPE, stderr = sp.STDOUT, text = True)
 
             # ---- Second run: remaining SIMPUTs (6,7,...) ----
             remaining = self._simput[6:]
@@ -358,7 +358,7 @@ class Simulator:
 
             command1 = " ".join(cmd1)
             print('\nTile {0} - SECOND SIXTE RUN (SIMPUT 7+) - Running SIXTE with command:\n{1}'.format(self._str_field, command1))
-            sp.run(cmd1)
+            sp.run(command1, shell = True, stdout = sp.PIPE, stderr = sp.STDOUT, text = True)
 
     #This is what is called
     def run_all(self):
@@ -385,10 +385,10 @@ class Simulator:
             path_to_gti = os.path.join(self._data_dir, "erass.gti")
             gti_files = glob.glob(self._data_dir + "/*.gti")
             if len(gti_files)>0:
-                command_list = ["ls", self._data_dir, "/*.gti > ", path_to_gti_list]
+                command_list = "ls " + self._data_dir + "/*.gti > " + path_to_gti_list
                 print('\nTile {0} - Listing GTI files:\n{1}'.format(self._str_field, command_list))
-                sp.run(command_list)
-                command_merge = ["mgtime ingtis=@", path_to_gti_list, "outgti=", path_to_gti, "merge=OR"]
+                sp.run(command_list, shell = True, stdout = sp.PIPE, stderr = sp.STDOUT, text = True)
+                command_merge = "mgtime ingtis=@ " + path_to_gti_list + " outgti=" + path_to_gti + " merge=OR"
                 print('\nTile {0} - Merging GTI files with command:\n{1}'.format(self._str_field, command_merge))
                 sp.run(command_merge)
 
