@@ -208,13 +208,11 @@ class Simulator:
         Use this as input to SIXTE call for reducing computational expense.
         """
         cmd = ["ero_vis",
-                "GTIfile=%s" % gti_file,
-                "Simput=%s" % simput_ero,
-                "Exposure=%f" % self._exposure,
-                "Attitude=%s" % self._p_2_att_file,
-                "TSTART=%f" % self._t_start,
-                #"RA=%s" % self._ra_cen,
-                #"Dec=%s" % self._dec_cen,
+                "GTIfile={0}".format(gti_file),
+                "Simput={0}".format(simput_ero),
+                "Exposure={0:f}".format(self._exposure),
+                "Attitude={0}".format(self._p_2_att_file),
+                "TSTART={0:f}".format(self._t_start),
                 "dt=0.5",
                 "visibility_range=1.0",
                 "clobber=yes"
@@ -222,14 +220,16 @@ class Simulator:
 
         command = " ".join(cmd)
         print('\nTile {0} - Compute GTI with command:\n{1}'.format(self._str_field, command))
-        os.system(command)
+#        os.system(command) #Offending line in NEW SciServer?
+        sp.run(cmd)
         hd=fits.open(gti_file)
         number_of_lines = hd[1].header['NAXIS2']
         print('\nTile {0} - GTI file has {1} lines'.format(self._str_field, number_of_lines))
         if number_of_lines==0:
-            cmd_del = 'rm '+gti_file
-            print('\nTile {0} - Removing GTI file with command:\n{1}'.format(self._str_field, cmd_del))
-            os.system(cmd_del)
+            cmd_del = ['rm', gti_file]
+            command_del = " ".join(cmd_del)
+            print('\nTile {0} - Removing GTI file with command:\n{1}'.format(self._str_field, command_del))
+            sp.run(cmd_del)
 
     def run_sixte(self):
         """
@@ -240,17 +240,17 @@ class Simulator:
         prefix = os.path.join(self._data_dir, self._block_id+"erass_" )
         if self._N_simputs==1:
             cmd = ["erosim",
-                    "Simput=%s" % self._simput[0],
-                    "Prefix=%s" % prefix,
-                    "Attitude=%s" % self._p_2_att_file,
-                    "RA=%s" % self._ra_cen,
-                    "Dec=%s" % self._dec_cen,
-                    "GTIFile=%s/erass.gti" % self._data_dir,
-                    "TSTART=%s" % self._t_start,
-                    "Exposure=%s" % self._exposure,
+                    "Simput={0}".format(self._simput[0]),
+                    "Prefix={0}".format(prefix),
+                    "Attitude={0}".format(self._p_2_att_file),
+                    "RA={0}".format(self._ra_cen),
+                    "Dec={0}".format(self._dec_cen),
+                    "GTIFile={0}/erass.gti".format(self._data_dir),
+                    "TSTART={0}".format(self._t_start),
+                    "Exposure={0}".format(self._exposure),
                     "MJDREF=51543.875",
                     "dt=0.5",
-                    "Seed=%s" % self._seed,
+                    "Seed={0}".format(self._seed),
                     "clobber=yes",
                     "chatter=3"
                     ]
@@ -261,23 +261,23 @@ class Simulator:
 
             command = " ".join(cmd)
             print('\nTile {0} - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            os.system(command)
+            sp.run(cmd)
             return  # we're done
 
         elif (self._N_simputs >= 2) and (self._N_simputs <= 6):
-            cmd = ["erosim", "Simput=%s" % self._simput[0] ]
+            cmd = ["erosim", "Simput={0}".format(self._simput[0])]
             for jj in np.arange(len(self._simput))[1:]:
-                cmd.append("Simput"+str(int(jj+1))+"=%s" % self._simput[jj])
-            cmd_end = ["Prefix=%s" % prefix,
-                    "Attitude=%s" % self._p_2_att_file,
-                    "RA=%s" % self._ra_cen,
-                    "Dec=%s" % self._dec_cen,
-                    "GTIFile=%s/erass.gti" % self._data_dir,
-                    "TSTART=%s" % self._t_start,
-                    "Exposure=%s" % self._exposure,
+                cmd.append("Simput"+str(int(jj+1))+"={0}".format(self._simput[jj]))
+            cmd_end = ["Prefix={0}".format(prefix),
+                    "Attitude={0}".format(self._p_2_att_file),
+                    "RA={0}".format(self._ra_cen),
+                    "Dec={0}".format(self._dec_cen),
+                    "GTIFile={0}/erass.gti".format(self._data_dir),
+                    "TSTART={0}".format(self._t_start),
+                    "Exposure={0}".format(self._exposure),
                     "MJDREF=51543.875",
                     "dt=0.5",
-                    "Seed=%s" % self._seed,
+                    "Seed={0}".format(self._seed),
                     "clobber=yes",
                     "chatter=3"
                     ]
@@ -290,27 +290,27 @@ class Simulator:
                 cmd.append("Background=no")
             command = " ".join(cmd)
             print('\nTile {0} - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            os.system(command)
+            sp.run(cmd)
 
         # ---------- >6 SIMPUTS: two runs ----------
         elif self._N_simputs > 6:
             # ---- First run: first 6 SIMPUTs ----
-            cmd = ["erosim", "Simput=%s" % self._simput[0]]
+            cmd = ["erosim", "Simput={0}".format(self._simput[0])]
             # add Simput2..Simput6 with indices 1..5
             for jj in np.arange(1, 6):
-                cmd.append("Simput" + str(int(jj + 1)) + "=%s" % self._simput[jj])
+                cmd.append("Simput" + str(int(jj + 1)) + "={0}".format(self._simput[jj]))
 
             cmd_end = [
-                "Prefix=%s" % prefix,
-                "Attitude=%s" % self._p_2_att_file,
-                "RA=%s" % self._ra_cen,
-                "Dec=%s" % self._dec_cen,
-                "GTIFile=%s/erass.gti" % self._data_dir,
-                "TSTART=%s" % self._t_start,
-                "Exposure=%s" % self._exposure,
+                "Prefix={0}".format(prefix),
+                "Attitude={0}".format(self._p_2_att_file),
+                "RA={0}".format(self._ra_cen),
+                "Dec={0}".format(self._dec_cen),
+                "GTIFile={0}/erass.gti".format(self._data_dir),
+                "TSTART={0}".format(self._t_start),
+                "Exposure={0}".format(self._exposure),
                 "MJDREF=51543.875",
                 "dt=0.5",
-                "Seed=%s" % self._seed,
+                "Seed={0}".format(self._seed),
                 "clobber=yes",
                 "chatter=3"
             ]
@@ -323,29 +323,29 @@ class Simulator:
 
             command = " ".join(cmd)
             print('\nTile {0} - FIRST SIXTE RUN (SIMPUT 1–6) - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            os.system(command)
+            sp.run(cmd)
 
             # ---- Second run: remaining SIMPUTs (6,7,...) ----
             remaining = self._simput[6:]
             prefix2 = os.path.join(self._data_dir, self._block_id + "erass_run2_")
 
             # first file in this run is "Simput="
-            cmd1 = ["erosim", "Simput=%s" % remaining[0]]
+            cmd1 = ["erosim", "Simput={0}".format(remaining[0])]
             # then Simput2, Simput3, ... for the rest
             for k, simput_path in enumerate(remaining[1:], start=2):
-                cmd1.append("Simput%d=%s" % (k, simput_path))
+                cmd1.append("Simput{0:d}={1}".format(k, simput_path))
 
             cmd_end1 = [
-                "Prefix=%s" % prefix2,
-                "Attitude=%s" % self._p_2_att_file,
-                "RA=%s" % self._ra_cen,
-                "Dec=%s" % self._dec_cen,
-                "GTIFile=%s/erass.gti" % self._data_dir,
-                "TSTART=%s" % self._t_start,
-                "Exposure=%s" % self._exposure,
+                "Prefix={0}".format(prefix2),
+                "Attitude={0}".format(self._p_2_att_file),
+                "RA={0}".format(self._ra_cen),
+                "Dec={0}".format(self._dec_cen),
+                "GTIFile={0}/erass.gti".format(self._data_dir),
+                "TSTART={0}".format(self._t_start),
+                "Exposure={0}".format(self._exposure),
                 "MJDREF=51543.875",
                 "dt=0.5",
-                "Seed=%s" % self._seed,
+                "Seed={0}".format(self._seed),
                 "clobber=yes",
                 "chatter=3"
             ]
@@ -358,7 +358,7 @@ class Simulator:
 
             command1 = " ".join(cmd1)
             print('\nTile {0} - SECOND SIXTE RUN (SIMPUT 7+) - Running SIXTE with command:\n{1}'.format(self._str_field, command1))
-            os.system(command1)
+            sp.run(cmd1)
 
     #This is what is called
     def run_all(self):
@@ -385,12 +385,12 @@ class Simulator:
             path_to_gti = os.path.join(self._data_dir, "erass.gti")
             gti_files = glob.glob(self._data_dir + "/*.gti")
             if len(gti_files)>0:
-                command_list = "ls " + self._data_dir + "/*.gti > " + path_to_gti_list
+                command_list = ["ls", self._data_dir, "/*.gti > ", path_to_gti_list]
                 print('\nTile {0} - Listing GTI files:\n{1}'.format(self._str_field, command_list))
-                os.system(command_list)
-                command_merge = "mgtime ingtis=@" + path_to_gti_list + " outgti=" + path_to_gti + " merge=OR"
+                sp.run(command_list)
+                command_merge = ["mgtime ingtis=@", path_to_gti_list, "outgti=", path_to_gti, "merge=OR"]
                 print('\nTile {0} - Merging GTI files with command:\n{1}'.format(self._str_field, command_merge))
-                os.system(command_merge)
+                sp.run(command_merge)
 
         if self._N_simputs==0:
             print('\nTile {0} - No simput'.format(self._str_field))
