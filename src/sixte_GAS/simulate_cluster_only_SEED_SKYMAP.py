@@ -6,6 +6,7 @@ To use sixte version 3.0, this needs a significant upgrade
 
 """
 import subprocess as sp
+import pty
 from multiprocessing import Pool
 from functools import partial
 import os
@@ -239,7 +240,8 @@ class Simulator:
         command = " ".join(cmd)
         print('\nTile {0} - Compute GTI with command:\n{1}'.format(self._str_field, command))
 #        os.system(command) #Offending line in NEW SciServer?
-        proprocess(command)
+#        proprocess(command)
+        pty.spawn(["/bin/bash", "-c", f"script -q -c '{command}'"])
         hd=fits.open(gti_file)
         number_of_lines = hd[1].header['NAXIS2']
         print('\nTile {0} - GTI file has {1} lines'.format(self._str_field, number_of_lines))
@@ -247,7 +249,8 @@ class Simulator:
             cmd_del = ['rm', gti_file]
             command_del = " ".join(cmd_del)
             print('\nTile {0} - Removing GTI file with command:\n{1}'.format(self._str_field, command_del))
-            proprocess(command_del)
+#            proprocess(command_del)
+            pty.spawn(["/bin/bash", "-c", f"script -q -c '{command_del}'"])
             
     def run_sixte(self):
         """
@@ -279,7 +282,8 @@ class Simulator:
 
             command = " ".join(cmd)
             print('\nTile {0} - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            proprocess(command)
+#            proprocess(command)
+            pty.spawn(["/bin/bash", "-c", f"script -q -c '{command}'"])
             return  # we're done
 
         elif (self._N_simputs >= 2) and (self._N_simputs <= 6):
@@ -308,7 +312,8 @@ class Simulator:
                 cmd.append("Background=no")
             command = " ".join(cmd)
             print('\nTile {0} - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            proprocess(command)
+#            proprocess(command)
+            pty.spawn(["/bin/bash", "-c", f"script -q -c '{command}'"])
 
         # ---------- >6 SIMPUTS: two runs ----------
         elif self._N_simputs > 6:
@@ -341,7 +346,8 @@ class Simulator:
 
             command = " ".join(cmd)
             print('\nTile {0} - FIRST SIXTE RUN (SIMPUT 1–6) - Running SIXTE with command:\n{1}'.format(self._str_field, command))
-            proprocess(command)
+#            proprocess(command)
+            pty.spawn(["/bin/bash", "-c", f"script -q -c '{command}'"])
 
             # ---- Second run: remaining SIMPUTs (6,7,...) ----
             remaining = self._simput[6:]
@@ -376,7 +382,8 @@ class Simulator:
 
             command1 = " ".join(cmd1)
             print('\nTile {0} - SECOND SIXTE RUN (SIMPUT 7+) - Running SIXTE with command:\n{1}'.format(self._str_field, command1))
-            proprocess(command1)
+#            proprocess(command1)
+            pty.spawn(["/bin/bash", "-c", f"script -q -c '{command1}'"])
 
     #This is what is called
     def run_all(self):
@@ -405,10 +412,12 @@ class Simulator:
             if len(gti_files)>0:
                 command_list = "ls " + self._data_dir + "/*.gti > " + path_to_gti_list
                 print('\nTile {0} - Listing GTI files:\n{1}'.format(self._str_field, command_list))
-                proprocess(command_list)
+#                proprocess(command_list)
+                pty.spawn(["/bin/bash", "-c", f"script -q -c '{command_list}'"])
                 command_merge = "mgtime ingtis=@" + path_to_gti_list + " outgti=" + path_to_gti + " merge=OR"
                 print('\nTile {0} - Merging GTI files with command:\n{1}'.format(self._str_field, command_merge))
-                proprocess(command_merge)
+#                proprocess(command_merge)
+                pty.spawn(["/bin/bash", "-c", f"script -q -c '{command_merge}'"])
 
         if self._N_simputs==0:
             print('\nTile {0} - No simput'.format(self._str_field))
