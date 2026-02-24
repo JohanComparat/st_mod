@@ -480,7 +480,7 @@ if __name__ == '__main__':
 #            p.map(onepool_func, tiles_to_consider)
     if joblabel == 3:
         for ti in tiles_to_consider:
-            onepool_func[ti]
+            onepool_func(ti)
 
 
 
