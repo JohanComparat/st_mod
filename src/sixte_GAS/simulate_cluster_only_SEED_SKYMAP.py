@@ -406,7 +406,7 @@ class Simulator:
                 command_list = "ls " + self._data_dir + "/*.gti > " + path_to_gti_list
                 print('\nTile {0} - Listing GTI files:\n{1}'.format(self._str_field, command_list))
                 proprocess(command_list)
-                command_merge = "mgtime ingtis=@ " + path_to_gti_list + " outgti=" + path_to_gti + " merge=OR"
+                command_merge = "mgtime ingtis=@" + path_to_gti_list + " outgti=" + path_to_gti + " merge=OR"
                 print('\nTile {0} - Merging GTI files with command:\n{1}'.format(self._str_field, command_merge))
                 proprocess(command_merge)
 
@@ -470,18 +470,14 @@ if __name__ == '__main__':
     #Define function for multiprocessing
     onepool_func = partial(one_iter_func, other_elements = [basename, seed, LC_dir, erass_option, sixte_version, log_fn_for_check])
 
-#    #Map to cores    
-#    with Pool(ncores) as p:
-#        if joblabel == 1:
-#            p.map(onepool_func, tiles_to_consider[:int(round((len(tiles_to_consider)-1)/2))])
-#        elif joblabel == 2:
-#            p.map(onepool_func, tiles_to_consider[int(round((len(tiles_to_consider)-1)/2)):])
-#        elif joblabel == 3:
-#            p.map(onepool_func, tiles_to_consider)
-    if joblabel == 3:
-        for ti in tiles_to_consider:
-            onepool_func(ti)
-
+    #Map to cores    
+    with Pool(ncores) as p:
+        if joblabel == 1:
+            p.map(onepool_func, tiles_to_consider[:int(round((len(tiles_to_consider)-1)/2))])
+        elif joblabel == 2:
+            p.map(onepool_func, tiles_to_consider[int(round((len(tiles_to_consider)-1)/2)):])
+        elif joblabel == 3:
+            p.map(onepool_func, tiles_to_consider)
 
 
 
