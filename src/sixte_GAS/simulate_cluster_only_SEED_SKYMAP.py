@@ -470,15 +470,17 @@ if __name__ == '__main__':
     #Define function for multiprocessing
     onepool_func = partial(one_iter_func, other_elements = [basename, seed, LC_dir, erass_option, sixte_version, log_fn_for_check])
 
-    #Map to cores    
-    with Pool(ncores) as p:
-        if joblabel == 1:
-            p.map(onepool_func, tiles_to_consider[:int(round((len(tiles_to_consider)-1)/2))])
-        elif joblabel == 2:
-            p.map(onepool_func, tiles_to_consider[int(round((len(tiles_to_consider)-1)/2)):])
-        elif joblabel == 3:
-            p.map(onepool_func, tiles_to_consider)
-
+#    #Map to cores    
+#    with Pool(ncores) as p:
+#        if joblabel == 1:
+#            p.map(onepool_func, tiles_to_consider[:int(round((len(tiles_to_consider)-1)/2))])
+#        elif joblabel == 2:
+#            p.map(onepool_func, tiles_to_consider[int(round((len(tiles_to_consider)-1)/2)):])
+#        elif joblabel == 3:
+#            p.map(onepool_func, tiles_to_consider)
+    if joblabel == 3:
+        for ti in tiles_to_consider:
+            onepool_func[ti]
 
 
 
