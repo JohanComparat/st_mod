@@ -6,6 +6,7 @@ t0 = time.time()
 from astropy.table import Table, vstack
 import numpy as np
 import matplotlib
+import sys
 
 basedir = '/home/idies/workspace/erosim/Uchuu/LCerass'
 base_st_mod_data = '/home/idies/workspace/erosim/software/st_mod_data'
