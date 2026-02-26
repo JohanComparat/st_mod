@@ -500,7 +500,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     print('\nTile {1} - BKGs fraction: {0}'.format(np.round(len(data_B) / N_sim, 4), str_field))
     print('\nTile {1} - CLUs fraction: {0}'.format(np.round(len(data_C) / N_sim, 4), str_field))
     t1 = time.time()
-    good.append(1)
+    good.append(str_field)
     print('\nTile {0} - It took {1} sec in total.'.format(str_field, t1-t0))
 
 
