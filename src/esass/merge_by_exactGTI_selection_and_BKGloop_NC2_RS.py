@@ -446,7 +446,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     # ##
     # ##
     # ##
-    print(len(data_A), len(data_C), len(data_B), len(data_A) + len(data_C) + len(data_B), N_ev_OBS)
+    print('\nTile {0} - Number of:\n AGNs {1}\n Clusters {2}\n Background {3}\n Total simulated data {4}\n Number of observed events {5}'.format(str_field, len(data_A), len(data_C), len(data_B), len(data_A) + len(data_C) + len(data_B), N_ev_OBS))
     if len(data_A) + len(data_C) + len(data_B) == N_ev_OBS:
         print('\nTile {0} - Exactly the number of events needed, perfect match!'.format(str_field))
         fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
