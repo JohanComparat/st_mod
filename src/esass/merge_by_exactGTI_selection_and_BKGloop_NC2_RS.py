@@ -542,5 +542,4 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     good.append(str_field)
     print('\nTile {0} - It took {1} sec in total.'.format(str_field, t1-t0))
 
-
 print('{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(good), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(fails), len(good)+len(fails)))
