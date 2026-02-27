@@ -68,6 +68,7 @@ for GE_name in GE_names:
             out_im1 = os.path.join('/home/idies/workspace/erosim', 'runs', GE_name + '_processing_'+str(kk).zfill(4)+'.sh')
             f_out = open(out_im1, 'w')
             f_out.write("""#!/bin/bash/ \n""")
+            f_out.write("""set -x \n""")
             f_out.write("source activate heasoft \n")
             f_out.write("[ -r /home/idies/.healpix/3_50_Linux/config ] && . /home/idies/.healpix/3_50_Linux/config \n")
             f_out.write("source /opt/esass/bin/esass-init.sh \n")

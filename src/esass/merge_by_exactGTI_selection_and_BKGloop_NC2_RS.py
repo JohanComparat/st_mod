@@ -2,24 +2,23 @@ import os, glob
 from astropy.wcs import WCS
 import astropy.io.fits as fits
 import time
-t0 = time.time()
 from astropy.table import Table, vstack
 import numpy as np
-import matplotlib
+import sys
 
+#Set paths and environmental variables
 basedir = '/home/idies/workspace/erosim/Uchuu/LCerass'
 base_st_mod_data = '/home/idies/workspace/erosim/software/st_mod_data'
 os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
-# os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
+os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
 os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
+LC_dir = 'LCerass'
+top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 
-#will be used to get local Bg and ExpMap to rescale pdet
+#Will be used to get local Bg and ExpMap to rescale pdet
 p2erass1clu = '/home/idies/workspace/erosim/eRASS1_mock_input_CLUSTERS_extlike3.fits'
 erass1_clu = Table.read(p2erass1clu, memmap=True)
 
-matplotlib.use('Agg')
-matplotlib.rcParams.update({'font.size': 14})
-# import matplotlib.pyplot as plt
 agn_seed = sys.argv[1] # Seed for the AGN realization e.g. 1
 clu_seed = sys.argv[2] # Seed for the CLU realization e.g. 1
 exp_name = sys.argv[3] # Type of the experiment, whether e4 or e5
@@ -33,15 +32,10 @@ nl = lambda sel: len(sel.nonzero()[0])
 
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
 
-LC_dir = 'LCerass'
-top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
-
-
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[
         (sky_map_hdu['RA_MIN'] < ra) & (sky_map_hdu['RA_MAX'] >= ra) & (sky_map_hdu['DE_MIN'] < dec) & (
                     sky_map_hdu['DE_MAX'] >= dec)]
-
 
 def remove_events(evlist, blacklist):
     '''Events from evlist will be removed following the energy statistics
@@ -60,7 +54,6 @@ def remove_events(evlist, blacklist):
     id_shuffle = np.arange(len(evlist))
     np.random.shuffle(id_shuffle)
     return evlist[id_shuffle]
-
 
 def remove_events_binned(evlist, blacklist, nbins=400, emin=None, emax=None, rng=None):
     """
@@ -127,11 +120,18 @@ def ctr_BKG_percent_detection(bg_cts_per_pix, b, a):
     '''
     return 10 ** a * bg_cts_per_pix ** b
 
+print('{0} tiles to process'.format(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
+
 fails = []
+good = []
 for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]:#[:1]:
+
+    #Set reference time
+    t0 = time.time()
+
     sky_tile_id = str(sky_tile['SRVMAP'])
     str_field = str(sky_tile['SRVMAP']).zfill(6)
-    print('\nNow processing tile: {0}'.format(str_field))
+    print('\nTile {0} - Started processing'.format(str_field))
     evt_list = np.array(glob.glob(
         os.path.join(os.environ['UCHUU'], LC_dir, str_field, '{0}_c030'.format(real_data_name),
                      '*_Image_c030.fits.gz')))
@@ -143,7 +143,6 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
 
     real_BgMap = fits.open(p2_real_BgMap)[0].data
     real_ExpMap = fits.open(p2_real_ExpMap)[0].data
-
 
     esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field,
                              mergeType + '_{0}_merge_AGNseed'.format(exp_name) + agn_seed.zfill(
@@ -158,14 +157,14 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_' + str_field + '.fits')
     if len(evt_list) == 0 or os.path.isfile(path_2_event_file):
         print(
-            'Tile not processed. Reason:\n no real data event file: {0}\n merged simulated event file exists: {1}'.format(
-                len(evt_list) == 0, os.path.isfile(path_2_event_file)))
+            'Tile {0} -  Not processed. Reason:\n no real data event file: {1}\n merged simulated event file exists: {2}'.format(
+                str_field, len(evt_list) == 0, os.path.isfile(path_2_event_file)))
         fails.append(1)
         continue
     bg_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'pBG2')  # 'evt_particle_???.fits' )
     BG_evt_files = np.array(glob.glob(os.path.join(bg_dir, '*.fits')))
     if len(BG_evt_files) == 0:
-        print('Tile not processed. Reason:\n no background file: {0}'.format(len(BG_evt_files) == 0))
+        print('\nTile {0} - Not processed. Reason:\n no background file: {1}'.format(str_field, len(BG_evt_files) == 0))
         fails.append(2)
         continue
     hdul_raw = fits.open(evt_list[0])
@@ -178,7 +177,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
                             , np.sum(hdul_raw['GTI6'].data['STOP'] - hdul_raw['GTI6'].data['START'])
                             , np.sum(hdul_raw['GTI7'].data['STOP'] - hdul_raw['GTI7'].data['START'])])
     except KeyError:
-        print('This tile has a problem: KeyError')
+        print('\nTile {0} - Has a problem: KeyError'.format(str_field))
+        fails.append(3)
         continue
     # for eee in hdul_raw[1:]:
     # 	print(eee.header['EXTNAME'])
@@ -244,9 +244,6 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     data_C['is_in_unique_area'] = (data_C['RA'] >= sky_tile['RA_MIN']) & (data_C['RA'] <= sky_tile['RA_MAX']) & (
                 data_C['DEC'] >= sky_tile['DE_MIN']) & (data_C['DEC'] <= sky_tile['DE_MAX'])
     # now in data_A, data_C I have agn and clu events reteained after the gti filtering as in the real data plus a flag about the unique tile area
-
-
-
     # need to determine how many of these events are sources and how many are background
 
     # Oversample the BKG [from eRASS1], CLU, AGN event lists
@@ -305,8 +302,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
                 data_C_oversampled['RA'] <= sky_tile['RA_MAX']) & (data_C_oversampled['DEC'] >= sky_tile['DE_MIN']) & (
                                                           data_C_oversampled['DEC'] <= sky_tile['DE_MAX'])
 
-    print(len(data_A), len(data_C), len(data_B_oversampled), len(data_A) + len(data_C) + len(data_B_oversampled),
-          N_ev_OBS)
+    print('\nTile {0} - Number of:\n AGNs {1}\n Clusters {2}\n Oversampled background {3}\n Total simulated data {4}\n Number of observed events {5}'.format(str_field, len(data_A), len(data_C), len(data_B_oversampled), len(data_A) + len(data_C) + len(data_B_oversampled), N_ev_OBS))
 
     # verify the background levels between the simulated and real data
     # exposure and background maps (from the real data)
@@ -324,19 +320,19 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     # select events that will belong top detected sources
     # deduce events that will belong to the background
     texp_factor_to_e1 = float(local_EXP/local_EXP_erass1)
-    print('texp_factor_to_e1:', texp_factor_to_e1)
+    print('\nTile {0} - texp_factor_to_e1: {1}'.format(str_field, texp_factor_to_e1))
 
     A_DetLimit_eRASS1 = ctr_BKG_percent_detection(local_BKG / texp_factor_to_e1, -0.76810338809034,-3.62348244025905) * local_EXP / texp_factor_to_e1
     C_DetLimit_eRASS1 = ctr_BKG_percent_detection(local_BKG / texp_factor_to_e1, -0.59810338809034,-2.39348244025905) * local_EXP / texp_factor_to_e1
-    print('A_DetLimit_eRASS1:', A_DetLimit_eRASS1)
-    print('C_DetLimit_eRASS1:', C_DetLimit_eRASS1)
+    print('\nTile {0} - A_DetLimit_eRASS1: {1}'.format(str_field, A_DetLimit_eRASS1))
+    print('\nTile {0} - C_DetLimit_eRASS1: {1}'.format(str_field, C_DetLimit_eRASS1))
 
     # To erass4 the SNR of count rate goes down by sqrt(4): you get higher counts by a factor of 2, but BG increased by 4, so effectively SNR went down.
     # A source at the limit producing 1 ct in erass1 will produce for counts in erass4, where the limit is now 2 counts, so you need more counts in erass4 than erass1 but the same source has higher significance in erass4 than erass1
     A_DetLimit_eRASSn = ctr_BKG_percent_detection(local_BKG / texp_factor_to_e1, -0.76810338809034,-3.62348244025905) / np.sqrt(texp_factor_to_e1) * local_EXP
     C_DetLimit_eRASSn = ctr_BKG_percent_detection(local_BKG / texp_factor_to_e1, -0.59810338809034,-2.39348244025905) / np.sqrt(texp_factor_to_e1) * local_EXP
-    print('A_DetLimit_eRASSn:', A_DetLimit_eRASSn)
-    print('C_DetLimit_eRASSn:', C_DetLimit_eRASSn)
+    print('\nTile {0} - A_DetLimit_eRASSn: {1}'.format(str_field, A_DetLimit_eRASSn))
+    print('\nTile {0} - C_DetLimit_eRASSn: {1}'.format(str_field, C_DetLimit_eRASSn))
 
     #A_DetLimit_eRASS1 = 4
     #C_DetLimit_eRASS1 = 8
@@ -404,10 +400,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     is_in_unique_area = (rade_mat.ra.deg > sky_tile['RA_MIN']) & (rade_mat.ra.deg <= sky_tile['RA_MAX']) & (
                 rade_mat.dec.deg > sky_tile['DE_MIN']) & (rade_mat.dec.deg <= sky_tile['DE_MAX'])
     bg_unique_area = bg3mapD[0].data[pix_mat_X[is_in_unique_area], pix_mat_Y[is_in_unique_area]]
-    print('BG in the unique area (min, max, median, mean, std)', bg_unique_area.min(), bg_unique_area.max(),
-          np.median(bg_unique_area), np.mean(bg_unique_area), np.std(bg_unique_area))
-    BG_CT_val_target = np.median(
-        bg_unique_area)  # This value is the eRASS:n background (including CLU and AGN below eRASS:n threshold)
+    print('\nTile {0} - BG in the unique area:\n min {1}\n max {2}\n median {3}\n mean {4}\n std {5}'.format(str_field, bg_unique_area.min(), bg_unique_area.max(), np.median(bg_unique_area), np.mean(bg_unique_area), np.std(bg_unique_area)))
+    BG_CT_val_target = np.median(bg_unique_area)  # This value is the eRASS:n background (including CLU and AGN below eRASS:n threshold)
 
     # locate background event on the BG map :
     x_pix_B, y_pix_B = wcs.wcs_world2pix(data_B_oversampled['RA'], data_B_oversampled['DEC'], 0)
@@ -429,17 +423,16 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     N_BGcandidate_in_C_eRange = np.count_nonzero(BGcandidate_in_C_eRange)
     N_BGcandidate_in_B_eRange = np.count_nonzero(BGcandidate_in_B_eRange)
     N_BG_prediction = N_BGcandidate_in_A_eRange + N_BGcandidate_in_B_eRange + N_BGcandidate_in_C_eRange
-    print(N_BGcandidate_in_A_eRange, N_BGcandidate_in_B_eRange, N_BGcandidate_in_C_eRange)
-    print(N_BG_prediction)
-    print('BG CT per pixel predicted by the model', N_BG_prediction / N_pixels)
-    print('Median observed BG CT per pixel in the data', BG_CT_val_target)
-    print('we predict', N_BG_prediction, 'we need', int(N_pixels * BG_CT_val_target))
+    print('\nTile {0} - N_BGcandidate_in_A_eRange {1}, N_BGcandidate_in_B_eRange {2}, N_BGcandidate_in_C_eRange {3}'.format( str_field, N_BGcandidate_in_A_eRange, N_BGcandidate_in_B_eRange, N_BGcandidate_in_C_eRange))
+    print('\nTile {0} - N_BG_prediction {1}'.format(str_field, N_BG_prediction))
+    print('\nTile {0} - BG CT per pixel predicted by the model {1}'.format(str_field, N_BG_prediction / N_pixels))
+    print('\nTile {0} - Median observed BG CT per pixel in the data {1}'.format(str_field, BG_CT_val_target))
+    print('\nTile {0} - We predict {1} We need {2}'.format(str_field, N_BG_prediction, int(N_pixels * BG_CT_val_target)))
 
     if N_BG_prediction < int(N_pixels * BG_CT_val_target):
-        print('need to add more BG events')
-        print('this should never be the case !')
+        print('\nTile {0} - Need to add more BG events. This should never be the case !'.format(str_field))
     else:
-        print('need to remove some BG events from the oversampled background list')
+        print('\nTile {0} - Need to remove some BG events from the oversampled background list'.format(str_field))
         # Calculate the number of extra BG events in (emin, emax)
         Nextra_eRange = int(N_pixels * BG_CT_val_target) - N_BG_prediction
         # Assume all these extra events come from the BG file.
@@ -453,22 +446,21 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     # ##
     # ##
     # ##
-    print(len(data_A), len(data_C), len(data_B), len(data_A) + len(data_C) + len(data_B), N_ev_OBS)
+    print('\nTile {0} - Number of:\n AGNs {1}\n Clusters {2}\n Background {3}\n Total simulated data {4}\n Number of observed events {5}'.format(str_field, len(data_A), len(data_C), len(data_B), len(data_A) + len(data_C) + len(data_B), N_ev_OBS))
     if len(data_A) + len(data_C) + len(data_B) == N_ev_OBS:
-        print('exactly the number of events needed, perfect match!')
+        print('\nTile {0} - Exactly the number of events needed, perfect match!'.format(str_field))
         fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
         for fn in fi_up:
             hdul['EVENTS'].data[fn][ids_to_replace] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
         fn = 'SIGNAL'
         hdul['EVENTS'].data['PI'][ids_to_replace] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
         hdul.writeto(path_2_event_file, overwrite=True)
-        print('File written to:\n {0}'.format(path_2_event_file))
+        print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
 
     elif len(data_A) + len(data_C) + len(data_B) < N_ev_OBS:
-        print('less simulated events than observed events, need to move some true events out of the unique area')
         N_available = len(data_A) + len(data_C) + len(data_B)
         N_too_many = N_ev_OBS - N_available
-        print(N_too_many)
+        print('\nTile {0} - Less simulated events than observed events (difference is {1}), need to move some true events out of the unique area.'.format(str_field, N_too_many))
         ids_to_replace = np.arange(len(to_replace))[to_replace]
         np.random.shuffle(ids_to_replace)
 
@@ -481,7 +473,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
             (data_C[fn], data_A[fn], data_B[fn]))
         hdul['EVENTS'].data['PI'][ids_to_replace[N_available:]] = hdul['EVENTS'].data['PI'].min() * np.ones(N_too_many)
         hdul.writeto(path_2_event_file, overwrite=True)
-        print('File written to:\n {0}'.format(path_2_event_file))
+        print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
 
     else:
         print('More simulated events than observed events, need to take some true events outside of the unique area')
@@ -489,6 +481,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         print('Nsim:', len(data_A) + len(data_C) + len(data_B))
         print('Nobs:', N_ev_OBS)
         print('Nadditional:',N_additional)
+        print('\nTile {0} - More simulated events than observed events (difference is {1}), need to take some true events outside of the unique area.'.format(str_field, N_additional))
         extra_ids = np.arange(len(to_replace))[np.isin(np.arange(len(to_replace)), ids_to_replace, invert=True)]
         np.random.shuffle(extra_ids)
         ids_to_replace2 = np.hstack((np.arange(len(to_replace))[to_replace], extra_ids[:N_additional]))
@@ -538,17 +531,21 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
             hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
 
         hdul.writeto(path_2_event_file, overwrite=True)
-        print('File written to:\n {0}'.format(path_2_event_file))
+        print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
 
     data_A.write(path_2_simeventAGN_file, overwrite=True)
     data_C.write(path_2_simeventCLU_file, overwrite=True)
     data_B.write(path_2_simeventBKG_file, overwrite=True)
-    print('\n {1} AGNs written to {0}'.format(path_2_simeventAGN_file, len(data_A)))
-    print('\n {1} CLUs written to {0}'.format(path_2_simeventCLU_file, len(data_C)))
-    print('\n {1} BKGs written to {0}'.format(path_2_simeventBKG_file, len(data_B)))
+    print('\nTile {2} - {1} AGNs written to {0}'.format(path_2_simeventAGN_file, len(data_A), str_field))
+    print('\nTile {2} - {1} CLUs written to {0}'.format(path_2_simeventCLU_file, len(data_C), str_field))
+    print('\nTile {2} - {1} BKGs written to {0}'.format(path_2_simeventBKG_file, len(data_B), str_field))
     N_sim = len(data_A) + len(data_C) + len(data_B)
-    print('\n AGNs fraction: {0}'.format(np.round(len(data_A) / N_sim, 4)))
-    print('\n BKGs fraction: {0}'.format(np.round(len(data_B) / N_sim, 4)))
-    print('\n CLUs fraction: {0}'.format(np.round(len(data_C) / N_sim, 4)))
+    print('\nTile {1} - AGNs fraction: {0}'.format(np.round(len(data_A) / N_sim, 4), str_field))
+    print('\nTile {1} - BKGs fraction: {0}'.format(np.round(len(data_B) / N_sim, 4), str_field))
+    print('\nTile {1} - CLUs fraction: {0}'.format(np.round(len(data_C) / N_sim, 4), str_field))
     t1 = time.time()
-    print('It took', t1-t0, 'sec in total.')
+    good.append(str_field)
+    print('\nTile {0} - It took {1} sec in total.'.format(str_field, t1-t0))
+
+
+print('{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(good), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(fails), len(good)+len(fails)))
