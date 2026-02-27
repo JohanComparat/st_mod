@@ -476,12 +476,9 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
 
     else:
-        print('More simulated events than observed events, need to take some true events outside of the unique area')
         N_additional = len(data_A) + len(data_C) + len(data_B) - N_ev_OBS
-        print('Nsim:', len(data_A) + len(data_C) + len(data_B))
-        print('Nobs:', N_ev_OBS)
-        print('Nadditional:',N_additional)
         print('\nTile {0} - More simulated events than observed events (difference is {1}), need to take some true events outside of the unique area.'.format(str_field, N_additional))
+        print('\nTile {0} - Nsim {1} Nobs {2} Nadditional {3}'.format(str_field, len(data_A) + len(data_C) + len(data_B), N_ev_OBS, N_additional))
         extra_ids = np.arange(len(to_replace))[np.isin(np.arange(len(to_replace)), ids_to_replace, invert=True)]
         np.random.shuffle(extra_ids)
         ids_to_replace2 = np.hstack((np.arange(len(to_replace))[to_replace], extra_ids[:N_additional]))
@@ -495,12 +492,10 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
             hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
 
         else:
-            print('Not enough events outside the unique area. Need to create a new bin table to accomodate all simulated events...')
+            print('\nTile {0} - Not enough events outside the unique area. Need to create a new bin table to accomodate all simulated events.'.format(str_field))
             N_sim = len(data_A) + len(data_C) + len(data_B)
             DIFF = N_sim - ids_to_replace2.size
-            print(
-                f"Not enough rows to overwrite: need {N_sim}, have {ids_to_replace2.size}. Growing EVENTS by {DIFF} rows.")
-
+            print('\nTile {0} - Not enough rows to overwrite: need {1}, have {2}. Growing EVENTS by {3} rows.'.format(str_field, N_sim,ids_to_replace2.size, DIFF))
             #grow EVENTS table by DIFF rows by copying last rows as template
             old = hdul['EVENTS'].data
             n_old = len(old)
