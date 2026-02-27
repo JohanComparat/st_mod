@@ -484,7 +484,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         extra_ids = np.arange(len(to_replace))[np.isin(np.arange(len(to_replace)), ids_to_replace, invert=True)]
         np.random.shuffle(extra_ids)
         ids_to_replace2 = np.hstack((np.arange(len(to_replace))[to_replace], extra_ids[:N_additional]))
-        enough_events = len(ids_to_replace2)-(len(data_A) + len(data_C) + len(data_B))>0
+        enough_events = ids_to_replace2.size-(len(data_A) + len(data_C) + len(data_B))>=0
 
         fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
         if enough_events:
