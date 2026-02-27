@@ -456,6 +456,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         hdul['EVENTS'].data['PI'][ids_to_replace] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
+        good.append(1)
 
     elif len(data_A) + len(data_C) + len(data_B) < N_ev_OBS:
         N_available = len(data_A) + len(data_C) + len(data_B)
@@ -474,6 +475,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         hdul['EVENTS'].data['PI'][ids_to_replace[N_available:]] = hdul['EVENTS'].data['PI'].min() * np.ones(N_too_many)
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
+        good.append(2)
 
     else:
         N_additional = len(data_A) + len(data_C) + len(data_B) - N_ev_OBS
@@ -490,6 +492,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
                 hdul['EVENTS'].data[fn][ids_to_replace2] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
             fn = 'SIGNAL'
             hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            good.append(3)
 
         else:
             print('\nTile {0} - Not enough events outside the unique area. Need to create a new bin table to accomodate all simulated events.'.format(str_field))
@@ -524,6 +527,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
                 hdul['EVENTS'].data[fn][ids_to_replace2[:N_sim]] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
             fn = 'SIGNAL'
             hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            good.append(4)
 
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
@@ -539,7 +543,6 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     print('\nTile {1} - BKGs fraction: {0}'.format(np.round(len(data_B) / N_sim, 4), str_field))
     print('\nTile {1} - CLUs fraction: {0}'.format(np.round(len(data_C) / N_sim, 4), str_field))
     t1 = time.time()
-    good.append(str_field)
     print('\nTile {0} - It took {1} sec in total.'.format(str_field, t1-t0))
 
 print('{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(good), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(fails), len(good)+len(fails)))
