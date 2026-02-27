@@ -486,15 +486,57 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     else:
         print('More simulated events than observed events, need to take some true events outside of the unique area')
         N_additional = len(data_A) + len(data_C) + len(data_B) - N_ev_OBS
-        print(N_additional)
+        print('Nsim:', len(data_A) + len(data_C) + len(data_B))
+        print('Nobs:', N_ev_OBS)
+        print('Nadditional:',N_additional)
         extra_ids = np.arange(len(to_replace))[np.isin(np.arange(len(to_replace)), ids_to_replace, invert=True)]
         np.random.shuffle(extra_ids)
         ids_to_replace2 = np.hstack((np.arange(len(to_replace))[to_replace], extra_ids[:N_additional]))
+        enough_events = len(ids_to_replace2)-(len(data_A) + len(data_C) + len(data_B))>0
+
         fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
-        for fn in fi_up:
-            hdul['EVENTS'].data[fn][ids_to_replace2] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-        fn = 'SIGNAL'
-        hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+        if enough_events:
+            for fn in fi_up:
+                hdul['EVENTS'].data[fn][ids_to_replace2] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            fn = 'SIGNAL'
+            hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+
+        else:
+            print('Not enough events outside the unique area. Need to create a new bin table to accomodate all simulated events...')
+            N_sim = len(data_A) + len(data_C) + len(data_B)
+            DIFF = N_sim - ids_to_replace2.size
+            print(
+                f"Not enough rows to overwrite: need {N_sim}, have {ids_to_replace2.size}. Growing EVENTS by {DIFF} rows.")
+
+            #grow EVENTS table by DIFF rows by copying last rows as template
+            old = hdul['EVENTS'].data
+            n_old = len(old)
+            n_new = n_old + DIFF
+
+            new = np.empty(n_new, dtype=old.dtype)
+            new[:n_old] = old
+
+            # pad using copies of last rows (repeat if DIFF > n_old)
+            take = min(DIFF, n_old)
+            reps = (DIFF + take - 1) // take
+            pad = np.tile(old[-take:], reps)[:DIFF]
+            new[n_old:] = pad
+
+            # replace EVENTS HDU
+            ev_hdu = fits.BinTableHDU(data=new, header=hdul['EVENTS'].header, name='EVENTS')
+            hdul[hdul.index_of('EVENTS')] = ev_hdu
+
+            # Now we can overwrite: use all previous ids plus the appended rows
+            appended_ids = np.arange(n_old, n_new, dtype=int)
+            ids_to_replace2 = np.hstack((ids_to_replace2, appended_ids))
+
+            assert ids_to_replace2.size >= N_sim
+
+            for fn in fi_up:
+                hdul['EVENTS'].data[fn][ids_to_replace2[:N_sim]] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            fn = 'SIGNAL'
+            hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+
         hdul.writeto(path_2_event_file, overwrite=True)
         print('File written to:\n {0}'.format(path_2_event_file))
 
