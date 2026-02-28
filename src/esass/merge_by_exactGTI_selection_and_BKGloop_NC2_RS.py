@@ -5,6 +5,8 @@ import time
 from astropy.table import Table, vstack
 import numpy as np
 import sys
+from multiprocessing import Pool
+from functools import partial
 
 #Set paths and environmental variables
 basedir = '/home/idies/workspace/erosim/Uchuu/LCerass'
@@ -120,11 +122,11 @@ def ctr_BKG_percent_detection(bg_cts_per_pix, b, a):
     '''
     return 10 ** a * bg_cts_per_pix ** b
 
-print('{0} tiles to process'.format(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
+def one_iter_func(sky_tile_el, other_elements):
 
-fails = []
-good = []
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]:#[:1]:
+    #Separate elements
+    sky_tile_idx, sky_tile = sky_tile_el
+    LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu, the_good_the_bad = other_elements
 
     #Set reference time
     t0 = time.time()
@@ -159,14 +161,15 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         print(
             'Tile {0} -  Not processed. Reason:\n no real data event file: {1}\n merged simulated event file exists: {2}'.format(
                 str_field, len(evt_list) == 0, os.path.isfile(path_2_event_file)))
-        fails.append(1)
-        continue
+        the_good_the_bad['fails'][sky_tile_idx] = 1
+        return the_good_the_bad
+
     bg_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'pBG2')  # 'evt_particle_???.fits' )
     BG_evt_files = np.array(glob.glob(os.path.join(bg_dir, '*.fits')))
     if len(BG_evt_files) == 0:
         print('\nTile {0} - Not processed. Reason:\n no background file: {1}'.format(str_field, len(BG_evt_files) == 0))
-        fails.append(2)
-        continue
+        the_good_the_bad['fails'][sky_tile_idx] = 2
+        return the_good_the_bad
     hdul_raw = fits.open(evt_list[0])
     try:
         gtis = np.array([np.sum(hdul_raw['GTI1'].data['STOP'] - hdul_raw['GTI1'].data['START'])
@@ -178,8 +181,9 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
                             , np.sum(hdul_raw['GTI7'].data['STOP'] - hdul_raw['GTI7'].data['START'])])
     except KeyError:
         print('\nTile {0} - Has a problem: KeyError'.format(str_field))
-        fails.append(3)
-        continue
+        the_good_the_bad['fails'][sky_tile_idx] = 3
+        return the_good_the_bad
+
     # for eee in hdul_raw[1:]:
     # 	print(eee.header['EXTNAME'])
     hdul = fits.open(evt_list[0])
@@ -456,7 +460,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         hdul['EVENTS'].data['PI'][ids_to_replace] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
-        good.append(1)
+        the_good_the_bad['good'][sky_tile_idx] = 1
 
     elif len(data_A) + len(data_C) + len(data_B) < N_ev_OBS:
         N_available = len(data_A) + len(data_C) + len(data_B)
@@ -475,7 +479,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
         hdul['EVENTS'].data['PI'][ids_to_replace[N_available:]] = hdul['EVENTS'].data['PI'].min() * np.ones(N_too_many)
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
-        good.append(2)
+        the_good_the_bad['good'][sky_tile_idx] = 2
 
     else:
         N_additional = len(data_A) + len(data_C) + len(data_B) - N_ev_OBS
@@ -492,7 +496,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
                 hdul['EVENTS'].data[fn][ids_to_replace2] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
             fn = 'SIGNAL'
             hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-            good.append(3)
+            the_good_the_bad['good'][sky_tile_idx] = 3
 
         else:
             print('\nTile {0} - Not enough events outside the unique area. Need to create a new bin table to accomodate all simulated events.'.format(str_field))
@@ -527,7 +531,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
                 hdul['EVENTS'].data[fn][ids_to_replace2[:N_sim]] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
             fn = 'SIGNAL'
             hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-            good.append(4)
+            the_good_the_bad['good'][sky_tile_idx] = 4
 
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
@@ -545,4 +549,26 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] 
     t1 = time.time()
     print('\nTile {0} - It took {1} sec in total.'.format(str_field, t1-t0))
 
-print('{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(good), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(fails), len(good)+len(fails)))
+    return the_good_the_bad
+
+# =============================================================================
+
+print('{0} tiles to process'.format(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
+
+#Create table to save flags
+fails = np.full(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), -99)
+good = np.full(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), -99)
+tileidi = np.array([str(sky_tile['SRVMAP']).zfill(6) for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]])
+the_good_the_bad = Table([tileidi, good, fails], names = ['tile_ID','good','fails'])
+
+#Define function for multiprocessing
+onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu, the_good_the_bad])
+
+#Map to cores    
+with Pool(10) as p:
+    the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
+
+print('{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]])+len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]])))
+
+#Write table to file
+the_good_the_bad_out.write(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv', overwrite = True)
