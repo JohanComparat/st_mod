@@ -435,6 +435,8 @@ def one_iter_func(sky_tile_el, other_elements):
 
     if N_BG_prediction < int(N_pixels * BG_CT_val_target):
         print('\nTile {0} - Need to add more BG events. This should never be the case !'.format(str_field))
+        the_good_the_bad['fails'][sky_tile_idx] = 4
+        return the_good_the_bad
     else:
         print('\nTile {0} - Need to remove some BG events from the oversampled background list'.format(str_field))
         # Calculate the number of extra BG events in (emin, emax)
@@ -568,7 +570,9 @@ onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, 
 with Pool(10) as p:
     the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
-print('{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]])+len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]])))
+print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]])+len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]])))
+
+print('\n Tiles failures were caused by:\n No real data event file or merged simulated event files exists already: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0])))
 
 #Write table to file
 the_good_the_bad_out.write(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv', overwrite = True)
