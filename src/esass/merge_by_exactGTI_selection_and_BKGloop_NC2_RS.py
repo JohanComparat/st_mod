@@ -577,7 +577,7 @@ the_good_the_bad = Table([tileidi, good, fails], names = ['tile_ID','good','fail
 onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu, the_good_the_bad])
 
 #Map to cores    
-with Pool(10) as p:
+with Pool(1) as p:
     the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
 print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]])+len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]])))
