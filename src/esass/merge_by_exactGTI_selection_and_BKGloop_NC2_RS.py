@@ -317,7 +317,17 @@ def one_iter_func(sky_tile_el, other_elements):
     local_BKG = np.median(bg3mapD[0].data)
     local_EXP = np.median(expmap[0].data)
 
-    sel_local = erass1_clu['tile'] == str_field
+    #Tile 197093 failing, using the tile close to it.
+    if str_field=='197093':
+        str_field_e1 = '194093'
+    else:
+        str_field_e1 = str_field
+
+    sel_local = erass1_clu['tile'] == str_field_e1
+
+    #Previously
+#    sel_local = erass1_clu['tile'] == str_field
+
     local_BKG_erass1 = np.median(erass1_clu['BG3Model'][sel_local])
     local_EXP_erass1 = np.median(erass1_clu['TexpModel'][sel_local])
 
