@@ -383,7 +383,7 @@ def one_iter_func(sky_tile_el, other_elements):
     try:
         data_B_oversampled = remove_events_binned(data_B_oversampled, data_A_oversampled[data_A_oversampled['is_BG']])
     except ValueError:
-        print(str_field)
+        print('THIS IS A PROBLEMATIC TILE', str_field)
 
 
 
