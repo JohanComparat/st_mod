@@ -218,7 +218,12 @@ def one_iter_func(sky_tile_el, other_elements):
         agn_evt_files = np.array(glob.glob(os.path.join(agn_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits')))
         hdu_A = fits.open(agn_evt_files[0])
         texp_cum = np.cumsum(hdu_A['STDGTI'].data['STOP'] - hdu_A['STDGTI'].data['START'])
-        t_max = hdu_A['STDGTI'].data['STOP'][np.searchsorted(texp_cum, t_obs) + 1]
+        try:
+            t_max = hdu_A['STDGTI'].data['STOP'][np.searchsorted(texp_cum, t_obs) + 1]
+        except IndexError:
+            print('\nTile {0} - Has a problem: IndexError'.format(str_field))
+            the_good_the_bad['fails'][sky_tile_idx] = 5
+            return the_good_the_bad
         t_max_A.append(t_max)
         t_a = Table(hdu_A['EVENTS'].data)
         frac_A.append(nl(t_a['TIME'] < t_max) / len(t_a))
@@ -318,15 +323,22 @@ def one_iter_func(sky_tile_el, other_elements):
     local_EXP = np.median(expmap[0].data)
 
     #Tile 197093 failing, using the tile close to it.
-#    if str_field=='197093':
-#        str_field_e1 = '194093'
-#    else:
-#        str_field_e1 = str_field
-
-#    sel_local = erass1_clu['tile'] == str_field_e1
+    if str_field=='197093':
+        str_field_e1 = '194093'
+    elif str_field=='245105':
+        str_field_e1 = '242105'
+    elif str_field=='126135':
+        str_field_e1 = '122135'
+    elif str_field=='130135':
+        str_field_e1 = '134135'
+    elif str_field=='128138':
+        str_field_e1 = '124138'
+    else:
+        str_field_e1 = str_field
+    sel_local = erass1_clu['tile'] == str_field_e1
 
     #Previously
-    sel_local = erass1_clu['tile'] == str_field
+#    sel_local = erass1_clu['tile'] == str_field
 
     local_BKG_erass1 = np.median(erass1_clu['BG3Model'][sel_local])
     local_EXP_erass1 = np.median(erass1_clu['TexpModel'][sel_local])
@@ -368,220 +380,198 @@ def one_iter_func(sky_tile_el, other_elements):
     data_A_oversampled.write(os.path.join(esass_dir, 'all_AGN_evts_oversampled.fits'), overwrite=True)
     data_C_oversampled.write(os.path.join(esass_dir, 'all_GAS_evts_oversampled.fits'), overwrite=True)
 
-
-
-
-
-
-
-
-
-
-
-
     # Remove statistically the A and C is_BG from the oversampled data_B
-    try:
-        data_B_oversampled = remove_events_binned(data_B_oversampled, data_A_oversampled[data_A_oversampled['is_BG']])
-    except ValueError:
-        print('THIS IS A PROBLEMATIC TILE', str_field)
+    data_B_oversampled = remove_events_binned(data_B_oversampled, data_A_oversampled[data_A_oversampled['is_BG']])
+    data_B_oversampled = remove_events_binned(data_B_oversampled, data_C_oversampled[data_C_oversampled['is_BG']])
+    # Now we have removed from the oversampled background list contributions
+    # from AGN and CLU (statistically speaking) that were undetected by eRASS1   RS: I don't think this is needed, we can use directly the estimated erassn limit
+    # ==>  data_B_oversampled contains pure eRASS1 background rate, with exposure  #RS: so now this is oversampled BKG than contains expected erassN bkg rate with Texp=1.5*TexpN
+    # time that is 1.5 longer than the eRASS:n exposure time.
 
+    # We want to match the level of the eRASS:n background in the 0.2-2.3 keV
+    # with the BgMap3 map.
+    # It will take CLU and AGN up to the eRASS:n detection limit and complete
+    # with events from the clean oversampled background list
 
+    # verify the background levels between the simulated and real data
+    # select events that will belong top detected sources
+    # deduce events that will belong to the background
 
+    #A_DetLimit_eRASSn = 3
+    #C_DetLimit_eRASSn = 7
+    #now get AGN and CLU evts from the right exptime window and add flag to the ones expected to fall back as BKG
+    src_id_A, n_evt_A = np.unique(data_A['SRC_ID'].T[0], return_counts=True)
+    not_detected_src_id_A = src_id_A[n_evt_A < A_DetLimit_eRASSn]
+    selection_bg_A = np.isin(data_A['SRC_ID'].T[0], not_detected_src_id_A)
+    BG_A = data_A[selection_bg_A]
+    src_id_C, n_evt_C = np.unique(data_C['SRC_ID'].T[0], return_counts=True)
+    not_detected_src_id_C = src_id_C[n_evt_C < C_DetLimit_eRASSn]
+    selection_bg_C = np.isin(data_C['SRC_ID'].T[0], not_detected_src_id_C)
+    BG_C = data_C[selection_bg_C]
+    data_A['is_BG'] = selection_bg_A
+    data_C['is_BG'] = selection_bg_C
+    data_A['is_det'] = ~selection_bg_A
+    data_C['is_det'] = ~selection_bg_C
+    data_A.write(os.path.join(esass_dir, 'all_AGN_evts.fits'), overwrite=True)
+    data_C.write(os.path.join(esass_dir, 'all_GAS_evts.fits'), overwrite=True)
 
+    #then match to 0.2-2.3 bgmap
+    emin_bgmap = 0.2
+    emax_bgmap = 2.3
+    wcs = WCS(expmap[0].header)
+    shape_xy = bg3mapD[0].data.shape
+    pix_mat_X, pix_mat_Y = np.meshgrid(np.arange(shape_xy[0]), np.arange(shape_xy[1]))
+    pix_mat_X_ravel, pix_mat_Y_ravel = pix_mat_X.ravel(), pix_mat_Y.ravel()
+    rade_mat = wcs.pixel_to_world(pix_mat_X, pix_mat_Y)
+    is_in_unique_area = (rade_mat.ra.deg > sky_tile['RA_MIN']) & (rade_mat.ra.deg <= sky_tile['RA_MAX']) & (
+                rade_mat.dec.deg > sky_tile['DE_MIN']) & (rade_mat.dec.deg <= sky_tile['DE_MAX'])
+    bg_unique_area = bg3mapD[0].data[pix_mat_X[is_in_unique_area], pix_mat_Y[is_in_unique_area]]
+    print('\nTile {0} - BG in the unique area:\n min {1}\n max {2}\n median {3}\n mean {4}\n std {5}'.format(str_field, bg_unique_area.min(), bg_unique_area.max(), np.median(bg_unique_area), np.mean(bg_unique_area), np.std(bg_unique_area)))
+    BG_CT_val_target = np.median(bg_unique_area)  # This value is the eRASS:n background (including CLU and AGN below eRASS:n threshold)
 
+    # locate background event on the BG map :
+    x_pix_B, y_pix_B = wcs.wcs_world2pix(data_B_oversampled['RA'], data_B_oversampled['DEC'], 0)
+    x_pix_B = np.round(x_pix_B).astype(int)
+    y_pix_B = np.round(y_pix_B).astype(int)
+    # all possible pixels in the unique area
+    all_x_pix = np.arange(x_pix_B.min(), x_pix_B.max(), 1)
+    all_y_pix = np.arange(y_pix_B.min(), y_pix_B.max(), 1)
+    # all_X,all_Y = np.meshgrid(all_x_pix, all_y_pix)
+    # all_pixels = np.transpose([all_X.ravel(), all_Y.ravel()])
+    # N_pixels = all_pixels.shape[0]
+    N_pixels = len(all_x_pix) * len(all_y_pix)
+    #take BG candidates from AGN and CLU in the 0.2-2.3 range
+    BGcandidate_in_A_eRange = data_A['is_BG'] & (data_A['SIGNAL'] > emin_bgmap) & (data_A['SIGNAL'] < emax_bgmap)
+    BGcandidate_in_C_eRange = data_C['is_BG'] & (data_C['SIGNAL'] > emin_bgmap) & (data_C['SIGNAL'] < emax_bgmap)
+    BGcandidate_in_B_eRange = (data_B_oversampled['SIGNAL'] > emin_bgmap) & (data_B_oversampled['SIGNAL'] < emax_bgmap)
 
+    N_BGcandidate_in_A_eRange = np.count_nonzero(BGcandidate_in_A_eRange)
+    N_BGcandidate_in_C_eRange = np.count_nonzero(BGcandidate_in_C_eRange)
+    N_BGcandidate_in_B_eRange = np.count_nonzero(BGcandidate_in_B_eRange)
+    N_BG_prediction = N_BGcandidate_in_A_eRange + N_BGcandidate_in_B_eRange + N_BGcandidate_in_C_eRange
+    print('\nTile {0} - N_BGcandidate_in_A_eRange {1}, N_BGcandidate_in_B_eRange {2}, N_BGcandidate_in_C_eRange {3}'.format( str_field, N_BGcandidate_in_A_eRange, N_BGcandidate_in_B_eRange, N_BGcandidate_in_C_eRange))
+    print('\nTile {0} - N_BG_prediction {1}'.format(str_field, N_BG_prediction))
+    print('\nTile {0} - BG CT per pixel predicted by the model {1}'.format(str_field, N_BG_prediction / N_pixels))
+    print('\nTile {0} - Median observed BG CT per pixel in the data {1}'.format(str_field, BG_CT_val_target))
+    print('\nTile {0} - We predict {1} We need {2}'.format(str_field, N_BG_prediction, int(N_pixels * BG_CT_val_target)))
 
+    if N_BG_prediction < int(N_pixels * BG_CT_val_target):
+        print('\nTile {0} - Need to add more BG events. This should never be the case !'.format(str_field))
+        the_good_the_bad['fails'][sky_tile_idx] = 4
+        return the_good_the_bad
+    else:
+        print('\nTile {0} - Need to remove some BG events from the oversampled background list'.format(str_field))
+        # Calculate the number of extra BG events in (emin, emax)
+        Nextra_eRange = int(N_pixels * BG_CT_val_target) - N_BG_prediction
+        # Assume all these extra events come from the BG file.
+        # Apply correction by assuming a constant removal factor throughout energy distribution
+        ratio_full_over_eRange = len(data_B_oversampled) / N_BGcandidate_in_B_eRange
+        Nextra_fullRange = int(Nextra_eRange * ratio_full_over_eRange)
+        # Remove Nextra_fullRange events from the oversampled clean BG list
+        data_B = data_B_oversampled[:-Nextra_fullRange]
 
-    # data_B_oversampled = remove_events_binned(data_B_oversampled, data_C_oversampled[data_C_oversampled['is_BG']])
-    # # Now we have removed from the oversampled background list contributions
-    # # from AGN and CLU (statistically speaking) that were undetected by eRASS1   RS: I don't think this is needed, we can use directly the estimated erassn limit
-    # # ==>  data_B_oversampled contains pure eRASS1 background rate, with exposure  #RS: so now this is oversampled BKG than contains expected erassN bkg rate with Texp=1.5*TexpN
-    # # time that is 1.5 longer than the eRASS:n exposure time.
+    # From here it continues as in original JC's code.......
+    # ##
+    # ##
+    # ##
+    print('\nTile {0} - Number of:\n AGNs {1}\n Clusters {2}\n Background {3}\n Total simulated data {4}\n Number of observed events {5}'.format(str_field, len(data_A), len(data_C), len(data_B), len(data_A) + len(data_C) + len(data_B), N_ev_OBS))
+    if len(data_A) + len(data_C) + len(data_B) == N_ev_OBS:
+        print('\nTile {0} - Exactly the number of events needed, perfect match!'.format(str_field))
+        fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
+        for fn in fi_up:
+            hdul['EVENTS'].data[fn][ids_to_replace] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+        fn = 'SIGNAL'
+        hdul['EVENTS'].data['PI'][ids_to_replace] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+        hdul.writeto(path_2_event_file, overwrite=True)
+        print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
+        the_good_the_bad['good'][sky_tile_idx] = 1
 
-    # # We want to match the level of the eRASS:n background in the 0.2-2.3 keV
-    # # with the BgMap3 map.
-    # # It will take CLU and AGN up to the eRASS:n detection limit and complete
-    # # with events from the clean oversampled background list
+    elif len(data_A) + len(data_C) + len(data_B) < N_ev_OBS:
+        N_available = len(data_A) + len(data_C) + len(data_B)
+        N_too_many = N_ev_OBS - N_available
+        print('\nTile {0} - Less simulated events than observed events (difference is {1}), need to move some true events out of the unique area.'.format(str_field, N_too_many))
+        ids_to_replace = np.arange(len(to_replace))[to_replace]
+        np.random.shuffle(ids_to_replace)
 
-    # # verify the background levels between the simulated and real data
-    # # select events that will belong top detected sources
-    # # deduce events that will belong to the background
+        fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
+        for fn in fi_up:
+            hdul['EVENTS'].data[fn][ids_to_replace[:N_available]] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            hdul['EVENTS'].data[fn][ids_to_replace[N_available:]] = hdul['EVENTS'].data[fn].min() * np.ones(N_too_many)
+        fn = 'SIGNAL'
+        hdul['EVENTS'].data['PI'][ids_to_replace[:N_available]] = 1000. * np.hstack(
+            (data_C[fn], data_A[fn], data_B[fn]))
+        hdul['EVENTS'].data['PI'][ids_to_replace[N_available:]] = hdul['EVENTS'].data['PI'].min() * np.ones(N_too_many)
+        hdul.writeto(path_2_event_file, overwrite=True)
+        print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
+        the_good_the_bad['good'][sky_tile_idx] = 2
 
-    # #A_DetLimit_eRASSn = 3
-    # #C_DetLimit_eRASSn = 7
-    # #now get AGN and CLU evts from the right exptime window and add flag to the ones expected to fall back as BKG
-    # src_id_A, n_evt_A = np.unique(data_A['SRC_ID'].T[0], return_counts=True)
-    # not_detected_src_id_A = src_id_A[n_evt_A < A_DetLimit_eRASSn]
-    # selection_bg_A = np.isin(data_A['SRC_ID'].T[0], not_detected_src_id_A)
-    # BG_A = data_A[selection_bg_A]
-    # src_id_C, n_evt_C = np.unique(data_C['SRC_ID'].T[0], return_counts=True)
-    # not_detected_src_id_C = src_id_C[n_evt_C < C_DetLimit_eRASSn]
-    # selection_bg_C = np.isin(data_C['SRC_ID'].T[0], not_detected_src_id_C)
-    # BG_C = data_C[selection_bg_C]
-    # data_A['is_BG'] = selection_bg_A
-    # data_C['is_BG'] = selection_bg_C
-    # data_A['is_det'] = ~selection_bg_A
-    # data_C['is_det'] = ~selection_bg_C
-    # data_A.write(os.path.join(esass_dir, 'all_AGN_evts.fits'), overwrite=True)
-    # data_C.write(os.path.join(esass_dir, 'all_GAS_evts.fits'), overwrite=True)
+    else:
+        N_additional = len(data_A) + len(data_C) + len(data_B) - N_ev_OBS
+        print('\nTile {0} - More simulated events than observed events (difference is {1}), need to take some true events outside of the unique area.'.format(str_field, N_additional))
+        print('\nTile {0} - Nsim {1} Nobs {2} Nadditional {3}'.format(str_field, len(data_A) + len(data_C) + len(data_B), N_ev_OBS, N_additional))
+        extra_ids = np.arange(len(to_replace))[np.isin(np.arange(len(to_replace)), ids_to_replace, invert=True)]
+        np.random.shuffle(extra_ids)
+        ids_to_replace2 = np.hstack((np.arange(len(to_replace))[to_replace], extra_ids[:N_additional]))
+        enough_events = ids_to_replace2.size-(len(data_A) + len(data_C) + len(data_B))>=0
 
-    # #then match to 0.2-2.3 bgmap
-    # emin_bgmap = 0.2
-    # emax_bgmap = 2.3
-    # wcs = WCS(expmap[0].header)
-    # shape_xy = bg3mapD[0].data.shape
-    # pix_mat_X, pix_mat_Y = np.meshgrid(np.arange(shape_xy[0]), np.arange(shape_xy[1]))
-    # pix_mat_X_ravel, pix_mat_Y_ravel = pix_mat_X.ravel(), pix_mat_Y.ravel()
-    # rade_mat = wcs.pixel_to_world(pix_mat_X, pix_mat_Y)
-    # is_in_unique_area = (rade_mat.ra.deg > sky_tile['RA_MIN']) & (rade_mat.ra.deg <= sky_tile['RA_MAX']) & (
-    #             rade_mat.dec.deg > sky_tile['DE_MIN']) & (rade_mat.dec.deg <= sky_tile['DE_MAX'])
-    # bg_unique_area = bg3mapD[0].data[pix_mat_X[is_in_unique_area], pix_mat_Y[is_in_unique_area]]
-    # print('\nTile {0} - BG in the unique area:\n min {1}\n max {2}\n median {3}\n mean {4}\n std {5}'.format(str_field, bg_unique_area.min(), bg_unique_area.max(), np.median(bg_unique_area), np.mean(bg_unique_area), np.std(bg_unique_area)))
-    # BG_CT_val_target = np.median(bg_unique_area)  # This value is the eRASS:n background (including CLU and AGN below eRASS:n threshold)
+        fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
+        if enough_events:
+            for fn in fi_up:
+                hdul['EVENTS'].data[fn][ids_to_replace2] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            fn = 'SIGNAL'
+            hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            the_good_the_bad['good'][sky_tile_idx] = 3
 
-    # # locate background event on the BG map :
-    # x_pix_B, y_pix_B = wcs.wcs_world2pix(data_B_oversampled['RA'], data_B_oversampled['DEC'], 0)
-    # x_pix_B = np.round(x_pix_B).astype(int)
-    # y_pix_B = np.round(y_pix_B).astype(int)
-    # # all possible pixels in the unique area
-    # all_x_pix = np.arange(x_pix_B.min(), x_pix_B.max(), 1)
-    # all_y_pix = np.arange(y_pix_B.min(), y_pix_B.max(), 1)
-    # # all_X,all_Y = np.meshgrid(all_x_pix, all_y_pix)
-    # # all_pixels = np.transpose([all_X.ravel(), all_Y.ravel()])
-    # # N_pixels = all_pixels.shape[0]
-    # N_pixels = len(all_x_pix) * len(all_y_pix)
-    # #take BG candidates from AGN and CLU in the 0.2-2.3 range
-    # BGcandidate_in_A_eRange = data_A['is_BG'] & (data_A['SIGNAL'] > emin_bgmap) & (data_A['SIGNAL'] < emax_bgmap)
-    # BGcandidate_in_C_eRange = data_C['is_BG'] & (data_C['SIGNAL'] > emin_bgmap) & (data_C['SIGNAL'] < emax_bgmap)
-    # BGcandidate_in_B_eRange = (data_B_oversampled['SIGNAL'] > emin_bgmap) & (data_B_oversampled['SIGNAL'] < emax_bgmap)
+        else:
+            print('\nTile {0} - Not enough events outside the unique area. Need to create a new bin table to accomodate all simulated events.'.format(str_field))
+            N_sim = len(data_A) + len(data_C) + len(data_B)
+            DIFF = N_sim - ids_to_replace2.size
+            print('\nTile {0} - Not enough rows to overwrite: need {1}, have {2}. Growing EVENTS by {3} rows.'.format(str_field, N_sim,ids_to_replace2.size, DIFF))
+            #grow EVENTS table by DIFF rows by copying last rows as template
+            old = hdul['EVENTS'].data
+            n_old = len(old)
+            n_new = n_old + DIFF
 
-    # N_BGcandidate_in_A_eRange = np.count_nonzero(BGcandidate_in_A_eRange)
-    # N_BGcandidate_in_C_eRange = np.count_nonzero(BGcandidate_in_C_eRange)
-    # N_BGcandidate_in_B_eRange = np.count_nonzero(BGcandidate_in_B_eRange)
-    # N_BG_prediction = N_BGcandidate_in_A_eRange + N_BGcandidate_in_B_eRange + N_BGcandidate_in_C_eRange
-    # print('\nTile {0} - N_BGcandidate_in_A_eRange {1}, N_BGcandidate_in_B_eRange {2}, N_BGcandidate_in_C_eRange {3}'.format( str_field, N_BGcandidate_in_A_eRange, N_BGcandidate_in_B_eRange, N_BGcandidate_in_C_eRange))
-    # print('\nTile {0} - N_BG_prediction {1}'.format(str_field, N_BG_prediction))
-    # print('\nTile {0} - BG CT per pixel predicted by the model {1}'.format(str_field, N_BG_prediction / N_pixels))
-    # print('\nTile {0} - Median observed BG CT per pixel in the data {1}'.format(str_field, BG_CT_val_target))
-    # print('\nTile {0} - We predict {1} We need {2}'.format(str_field, N_BG_prediction, int(N_pixels * BG_CT_val_target)))
+            new = np.empty(n_new, dtype=old.dtype)
+            new[:n_old] = old
 
-    # if N_BG_prediction < int(N_pixels * BG_CT_val_target):
-    #     print('\nTile {0} - Need to add more BG events. This should never be the case !'.format(str_field))
-    #     the_good_the_bad['fails'][sky_tile_idx] = 4
-    #     return the_good_the_bad
-    # else:
-    #     print('\nTile {0} - Need to remove some BG events from the oversampled background list'.format(str_field))
-    #     # Calculate the number of extra BG events in (emin, emax)
-    #     Nextra_eRange = int(N_pixels * BG_CT_val_target) - N_BG_prediction
-    #     # Assume all these extra events come from the BG file.
-    #     # Apply correction by assuming a constant removal factor throughout energy distribution
-    #     ratio_full_over_eRange = len(data_B_oversampled) / N_BGcandidate_in_B_eRange
-    #     Nextra_fullRange = int(Nextra_eRange * ratio_full_over_eRange)
-    #     # Remove Nextra_fullRange events from the oversampled clean BG list
-    #     data_B = data_B_oversampled[:-Nextra_fullRange]
+            # pad using copies of last rows (repeat if DIFF > n_old)
+            take = min(DIFF, n_old)
+            reps = (DIFF + take - 1) // take
+            pad = np.tile(old[-take:], reps)[:DIFF]
+            new[n_old:] = pad
 
-    # # From here it continues as in original JC's code.......
-    # # ##
-    # # ##
-    # # ##
-    # print('\nTile {0} - Number of:\n AGNs {1}\n Clusters {2}\n Background {3}\n Total simulated data {4}\n Number of observed events {5}'.format(str_field, len(data_A), len(data_C), len(data_B), len(data_A) + len(data_C) + len(data_B), N_ev_OBS))
-    # if len(data_A) + len(data_C) + len(data_B) == N_ev_OBS:
-    #     print('\nTile {0} - Exactly the number of events needed, perfect match!'.format(str_field))
-    #     fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
-    #     for fn in fi_up:
-    #         hdul['EVENTS'].data[fn][ids_to_replace] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-    #     fn = 'SIGNAL'
-    #     hdul['EVENTS'].data['PI'][ids_to_replace] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-    #     hdul.writeto(path_2_event_file, overwrite=True)
-    #     print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
-    #     the_good_the_bad['good'][sky_tile_idx] = 1
+            # replace EVENTS HDU
+            ev_hdu = fits.BinTableHDU(data=new, header=hdul['EVENTS'].header, name='EVENTS')
+            hdul[hdul.index_of('EVENTS')] = ev_hdu
 
-    # elif len(data_A) + len(data_C) + len(data_B) < N_ev_OBS:
-    #     N_available = len(data_A) + len(data_C) + len(data_B)
-    #     N_too_many = N_ev_OBS - N_available
-    #     print('\nTile {0} - Less simulated events than observed events (difference is {1}), need to move some true events out of the unique area.'.format(str_field, N_too_many))
-    #     ids_to_replace = np.arange(len(to_replace))[to_replace]
-    #     np.random.shuffle(ids_to_replace)
+            # Now we can overwrite: use all previous ids plus the appended rows
+            appended_ids = np.arange(n_old, n_new, dtype=int)
+            ids_to_replace2 = np.hstack((ids_to_replace2, appended_ids))
 
-    #     fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
-    #     for fn in fi_up:
-    #         hdul['EVENTS'].data[fn][ids_to_replace[:N_available]] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-    #         hdul['EVENTS'].data[fn][ids_to_replace[N_available:]] = hdul['EVENTS'].data[fn].min() * np.ones(N_too_many)
-    #     fn = 'SIGNAL'
-    #     hdul['EVENTS'].data['PI'][ids_to_replace[:N_available]] = 1000. * np.hstack(
-    #         (data_C[fn], data_A[fn], data_B[fn]))
-    #     hdul['EVENTS'].data['PI'][ids_to_replace[N_available:]] = hdul['EVENTS'].data['PI'].min() * np.ones(N_too_many)
-    #     hdul.writeto(path_2_event_file, overwrite=True)
-    #     print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
-    #     the_good_the_bad['good'][sky_tile_idx] = 2
+            assert ids_to_replace2.size >= N_sim
 
-    # else:
-    #     N_additional = len(data_A) + len(data_C) + len(data_B) - N_ev_OBS
-    #     print('\nTile {0} - More simulated events than observed events (difference is {1}), need to take some true events outside of the unique area.'.format(str_field, N_additional))
-    #     print('\nTile {0} - Nsim {1} Nobs {2} Nadditional {3}'.format(str_field, len(data_A) + len(data_C) + len(data_B), N_ev_OBS, N_additional))
-    #     extra_ids = np.arange(len(to_replace))[np.isin(np.arange(len(to_replace)), ids_to_replace, invert=True)]
-    #     np.random.shuffle(extra_ids)
-    #     ids_to_replace2 = np.hstack((np.arange(len(to_replace))[to_replace], extra_ids[:N_additional]))
-    #     enough_events = ids_to_replace2.size-(len(data_A) + len(data_C) + len(data_B))>=0
+            for fn in fi_up:
+                hdul['EVENTS'].data[fn][ids_to_replace2[:N_sim]] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            fn = 'SIGNAL'
+            hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
+            the_good_the_bad['good'][sky_tile_idx] = 4
 
-    #     fi_up = ['RA', 'DEC', 'RAWX', 'RAWY', 'PHA']
-    #     if enough_events:
-    #         for fn in fi_up:
-    #             hdul['EVENTS'].data[fn][ids_to_replace2] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-    #         fn = 'SIGNAL'
-    #         hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-    #         the_good_the_bad['good'][sky_tile_idx] = 3
+        hdul.writeto(path_2_event_file, overwrite=True)
+        print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
 
-    #     else:
-    #         print('\nTile {0} - Not enough events outside the unique area. Need to create a new bin table to accomodate all simulated events.'.format(str_field))
-    #         N_sim = len(data_A) + len(data_C) + len(data_B)
-    #         DIFF = N_sim - ids_to_replace2.size
-    #         print('\nTile {0} - Not enough rows to overwrite: need {1}, have {2}. Growing EVENTS by {3} rows.'.format(str_field, N_sim,ids_to_replace2.size, DIFF))
-    #         #grow EVENTS table by DIFF rows by copying last rows as template
-    #         old = hdul['EVENTS'].data
-    #         n_old = len(old)
-    #         n_new = n_old + DIFF
-
-    #         new = np.empty(n_new, dtype=old.dtype)
-    #         new[:n_old] = old
-
-    #         # pad using copies of last rows (repeat if DIFF > n_old)
-    #         take = min(DIFF, n_old)
-    #         reps = (DIFF + take - 1) // take
-    #         pad = np.tile(old[-take:], reps)[:DIFF]
-    #         new[n_old:] = pad
-
-    #         # replace EVENTS HDU
-    #         ev_hdu = fits.BinTableHDU(data=new, header=hdul['EVENTS'].header, name='EVENTS')
-    #         hdul[hdul.index_of('EVENTS')] = ev_hdu
-
-    #         # Now we can overwrite: use all previous ids plus the appended rows
-    #         appended_ids = np.arange(n_old, n_new, dtype=int)
-    #         ids_to_replace2 = np.hstack((ids_to_replace2, appended_ids))
-
-    #         assert ids_to_replace2.size >= N_sim
-
-    #         for fn in fi_up:
-    #             hdul['EVENTS'].data[fn][ids_to_replace2[:N_sim]] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-    #         fn = 'SIGNAL'
-    #         hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-    #         the_good_the_bad['good'][sky_tile_idx] = 4
-
-    #     hdul.writeto(path_2_event_file, overwrite=True)
-    #     print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
-
-    # data_A.write(path_2_simeventAGN_file, overwrite=True)
-    # data_C.write(path_2_simeventCLU_file, overwrite=True)
-    # data_B.write(path_2_simeventBKG_file, overwrite=True)
-    # print('\nTile {2} - {1} AGNs written to {0}'.format(path_2_simeventAGN_file, len(data_A), str_field))
-    # print('\nTile {2} - {1} CLUs written to {0}'.format(path_2_simeventCLU_file, len(data_C), str_field))
-    # print('\nTile {2} - {1} BKGs written to {0}'.format(path_2_simeventBKG_file, len(data_B), str_field))
-    # N_sim = len(data_A) + len(data_C) + len(data_B)
-    # print('\nTile {1} - AGNs fraction: {0}'.format(np.round(len(data_A) / N_sim, 4), str_field))
-    # print('\nTile {1} - BKGs fraction: {0}'.format(np.round(len(data_B) / N_sim, 4), str_field))
-    # print('\nTile {1} - CLUs fraction: {0}'.format(np.round(len(data_C) / N_sim, 4), str_field))
-    # t1 = time.time()
-    # print('\nTile {0} - It took {1} sec in total.'.format(str_field, t1-t0))
+    data_A.write(path_2_simeventAGN_file, overwrite=True)
+    data_C.write(path_2_simeventCLU_file, overwrite=True)
+    data_B.write(path_2_simeventBKG_file, overwrite=True)
+    print('\nTile {2} - {1} AGNs written to {0}'.format(path_2_simeventAGN_file, len(data_A), str_field))
+    print('\nTile {2} - {1} CLUs written to {0}'.format(path_2_simeventCLU_file, len(data_C), str_field))
+    print('\nTile {2} - {1} BKGs written to {0}'.format(path_2_simeventBKG_file, len(data_B), str_field))
+    N_sim = len(data_A) + len(data_C) + len(data_B)
+    print('\nTile {1} - AGNs fraction: {0}'.format(np.round(len(data_A) / N_sim, 4), str_field))
+    print('\nTile {1} - BKGs fraction: {0}'.format(np.round(len(data_B) / N_sim, 4), str_field))
+    print('\nTile {1} - CLUs fraction: {0}'.format(np.round(len(data_C) / N_sim, 4), str_field))
+    t1 = time.time()
+    print('\nTile {0} - It took {1} sec in total.'.format(str_field, t1-t0))
 
     return the_good_the_bad
 
@@ -599,12 +589,12 @@ the_good_the_bad = Table([tileidi, good, fails], names = ['tile_ID','good','fail
 onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu, the_good_the_bad])
 
 #Map to cores    
-with Pool(1) as p:
+with Pool(10) as p:
     the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
 print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]])+len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]])))
 
-print('\n Tiles failures were caused by:\n No real data event file or merged simulated event files exists already: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0])))
+print('\n Tiles failures were caused by:\n No real data event file or merged simulated event files exists already: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0]), len(np.where(the_good_the_bad_out['fails'] == 5)[0])))
 
 #Write table to file
 the_good_the_bad_out.write(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv', overwrite = True)
