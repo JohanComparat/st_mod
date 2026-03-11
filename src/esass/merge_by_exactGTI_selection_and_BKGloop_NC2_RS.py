@@ -168,7 +168,7 @@ def one_iter_func(sky_tile_el, other_elements):
         the_good_the_bad['fails'][sky_tile_idx] = 1
         return the_good_the_bad
     elif os.path.isfile(path_2_event_file):
-        print('Tile {0} -  Not processed. Reason:\n merged simulated event file exists:.'.format(str_field))
+        print('Tile {0} -  Not processed. Reason:\n merged simulated event file exists.'.format(str_field))
         the_good_the_bad['good'][sky_tile_idx] = 5
         return the_good_the_bad
     bg_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'pBG2')  # 'evt_particle_???.fits' )
