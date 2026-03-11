@@ -142,8 +142,14 @@ def one_iter_func(sky_tile_el, other_elements):
                      str_field+'_024_Bg3Map.fits')
     p2_real_ExpMap = os.path.join(os.environ['UCHUU'], LC_dir, str_field, '{0}_eSASS'.format(real_data_name),
                      str_field+'_024_ExpMap.fits')
-
-    real_BgMap = fits.open(p2_real_BgMap)[0].data
+    
+    #Tile has no data in e5
+    try:
+        real_BgMap = fits.open(p2_real_BgMap)[0].data
+    except FileNotFoundError:
+        print('\nTile {0} - Has a problem: FileNotFoundError'.format(str_field))
+        the_good_the_bad['fails'][sky_tile_idx] = 6
+        return the_good_the_bad
     real_ExpMap = fits.open(p2_real_ExpMap)[0].data
 
     esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field,
@@ -157,13 +163,14 @@ def one_iter_func(sky_tile_el, other_elements):
     path_2_simeventAGN_file = os.path.join(esass_dir, 'simAGNevt_' + str_field + '.fits')
     path_2_simeventCLU_file = os.path.join(esass_dir, 'simCLUevt_' + str_field + '.fits')
     path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_' + str_field + '.fits')
-    if len(evt_list) == 0 or os.path.isfile(path_2_event_file):
-        print(
-            'Tile {0} -  Not processed. Reason:\n no real data event file: {1}\n merged simulated event file exists: {2}'.format(
-                str_field, len(evt_list) == 0, os.path.isfile(path_2_event_file)))
+    if len(evt_list) == 0:
+        print('Tile {0} -  Not processed. Reason:\n no real data event file.'.format(str_field))
         the_good_the_bad['fails'][sky_tile_idx] = 1
         return the_good_the_bad
-
+    elif os.path.isfile(path_2_event_file):
+        print('Tile {0} -  Not processed. Reason:\n merged simulated event file exists:.'.format(str_field))
+        the_good_the_bad['good'][sky_tile_idx] = 5
+        return the_good_the_bad
     bg_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'pBG2')  # 'evt_particle_???.fits' )
     BG_evt_files = np.array(glob.glob(os.path.join(bg_dir, '*.fits')))
     if len(BG_evt_files) == 0:
@@ -589,12 +596,12 @@ the_good_the_bad = Table([tileidi, good, fails], names = ['tile_ID','good','fail
 onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu, the_good_the_bad])
 
 #Map to cores    
-with Pool(10) as p:
+with Pool(1) as p:
     the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
 print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]])+len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]])))
 
-print('\n Tiles failures were caused by:\n No real data event file or merged simulated event files exists already: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0]), len(np.where(the_good_the_bad_out['fails'] == 5)[0])))
+print('\n Tiles failures were caused by:\n No real data event file: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}\n FileNotFoundError: {5}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0]), len(np.where(the_good_the_bad_out['fails'] == 5)[0]), len(np.where(the_good_the_bad_out['fails'] == 6)[0])))
 
 #Write table to file
 the_good_the_bad_out.write(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv', overwrite = True)
