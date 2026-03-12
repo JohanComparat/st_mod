@@ -602,7 +602,12 @@ onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, 
 
 #Map to cores    
 with Pool(16) as p:
-    the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
+    the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]))[:33])
+
+
+print(the_good_the_bad_out)
+
+
 
 print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(np.where(the_good_the_bad_out['good'] > 0)[0]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(np.where(the_good_the_bad_out['fails'] > 0)[0]), len(np.where(the_good_the_bad_out['good'] > 0)[0])+len(np.where(the_good_the_bad_out['fails'] > 0)[0])))
 
