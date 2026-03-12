@@ -604,7 +604,7 @@ onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, 
 with Pool(16) as p:
     the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
-print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]])+len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]])))
+print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(np.where(the_good_the_bad_out['good'] > 0)[0]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(np.where(the_good_the_bad_out['fails'] > 0)[0]), len(np.where(the_good_the_bad_out['good'] > 0)[0])+len(np.where(the_good_the_bad_out['fails'] > 0)[0])))
 
 print('\n Tiles failures were caused by:\n No real data event file: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}\n FileNotFoundError: {5}\n ValueError: {6}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0]), len(np.where(the_good_the_bad_out['fails'] == 5)[0]), len(np.where(the_good_the_bad_out['fails'] == 6)[0]), len(np.where(the_good_the_bad_out['fails'] == 7)[0])))
 
