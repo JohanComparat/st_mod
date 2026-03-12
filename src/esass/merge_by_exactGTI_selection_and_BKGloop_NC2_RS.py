@@ -7,6 +7,7 @@ import numpy as np
 import sys
 from multiprocessing import Pool
 from functools import partial
+import warnings
 
 #Set paths and environmental variables
 basedir = '/home/idies/workspace/erosim/Uchuu/LCerass'
@@ -19,7 +20,9 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 
 #Will be used to get local Bg and ExpMap to rescale pdet
 p2erass1clu = '/home/idies/workspace/erosim/eRASS1_mock_input_CLUSTERS_extlike3.fits'
-erass1_clu = Table.read(p2erass1clu, memmap=True)
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', UnitsWarning)
+    erass1_clu = Table.read(p2erass1clu, memmap=True)
 
 agn_seed = sys.argv[1] # Seed for the AGN realization e.g. 1
 clu_seed = sys.argv[2] # Seed for the CLU realization e.g. 1
@@ -32,7 +35,9 @@ mergeType = 'GE'
 
 nl = lambda sel: len(sel.nonzero()[0])
 
-sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', UnitsWarning)
+    sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
 
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[
@@ -253,8 +258,8 @@ def one_iter_func(sky_tile_el, other_elements):
     # t_max_C = np.array(t_max_C)
     frac_A = np.array(frac_A)
     frac_C = np.array(frac_C)
-    data_A = vstack((data_A))
-    data_C = vstack((data_C))
+    data_A = vstack((data_A), metadata_conflicts='silent')
+    data_C = vstack((data_C), metadata_conflicts='silent')
     data_A['is_in_unique_area'] = (data_A['RA'] >= sky_tile['RA_MIN']) & (data_A['RA'] <= sky_tile['RA_MAX']) & (
                 data_A['DEC'] >= sky_tile['DE_MIN']) & (data_A['DEC'] <= sky_tile['DE_MAX'])
     data_C['is_in_unique_area'] = (data_C['RA'] >= sky_tile['RA_MIN']) & (data_C['RA'] <= sky_tile['RA_MAX']) & (
@@ -269,7 +274,9 @@ def one_iter_func(sky_tile_el, other_elements):
     for el in BG_evt_files:
         hh = fits.open(el)
         exp_bg = hh[1].header['EXPOSURE']
-        tt0 = Table.read(el)
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', UnitsWarning)
+            tt0 = Table.read(el)
         NCCD = int(os.path.basename(el).split('_')[-2][-1])
         tt0['TM_NR'] = NCCD
         tt0.keep_columns(['TIME', 'RA', 'DEC', 'RAWX', 'RAWY', 'PHA', 'SIGNAL', 'TM_NR'])
@@ -280,7 +287,7 @@ def one_iter_func(sky_tile_el, other_elements):
         bg_all.append(tt0)
 
     frac_B = np.array(frac_B)
-    data_B_oversampled = vstack((bg_all))
+    data_B_oversampled = vstack((bg_all), metadata_conflicts='silent')
     id_B_shuffle = np.arange(len(data_B_oversampled))
     np.random.shuffle(id_B_shuffle)
     data_B_oversampled = data_B_oversampled[id_B_shuffle]
@@ -295,22 +302,26 @@ def one_iter_func(sky_tile_el, other_elements):
     agn_oversampled = []
     for NCCD in np.arange(7) + 1:
         agn_evt_files = np.array(glob.glob(os.path.join(agn_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits')))
-        hdu_A = Table.read(agn_evt_files[0])
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', UnitsWarning)
+            hdu_A = Table.read(agn_evt_files[0])
         tt0 = hdu_A[hdu_A['TIME'] < np.max(t_max_A) * oversampling]
         agn_oversampled.append(tt0)
         #
         clu_evt_files = np.array(glob.glob(os.path.join(cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits')))
-        hdu_C = Table.read(clu_evt_files[0])
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', UnitsWarning)
+            hdu_C = Table.read(clu_evt_files[0])
         tt0 = hdu_C[hdu_C['TIME'] < np.max(t_max_A) * oversampling]
         clu_oversampled.append(tt0)
-    data_A_oversampled = vstack(agn_oversampled)
+    data_A_oversampled = vstack(agn_oversampled, metadata_conflicts='silent')
     id_A_shuffle = np.arange(len(data_A_oversampled))
     np.random.shuffle(id_A_shuffle)
     data_A_oversampled = data_A_oversampled[id_A_shuffle]
     data_A_oversampled['is_in_unique_area'] = (data_A_oversampled['RA'] >= sky_tile['RA_MIN']) & (
                 data_A_oversampled['RA'] <= sky_tile['RA_MAX']) & (data_A_oversampled['DEC'] >= sky_tile['DE_MIN']) & (
                                                           data_A_oversampled['DEC'] <= sky_tile['DE_MAX'])
-    data_C_oversampled = vstack((clu_oversampled))
+    data_C_oversampled = vstack((clu_oversampled), metadata_conflicts='silent')
     id_C_shuffle = np.arange(len(data_C_oversampled))
     np.random.shuffle(id_C_shuffle)
     data_C_oversampled = data_C_oversampled[id_C_shuffle]
@@ -329,23 +340,23 @@ def one_iter_func(sky_tile_el, other_elements):
     local_BKG = np.median(bg3mapD[0].data)
     local_EXP = np.median(expmap[0].data)
 
-    #Tile 197093 failing, using the tile close to it.
-    if str_field=='197093':
-        str_field_e1 = '194093'
-    elif str_field=='245105':
-        str_field_e1 = '242105'
-    elif str_field=='126135':
-        str_field_e1 = '122135'
-    elif str_field=='130135':
-        str_field_e1 = '134135'
-    elif str_field=='128138':
-        str_field_e1 = '124138'
-    else:
-        str_field_e1 = str_field
-    sel_local = erass1_clu['tile'] == str_field_e1
+    # #Tile 197093 failing, using the tile close to it.
+    # if str_field=='197093':
+    #     str_field_e1 = '194093'
+    # elif str_field=='245105':
+    #     str_field_e1 = '242105'
+    # elif str_field=='126135':
+    #     str_field_e1 = '122135'
+    # elif str_field=='130135':
+    #     str_field_e1 = '134135'
+    # elif str_field=='128138':
+    #     str_field_e1 = '124138'
+    # else:
+    #     str_field_e1 = str_field
+    # sel_local = erass1_clu['tile'] == str_field_e1
 
     #Previously
-#    sel_local = erass1_clu['tile'] == str_field
+    sel_local = erass1_clu['tile'] == str_field
 
     local_BKG_erass1 = np.median(erass1_clu['BG3Model'][sel_local])
     local_EXP_erass1 = np.median(erass1_clu['TexpModel'][sel_local])
@@ -388,7 +399,12 @@ def one_iter_func(sky_tile_el, other_elements):
     data_C_oversampled.write(os.path.join(esass_dir, 'all_GAS_evts_oversampled.fits'), overwrite=True)
 
     # Remove statistically the A and C is_BG from the oversampled data_B
-    data_B_oversampled = remove_events_binned(data_B_oversampled, data_A_oversampled[data_A_oversampled['is_BG']])
+    try:
+        data_B_oversampled = remove_events_binned(data_B_oversampled, data_A_oversampled[data_A_oversampled['is_BG']])
+    except ValueError:
+        print('\nTile {0} - This tile has a problem: ValueError'.format(str_field))
+        the_good_the_bad['fails'][sky_tile_idx] = 7
+        return the_good_the_bad    
     data_B_oversampled = remove_events_binned(data_B_oversampled, data_C_oversampled[data_C_oversampled['is_BG']])
     # Now we have removed from the oversampled background list contributions
     # from AGN and CLU (statistically speaking) that were undetected by eRASS1   RS: I don't think this is needed, we can use directly the estimated erassn limit
@@ -596,12 +612,12 @@ the_good_the_bad = Table([tileidi, good, fails], names = ['tile_ID','good','fail
 onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu, the_good_the_bad])
 
 #Map to cores    
-with Pool(1) as p:
+with Pool(16) as p:
     the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
 print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]]), len(the_good_the_bad_out[np.where(the_good_the_bad_out['good'] > 0)[0]])+len(the_good_the_bad_out[np.where(the_good_the_bad_out['fails'] > 0)[0]])))
 
-print('\n Tiles failures were caused by:\n No real data event file: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}\n FileNotFoundError: {5}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0]), len(np.where(the_good_the_bad_out['fails'] == 5)[0]), len(np.where(the_good_the_bad_out['fails'] == 6)[0])))
+print('\n Tiles failures were caused by:\n No real data event file: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}\n FileNotFoundError: {5}\n ValueError: {6}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0]), len(np.where(the_good_the_bad_out['fails'] == 5)[0]), len(np.where(the_good_the_bad_out['fails'] == 6)[0]), len(np.where(the_good_the_bad_out['fails'] == 7)[0])))
 
 #Write table to file
 the_good_the_bad_out.write(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv', overwrite = True)
