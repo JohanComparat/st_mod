@@ -7,7 +7,6 @@ import numpy as np
 import sys
 from multiprocessing import Pool
 from functools import partial
-import warnings
 
 #Set paths and environmental variables
 basedir = '/home/idies/workspace/erosim/Uchuu/LCerass'
@@ -20,9 +19,7 @@ top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 
 #Will be used to get local Bg and ExpMap to rescale pdet
 p2erass1clu = '/home/idies/workspace/erosim/eRASS1_mock_input_CLUSTERS_extlike3.fits'
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', UnitsWarning)
-    erass1_clu = Table.read(p2erass1clu, memmap=True)
+erass1_clu = Table.read(p2erass1clu, memmap=True, unit_parse_strict='silent')
 
 agn_seed = sys.argv[1] # Seed for the AGN realization e.g. 1
 clu_seed = sys.argv[2] # Seed for the CLU realization e.g. 1
@@ -35,9 +32,7 @@ mergeType = 'GE'
 
 nl = lambda sel: len(sel.nonzero()[0])
 
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', UnitsWarning)
-    sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'))
+sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits'), unit_parse_strict='silent')
 
 def get_srvmap(ra, dec):
     return sky_map_hdu['SRVMAP'].value[
@@ -274,9 +269,7 @@ def one_iter_func(sky_tile_el, other_elements):
     for el in BG_evt_files:
         hh = fits.open(el)
         exp_bg = hh[1].header['EXPOSURE']
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', UnitsWarning)
-            tt0 = Table.read(el)
+        tt0 = Table.read(el, unit_parse_strict='silent')
         NCCD = int(os.path.basename(el).split('_')[-2][-1])
         tt0['TM_NR'] = NCCD
         tt0.keep_columns(['TIME', 'RA', 'DEC', 'RAWX', 'RAWY', 'PHA', 'SIGNAL', 'TM_NR'])
@@ -302,16 +295,12 @@ def one_iter_func(sky_tile_el, other_elements):
     agn_oversampled = []
     for NCCD in np.arange(7) + 1:
         agn_evt_files = np.array(glob.glob(os.path.join(agn_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits')))
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', UnitsWarning)
-            hdu_A = Table.read(agn_evt_files[0])
+        hdu_A = Table.read(agn_evt_files[0], unit_parse_strict='silent')
         tt0 = hdu_A[hdu_A['TIME'] < np.max(t_max_A) * oversampling]
         agn_oversampled.append(tt0)
         #
         clu_evt_files = np.array(glob.glob(os.path.join(cluster_dir, 't0erass_ccd' + str(NCCD) + '_evt.fits')))
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', UnitsWarning)
-            hdu_C = Table.read(clu_evt_files[0])
+        hdu_C = Table.read(clu_evt_files[0], unit_parse_strict='silent')
         tt0 = hdu_C[hdu_C['TIME'] < np.max(t_max_A) * oversampling]
         clu_oversampled.append(tt0)
     data_A_oversampled = vstack(agn_oversampled, metadata_conflicts='silent')
