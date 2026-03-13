@@ -126,7 +126,7 @@ def one_iter_func(sky_tile_el, other_elements):
 
     #Separate elements
     sky_tile_idx, sky_tile = sky_tile_el
-    LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu, the_good_the_bad = other_elements
+    LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu = other_elements
 
     #Set reference time
     t0 = time.time()
@@ -148,8 +148,7 @@ def one_iter_func(sky_tile_el, other_elements):
         real_BgMap = fits.open(p2_real_BgMap)[0].data
     except FileNotFoundError:
         print('\nTile {0} - Has a problem: FileNotFoundError'.format(str_field))
-        the_good_the_bad['fails'][sky_tile_idx] = 6
-        return the_good_the_bad
+        return [str_field, -99, 6]
     real_ExpMap = fits.open(p2_real_ExpMap)[0].data
 
     esass_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field,
@@ -165,18 +164,15 @@ def one_iter_func(sky_tile_el, other_elements):
     path_2_simeventBKG_file = os.path.join(esass_dir, 'simBKGevt_' + str_field + '.fits')
     if len(evt_list) == 0:
         print('Tile {0} -  Not processed. Reason:\n no real data event file.'.format(str_field))
-        the_good_the_bad['fails'][sky_tile_idx] = 1
-        return the_good_the_bad
+        return [str_field, -99, 1]
     elif os.path.isfile(path_2_event_file):
         print('Tile {0} -  Not processed. Reason:\n merged simulated event file exists.'.format(str_field))
-        the_good_the_bad['good'][sky_tile_idx] = 5
-        return the_good_the_bad
+        return [str_field, 5, -99]
     bg_dir = os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'pBG2')  # 'evt_particle_???.fits' )
     BG_evt_files = np.array(glob.glob(os.path.join(bg_dir, '*.fits')))
     if len(BG_evt_files) == 0:
         print('\nTile {0} - Not processed. Reason:\n no background file: {1}'.format(str_field, len(BG_evt_files) == 0))
-        the_good_the_bad['fails'][sky_tile_idx] = 2
-        return the_good_the_bad
+        return [str_field, -99, 2]
     hdul_raw = fits.open(evt_list[0])
     try:
         gtis = np.array([np.sum(hdul_raw['GTI1'].data['STOP'] - hdul_raw['GTI1'].data['START'])
@@ -188,8 +184,7 @@ def one_iter_func(sky_tile_el, other_elements):
                             , np.sum(hdul_raw['GTI7'].data['STOP'] - hdul_raw['GTI7'].data['START'])])
     except KeyError:
         print('\nTile {0} - Has a problem: KeyError'.format(str_field))
-        the_good_the_bad['fails'][sky_tile_idx] = 3
-        return the_good_the_bad
+        return [str_field, -99, 3]
 
     # for eee in hdul_raw[1:]:
     # 	print(eee.header['EXTNAME'])
@@ -229,8 +224,7 @@ def one_iter_func(sky_tile_el, other_elements):
             t_max = hdu_A['STDGTI'].data['STOP'][np.searchsorted(texp_cum, t_obs) + 1]
         except IndexError:
             print('\nTile {0} - Has a problem: IndexError'.format(str_field))
-            the_good_the_bad['fails'][sky_tile_idx] = 5
-            return the_good_the_bad
+            return [str_field, -99, 5]
         t_max_A.append(t_max)
         t_a = Table(hdu_A['EVENTS'].data)
         frac_A.append(nl(t_a['TIME'] < t_max) / len(t_a))
@@ -392,8 +386,7 @@ def one_iter_func(sky_tile_el, other_elements):
         data_B_oversampled = remove_events_binned(data_B_oversampled, data_A_oversampled[data_A_oversampled['is_BG']])
     except ValueError:
         print('\nTile {0} - This tile has a problem: ValueError'.format(str_field))
-        the_good_the_bad['fails'][sky_tile_idx] = 7
-        return the_good_the_bad    
+        return [str_field, -99, 7]   
     data_B_oversampled = remove_events_binned(data_B_oversampled, data_C_oversampled[data_C_oversampled['is_BG']])
     # Now we have removed from the oversampled background list contributions
     # from AGN and CLU (statistically speaking) that were undetected by eRASS1   RS: I don't think this is needed, we can use directly the estimated erassn limit
@@ -469,8 +462,7 @@ def one_iter_func(sky_tile_el, other_elements):
 
     if N_BG_prediction < int(N_pixels * BG_CT_val_target):
         print('\nTile {0} - Need to add more BG events. This should never be the case !'.format(str_field))
-        the_good_the_bad['fails'][sky_tile_idx] = 4
-        return the_good_the_bad
+        return [str_field, -99, 4]
     else:
         print('\nTile {0} - Need to remove some BG events from the oversampled background list'.format(str_field))
         # Calculate the number of extra BG events in (emin, emax)
@@ -496,7 +488,7 @@ def one_iter_func(sky_tile_el, other_elements):
         hdul['EVENTS'].data['PI'][ids_to_replace] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
-        the_good_the_bad['good'][sky_tile_idx] = 1
+        good_flag = 1
 
     elif len(data_A) + len(data_C) + len(data_B) < N_ev_OBS:
         N_available = len(data_A) + len(data_C) + len(data_B)
@@ -515,7 +507,7 @@ def one_iter_func(sky_tile_el, other_elements):
         hdul['EVENTS'].data['PI'][ids_to_replace[N_available:]] = hdul['EVENTS'].data['PI'].min() * np.ones(N_too_many)
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
-        the_good_the_bad['good'][sky_tile_idx] = 2
+        good_flag = 2
 
     else:
         N_additional = len(data_A) + len(data_C) + len(data_B) - N_ev_OBS
@@ -532,7 +524,7 @@ def one_iter_func(sky_tile_el, other_elements):
                 hdul['EVENTS'].data[fn][ids_to_replace2] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
             fn = 'SIGNAL'
             hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-            the_good_the_bad['good'][sky_tile_idx] = 3
+            good_flag = 3
 
         else:
             print('\nTile {0} - Not enough events outside the unique area. Need to create a new bin table to accomodate all simulated events.'.format(str_field))
@@ -567,7 +559,7 @@ def one_iter_func(sky_tile_el, other_elements):
                 hdul['EVENTS'].data[fn][ids_to_replace2[:N_sim]] = np.hstack((data_C[fn], data_A[fn], data_B[fn]))
             fn = 'SIGNAL'
             hdul['EVENTS'].data['PI'][ids_to_replace2] = 1000. * np.hstack((data_C[fn], data_A[fn], data_B[fn]))
-            the_good_the_bad['good'][sky_tile_idx] = 4
+            good_flag = 4
 
         hdul.writeto(path_2_event_file, overwrite=True)
         print('\nTile {0} - File written to:\n {1}'.format(str_field, path_2_event_file))
@@ -585,33 +577,35 @@ def one_iter_func(sky_tile_el, other_elements):
     t1 = time.time()
     print('\nTile {0} - It took {1} sec in total.'.format(str_field, t1-t0))
 
-    return the_good_the_bad
+    return [str_field, good_flag, -99]
 
 # =============================================================================
 
 print('{0} tiles to process'.format(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
-#Create table to save flags
-fails = np.full(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), -99)
-good = np.full(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), -99)
-tileidi = np.array([str(sky_tile['SRVMAP']).zfill(6) for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]])
-the_good_the_bad = Table([tileidi, good, fails], names = ['tile_ID','good','fails'])
-
 #Define function for multiprocessing
-onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu, the_good_the_bad])
+onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu])
 
 #Map to cores    
 with Pool(16) as p:
-    the_good_the_bad_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]))[:33])
+    flags_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]))[:33])
 
+#Create table to save flags
+if os.path.isfile(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3)))):
+    the_good_the_bad = Table.read(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv')    
+    for row in flags_out:
+        where_row = np.where(the_good_the_bad['tile_ID'] == row[0])[0]
+        if len(where_row) > 0:
+            if (the_good_the_bad['good'][where_row] == -99) | (the_good_the_bad['good'][where_row] == 5):
+                the_good_the_bad['good'][where_row] = row[1]
+else:
+    the_good_the_bad = Table(names = ['tile_ID','good','fails'], dtype = [str, int, int])
+    for row in flags_out:
+        the_good_the_bad.add_row(row)
 
-print(the_good_the_bad_out)
+print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(np.where(the_good_the_bad['good'] > 0)[0]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(np.where(the_good_the_bad['fails'] > 0)[0]), len(np.where(the_good_the_bad['good'] > 0)[0])+len(np.where(the_good_the_bad['fails'] > 0)[0])))
 
-
-
-print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(np.where(the_good_the_bad_out['good'] > 0)[0]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(np.where(the_good_the_bad_out['fails'] > 0)[0]), len(np.where(the_good_the_bad_out['good'] > 0)[0])+len(np.where(the_good_the_bad_out['fails'] > 0)[0])))
-
-print('\n Tiles failures were caused by:\n No real data event file: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}\n FileNotFoundError: {5}\n ValueError: {6}'.format(len(np.where(the_good_the_bad_out['fails'] == 1)[0]), len(np.where(the_good_the_bad_out['fails'] == 2)[0]), len(np.where(the_good_the_bad_out['fails'] == 3)[0]), len(np.where(the_good_the_bad_out['fails'] == 4)[0]), len(np.where(the_good_the_bad_out['fails'] == 5)[0]), len(np.where(the_good_the_bad_out['fails'] == 6)[0]), len(np.where(the_good_the_bad_out['fails'] == 7)[0])))
+print('\n Tiles failures were caused by:\n No real data event file: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}\n FileNotFoundError: {5}\n ValueError: {6}'.format(len(np.where(the_good_the_bad['fails'] == 1)[0]), len(np.where(the_good_the_bad['fails'] == 2)[0]), len(np.where(the_good_the_bad['fails'] == 3)[0]), len(np.where(the_good_the_bad['fails'] == 4)[0]), len(np.where(the_good_the_bad['fails'] == 5)[0]), len(np.where(the_good_the_bad['fails'] == 6)[0]), len(np.where(the_good_the_bad['fails'] == 7)[0])))
 
 #Write table to file
-the_good_the_bad_out.write(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv', overwrite = True)
+the_good_the_bad.write(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv', overwrite = True)
