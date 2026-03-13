@@ -42,9 +42,10 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     print(sys.argv)
     # input files
     EvtFiles = os.path.join(indir, 'evt_'+field_id+'.fits')
-    if (not os.path.isfile(EvtFiles)):
-        continue
     print(EvtFiles)
+    if (not os.path.isfile(EvtFiles)):
+        print('Does not exist')
+        continue
     # SINGLE BAND
     # single band image
     out_im1 = os.path.join(outdir, outprefix + 'pipeline_img1.sh')

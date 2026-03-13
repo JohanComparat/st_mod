@@ -588,7 +588,7 @@ onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, 
 
 #Map to cores    
 with Pool(16) as p:
-    flags_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]))[:33])
+    flags_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
 #Create table to save flags
 if os.path.isfile(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3)))):
