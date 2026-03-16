@@ -3,10 +3,8 @@ import sys
 import subprocess
 from select import select
 
-
-
-
 # Start two subprocesses
+
 procs = [
     subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0210.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
     subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0240.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
@@ -50,3 +48,22 @@ while procs:
             # Identify which process produced this
             pid = next(p.pid for p in procs if p.stdout is pipe)
             print(f"[PID {pid}]: {line}", end='')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
