@@ -3,9 +3,6 @@ import sys
 import subprocess
 from select import select
 
-
-
-
 # Start two subprocesses
 procs = [
     subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e4_merge_AGNseed001_SimBKG_CLUseed001_processing_0210.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),

@@ -4,7 +4,6 @@ import subprocess
 from select import select
 
 # Start two subprocesses
-
 procs = [
     subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0330.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
     subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e4_merge_AGNseed002_SimBKG_CLUseed002_processing_0360.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
