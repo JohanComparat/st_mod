@@ -463,23 +463,20 @@ def one_iter_func(sky_tile_el, other_elements):
 
     if N_BG_prediction < int(N_pixels * BG_CT_val_target):
         #if the model did not produce enough BKG events to match real BgMap
-        print('\nTile {0} - Need to add more BG events. This should never be the case !'.format(str_field))
         sel_band = (removed_pool['SIGNAL'] > emin_bgmap) & (removed_pool['SIGNAL'] < emax_bgmap)
         candidates = removed_pool[sel_band]
-
         deficit = int(N_pixels * BG_CT_val_target) - N_BG_prediction
         n_add = min(deficit, len(candidates))
-        print('Adding', n_add, 'from the removed pool, that has:', len(candidates))
         idx = np.random.choice(len(candidates), size=n_add, replace=False)
         to_readd = candidates[idx]
-
+        print('\nTile {0} - Need to add more BG events. Adding {1} from the removed pool that has {2}'.format(str_field, n_add, len(candidates)))
         data_B = vstack([data_B_oversampled, to_readd])
-        #return [str_field, -99, 4]
+
     else:
         #if the model produced too many BKG events compared to real BgMap
         print('\nTile {0} - Need to remove some BG events from the oversampled background list'.format(str_field))
         # Calculate the number of extra BG events in (emin, emax)
-        Nextra_eRange = int(N_pixels * BG_CT_val_target) - N_BG_prediction
+        Nextra_eRange = N_BG_prediction - int(N_pixels * BG_CT_val_target)    
         # Assume all these extra events come from the BG file.
         # Apply correction by assuming a constant removal factor throughout energy distribution
         ratio_full_over_eRange = len(data_B_oversampled) / N_BGcandidate_in_B_eRange
@@ -618,7 +615,7 @@ else:
 
 print('\n{0} tiles out of {1} processed, {2} fails, total {3}'.format(len(np.where(the_good_the_bad['good'] > 0)[0]), len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)]), len(np.where(the_good_the_bad['fails'] > 0)[0]), len(np.where(the_good_the_bad['good'] > 0)[0])+len(np.where(the_good_the_bad['fails'] > 0)[0])))
 
-print('\n Tiles failures were caused by:\n No real data event file: {0}\n No background file: {1}\n KeyError: {2}\n Not enough background events: {3}\n IndexError: {4}\n FileNotFoundError: {5}\n ValueError: {6}'.format(len(np.where(the_good_the_bad['fails'] == 1)[0]), len(np.where(the_good_the_bad['fails'] == 2)[0]), len(np.where(the_good_the_bad['fails'] == 3)[0]), len(np.where(the_good_the_bad['fails'] == 4)[0]), len(np.where(the_good_the_bad['fails'] == 5)[0]), len(np.where(the_good_the_bad['fails'] == 6)[0]), len(np.where(the_good_the_bad['fails'] == 7)[0])))
+print('\n Tiles failures were caused by:\n No real data event file: {0}\n No background file: {1}\n KeyError: {2}\n IndexError: {3}\n FileNotFoundError: {4}\n ValueError: {5}'.format(len(np.where(the_good_the_bad['fails'] == 1)[0]), len(np.where(the_good_the_bad['fails'] == 2)[0]), len(np.where(the_good_the_bad['fails'] == 3)[0]), len(np.where(the_good_the_bad['fails'] == 5)[0]), len(np.where(the_good_the_bad['fails'] == 6)[0]), len(np.where(the_good_the_bad['fails'] == 7)[0])))
 
 #Write table to file
 the_good_the_bad.write(os.path.join(top_dir, 'merge_success_logs/success_flags_{0}_{1}_AGNseed{2}_SimBKG_CLUseed{3}.ecsv'.format(mergeType, exp_name, agn_seed.zfill(3), clu_seed.zfill(3))), format = 'ascii.ecsv', overwrite = True)
