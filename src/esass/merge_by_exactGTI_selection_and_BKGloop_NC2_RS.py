@@ -471,7 +471,6 @@ def one_iter_func(sky_tile_el, other_elements):
         to_readd = candidates[idx]
         print('\nTile {0} - Need to add more BG events. Adding {1} from the removed pool that has {2}'.format(str_field, n_add, len(candidates)))
         data_B = vstack([data_B_oversampled, to_readd])
-
     else:
         #if the model produced too many BKG events compared to real BgMap
         print('\nTile {0} - Need to remove some BG events from the oversampled background list'.format(str_field))
