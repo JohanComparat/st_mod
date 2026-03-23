@@ -73,7 +73,7 @@ def remove_events_binned(evlist, blacklist, nbins=400, emin=None, emax=None, rng
     if emax is None:
         emax = max(e_ev.max(), e_bl.max())
     if not np.isfinite(emin) or not np.isfinite(emax) or emin >= emax:
-        return evlist  # nothing sensible to do
+        return evlist, evlist[:0]  # nothing sensible to do
 
     edges = np.linspace(emin, emax, nbins + 1)
 
@@ -101,7 +101,7 @@ def remove_events_binned(evlist, blacklist, nbins=400, emin=None, emax=None, rng
         to_remove.append(rng.choice(in_bin, size=k, replace=False))
 
     if not to_remove:
-        return evlist
+        return evlist, evlist[:0]
 
     to_remove = np.concatenate(to_remove)
     keep_mask = np.ones(len(evlist), dtype=bool)
@@ -110,7 +110,7 @@ def remove_events_binned(evlist, blacklist, nbins=400, emin=None, emax=None, rng
     # return shuffled (to avoid energy ordering)
     kept_idx = np.nonzero(keep_mask)[0]
     rng.shuffle(kept_idx)
-    return evlist[kept_idx]
+    return evlist[kept_idx], evlist[to_remove]
 
 def ctr_BKG_percent_detection(bg_cts_per_pix, b, a):
     '''
@@ -383,11 +383,12 @@ def one_iter_func(sky_tile_el, other_elements):
 
     # Remove statistically the A and C is_BG from the oversampled data_B
     try:
-        data_B_oversampled = remove_events_binned(data_B_oversampled, data_A_oversampled[data_A_oversampled['is_BG']])
+        data_B_oversampled, removed_A = remove_events_binned(data_B_oversampled, data_A_oversampled[data_A_oversampled['is_BG']])
     except ValueError:
         print('\nTile {0} - This tile has a problem: ValueError'.format(str_field))
         return [str_field, -99, 7]   
-    data_B_oversampled = remove_events_binned(data_B_oversampled, data_C_oversampled[data_C_oversampled['is_BG']])
+    data_B_oversampled, removed_C = remove_events_binned(data_B_oversampled, data_C_oversampled[data_C_oversampled['is_BG']])
+    removed_pool = vstack([removed_A, removed_C])
     # Now we have removed from the oversampled background list contributions
     # from AGN and CLU (statistically speaking) that were undetected by eRASS1   RS: I don't think this is needed, we can use directly the estimated erassn limit
     # ==>  data_B_oversampled contains pure eRASS1 background rate, with exposure  #RS: so now this is oversampled BKG than contains expected erassN bkg rate with Texp=1.5*TexpN
@@ -461,9 +462,21 @@ def one_iter_func(sky_tile_el, other_elements):
     print('\nTile {0} - We predict {1} We need {2}'.format(str_field, N_BG_prediction, int(N_pixels * BG_CT_val_target)))
 
     if N_BG_prediction < int(N_pixels * BG_CT_val_target):
+        #if the model did not produce enough BKG events to match real BgMap
         print('\nTile {0} - Need to add more BG events. This should never be the case !'.format(str_field))
-        return [str_field, -99, 4]
+        sel_band = (removed_pool['SIGNAL'] > emin_bgmap) & (removed_pool['SIGNAL'] < emax_bgmap)
+        candidates = removed_pool[sel_band]
+
+        deficit = int(N_pixels * BG_CT_val_target) - N_BG_prediction
+        n_add = min(deficit, len(candidates))
+        print('Adding', n_add, 'from the removed pool, that has:', len(candidates))
+        idx = np.random.choice(len(candidates), size=n_add, replace=False)
+        to_readd = candidates[idx]
+
+        data_B = vstack([data_B_oversampled, to_readd])
+        #return [str_field, -99, 4]
     else:
+        #if the model produced too many BKG events compared to real BgMap
         print('\nTile {0} - Need to remove some BG events from the oversampled background list'.format(str_field))
         # Calculate the number of extra BG events in (emin, emax)
         Nextra_eRange = int(N_pixels * BG_CT_val_target) - N_BG_prediction
