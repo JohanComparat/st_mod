@@ -596,7 +596,7 @@ print('{0} tiles to process'.format(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) 
 onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu])
 
 #Map to cores    
-with Pool(16) as p:
+with Pool(18) as p:
     flags_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
 #Create table to save flags
