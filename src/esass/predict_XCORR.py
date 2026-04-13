@@ -1,7 +1,12 @@
+# mamba activate /home/idies/workspace/erosim/software/JC/env/clustering
+
 import matplotlib
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 14})
 import matplotlib.pyplot as plt
+os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
+os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
+os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
 import os, sys
 import glob
 import numpy as np

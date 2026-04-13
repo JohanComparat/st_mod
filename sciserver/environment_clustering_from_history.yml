@@ -1,0 +1,14 @@
+name: clustering
+channels:
+  - conda-forge
+dependencies:
+  - astropy
+  - gsl
+  - healpy
+  - ipython
+  - numpy
+  - pip
+  - python
+  - scipy
+
+prefix: "/home/idies/miniforge3/envs/clustering"
