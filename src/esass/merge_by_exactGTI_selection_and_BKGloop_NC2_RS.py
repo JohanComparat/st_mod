@@ -26,8 +26,10 @@ clu_seed = sys.argv[2] # Seed for the CLU realization e.g. 1
 exp_name = sys.argv[3] # Type of the experiment, whether e4 or e5
 if exp_name == 'e4':
     real_data_name = 's4'
+    real_data_number = 's?04'
 elif exp_name == 'e5':
     real_data_name = 's5'
+    real_data_number = 's?05'
 mergeType = 'GE'
 
 nl = lambda sel: len(sel.nonzero()[0])
@@ -136,7 +138,7 @@ def one_iter_func(sky_tile_el, other_elements):
     print('\nTile {0} - Started processing'.format(str_field))
     evt_list = np.array(glob.glob(
         os.path.join(os.environ['UCHUU'], LC_dir, str_field, '{0}_c030'.format(real_data_name),
-                     '*_Image_c030.fits.gz')))
+                     '{0}_*_Image_c030.fits.gz'.format(real_data_number))))
 
     p2_real_BgMap = os.path.join(os.environ['UCHUU'], LC_dir, str_field, '{0}_eSASS'.format(real_data_name),
                      str_field+'_024_Bg3Map.fits')
