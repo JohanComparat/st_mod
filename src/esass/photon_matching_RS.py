@@ -455,9 +455,16 @@ def run_match_for_catalogue(src_cat_path, prefix):
     out_any['DET_LIKE_0'] = SrcCat['DET_LIKE_0']
     out_any['EXT'] = SrcCat['EXT']
     out_any['EXT_LIKE'] = SrcCat['EXT_LIKE']
+
+    out_any['DIST_NN'] = SrcCat['DIST_NN']
     out_any['ML_CTS_0'] = SrcCat['ML_CTS_0']
+    out_any['ML_CTS_ERR_0'] = SrcCat['ML_CTS_ERR_0']
     out_any['ML_RATE_0'] = SrcCat['ML_RATE_0']
+    out_any['ML_RATE_ERR_0'] = SrcCat['ML_RATE_ERR_0']
     out_any['ML_FLUX_0'] = SrcCat['ML_FLUX_0']
+    out_any['ML_FLUX_ERR_0'] = SrcCat['ML_FLUX_ERR_0']
+    out_any['ML_BKG_0'] = SrcCat['ML_BKG_0']
+    out_any['ML_EXP_1'] = SrcCat['ML_EXP_1']
 
     out_any['ID_simput'] = SrcID64
     out_any['aperture_counts'] = SrcApeCts
@@ -535,9 +542,16 @@ def run_match_for_catalogue(src_cat_path, prefix):
     out_uniq['DET_LIKE_0'] = SrcCat['DET_LIKE_0']
     out_uniq['EXT'] = SrcCat['EXT']
     out_uniq['EXT_LIKE'] = SrcCat['EXT_LIKE']
+
+    out_uniq['DIST_NN'] = SrcCat['DIST_NN']
     out_uniq['ML_CTS_0'] = SrcCat['ML_CTS_0']
+    out_uniq['ML_CTS_ERR_0'] = SrcCat['ML_CTS_ERR_0']
     out_uniq['ML_RATE_0'] = SrcCat['ML_RATE_0']
+    out_uniq['ML_RATE_ERR_0'] = SrcCat['ML_RATE_ERR_0']
     out_uniq['ML_FLUX_0'] = SrcCat['ML_FLUX_0']
+    out_uniq['ML_FLUX_ERR_0'] = SrcCat['ML_FLUX_ERR_0']
+    out_uniq['ML_BKG_0'] = SrcCat['ML_BKG_0']
+    out_uniq['ML_EXP_1'] = SrcCat['ML_EXP_1']
 
     out_uniq['ID_simput'] = SrcID64_out
     out_uniq['ID_simput32'] = SrcID32_out
