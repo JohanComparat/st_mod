@@ -24,6 +24,15 @@ GE_names = [
     'GE_e5_merge_AGNseed007_SimBKG_CLUseed007', 
     'GE_e5_merge_AGNseed008_SimBKG_CLUseed008', 
     'GE_e5_merge_AGNseed009_SimBKG_CLUseed009',
+    'GE_e5_merge_AGNseed010_SimBKG_CLUseed010', 
+    'GE_e5_merge_AGNseed011_SimBKG_CLUseed011', 
+    'GE_e5_merge_AGNseed012_SimBKG_CLUseed012', 
+    'GE_e5_merge_AGNseed013_SimBKG_CLUseed013', 
+    'GE_e5_merge_AGNseed014_SimBKG_CLUseed014', 
+    'GE_e5_merge_AGNseed015_SimBKG_CLUseed015', 
+    'GE_e5_merge_AGNseed016_SimBKG_CLUseed016', 
+    'GE_e5_merge_AGNseed017_SimBKG_CLUseed017', 
+    'GE_e5_merge_AGNseed018_SimBKG_CLUseed018',
 
     'GE_e4_merge_AGNseed001_SimBKG_CLUseed001',
     'GE_e4_merge_AGNseed002_SimBKG_CLUseed002',
@@ -34,54 +43,21 @@ GE_names = [
     'GE_e4_merge_AGNseed007_SimBKG_CLUseed007',
     'GE_e4_merge_AGNseed008_SimBKG_CLUseed008',
     'GE_e4_merge_AGNseed009_SimBKG_CLUseed009',
-
-    'GE_e5_merge_AGNseed001_SimBKG', 
-    'GE_e5_merge_AGNseed002_SimBKG',
-    'GE_e5_merge_AGNseed003_SimBKG',
-    'GE_e5_merge_AGNseed004_SimBKG',
-    'GE_e5_merge_AGNseed005_SimBKG',
-    'GE_e5_merge_AGNseed006_SimBKG',
-    'GE_e5_merge_AGNseed007_SimBKG',
-    'GE_e5_merge_AGNseed008_SimBKG',
-    'GE_e5_merge_AGNseed009_SimBKG',
-
-    'GE_e4_merge_AGNseed001_SimBKG',
-    'GE_e4_merge_AGNseed002_SimBKG',
-    'GE_e4_merge_AGNseed003_SimBKG',
-    'GE_e4_merge_AGNseed004_SimBKG',
-    'GE_e4_merge_AGNseed005_SimBKG',
-    'GE_e4_merge_AGNseed006_SimBKG',
-    'GE_e4_merge_AGNseed007_SimBKG',
-    'GE_e4_merge_AGNseed008_SimBKG',
-    'GE_e4_merge_AGNseed009_SimBKG',
-
-    'GE_e5_merge_SimBKG_CLUseed001',
-    'GE_e5_merge_SimBKG_CLUseed002',
-    'GE_e5_merge_SimBKG_CLUseed003',
-    'GE_e5_merge_SimBKG_CLUseed004',
-    'GE_e5_merge_SimBKG_CLUseed005',
-    'GE_e5_merge_SimBKG_CLUseed006',
-    'GE_e5_merge_SimBKG_CLUseed007',
-    'GE_e5_merge_SimBKG_CLUseed008',
-    'GE_e5_merge_SimBKG_CLUseed009',
-    
-    'GE_e4_merge_SimBKG_CLUseed001',
-    'GE_e4_merge_SimBKG_CLUseed002',
-    'GE_e4_merge_SimBKG_CLUseed003',
-    'GE_e4_merge_SimBKG_CLUseed004',
-    'GE_e4_merge_SimBKG_CLUseed005',
-    'GE_e4_merge_SimBKG_CLUseed006',
-    'GE_e4_merge_SimBKG_CLUseed007',
-    'GE_e4_merge_SimBKG_CLUseed008',
-    'GE_e4_merge_SimBKG_CLUseed009',
-    
-    'GE_e4_merge_SimBKG',
+    'GE_e4_merge_AGNseed010_SimBKG_CLUseed010',
+    'GE_e4_merge_AGNseed011_SimBKG_CLUseed011',
+    'GE_e4_merge_AGNseed012_SimBKG_CLUseed012',
+    'GE_e4_merge_AGNseed013_SimBKG_CLUseed013',
+    'GE_e4_merge_AGNseed014_SimBKG_CLUseed014',
+    'GE_e4_merge_AGNseed015_SimBKG_CLUseed015',
+    'GE_e4_merge_AGNseed016_SimBKG_CLUseed016',
+    'GE_e4_merge_AGNseed017_SimBKG_CLUseed017',
+    'GE_e4_merge_AGNseed018_SimBKG_CLUseed018',
     ]
 SKYMAP = {}
 for GE_name in GE_names:
     SKYMAP[GE_name] = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+GE_name+'.fits'))
 
-N_per_batch = 5
+N_per_batch = 250
 datata = []
 #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][2:48]:
 for GE_name in GE_names:
