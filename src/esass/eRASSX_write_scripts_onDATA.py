@@ -1,5 +1,8 @@
 # !/usr/bin/env python
 import sys, os, glob
+os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
+os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
+os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
 import numpy as n
 from astropy.table import Table, vstack
 import astropy.io.fits as fits
