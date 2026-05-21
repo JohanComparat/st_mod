@@ -21,11 +21,11 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     outprefix = field_id + "_"  # ""
     print(outdir)
     print(sys.argv)
-    # input files
-	  evt_list = np.array(glob.glob(os.path.join(indir, '*_Image_c030.fits.gz' ) ) )
-	  if len(evt_list)==0 :
-		  print('Tile not processed. Reason:\n no real data event file: {0}\n merged simulated event file exists: {1}'.format(len(evt_list)==0, os.path.isfile(path_2_event_file)))
-		  continue
+	# input files
+	evt_list = np.array(glob.glob(os.path.join(indir, '*_Image_c030.fits.gz' ) ) )
+	if len(evt_list)==0 :
+		print('Tile not processed. Reason:\n no real data event file: {0}\n merged simulated event file exists: {1}'.format(len(evt_list)==0, os.path.isfile(path_2_event_file)))
+		continue
     EvtFiles = evt_list[0]
     print(EvtFiles)
     if (not os.path.isfile(EvtFiles)):
