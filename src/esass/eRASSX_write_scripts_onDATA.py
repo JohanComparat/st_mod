@@ -1,34 +1,43 @@
+"""
+test tile
+sh /home/idies/workspace/erosim/Uchuu/LCerass/000000/s4_c030/s4_eSASS/000000_pipeline_img1.sh
+sh /home/idies/workspace/erosim/Uchuu/LCerass/000000/s4_c030/s4_eSASS/000000_pipeline_det1.sh
+sh /home/idies/workspace/erosim/Uchuu/LCerass/000000/s4_c030/s4_eSASS/000000_pipeline_Src1.sh
+"""
+
 # !/usr/bin/env python
 import sys, os, glob
+import numpy as np
+from astropy.table import Table, vstack
+import astropy.io.fits as fits
 os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
 os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
 os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
-import numpy as n
-from astropy.table import Table, vstack
-import astropy.io.fits as fits
+
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
+# eRASSn = 's4'
+# sky_tile_num = 0.
 eRASSn = sys.argv[1] # 's4' or 's5'
-
 for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
-
     sky_tile_id = str(sky_tile['SRVMAP'])
     str_field = str(sky_tile['SRVMAP']).zfill(6)
+    #str_field = str(int(sky_tile_num)).zfill(6)
 
     # directory
     field_id = str_field # sys.argv[2]
     indir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", field_id, eRASSn + '_c030')
-    outdir = os.path.join(indir, eRASSn + '_eSASS')
+    outdir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", field_id, eRASSn + '_eSASS')
     os.system('mkdir -p ' + outdir)
     # sb05_030108_020_FlareGTI_c030.fits  sb05_030108_020_Image_c030.fits.gz
     outprefix = field_id + "_"  # ""
     print(outdir)
     print(sys.argv)
-	# input files
-	evt_list = np.array(glob.glob(os.path.join(indir, '*_Image_c030.fits.gz' ) ) )
-	if len(evt_list)==0 :
-		print('Tile not processed. Reason:\n no real data event file: {0}\n merged simulated event file exists: {1}'.format(len(evt_list)==0, os.path.isfile(path_2_event_file)))
-		continue
+    # input files
+    evt_list = np.array(glob.glob(os.path.join(indir, '*_Image_c030.fits.gz' ) ) )
+    if len(evt_list)==0 :
+        print('Tile not existing.')
+        continue
     EvtFiles = evt_list[0]
     print(EvtFiles)
     if (not os.path.isfile(EvtFiles)):
@@ -60,7 +69,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     VerBand3 = str(3)
     VerBand4 = str(4)
 
-    VerBands = n.array([VerBand1, VerBand2, VerBand3])#, VerBand4])
+    VerBands = np.array([VerBand1, VerBand2, VerBand3])#, VerBand4])
 
     # energy bands
     eminstr1, emaxstr1 = str(0.2), str(0.6)
@@ -68,8 +77,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     eminstr3, emaxstr3 = str(2.3), str(5.0)
     eminstr4, emaxstr4 = str(0.2), str(2.3)
 
-    energy_band_mins = n.array([ eminstr1, eminstr2, eminstr3])#, eminstr4 ])
-    energy_band_maxs = n.array([ emaxstr1, emaxstr2, emaxstr3])#, emaxstr4 ])
+    energy_band_mins = np.array([ eminstr1, eminstr2, eminstr3])#, eminstr4 ])
+    energy_band_maxs = np.array([ emaxstr1, emaxstr2, emaxstr3])#, emaxstr4 ])
 
 
     # single band image
@@ -622,4 +631,3 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     #f_out.write("\n")
 
     f_out.close()
-
