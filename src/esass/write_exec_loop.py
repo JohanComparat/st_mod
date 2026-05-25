@@ -57,7 +57,7 @@ SKYMAP = {}
 for GE_name in GE_names:
     SKYMAP[GE_name] = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+GE_name+'.fits'))
 
-N_per_batch = 50
+N_per_batch = 100
 datata = []
 #for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][2:48]:
 for GE_name in GE_names:
