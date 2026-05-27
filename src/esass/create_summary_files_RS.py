@@ -46,6 +46,8 @@ print('Reading in p2cats...')
 p_2_match_cats = np.sort(glob.glob(os.path.join(basedir, '??????', subdir, 'Sc1*Uniq*fits')))
 p_2_match_cats_Lext0 = np.sort(glob.glob(os.path.join(basedir, '??????', subdir, 'Sc_Lext0*Uniq*fits')))
 
+p_2_agn_matched = os.path.join(basedir, 'SummaryFiles', f'LC_eRASS_AGN_Input_{subdir}.fits')
+
 p_2_clu_matched = os.path.join(basedir, 'SummaryFiles', f'LC_eRASS_Clusters_Input_{subdir}.fits')
 p_2_eSASS_matched = os.path.join(basedir, 'SummaryFiles', f'LC_eRASS_eSASS_Output_{subdir}.fits')
 
@@ -58,8 +60,9 @@ profiles = Table.read(
     '/home/idies/workspace/erosim/software/st_mod_data/data/models/model_GAS/profiles_010z015_1e14M2e14.fits')
 
 rsp_path = "/home/idies/workspace/erosim/software/st_mod_data/data/onaxis_tm0_rmf_2023-01-17.fits"
-arf_path = "/home/idies/workspace/erosim/software/st_mod_data/data/survey_tm0_arf_filter_2023-01-17.fits"
-p2ecf_grid = "/home/idies/workspace/erosim/software/st_mod_data/data/ecf_grid.npz"
+#arf_path = "/home/idies/workspace/erosim/software/st_mod_data/data/survey_tm0_arf_filter_2023-01-17.fits"
+arf_path = "/home/idies/workspace/erosim/software/st_mod_data/data/onaxis_tm0_rmf_2023-01-17.fits"
+p2ecf_grid = "/home/idies/workspace/erosim/software/st_mod_data/data/ecf_grid_onaxis.npz"
 
 
 # ----------------------------------------------------------------------
@@ -164,8 +167,8 @@ def build_ecf_grid(kT_grid, z_grid, rsp_path, arf_path,
 # ----------------------------------------------------------------------
 # Build/load ECF grid once in parent process
 # ----------------------------------------------------------------------
-kT_grid = np.arange(0.1, 13.1, 0.2)
-z_grid = np.arange(0.01, 1.51, 0.02)
+kT_grid = np.arange(0.1, 15.1, 0.1)
+z_grid = np.arange(0.01, 1.61, 0.01)
 
 if not os.path.isfile(p2ecf_grid):
     build_ecf_grid(kT_grid, z_grid, rsp_path, arf_path, out_file=p2ecf_grid)
@@ -211,6 +214,81 @@ high_BKG_ids = bkg_simput['SRC_ID'][sel_BG_feature]
 nside = 128
 
 
+
+#### Helper for AGN ####
+def load_agn_input_table(tile):
+    """
+    Returns an AGN input table with SRC_ID from the simput catalogue
+    plus physical AGN properties from the non-simput catalogue.
+    """
+    simput_path = os.path.join(basedir, tile, 'AGN_list_sigma_0.8_fsat_8.0_simput.fits')
+    props_path  = os.path.join(basedir, tile, 'AGN_list_sigma_0.8_fsat_8.0.fits')
+
+    if (not os.path.isfile(simput_path)) or (not os.path.isfile(props_path)):
+        return None
+
+    agn_simput = Table.read(simput_path, memmap=True)
+    agn_simput = agn_simput[agn_simput['FLUX']>=8e-16]
+    agn_props = Table.read(props_path, memmap=True)
+
+    # Keep only useful simput columns
+    agn = Table()
+    for c in ['SRC_ID', 'RA', 'DEC', 'E_MIN', 'E_MAX', 'FLUX']:#, 'SPECTRUM']:
+        if c in agn_simput.colnames:
+            agn[c] = agn_simput[c]
+
+    # First try exact join on RA/DEC
+    try:
+        agn_join = join(
+            agn,
+            agn_props,
+            keys=['RA', 'DEC'],
+            join_type='left',
+            table_names=['_simput', '_props'],
+            uniq_col_name='{col_name}{table_name}'
+        )
+
+        # If exact join preserved row count, use it
+        if len(agn_join) == len(agn):
+            return agn_join
+
+    except Exception:
+        pass
+
+    # Fallback: nearest-neighbour positional match
+    c_sim = SkyCoord(agn['RA'], agn['DEC'], unit='deg')
+    c_prp = SkyCoord(agn_props['RA'], agn_props['DEC'], unit='deg')
+
+    idx, sep2d, _ = c_sim.match_to_catalog_sky(c_prp)
+
+    # Require a very small tolerance
+    max_sep = 0.1 * u.arcsec
+    bad = sep2d > max_sep
+
+    agn_out = agn.copy()
+    for col in agn_props.colnames:
+        if col in ['RA', 'DEC']:
+            agn_out[col + '_props'] = agn_props[col][idx]
+        else:
+            agn_out[col] = agn_props[col][idx]
+
+    agn_out['match_sep_arcsec'] = sep2d.arcsec
+    agn_out['has_props_match'] = ~bad
+
+    # For unmatched rows, fill with sentinel values where possible
+    for col in agn_props.colnames:
+        target = col if col not in ['RA', 'DEC'] else col + '_props'
+        if target not in agn_out.colnames:
+            continue
+
+        arr = agn_out[target]
+        if hasattr(arr, 'dtype') and np.issubdtype(arr.dtype, np.floating):
+            arr = np.array(arr, copy=True)
+            arr[bad] = -99.0
+            agn_out[target] = arr
+
+    return agn_out
+
 # ----------------------------------------------------------------------
 # Tile processing
 # ----------------------------------------------------------------------
@@ -219,7 +297,7 @@ def process_tile(tile, mode='standard'):
     Process one tile.
     mode = 'standard' or 'lext0'
     Returns:
-        clu_tile_table, esass_tile_table
+        clu_tile_table, esass_tile_table, ang_tile_table
     """
     try:
         tile_int = int(tile)
@@ -232,12 +310,14 @@ def process_tile(tile, mode='standard'):
             any_path = os.path.join(basedir, tile, subdir, f'Sc_Lext0_{tile}_IDMatch_Any_Tot2.0.fits')
 
         if (not os.path.isfile(uniq_path)) or (not os.path.isfile(any_path)):
-            return None, None
+            return None, None, None
 
         xgas_path = os.path.join(basedir, tile, 'XGAS.fits')
         clu_simput_path = os.path.join(basedir, tile, 'Xgas_bHS0.8_simput_final.fits')
         if (not os.path.isfile(xgas_path)) or (not os.path.isfile(clu_simput_path)):
-            return None, None
+            return None, None, None
+
+        agn_input = load_agn_input_table(tile)
 
         XGAS = Table.read(xgas_path, memmap=True)
 
@@ -247,7 +327,7 @@ def process_tile(tile, mode='standard'):
         XGAS_filtered = XGAS[mask]
 
         if len(XGAS_filtered) == 0:
-            return None, None
+            return None, None, None
 
         Any = Table.read(any_path, memmap=True)
         Uniq = Table.read(uniq_path, memmap=True)
@@ -271,7 +351,7 @@ def process_tile(tile, mode='standard'):
 
         # --- restrict Uniq to the tile area using precomputed box, not get_srvmap per source
         if tile_int not in tile_bounds:
-            return None, None
+            return None, None, None
 
         ra_min, ra_max, dec_min, dec_max = tile_bounds[tile_int]
         sel_area = (
@@ -283,7 +363,7 @@ def process_tile(tile, mode='standard'):
         Uniq = Uniq[sel_area]
 
         # add flag within border
-        ra_min_in, ra_max_in, dec_min_in, dec_max_in = get_inner_tile_bounds(tile, border_arcmin=30.0)
+        ra_min_in, ra_max_in, dec_min_in, dec_max_in = get_inner_tile_bounds(tile, border_arcmin=20.0)
         within_border = (
                 (Uniq['RA'] >= ra_min_in) &
                 (Uniq['RA'] <= ra_max_in) &
@@ -292,6 +372,35 @@ def process_tile(tile, mode='standard'):
         )
 
         Uniq['within_border'] = within_border
+
+        #process AGN
+        # --- restrict AGN truth catalogue to this tile and add flags
+        if agn_input is not None and len(agn_input) > 0:
+            sel_area_agn = (
+                    (agn_input['RA'] >= ra_min) &
+                    (agn_input['RA'] < ra_max) &
+                    (agn_input['DEC'] >= dec_min) &
+                    (agn_input['DEC'] < dec_max)
+            )
+            agn_input = agn_input[sel_area_agn]
+
+            if len(agn_input) > 0:
+                within_border_agn = (
+                        (agn_input['RA'] >= ra_min_in) &
+                        (agn_input['RA'] <= ra_max_in) &
+                        (agn_input['DEC'] >= dec_min_in) &
+                        (agn_input['DEC'] <= dec_max_in)
+                )
+                agn_input['within_border'] = within_border_agn
+
+                ipix_agn = hp.ang2pix(
+                    nside,
+                    agn_input['RA'],
+                    agn_input['DEC'],
+                    nest=True,
+                    lonlat=True
+                )
+                agn_input['in_good_region'] = ~np.isin(ipix_agn, high_BKG_ids)
 
         R500c_arcmin = XGAS_filtered['R500c'] / cosmo.kpc_proper_per_arcmin(z=XGAS_filtered['redshift_S'])
         XGAS_filtered['R500c_arcmin'] = R500c_arcmin.value
@@ -331,6 +440,23 @@ def process_tile(tile, mode='standard'):
                 r = deg_to_rad * ap
                 counts[:, j] = Tree_AGN.query_radius(coord_cat_CLU, r=r, count_only=True)
             XGAS_filtered.add_column(Column(name='COUNTS_02_23_CLU_AGN', data=counts))
+
+            # --- truth-level AGN photon counts per simulated AGN source
+            if agn_input is not None and len(agn_input) > 0 and 'SRC_ID' in agn_evt.colnames:
+                evt_src = np.asarray(agn_evt['SRC_ID'], dtype=np.int64)
+                u_src, c_src = np.unique(evt_src, return_counts=True)
+                count_map = dict(zip(u_src, c_src))
+
+                agn_counts = np.array(
+                    [count_map.get(int(src_id), 0)
+                     for src_id in np.asarray(agn_input['SRC_ID'])],
+                    dtype=np.int32
+                )
+                agn_input['COUNTS_02_23_AGN'] = agn_counts
+
+                agn_input = agn_input[agn_input['COUNTS_02_23_AGN'] > 0]
+                if len(agn_input) == 0:
+                    agn_input = None
 
         if os.path.isfile(p2evt_bkg):
             bkg_evt = Table.read(p2evt_bkg, memmap=True)
@@ -463,13 +589,13 @@ def process_tile(tile, mode='standard'):
 
         # From Uniq, build:
         # cluster_id -> final matched row info
-        uniq_ids = np.asarray(Uniq['ID_uniq'], dtype=np.int64)
-        uniq_any = np.asarray(Uniq['ID_Any'], dtype=np.int64)
+        uniq_ids_all = np.asarray(Uniq['ID_uniq'], dtype=np.int64)
+        uniq_any_all = np.asarray(Uniq['ID_Any'], dtype=np.int64)
 
         # keep only matched cluster rows
-        sel_uniq_cluster = uniq_ids >= 1e6
-        uniq_ids = uniq_ids[sel_uniq_cluster]
-        uniq_any = uniq_any[sel_uniq_cluster]
+        sel_uniq_cluster = uniq_ids_all >= 1e6
+        uniq_ids = uniq_ids_all[sel_uniq_cluster]
+        uniq_any = uniq_any_all[sel_uniq_cluster]
 
         uniq_any_map = dict(zip(uniq_ids, uniq_any))
 
@@ -508,11 +634,59 @@ def process_tile(tile, mode='standard'):
         ipix = hp.ang2pix(nside, Uniq['RA'], Uniq['DEC'], nest=True, lonlat=True)
         Uniq['in_good_region'] = ~np.isin(ipix, high_BKG_ids)
 
-        return XGAS_filtered, Uniq
+        # ------------------------------------------------------------------
+        # AGN truth catalogue: detected or not
+        # For AGN we trust the final photon-matching output:
+        #   - Any['ID_simput'] tells whether the AGN produced any eSASS detections
+        #   - Uniq['ID_uniq'] tells whether the AGN survives in the final unique catalogue
+        # We do NOT need to use ID_Any here.
+        # ------------------------------------------------------------------
+        if agn_input is not None and len(agn_input) > 0:
+            agn_ids = np.asarray(agn_input['SRC_ID'])
+
+            # all Any matches associated with AGN inputs
+            any_ids = np.asarray(Any['ID_simput'])
+            sel_any_agn = (any_ids >= 0) & (any_ids < 1e5)
+
+            u_any_agn, c_any_agn = np.unique(any_ids[sel_any_agn], return_counts=True)
+            n_any_map = dict(zip(u_any_agn, c_any_agn))
+            any_detected_set = set(u_any_agn.tolist())
+
+            # final unique AGN detections
+            sel_uniq_agn = (uniq_ids_all >= 0) & (uniq_ids_all < 1e5)
+            uniq_ids_agn = uniq_ids_all[sel_uniq_agn]
+            uniq_detected_set = set(np.asarray(uniq_ids_agn).tolist())
+
+            agn_input['detected_any'] = np.array(
+                [src_id in any_detected_set for src_id in agn_ids],
+                dtype=bool
+            )
+
+            agn_input['detected_uniq'] = np.array(
+                [src_id in uniq_detected_set for src_id in agn_ids],
+                dtype=bool
+            )
+
+            # Count how many final unique eSASS sources are attached to each AGN
+            # through ID_Any
+            uniq_any_all = np.asarray(Uniq['ID_Any'])
+            sel_uniq_any_agn = (uniq_any_all >= 0) & (uniq_any_all < 1e5)
+
+            uniq_any_agn = uniq_any_all[sel_uniq_any_agn]
+            u_uniq_any_agn, c_uniq_any_agn = np.unique(uniq_any_agn, return_counts=True)
+            n_uniq_any_agn_map = dict(zip(u_uniq_any_agn, c_uniq_any_agn))
+
+            agn_input['N_eSASS_det'] = np.array(
+                [n_uniq_any_agn_map.get(src_id, 0) for src_id in agn_ids],
+                dtype=np.int32
+            )
+
+
+        return XGAS_filtered, Uniq, agn_input
 
     except Exception as e:
         print(f"[{mode}] tile {tile} failed: {e}")
-        return None, None
+        return None, None, None
 
 
 # ----------------------------------------------------------------------
@@ -520,6 +694,7 @@ def process_tile(tile, mode='standard'):
 # ----------------------------------------------------------------------
 def run_parallel(tiles, mode='standard', max_workers=None):
     clu_all = []
+    agn_all = []
     esass_all = []
 
     if max_workers is None:
@@ -533,14 +708,16 @@ def run_parallel(tiles, mode='standard', max_workers=None):
 
         for fut in tqdm(as_completed(futures), total=len(futures), desc=f'Processing {mode}'):
             tile = futures[fut]
-            clu_tile, esass_tile = fut.result()
+            clu_tile, esass_tile, agn_tile = fut.result()
 
             if clu_tile is not None and len(clu_tile) > 0:
                 clu_all.append(clu_tile)
             if esass_tile is not None and len(esass_tile) > 0:
                 esass_all.append(esass_tile)
+            if agn_tile is not None and len(agn_tile) > 0:
+                agn_all.append(agn_tile)
 
-    return clu_all, esass_all
+    return clu_all, esass_all, agn_all
 
 
 # ----------------------------------------------------------------------
@@ -549,9 +726,14 @@ def run_parallel(tiles, mode='standard', max_workers=None):
 if __name__ == '__main__':
     # standard
     tiles_standard = [p.split('/')[-3] for p in p_2_match_cats]
-    clu_all, eSASS_all = run_parallel(tiles_standard, mode='standard')
+    clu_all, eSASS_all, agn_all = run_parallel(tiles_standard, mode='standard')
 
     if len(clu_all) > 0:
+        print('Number of AGN tile tables:', len(agn_all))
+        print('Total AGN rows:', np.sum([len(t) for t in agn_all]))
+        agn_all_table = vstack(agn_all)
+        agn_all_table.write(p_2_agn_matched, overwrite=True)
+
         clu_all_table = vstack(clu_all)
         clu_all_table.write(p_2_clu_matched, overwrite=True)
 
@@ -631,7 +813,8 @@ if __name__ == '__main__':
         if len(missing_cols) > 0:
             raise RuntimeError(f"Original summary missing columns: {missing_cols}")
 
-        orig_small = clu_all_orig['id']
+        orig_small = Table()
+        orig_small['id'] = clu_all_orig['id']
         for c in cols_to_copy:
             orig_small[c] = clu_all_orig[c]
 
