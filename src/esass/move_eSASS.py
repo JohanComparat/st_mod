@@ -1,5 +1,6 @@
 # !/usr/bin/env python
 import sys, os
+import subprocess as sp
 import logging
 from astropy.table import Table
 
@@ -7,7 +8,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s %(levelname)s %(message)s',
     handlers=[
-        logging.FileHandler('move_eSASS.log'),
+        logging.FileHandler('/home/idies/workspace/erosim/logs/move_eSASS_2026_06_01.log'),
         logging.StreamHandler(sys.stdout),
     ],
 )
@@ -24,7 +25,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     outdir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", field_id, eRASSn + '_eSASS_pre_2026_06_01')
     cmd = 'mv ' + indir + ' ' + outdir
     logging.info('CMD: %s', cmd)
-    rc = os.system(cmd)
+    rc = sp.run(cmd, shell=True).returncode
     if rc != 0:
         logging.warning('FAILED (exit %d): %s', rc, cmd)
     else:
@@ -37,7 +38,7 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     outdir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", field_id, eRASSn + '_eSASS_pre_2026_06_01')
     cmd = 'mv ' + indir + ' ' + outdir
     logging.info('CMD: %s', cmd)
-    rc = os.system(cmd)
+    rc = sp.run(cmd, shell=True).returncode
     if rc != 0:
         logging.warning('FAILED (exit %d): %s', rc, cmd)
     else:
