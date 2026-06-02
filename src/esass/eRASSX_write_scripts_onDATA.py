@@ -19,6 +19,13 @@ sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models
 # eRASSn = 's4'
 # sky_tile_num = 0.
 eRASSn = sys.argv[1] # 's4' or 's5'
+if eRASSn == 's4':
+    real_data_name = 's4'
+    real_data_number = 's?04'
+elif eRASSn == 's5':
+    real_data_name = 's5'
+    real_data_number = 's?05'
+LC_dir = 'LCerass' #sys.argv[3] # 'eRASSn_LC'
 for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
     sky_tile_id = str(sky_tile['SRVMAP'])
     str_field = str(sky_tile['SRVMAP']).zfill(6)
@@ -34,7 +41,10 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
     print(outdir)
     print(sys.argv)
     # input files
-    evt_list = np.array(glob.glob(os.path.join(indir, '*_Image_c030.fits.gz' ) ) )
+    #evt_list = np.array(glob.glob(os.path.join(indir, '*_Image_c030.fits.gz' ) ) )
+    evt_list = np.array(glob.glob(
+        os.path.join(os.environ['UCHUU'], LC_dir, str_field, '{0}_c030'.format(real_data_name),
+                     '{0}_*_Image_c030.fits.gz'.format(real_data_number))))
     if len(evt_list)==0 :
         print('Tile not existing.')
         continue
