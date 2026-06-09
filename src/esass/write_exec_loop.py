@@ -98,11 +98,19 @@ for GE_name in GE_names:
     skm_hdu_in_de_sky = sky_map_hdu[np.where((sky_map_hdu['OWNER']==2) | (sky_map_hdu['OWNER']==0))[0]]
 
     #Indexes of sky tiles in priority list
-    skm_hdu_priority_idx = [np.where(skm_hdu_in_de_sky['tile_id'] == gt)[0] for gt in good_tiles_list]
+    skm_hdu_priority_idx = []
+    skm_hdu_not_priority_idx = []
+    for tid in skm_hdu_in_de_sky['tile_id']:
+        if tid in list(good_tiles_list):    
+            skm_hdu_priority_idx.append(list(skm_hdu_in_de_sky['tile_id']).index(tid))
+        else:
+            skm_hdu_not_priority_idx.append(list(skm_hdu_in_de_sky['tile_id']).index(tid))
+    skm_hdu_priority_idx = np.array(skm_hdu_priority_idx)
+    skm_hdu_not_priority_idx = np.array(skm_hdu_not_priority_idx)
 
     #Separate priority from not in priority
     skm_hdu_priority = skm_hdu_in_de_sky[skm_hdu_priority_idx]
-    skm_hdu_not_priority = skm_hdu_in_de_sky[~skm_hdu_priority_idx]
+    skm_hdu_not_priority = skm_hdu_in_de_sky[skm_hdu_not_priority_idx]
 
     #Identify those already done and those to be done
     to_process_priority = skm_hdu_priority[np.where((skm_hdu_priority['has_merged_events'])&(skm_hdu_priority['has_Sc1Cat']==False))[0]]
