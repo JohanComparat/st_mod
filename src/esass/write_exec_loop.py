@@ -83,7 +83,7 @@ for GE_name in GE_names:
 N_per_batch = int(sys.argv[1])
 
 #Print header
-print('To do', 'Done', 'Priority done', 'Experiment name')
+print('(To do)', '(Done)', '(Priority done)', '(Experiment name)')
 
 #Populate array
 datata = []
@@ -119,7 +119,7 @@ for GE_name in GE_names:
     already_done_not_priority = skm_hdu_not_priority[np.where((skm_hdu_not_priority['has_merged_events'])&(skm_hdu_not_priority['has_Sc1Cat']))[0]]
 
     #If there are no more priority tiles to be done, then set variable
-    if len(to_process_priority == 0):
+    if len(to_process_priority) == 0:
         priority_done = True
     else:
         priority_done = False
