@@ -86,7 +86,8 @@ N_per_batch = int(sys.argv[1])
 print('(To do)', '(Done)', '(Priority done)', '(Experiment name)')
 
 #Populate array
-datata = []
+to_do_global = []
+already_done_global = []
 for GE_name in GE_names:
     sky_map_hdu = SKYMAP[GE_name]
 
@@ -131,10 +132,13 @@ for GE_name in GE_names:
     #Print information
     print(len(to_process_all), len(already_done_all), priority_done, GE_name)
 
+    #Global numbers
+    to_do_global.append(len(to_process_all))
+    already_done_global.append(len(already_done_all))
+
     #If N_per_batch is not zero, then actually write the files
     if N_per_batch > 0:
-        datata.append([len(to_process_all), len(already_done_all)])
-
+        
         #Do figure
         p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
         plt.plot(skm_hdu_in_de_sky['RA_CEN'], skm_hdu_in_de_sky['DE_CEN'], 'k,', label='eRO DE')
@@ -175,5 +179,5 @@ for GE_name in GE_names:
 
 print('='*100)
 print('fields')
-print(np.transpose(datata)[0].sum(), 'todo')
-print(np.transpose(datata)[1].sum(), 'done')
+print(np.sum(to_do_global), 'todo')
+print(np.sum(already_done_global), 'done')
