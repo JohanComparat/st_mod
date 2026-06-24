@@ -83,7 +83,7 @@ for GE_name in GE_names:
 N_per_batch = int(sys.argv[1])
 
 #Print header
-print('(To do)', '(Done)', '(Priority done)', '(Experiment name)')
+print('(To do)', '(Done)', '(Fraction)', '(Percentage)', '(Priority done)', '(Experiment name)')
 
 #Populate array
 to_do_global = []
@@ -127,7 +127,7 @@ for GE_name in GE_names:
     to_process_all = tbl.vstack([to_process_priority, to_process_not_priority], join_type = 'exact')
 
     #Print information
-    print(len(to_process_all), len(already_done_all), priority_done, GE_name)
+    print(len(to_process_all), len(already_done_all), len(already_done_all)/(len(already_done_all)+len(to_process_all)), (len(already_done_all)/(len(already_done_all)+len(to_process_all)))*100, priority_done, GE_name)
 
     #Global numbers
     to_do_global.append(len(to_process_all))
