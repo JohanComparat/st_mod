@@ -174,6 +174,7 @@ for GE_name in GE_names:
 
 #Create table
 statustab = tbl.Table(rows = statusrows, names = ['To_do', 'Done', 'Fraction', 'Percentage', 'Priority_done', 'Experiment_name'])
+statustab['Fraction'].info.format = '.2f'
 statustab['Percentage'].info.format = '.2f'
 statustab.pprint_all()
 print('='*100)
