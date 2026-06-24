@@ -82,10 +82,8 @@ for GE_name in GE_names:
 #Set number of tiles to be done per batch
 N_per_batch = int(sys.argv[1])
 
-#Print header
-print('(To do)', '(Done)', '(Fraction)', '(Percentage)', '(Priority done)', '(Experiment name)')
-
 #Populate array
+statusrows = []
 to_do_global = []
 already_done_global = []
 for GE_name in GE_names:
@@ -127,7 +125,7 @@ for GE_name in GE_names:
     to_process_all = tbl.vstack([to_process_priority, to_process_not_priority], join_type = 'exact')
 
     #Print information
-    print(len(to_process_all), len(already_done_all), len(already_done_all)/(len(already_done_all)+len(to_process_all)), (len(already_done_all)/(len(already_done_all)+len(to_process_all)))*100, priority_done, GE_name)
+    statusrows.append([len(to_process_all), len(already_done_all), len(already_done_all)/(len(already_done_all)+len(to_process_all)), (len(already_done_all)/(len(already_done_all)+len(to_process_all)))*100, priority_done, GE_name])
 
     #Global numbers
     to_do_global.append(len(to_process_all))
@@ -174,6 +172,10 @@ for GE_name in GE_names:
                 f_out.close()
                 print(out_im1, 'written')
 
+#Create table
+statustab = tbl.Table(rows = statusrows, names = ['To_do', 'Done', 'Fraction', 'Percentage', 'Priority_done', 'Experiment_name'])
+statustab['Percentage'].info.format = '.2f'
+statustab.pprint_all()
 print('='*100)
 print('fields')
 print(np.sum(to_do_global), 'todo')
