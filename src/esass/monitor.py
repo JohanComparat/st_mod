@@ -3,8 +3,14 @@ import sys
 import subprocess
 from select import select
 
+#Define seed list
+clu_seed = list(range(1,118))
+agn_seed = list(range(1,10))*13
+t_tot_seed = list(zip(agn_seed, clu_seed))
+tot_seed = [(str(seed[0]).zfill(3), str(seed[1]).zfill(3)) for seed in t_tot_seed]
+
 # Start two subprocesses
-procs = [subprocess.Popen(["python", "/home/idies/workspace/erosim/software/st_mod/src/esass/make_summary_skymap.py", "GE_e4_merge_AGNseed{0}_SimBKG_CLUseed{1}".format(str(seed[0]).zfill(3), str(seed[1]).zfill(3))], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True) for seed in list(zip(list(range(1,10))+list(range(1,10))+list(range(1,10)), list(range(1,28))))] + [subprocess.Popen(["python", "/home/idies/workspace/erosim/software/st_mod/src/esass/make_summary_skymap.py", "GE_e5_merge_AGNseed{0}_SimBKG_CLUseed{1}".format(str(seed[0]).zfill(3), str(seed[1]).zfill(3))], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True) for seed in list(zip(list(range(1,10))+list(range(1,10))+list(range(1,10)), list(range(1,28))))]
+procs = [subprocess.Popen(["python", "/home/idies/workspace/erosim/software/st_mod/src/esass/make_summary_skymap.py", "GE_e4_merge_AGNseed{0}_SimBKG_CLUseed{1}".format(seed[0], seed[1])], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True) for seed in tot_seed] + [subprocess.Popen(["python", "/home/idies/workspace/erosim/software/st_mod/src/esass/make_summary_skymap.py", "GE_e5_merge_AGNseed{0}_SimBKG_CLUseed{1}".format(seed[0], seed[1])], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True) for seed in tot_seed]
 
 # Continuously monitor output
 while procs:
