@@ -17,28 +17,15 @@ sky_map_hdu = tbl.Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/mo
 #Read list of tiles in eROSITA DE good footprint
 good_tiles_list = np.loadtxt('/home/idies/workspace/erosim/center_in_foot.txt', dtype = str, unpack = True)
 
-#List of experiment names
-GE_names = [
-    'GE_e5_merge_AGNseed001_SimBKG_CLUseed019', 
-    'GE_e5_merge_AGNseed002_SimBKG_CLUseed020', 
-    'GE_e5_merge_AGNseed003_SimBKG_CLUseed021', 
-    'GE_e5_merge_AGNseed004_SimBKG_CLUseed022', 
-    'GE_e5_merge_AGNseed005_SimBKG_CLUseed023', 
-    'GE_e5_merge_AGNseed006_SimBKG_CLUseed024', 
-    'GE_e5_merge_AGNseed007_SimBKG_CLUseed025', 
-    'GE_e5_merge_AGNseed008_SimBKG_CLUseed026', 
-    'GE_e5_merge_AGNseed009_SimBKG_CLUseed027',
+#Define seed list
+clu_seed = list(range(1,118))
+agn_seed = list(range(1,10))*13
+t_tot_seed = list(zip(agn_seed, clu_seed))
+tot_seed = [(str(seed[0]).zfill(3), str(seed[1]).zfill(3)) for seed in t_tot_seed]
 
-    'GE_e4_merge_AGNseed001_SimBKG_CLUseed019',
-    'GE_e4_merge_AGNseed002_SimBKG_CLUseed020',
-    'GE_e4_merge_AGNseed003_SimBKG_CLUseed021',
-    'GE_e4_merge_AGNseed004_SimBKG_CLUseed022',
-    'GE_e4_merge_AGNseed005_SimBKG_CLUseed023',
-    'GE_e4_merge_AGNseed006_SimBKG_CLUseed024',
-    'GE_e4_merge_AGNseed007_SimBKG_CLUseed025',
-    'GE_e4_merge_AGNseed008_SimBKG_CLUseed026',
-    'GE_e4_merge_AGNseed009_SimBKG_CLUseed027'
-    ]
+#List of experiment names
+GE_names = ['GE_e5_merge_AGNseed{0}_SimBKG_CLUseed{1}'.format(seed[0], seed[1]) for seed in tot_seed]+['GE_e4_merge_AGNseed{0}_SimBKG_CLUseed{1}'.format(seed[0], seed[1]) for seed in tot_seed]
+
 SKYMAP = {}
 for GE_name in GE_names:
     SKYMAP[GE_name] = tbl.Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+GE_name+'.fits'))
