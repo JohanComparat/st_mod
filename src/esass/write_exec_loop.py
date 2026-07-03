@@ -18,8 +18,8 @@ sky_map_hdu = tbl.Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/mo
 good_tiles_list = np.loadtxt('/home/idies/workspace/erosim/center_in_foot.txt', dtype = str, unpack = True)
 
 #Define seed list
-clu_seed = list(range(1,118))
-agn_seed = list(range(1,10))*13
+clu_seed = list(range(19,118))
+agn_seed = list(range(1,10))*11
 t_tot_seed = list(zip(agn_seed, clu_seed))
 tot_seed = [(str(seed[0]).zfill(3), str(seed[1]).zfill(3)) for seed in t_tot_seed]
 
@@ -76,7 +76,10 @@ for GE_name in GE_names:
     to_process_all = tbl.vstack([to_process_priority, to_process_not_priority], join_type = 'exact')
 
     #Print information
-    statusrows.append([len(to_process_all), len(already_done_all), len(already_done_all)/(len(already_done_all)+len(to_process_all)), (len(already_done_all)/(len(already_done_all)+len(to_process_all)))*100, priority_done, GE_name])
+    if len(already_done_all)+len(to_process_all) > 0:
+        statusrows.append([len(to_process_all), len(already_done_all), len(already_done_all)/(len(already_done_all)+len(to_process_all)), (len(already_done_all)/(len(already_done_all)+len(to_process_all)))*100, priority_done, GE_name])
+    else:
+        statusrows.append([len(to_process_all), len(already_done_all), 0, 0, priority_done, GE_name])
 
     #Global numbers
     to_do_global.append(len(to_process_all))
