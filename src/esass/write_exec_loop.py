@@ -86,7 +86,7 @@ for GE_name in GE_names:
     already_done_global.append(len(already_done_all))
 
     #If N_per_batch is not zero, then actually write the files
-    if (N_per_batch > 0) & ((GE_name == 'GE_e5_merge_AGNseed001_SimBKG_CLUseed019') | (GE_name == 'GE_e5_merge_AGNseed002_SimBKG_CLUseed020') | (GE_name == 'GE_e5_merge_AGNseed003_SimBKG_CLUseed021') | (GE_name == 'GE_e5_merge_AGNseed008_SimBKG_CLUseed026') | (GE_name == 'GE_e5_merge_AGNseed009_SimBKG_CLUseed027') | (GE_name == 'GE_e4_merge_AGNseed009_SimBKG_CLUseed081')):
+    if (N_per_batch > 0) & ((GE_name == 'GE_e5_merge_AGNseed008_SimBKG_CLUseed026') | (GE_name == 'GE_e5_merge_AGNseed007_SimBKG_CLUseed088') | (GE_name == 'GE_e5_merge_AGNseed008_SimBKG_CLUseed089') | (GE_name == 'GE_e5_merge_AGNseed009_SimBKG_CLUseed090')):
         
         #Do figure
         p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
