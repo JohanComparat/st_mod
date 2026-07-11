@@ -90,8 +90,7 @@ for GE_name in GE_names:
                           | (GE_name == 'GE_e4_merge_AGNseed006_SimBKG_CLUseed096') 
                           | (GE_name == 'GE_e4_merge_AGNseed007_SimBKG_CLUseed097')
                           | (GE_name == 'GE_e4_merge_AGNseed008_SimBKG_CLUseed098')
-                          | (GE_name == 'GE_e4_merge_AGNseed009_SimBKG_CLUseed099')
-                          | (GE_name == 'GE_e4_merge_AGNseed002_SimBKG_CLUseed101')):
+                          | (GE_name == 'GE_e4_merge_AGNseed009_SimBKG_CLUseed099')):
         
         #Do figure
         p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
