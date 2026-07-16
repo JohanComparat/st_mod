@@ -159,8 +159,8 @@ ten = np.array([stt.split('_')[1] for stt in statustab['Experiment_name']])
 stt_where_e4 = statustab[np.where(ten == 'e4')[0]]
 stt_where_e5 = statustab[np.where(ten == 'e5')[0]]
 plt.figure('completion')
-plt.hist(stt_where_e4['Percentage'], cumulative = -1, color = 'dodgerblue', label = 'eRASS:4', bins = 10, histtype = 'step', linewidth = 2)
-plt.hist(stt_where_e5['Percentage'], cumulative = -1, color = 'darkorange', label = 'eRASS:5', bins = 10, histtype = 'step', linewidth = 2)
+plt.hist(stt_where_e4['Percentage'], cumulative = -1, color = 'dodgerblue', label = 'eRASS:4', bins = 25, histtype = 'step', linewidth = 2)
+plt.hist(stt_where_e5['Percentage'], cumulative = -1, color = 'darkorange', label = 'eRASS:5', bins = 25, histtype = 'step', linewidth = 2)
 plt.xlabel('Percentage of completion')
 plt.ylabel('Number of seeds')
 plt.xlim(-5,105)
