@@ -5,6 +5,7 @@ import matplotlib
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 14})
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 
 #Set environmental variables
 os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
@@ -95,6 +96,14 @@ for GE_name in GE_names:
                           | (GE_name == 'GE_e5_merge_AGNseed007_SimBKG_CLUseed034')
                           | (GE_name == 'GE_e5_merge_AGNseed008_SimBKG_CLUseed035')
                           | (GE_name == 'GE_e5_merge_AGNseed009_SimBKG_CLUseed036')):
+        
+
+
+
+#e5 37 38 39 40, 41, 42
+
+
+
                 
         #Do figure
         p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
@@ -152,6 +161,15 @@ stt_where_e5 = statustab[np.where(ten == 'e5')[0]]
 plt.figure('completion')
 plt.hist(stt_where_e4['Percentage'], cumulative = -1, color = 'dodgerblue', label = 'eRASS:4', bins = 10, histtype = 'step', linewidth = 2)
 plt.hist(stt_where_e5['Percentage'], cumulative = -1, color = 'darkorange', label = 'eRASS:5', bins = 10, histtype = 'step', linewidth = 2)
+plt.xlabel('Percentage of completion')
+plt.ylabel('Number of seeds')
+plt.xlim(-5,105)
+plt.ylim(0,105)
+plt.gca().get_xaxis().set_minor_locator(MultipleLocator(1))
+plt.gca().get_xaxis().set_major_locator(MultipleLocator(5))
+plt.gca().get_yaxis().set_minor_locator(MultipleLocator(1))
+plt.gca().get_yaxis().set_major_locator(MultipleLocator(5))
+plt.tick_params(axis = 'both', which = 'both', direction = 'in', bottom = True, top = True, left = True, right = True, labelleft = True, labelright = False, labeltop = False, labelbottom = True)
 plt.legend()
 plt.savefig(p2fig, dpi = 300)
 plt.close('completion')
