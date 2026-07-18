@@ -87,16 +87,23 @@ for GE_name in GE_names:
     already_done_global.append(len(already_done_all))
 
     #If N_per_batch is not zero, then actually write the files
-    if (N_per_batch > 0) & ((GE_name == 'GE_e5_merge_AGNseed001_SimBKG_CLUseed037') 
-                          | (GE_name == 'GE_e5_merge_AGNseed002_SimBKG_CLUseed038')
-                          | (GE_name == 'GE_e5_merge_AGNseed003_SimBKG_CLUseed039')
-                          | (GE_name == 'GE_e5_merge_AGNseed004_SimBKG_CLUseed040')
-                          | (GE_name == 'GE_e5_merge_AGNseed005_SimBKG_CLUseed041')
-                          | (GE_name == 'GE_e5_merge_AGNseed006_SimBKG_CLUseed042')
-                          | (GE_name == 'GE_e5_merge_AGNseed007_SimBKG_CLUseed043')
-                          | (GE_name == 'GE_e5_merge_AGNseed008_SimBKG_CLUseed044')
-                          | (GE_name == 'GE_e5_merge_AGNseed009_SimBKG_CLUseed045')
-                          | (GE_name == 'GE_e5_merge_AGNseed001_SimBKG_CLUseed046')):
+    if (N_per_batch > 0) & ((GE_name == 'GE_e5_merge_AGNseed001_SimBKG_CLUseed019') 
+                          | (GE_name == 'GE_e5_merge_AGNseed002_SimBKG_CLUseed020')
+                          | (GE_name == 'GE_e5_merge_AGNseed003_SimBKG_CLUseed021')
+                          | (GE_name == 'GE_e5_merge_AGNseed008_SimBKG_CLUseed026')
+                          | (GE_name == 'GE_e5_merge_AGNseed009_SimBKG_CLUseed027')
+                          | (GE_name == 'GE_e5_merge_AGNseed002_SimBKG_CLUseed047')
+                          | (GE_name == 'GE_e5_merge_AGNseed003_SimBKG_CLUseed048')
+                          | (GE_name == 'GE_e5_merge_AGNseed009_SimBKG_CLUseed072')
+                          | (GE_name == 'GE_e5_merge_AGNseed001_SimBKG_CLUseed073')
+                          | (GE_name == 'GE_e5_merge_AGNseed002_SimBKG_CLUseed074')
+                          | (GE_name == 'GE_e5_merge_AGNseed003_SimBKG_CLUseed075')
+                          | (GE_name == 'GE_e5_merge_AGNseed004_SimBKG_CLUseed076')
+                          | (GE_name == 'GE_e5_merge_AGNseed005_SimBKG_CLUseed077')
+                          | (GE_name == 'GE_e5_merge_AGNseed006_SimBKG_CLUseed078')
+                          | (GE_name == 'GE_e5_merge_AGNseed007_SimBKG_CLUseed079')
+                          | (GE_name == 'GE_e5_merge_AGNseed009_SimBKG_CLUseed081')
+                          | (GE_name == 'GE_e4_merge_AGNseed008_SimBKG_CLUseed026')):
                 
         #Do figure
         p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
