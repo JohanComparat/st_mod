@@ -33,6 +33,26 @@ for GE_name in GE_names:
 
 #Set number of tiles to be done per batch
 N_per_batch = int(sys.argv[1])
+writetype = sys.argv[2] #total or batch
+
+#Cluster seed list
+cluseed_e4 = [28, 30, 31, 40, 41, 42, 43, 44, 45, 46, 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 72]
+cluseed_e5 = [25, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70]
+agnseed_e4 = []
+for cs in cluseed_e4:
+    tas = cs%9
+    if tas == 0:
+        tas = 9
+    agnseed_e4.append(tas)
+agnseed_e5 = []
+for cs in cluseed_e5:
+    tas = cs%9
+    if tas == 0:
+        tas = 9
+    agnseed_e5.append(tas)
+totalseed_e4 = list(zip(agnseed_e4, cluseed_e4))
+totalseed_e5 = list(zip(agnseed_e5, cluseed_e5))
+expname_list = ['GE_e5_merge_AGNseed{0}_SimBKG_CLUseed{1}'.format(str(ts[0]).zfill(3), str(ts[1]).zfill(3)) for ts in totalseed_e5]+['GE_e4_merge_AGNseed{0}_SimBKG_CLUseed{1}'.format(str(ts[0]).zfill(3), str(ts[1]).zfill(3)) for ts in totalseed_e4]
 
 #Populate array
 statusrows = []
@@ -87,13 +107,7 @@ for GE_name in GE_names:
     already_done_global.append(len(already_done_all))
 
     #If N_per_batch is not zero, then actually write the files
-    if (N_per_batch > 0) & ((GE_name == 'GE_e5_merge_AGNseed004_SimBKG_CLUseed022') 
-                          | (GE_name == 'GE_e5_merge_AGNseed005_SimBKG_CLUseed023')
-                          | (GE_name == 'GE_e5_merge_AGNseed006_SimBKG_CLUseed024')
-                          | (GE_name == 'GE_e4_merge_AGNseed001_SimBKG_CLUseed019')
-                          | (GE_name == 'GE_e4_merge_AGNseed006_SimBKG_CLUseed024')
-                          | (GE_name == 'GE_e4_merge_AGNseed007_SimBKG_CLUseed025')
-                          | (GE_name == 'GE_e4_merge_AGNseed008_SimBKG_CLUseed071')):
+    if (N_per_batch > 0) & (((writetype == 'batch') & (GE_name in expname_list)) | (writetype == 'total')):
 
         #Do figure
         p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
