@@ -4,8 +4,8 @@ import subprocess
 from select import select
 
 #Define seed list
-clu_seed = list(range(1,118))
-agn_seed = list(range(1,10))*13
+clu_seed = list(range(19,118))
+agn_seed = list(range(1,10))*11
 t_tot_seed = list(zip(agn_seed, clu_seed))
 tot_seed = [(str(seed[0]).zfill(3), str(seed[1]).zfill(3)) for seed in t_tot_seed]
 
