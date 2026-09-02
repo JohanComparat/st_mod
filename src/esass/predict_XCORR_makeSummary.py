@@ -11,8 +11,12 @@ os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
 sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 is_eroDE = ( (sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0) ) & ( abs(sky_map_hdu['GLAT_CEN']) > 20 ) #& ( sky_map_hdu['DE_CEN'] <= 32 )
 SRVMAP_exGAL_eroDE = sky_map_hdu['SRVMAP'][is_eroDE]
+is_eroDE30 = ( (sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0) ) & ( abs(sky_map_hdu['GLAT_CEN']) > 30 ) #& ( sky_map_hdu['DE_CEN'] <= 32 )
+SRVMAP_exGAL_eroDE30 = sky_map_hdu['SRVMAP'][is_eroDE30]
 benchmark_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/benchmark/xcorr_comparat_2025', 'XCORR_SHELLzlt04' )
 os.system('mkdir -p ' + benchmark_dir)
+# benchmark_dir = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/benchmark/xcorr_comparat_2025', 'XCORR' )
+# os.system('mkdir -p ' + benchmark_dir)
 
 
 def get_merge_wth(p_2_Apcf):
@@ -54,11 +58,13 @@ def get_merge_wth(p_2_Apcf):
 	return Merge
 
 agn_seed = '1' # sys.argv[1] # 1
-clu_seed = '1' # sys.argv[2] # 1
+clu_seed = '19' # sys.argv[2] # 1
 LC_dir = 'LCerass'
 
 dir_2pcf = os.path.join(os.environ['UCHUU'], LC_dir, '??????',
                          'GE_e4_merge_AGNseed' + agn_seed.zfill(3) + '_SimBKG_CLUseed' + clu_seed.zfill(3), 'XCORR_SHELLzlt04')
+# dir_2pcf = os.path.join(os.environ['UCHUU'], LC_dir, '??????',
+#                          'GE_e4_merge_AGNseed' + agn_seed.zfill(3) + '_SimBKG_CLUseed' + clu_seed.zfill(3), 'XCORR')
 
 m0 = 10.0
 z1 = 0.18
@@ -79,6 +85,52 @@ print(p_2_2PCF_GALxEVTc030singleRRDR10)
 basename = 'GALCEN_m'+m0_str+'_evBKG_CROSSCORR_05E20.wtheta.2pcf.fits'
 p_2_all_xcorr['GxB'] = np.array( glob.glob( os.path.join(dir_2pcf, basename  ) ) )
 p_2_all_xcorr['GxB'].sort()
+
+# MED_WTH_GxB = np.array([np.median(Table.read(t)['wtheta']) for t in p_2_all_xcorr['GxB']])
+# import matplotlib
+# matplotlib.use('Agg')
+# matplotlib.rcParams.update({'font.size': 14})
+# import matplotlib.pyplot as plt
+# dir_fig = os.path.join( os.environ['GIT_STMOD_DATA'], 'data/validation/validation_GasGal/XCORR_SHELL' )
+
+# p_2_2PCF_figure = os.path.join(dir_fig, 'BG_med_hist.png')
+# plt.figure(11, (6.5,5.5))
+# plt.hist(np.log10(MED_WTH_GxB[MED_WTH_GxB>0]), bins=20,  histtype='step', color='k', lw=2, label='pos')
+# plt.hist(np.log10(-MED_WTH_GxB[MED_WTH_GxB<0]), bins=20,  histtype='step', color='b', lw=2, label='neg')
+# plt.xticks(fontsize=14)
+# plt.yticks(fontsize=14)
+# # plt.xscale('log')
+# plt.yscale('log')
+# # plt.xlim((5, 5000))
+# # plt.ylim((3e33, 3e38))
+# plt.xlabel(r'log10 median GxBG ',fontsize=18)
+# plt.ylabel(r'$N$ ',fontsize=18)
+# plt.legend(fontsize=14)
+# plt.tight_layout()
+# plt.savefig(p_2_2PCF_figure)#, transparent = True)
+# plt.clf()
+# print(p_2_2PCF_figure, 'written')
+
+# p_2_2PCF_figure = os.path.join(dir_fig, 'BG_med_hist-full.png')
+# plt.figure(11, (6.5,5.5))
+# plt.hist(MED_WTH_GxB,  bins=40, histtype='step', color='k', lw=4, label='all', density=True)
+# plt.hist(MED_WTH_GxB[np.isin(p_2_all_srvval['GxB'], SRVMAP_exGAL_eroDE)],  bins=40, histtype='step', color='r', lw=2, label='glat>20', density=True)
+# plt.hist(MED_WTH_GxB[np.isin(p_2_all_srvval['GxB'], SRVMAP_exGAL_eroDE30)],  bins=40, histtype='step', color='b', lw=2, label='glat>30', density=True)
+# plt.xticks(fontsize=14)
+# plt.yticks(fontsize=14)
+# # plt.xscale('log')
+# plt.yscale('log')
+# # plt.xlim((5, 5000))
+# # plt.ylim((3e33, 3e38))
+# plt.xlabel(r'median GxBG ',fontsize=18)
+# plt.ylabel(r'$N$ ',fontsize=18)
+# plt.legend(fontsize=14)
+# plt.tight_layout()
+# plt.savefig(p_2_2PCF_figure)#, transparent = True)
+# plt.clf()
+# print(p_2_2PCF_figure, 'written')
+# print(np.std(MED_WTH_GxB), np.std(MED_WTH_GxB[np.isin(p_2_all_srvval['GxB'], SRVMAP_exGAL_eroDE)]), np.std(MED_WTH_GxB[np.isin(p_2_all_srvval['GxB'], SRVMAP_exGAL_eroDE30)]))
+
 p_2_all_srvval['GxB'] = np.array([int(el.split('/')[7]) for el in p_2_all_xcorr['GxB']])
 Merge = get_merge_wth( p_2_all_xcorr['GxB'][np.isin(p_2_all_srvval['GxB'], SRVMAP_exGAL_eroDE)] )
 p_2_2PCF_GALxEVTc030singleRRDR10 = os.path.join(benchmark_dir, 'LS10_VLIM_ANY_10.0_Mstar_12.0_0.05_z_0.18_N_2759238_GALCENxEVT_wtheta_prediction_GxB.fits')

@@ -145,7 +145,6 @@ def tabulate_wtheta_clustering_noW(RA, DEC, rand_RA , rand_DEC, out_file ):
 	t.write(out_file, overwrite=True)
 	print(out_file, 'written', time.time()-t0, 's')
 
-
 def tabulate_XCORRwtheta_clustering_noW(RA, DEC, RA2, DEC2, rand_RA , rand_DEC, out_file ):
 	"""
 	wtheta direct estimate
@@ -230,7 +229,7 @@ z2psf = n.array([ 0.07
 		, 0.5  ])
 
 agn_seed = '1' # sys.argv[1] # 1
-clu_seed = '1' # sys.argv[2] # 1
+clu_seed = '19' # sys.argv[2] # 1
 LC_dir = 'LCerass'
 top_dir = os.path.join(os.environ['UCHUU'], LC_dir)
 nl = lambda sel : len(sel.nonzero()[0])
@@ -252,8 +251,8 @@ uu = np.random.uniform(size=size)
 dec_fs = np.arccos(1 - 2 * uu) * 180 / np.pi - 90.
 ra_fs = np.random.uniform(size=size) * 2 * np.pi * 180 / np.pi
 
-# GALCEN
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+# GALCEN DONE
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][::-1]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
@@ -384,8 +383,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 
-# GALSAT
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+# GALSAT DONE
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][::-1]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
@@ -516,8 +515,8 @@ for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]
 											GAL['RA'][s10], GAL['DEC'][s10],
 											ra_fs[s_R], dec_fs[s_R], p_2_2PCF)
 
-# GAL
-for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)]:
+# GAL DONE
+for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][::-1]:
 	sky_tile_id = str(sky_tile['SRVMAP'])
 	str_field = str(sky_tile['SRVMAP']).zfill(6)
 	print(str_field)
