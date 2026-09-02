@@ -61,3 +61,36 @@ while procs:
             # Identify which process produced this
             pid = next(p.pid for p in procs if p.stdout is pipe)
             print(f"[PID {pid}]: {line}", end='')
+
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0200.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0225.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0250.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0275.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0300.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0325.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0350.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0375.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0400.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0425.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0450.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0475.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0500.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0525.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0550.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0575.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0600.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0625.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0650.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0675.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed001_SimBKG_CLUseed109_processing_0700.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0000.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0025.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0050.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0075.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0100.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0125.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0150.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0175.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0200.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0225.sh
+/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed002_SimBKG_CLUseed110_processing_0250.sh
