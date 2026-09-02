@@ -435,7 +435,7 @@ def one_iter_func(sky_tile_el, other_elements):
                 rade_mat.dec.deg > sky_tile['DE_MIN']) & (rade_mat.dec.deg <= sky_tile['DE_MAX'])
     bg_unique_area = bg3mapD[0].data[pix_mat_X[is_in_unique_area], pix_mat_Y[is_in_unique_area]]
     print('\nTile {0} - BG in the unique area:\n min {1}\n max {2}\n median {3}\n mean {4}\n std {5}'.format(str_field, bg_unique_area.min(), bg_unique_area.max(), np.median(bg_unique_area), np.mean(bg_unique_area), np.std(bg_unique_area)))
-    BG_CT_val_target = 0.2*np.median(bg_unique_area)  # This value is the eRASS:n background (including CLU and AGN below eRASS:n threshold)
+    BG_CT_val_target = np.median(bg_unique_area)  # This value is the eRASS:n background (including CLU and AGN below eRASS:n threshold)
 
     # locate background event on the BG map :
     x_pix_B, y_pix_B = wcs.wcs_world2pix(data_B_oversampled['RA'], data_B_oversampled['DEC'], 0)
@@ -598,7 +598,7 @@ print('{0} tiles to process'.format(len(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) 
 onepool_func = partial(one_iter_func, other_elements = [LC_dir, real_data_name, mergeType, exp_name, agn_seed, clu_seed, erass1_clu])
 
 #Map to cores    
-with Pool(10) as p:
+with Pool(15) as p:
     flags_out = p.map(onepool_func, list(enumerate(sky_map_hdu[(sky_map_hdu['OWNER'] == 2) | (sky_map_hdu['OWNER'] == 0)])))
 
 #Create table to save flags

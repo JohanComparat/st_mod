@@ -1,111 +1,179 @@
-import sys, os, glob
+import os, sys
 import numpy as np
-from astropy.table import Table, vstack
-import astropy.io.fits as fits
-
+import astropy.table as tbl
 import matplotlib
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 14})
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 
+#Set environmental variables
 os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
 os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
 os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
 
-sky_map_hdu = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
+#Read skymap data model
+sky_map_hdu = tbl.Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS.fits') )
 
-GE_names = [
-    'GE_e5_merge_AGNseed001_SimBKG_CLUseed001', 
-    'GE_e5_merge_AGNseed002_SimBKG_CLUseed002', 
-    'GE_e5_merge_AGNseed003_SimBKG_CLUseed003', 
-    'GE_e5_merge_AGNseed004_SimBKG_CLUseed004', 
-    'GE_e5_merge_AGNseed005_SimBKG_CLUseed005', 
-    'GE_e5_merge_AGNseed006_SimBKG_CLUseed006', 
-    'GE_e5_merge_AGNseed007_SimBKG_CLUseed007', 
-    'GE_e5_merge_AGNseed008_SimBKG_CLUseed008', 
-    'GE_e5_merge_AGNseed009_SimBKG_CLUseed009',
-    'GE_e5_merge_AGNseed001_SimBKG_CLUseed010', 
-    'GE_e5_merge_AGNseed002_SimBKG_CLUseed011', 
-    'GE_e5_merge_AGNseed003_SimBKG_CLUseed012', 
-    'GE_e5_merge_AGNseed004_SimBKG_CLUseed013', 
-    'GE_e5_merge_AGNseed005_SimBKG_CLUseed014', 
-    'GE_e5_merge_AGNseed006_SimBKG_CLUseed015', 
-    'GE_e5_merge_AGNseed007_SimBKG_CLUseed016', 
-    'GE_e5_merge_AGNseed008_SimBKG_CLUseed017', 
-    'GE_e5_merge_AGNseed009_SimBKG_CLUseed018',
+#Read list of tiles in eROSITA DE good footprint
+good_tiles_list = np.loadtxt('/home/idies/workspace/erosim/center_in_foot.txt', dtype = str, unpack = True)
 
-    'GE_e4_merge_AGNseed001_SimBKG_CLUseed001',
-    'GE_e4_merge_AGNseed002_SimBKG_CLUseed002',
-    'GE_e4_merge_AGNseed003_SimBKG_CLUseed003',
-    'GE_e4_merge_AGNseed004_SimBKG_CLUseed004',
-    'GE_e4_merge_AGNseed005_SimBKG_CLUseed005',
-    'GE_e4_merge_AGNseed006_SimBKG_CLUseed006',
-    'GE_e4_merge_AGNseed007_SimBKG_CLUseed007',
-    'GE_e4_merge_AGNseed008_SimBKG_CLUseed008',
-    'GE_e4_merge_AGNseed009_SimBKG_CLUseed009',
-    'GE_e4_merge_AGNseed001_SimBKG_CLUseed010',
-    'GE_e4_merge_AGNseed002_SimBKG_CLUseed011',
-    'GE_e4_merge_AGNseed003_SimBKG_CLUseed012',
-    'GE_e4_merge_AGNseed004_SimBKG_CLUseed013',
-    'GE_e4_merge_AGNseed005_SimBKG_CLUseed014',
-    'GE_e4_merge_AGNseed006_SimBKG_CLUseed015',
-    'GE_e4_merge_AGNseed007_SimBKG_CLUseed016',
-    'GE_e4_merge_AGNseed008_SimBKG_CLUseed017',
-    'GE_e4_merge_AGNseed009_SimBKG_CLUseed018',
-    ]
+#Define seed list
+clu_seed = list(range(19,118))
+agn_seed = list(range(1,10))*11
+t_tot_seed = list(zip(agn_seed, clu_seed))
+tot_seed = [(str(seed[0]).zfill(3), str(seed[1]).zfill(3)) for seed in t_tot_seed]
+
+#List of experiment names
+GE_names = ['GE_e5_merge_AGNseed{0}_SimBKG_CLUseed{1}'.format(seed[0], seed[1]) for seed in tot_seed]+['GE_e4_merge_AGNseed{0}_SimBKG_CLUseed{1}'.format(seed[0], seed[1]) for seed in tot_seed]
+
 SKYMAP = {}
 for GE_name in GE_names:
-    SKYMAP[GE_name] = Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+GE_name+'.fits'))
+    SKYMAP[GE_name] = tbl.Table.read(os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'SKYMAPS_'+GE_name+'.fits'))
 
-N_per_batch = 100
-datata = []
-#for sky_tile in sky_map_hdu[(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0)][2:48]:
+#Set number of tiles to be done per batch
+N_per_batch = int(sys.argv[1])
+writetype = sys.argv[2] #total or batch
+
+#Cluster seed list
+cluseed_e4 = [1]
+cluseed_e5 = [28]
+agnseed_e4 = []
+for cs in cluseed_e4:
+    tas = cs%9
+    if tas == 0:
+        tas = 9
+    agnseed_e4.append(tas)
+agnseed_e5 = []
+for cs in cluseed_e5:
+    tas = cs%9
+    if tas == 0:
+        tas = 9
+    agnseed_e5.append(tas)
+totalseed_e4 = list(zip(agnseed_e4, cluseed_e4))
+totalseed_e5 = list(zip(agnseed_e5, cluseed_e5))
+expname_list = ['GE_e5_merge_AGNseed{0}_SimBKG_CLUseed{1}'.format(str(ts[0]).zfill(3), str(ts[1]).zfill(3)) for ts in totalseed_e5]+['GE_e4_merge_AGNseed{0}_SimBKG_CLUseed{1}'.format(str(ts[0]).zfill(3), str(ts[1]).zfill(3)) for ts in totalseed_e4]
+
+#Populate array
+statusrows = []
+to_do_global = []
+already_done_global = []
 for GE_name in GE_names:
-    # print('='*100)
     sky_map_hdu = SKYMAP[GE_name]
-    to_process = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat']==False)
-    already_done = ((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))&(sky_map_hdu['has_merged_events'])&(sky_map_hdu['has_Sc1Cat'])
-    print(len(sky_map_hdu[to_process]), len(sky_map_hdu[already_done]), GE_name)
-    # print(GE_name, len(sky_map_hdu[to_process]), 'tiles to process', len(sky_map_hdu[already_done]), 'tiles already done')
-    datata.append([len(sky_map_hdu[to_process]), len(sky_map_hdu[already_done])])
-    p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
-    plt.plot(sky_map_hdu['RA_CEN'][((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))], sky_map_hdu['DE_CEN'][((sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWNER']==0))], 'k,', label='eRO DE')
-    plt.plot(sky_map_hdu['RA_CEN'][already_done], sky_map_hdu['DE_CEN'][already_done], 'k+', label=str(len(sky_map_hdu['DE_CEN'][already_done]))+' done')
-    plt.plot(sky_map_hdu['RA_CEN'][to_process], sky_map_hdu['DE_CEN'][to_process], 'rx', label=str(len(sky_map_hdu['DE_CEN'][to_process]))+' todo')
-    plt.legend(loc=0)
-    plt.title(GE_name)
-    plt.savefig(p2fig)
-    plt.clf()
-    if len(sky_map_hdu[to_process])>0:
-        for kk in np.arange(0, len(sky_map_hdu[to_process]), N_per_batch):
-            out_im1 = os.path.join('/home/idies/workspace/erosim', 'runs', GE_name + '_processing_'+str(kk).zfill(4)+'.sh')
-            f_out = open(out_im1, 'w')
-            f_out.write("""#!/bin/bash/ \n""")
-#            f_out.write("""set -x \n""")
-            f_out.write("source activate heasoft \n")
-            f_out.write("[ -r /home/idies/.healpix/3_50_Linux/config ] && . /home/idies/.healpix/3_50_Linux/config \n")
-            f_out.write("source /opt/esass/bin/esass-init.sh \n")
 
-            for sky_tile in sky_map_hdu[to_process][kk: kk+N_per_batch]:
-                sky_tile_id = str(sky_tile['SRVMAP'])
-                str_field = str(sky_tile['SRVMAP']).zfill(6)
-                indir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", str_field, GE_name)
-                esass_dir = os.path.join(indir, 'eSASS')
-                git_dir = os.path.join(os.environ['GIT_STMOD'], 'src/esass' )
-                path_2_event_file = os.path.join(indir, 'evt_'+str_field+'.fits')
-                if os.path.isfile(path_2_event_file) and os.path.isfile(os.path.join(esass_dir,str_field+"_pipeline_img1.sh")) :
-                    f_out.write ("cd "+esass_dir +" \n")
-                    f_out.write ("sh "+str_field+"_pipeline_img1.sh"+" \n")
-                    f_out.write ("sh "+str_field+"_pipeline_det1.sh"+" \n")
-                    f_out.write ("sh "+str_field+"_pipeline_Src1.sh"+" \n")
-                    f_out.write ("cd "+git_dir+" \n")
-                    if not GE_name=='GE_e4_merge_SimBKG':
-                        f_out.write ("python photon_matching_RS.py "+GE_name+" "+str_field +" \n")
-                    f_out.write('# ====='+" \n")
-            f_out.close()
-            print(out_im1, 'written')
+    #Add column to sky_map_hdu with tile id
+    str_field_list = [str(sky_tile['SRVMAP']).zfill(6) for sky_tile in sky_map_hdu]
+    sky_map_hdu.add_column(tbl.Column(str_field_list, name = 'tile_id'))
 
+    #Select tiles in DE sky for simplicity
+    skm_hdu_in_de_sky = sky_map_hdu[np.where((sky_map_hdu['OWNER']==2) | (sky_map_hdu['OWNER']==0))[0]]
+
+    #Indexes of sky tiles in priority list
+    skm_hdu_priority_idx = []
+    skm_hdu_not_priority_idx = []
+    for tid in skm_hdu_in_de_sky['tile_id']:
+        if tid in list(good_tiles_list):    
+            skm_hdu_priority_idx.append(list(skm_hdu_in_de_sky['tile_id']).index(tid))
+        else:
+            skm_hdu_not_priority_idx.append(list(skm_hdu_in_de_sky['tile_id']).index(tid))
+    skm_hdu_priority_idx = np.array(skm_hdu_priority_idx)
+    skm_hdu_not_priority_idx = np.array(skm_hdu_not_priority_idx)
+
+    #Separate priority from not in priority
+    skm_hdu_priority = skm_hdu_in_de_sky[skm_hdu_priority_idx]
+    skm_hdu_not_priority = skm_hdu_in_de_sky[skm_hdu_not_priority_idx]
+
+    #Identify those already done and those to be done
+    to_process_priority = skm_hdu_priority[np.where((skm_hdu_priority['has_merged_events'])&(skm_hdu_priority['has_Sc1Cat']==False))[0]]
+    already_done_priority = skm_hdu_priority[np.where((skm_hdu_priority['has_merged_events'])&(skm_hdu_priority['has_Sc1Cat']))[0]]
+    to_process_not_priority = skm_hdu_not_priority[np.where((skm_hdu_not_priority['has_merged_events'])&(skm_hdu_not_priority['has_Sc1Cat']==False))[0]]
+    already_done_not_priority = skm_hdu_not_priority[np.where((skm_hdu_not_priority['has_merged_events'])&(skm_hdu_not_priority['has_Sc1Cat']))[0]]
+
+    #If there are no more priority tiles to be done, then set variable
+    priority_done = len(to_process_priority) == 0
+
+    #Stack back tables
+    already_done_all = tbl.vstack([already_done_priority, already_done_not_priority], join_type = 'exact')
+    to_process_all = tbl.vstack([to_process_priority, to_process_not_priority], join_type = 'exact')
+
+    #Print information
+    if len(already_done_all)+len(to_process_all) > 0:
+        statusrows.append([len(to_process_all), len(already_done_all), len(already_done_all)/(len(already_done_all)+len(to_process_all)), (len(already_done_all)/(len(already_done_all)+len(to_process_all)))*100, priority_done, GE_name])
+    else:
+        statusrows.append([len(to_process_all), len(already_done_all), 0, 0, priority_done, GE_name])
+
+    #Global numbers
+    to_do_global.append(len(to_process_all))
+    already_done_global.append(len(already_done_all))
+
+    #If N_per_batch is not zero, then actually write the files
+    if (N_per_batch > 0) & (((writetype == 'batch') & (GE_name in expname_list)) | (writetype == 'total')):
+
+        #Do figure
+        p2fig = os.path.join(os.environ['GIT_STMOD_DATA'], 'data/models/eROSITA', 'ra-dec-SKYMAPS_' + GE_name + '.png')
+        plt.plot(skm_hdu_in_de_sky['RA_CEN'], skm_hdu_in_de_sky['DE_CEN'], 'k,', label='eRO DE')
+        plt.plot(already_done_all['RA_CEN'], already_done_all['DE_CEN'], 'k+', label=str(len(already_done_all))+' done')
+        plt.plot(to_process_all['RA_CEN'], to_process_all['DE_CEN'], 'rx', label=str(len(to_process_all))+' todo')
+        plt.legend(loc=0)
+        plt.title(GE_name)
+        plt.savefig(p2fig)
+        plt.clf()
+
+        #If there are tiles left to process
+        if len(to_process_all)>0:
+            for kk in np.arange(0, len(to_process_all), N_per_batch):
+                out_im1 = os.path.join('/home/idies/workspace/erosim', 'runs', GE_name + '_processing_'+str(kk).zfill(4)+'.sh')
+                f_out = open(out_im1, 'w')
+                f_out.write("""#!/bin/bash/ \n""")
+                f_out.write("source activate heasoft \n")
+                f_out.write("[ -r /home/idies/.healpix/3_50_Linux/config ] && . /home/idies/.healpix/3_50_Linux/config \n")
+                f_out.write("source /opt/esass/bin/esass-init.sh \n")
+
+                #Cycle tiles to process
+                for sky_tile in to_process_all[kk: kk+N_per_batch]:
+                    indir = os.path.join("/home/idies/workspace/erosim/Uchuu/LCerass/", sky_tile['tile_id'], GE_name)
+                    esass_dir = os.path.join(indir, 'eSASS')
+                    git_dir = os.path.join(os.environ['GIT_STMOD'], 'src/esass' )
+                    path_2_event_file = os.path.join(indir, 'evt_'+sky_tile['tile_id']+'.fits')
+                    if os.path.isfile(path_2_event_file) and os.path.isfile(os.path.join(esass_dir,sky_tile['tile_id']+"_pipeline_img1.sh")):
+                        f_out.write ("cd "+esass_dir +" \n")
+                        f_out.write ("sh "+sky_tile['tile_id']+"_pipeline_img1.sh"+" \n")
+                        f_out.write ("sh "+sky_tile['tile_id']+"_pipeline_det1.sh"+" \n")
+                        f_out.write ("sh "+sky_tile['tile_id']+"_pipeline_Src1.sh"+" \n")
+                        f_out.write ("cd "+git_dir+" \n")
+                        if not GE_name=='GE_e4_merge_SimBKG':
+                            f_out.write ("python photon_matching_RS.py "+GE_name+" "+sky_tile['tile_id']+" \n")
+                        f_out.write('# ====='+" \n")
+                f_out.close()
+                print(out_im1, 'written')
+
+#Create table
+statustab = tbl.Table(rows = statusrows, names = ['To_do', 'Done', 'Fraction', 'Percentage', 'Priority_done', 'Experiment_name'])
+statustab['Fraction'].info.format = '.2f'
+statustab['Percentage'].info.format = '.2f'
+statustab.pprint_all()
 print('='*100)
 print('fields')
-print(np.transpose(datata)[0].sum(), 'todo')
-print(np.transpose(datata)[1].sum(), 'done')
+print(np.sum(to_do_global), 'todo')
+print(np.sum(already_done_global), 'done')
+
+#Do summary figure
+p2fig = '/home/idies/workspace/erosim/diagnostic_plots/completion_percentage.png'
+ten = np.array([stt.split('_')[1] for stt in statustab['Experiment_name']])
+stt_where_e4 = statustab[np.where(ten == 'e4')[0]]
+stt_where_e5 = statustab[np.where(ten == 'e5')[0]]
+plt.figure('completion')
+plt.hist(stt_where_e4['Percentage'], cumulative = -1, color = 'dodgerblue', label = 'eRASS:4', bins = 25, histtype = 'step', linewidth = 2)
+plt.hist(stt_where_e5['Percentage'], cumulative = -1, color = 'darkorange', label = 'eRASS:5', bins = 25, histtype = 'step', linewidth = 2)
+plt.xlabel('Percentage of completion')
+plt.ylabel('Number of seeds')
+plt.xlim(-5,105)
+plt.ylim(0,105)
+plt.gca().get_xaxis().set_minor_locator(MultipleLocator(1))
+plt.gca().get_xaxis().set_major_locator(MultipleLocator(10))
+plt.gca().get_yaxis().set_minor_locator(MultipleLocator(1))
+plt.gca().get_yaxis().set_major_locator(MultipleLocator(10))
+plt.tick_params(axis = 'both', which = 'both', direction = 'in', bottom = True, top = True, left = True, right = True, labelleft = True, labelright = False, labeltop = False, labelbottom = True)
+plt.legend()
+plt.savefig(p2fig, dpi = 300)
+plt.close('completion')
