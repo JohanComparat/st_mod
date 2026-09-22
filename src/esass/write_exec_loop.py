@@ -36,7 +36,7 @@ N_per_batch = int(sys.argv[1])
 writetype = sys.argv[2] #total or batch
 
 #Cluster seed list
-cluseed_e4 = [37,38]
+cluseed_e4 = [41, 49]
 cluseed_e5 = [0]
 agnseed_e4 = []
 for cs in cluseed_e4:
