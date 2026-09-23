@@ -26,7 +26,7 @@ validation_dir           = os.path.join(os.environ['GIT_STMOD_DATA'], 'data', 'v
 validation_dir_lNlS = os.path.join(validation_dir, 'XrayLogNlogS')
 os.system('mkdir -p ' + validation_dir_lNlS            )
 
-LC_dirs = np.array([ 'FullSky'])#, 'LC1800', 'LC0060', 'LC0002' ])[::-1]
+LC_dirs = np.array(['LC0060', 'LC1800', 'LC0002', 'FullSky'])#, ' ])[::-1]
 area = {}
 area['FullSky'] = 129600. / np.pi
 area['LC1800'] = 1800.

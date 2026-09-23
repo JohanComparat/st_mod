@@ -66,12 +66,17 @@ print('='*100)
 print(z_dir)
 print('='*100)
 p_2_catalogues = np.array( glob.glob( os.path.join(os.environ['UCHUU'], 'FullSky', z_dir, 'replication_*_*_*', 'AGN_list_sigma_0.8_fsat_8.0.fits') ) )
+# p_2_catalogues = np.array( glob.glob( os.path.join(os.environ['UCHUU'], 'FullSky', z_dir, 'replication_*_*_*', 'AGN_list_sigma_0.7_fsat_7.0.fits') ) )
 p_2_catalogues.sort()
+N_in_files = []
+
 for p_2_catalogue in p_2_catalogues:
     t_in = Table.read(p_2_catalogue)
+    N_in_files.append(len(t_in))
     t_in.remove_columns(['FX_hard', 'LX_soft_MWattenuated', 'scatter_LX_Ms', 'SDSS_r_AB_attenuated']) # ,'lvmp'
+    # t_in.remove_columns(['LX_soft_MWattenuated', 'scatter_LX_Ms', 'SDSS_r_AB_attenuated']) # ,'lvmp'
     selection = (t_in['FX_soft']>=log10FXmin)&(t_in['FX_soft']<=MvirMax)
-    t_in = t_in[selection]
+    # t_in = t_in[selection]
     #GAL = Table.read( os.path.join( os.path.dirname(p_2_catalogue), 'glist.fits' ) )[t_in['ID_glist']]
     #t_in['RA'] = GAL['RA']
     #t_in['DEC'] = GAL['DEC']
@@ -87,9 +92,17 @@ for p_2_catalogue in p_2_catalogues:
             dir_4_out = os.path.join(os.environ['UCHUU'], LC_dir, str_field, z_dir , p_2_catalogue.split('/')[-2])
             os.system('mkdir -p ' + dir_4_out)
             p_2_catalogue_out = os.path.join( dir_4_out, 'AGN_list_sigma_0.8_fsat_8.0.fits')
+            # p_2_catalogue_out = os.path.join( dir_4_out, 'AGN_list_sigma_0.7_fsat_7.0.fits')
             t_in[s2].write(p_2_catalogue_out, overwrite = True)
             print(N_selected, p_2_catalogue_out, 'written')
             N_tot.append(N_selected)
 
 N_haloes =  np.sum(N_tot)
 print(N_haloes, 'to be simulated')
+print(np.sum(N_in_files), 'total AGN in catalogues')
+
+# N_tot = []
+# for p_2_catalogue in p_2_catalogues:
+#     t_in = Table.read(p_2_catalogue)
+#     N_tot.append(len(t_in))
+# print(np.sum(N_in_files), 'total AGN in catalogues')
