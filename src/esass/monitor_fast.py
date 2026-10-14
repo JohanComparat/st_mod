@@ -55,6 +55,7 @@ def make_summary_skymap_fast(sky_tile_el, other_elements):
 os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
 os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
 os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
+debug == True
 
 #Define seed list
 clu_seed = list(range(19,118))
@@ -70,6 +71,9 @@ colname_list = ['has_merged_events', 'has_EvtImg', 'has_ExpMap', 'has_DetMsk', '
 
 #Cycle experiment names
 for GE_name in exp_name:
+
+    if debug:
+        print(GE_name)
 
     #Create copy of skymap
     sky_map_hdu = tbl.Table(sky_map_hdu_general, copy = True)
