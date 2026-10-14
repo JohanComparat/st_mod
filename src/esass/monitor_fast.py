@@ -55,7 +55,7 @@ def make_summary_skymap_fast(sky_tile_el, other_elements):
 os.environ['UCHUU']='/home/idies/workspace/erosim/Uchuu'
 os.environ['GIT_STMOD']='/home/idies/workspace/erosim/software/st_mod'
 os.environ['GIT_STMOD_DATA']='/home/idies/workspace/erosim/software/st_mod_data'
-debug == True
+debug = True
 
 #Define seed list
 clu_seed = list(range(19,118))
