@@ -187,8 +187,6 @@ HEALPIX = healpy.ang2pix(
     bb_gal *
     n.pi /
     180.,
-    2 *
-    n.pi -
     ll_gal *
     n.pi /
     180.)

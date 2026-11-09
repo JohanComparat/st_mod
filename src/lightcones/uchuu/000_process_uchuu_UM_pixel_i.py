@@ -380,7 +380,7 @@ for jj in range(len(iXT)):
 			rr_s[rr_s <= 0] = rr[rr_s <= 0]
 			redshift_S = dc_to_z(rr_s)
 			# NH
-			HEALPIX = healpy.ang2pix(1024, n.pi / 2. - bb_gal * n.pi / 180., 2 * n.pi - ll_gal * n.pi / 180.)
+			HEALPIX = healpy.ang2pix(1024, n.pi / 2. - bb_gal * n.pi / 180., ll_gal * n.pi / 180.)
 			NH = nh_val[HEALPIX]
 			# final table
 			t = []
