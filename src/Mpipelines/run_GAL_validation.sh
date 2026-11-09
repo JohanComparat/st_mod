@@ -1,5 +1,5 @@
 #!/bin/bash
-conda activate stmod
+conda activate dev
 cd $GIT_STMOD/src/Mpipelines
 python GAL_validation.py z0p00
 python GAL_validation.py z0p02

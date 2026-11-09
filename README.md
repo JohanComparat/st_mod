@@ -72,6 +72,8 @@ LC0002, LC0060, LC1800, FullSky, are generic arguments (LC_dir) of the model cla
 
 # conda setup and packages
 
+> **Maintainer setup.** On the development laptop, use the shared `dev` environment defined in `~/software/dev_env` (`conda activate dev`). Do not create a separate environment for it: add missing dependencies to `~/software/dev_env` and rebuild.
+
 Create the anaconda environment 'stmod' for stack models
 
 First, update your conda :

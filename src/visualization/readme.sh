@@ -1,6 +1,6 @@
 
 cd $GIT_STMOD/src/visualization
-conda activate stmod
+conda activate dev
 #
 #
 # DECOMPOSITION ALL = CEN + SAT

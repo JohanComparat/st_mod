@@ -1,5 +1,5 @@
 #!/bin/bash
-conda activate stmod
+conda activate dev
 cd $GIT_STMOD/src/Mpipelines
 
 

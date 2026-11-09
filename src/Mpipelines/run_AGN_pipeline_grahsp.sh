@@ -1,5 +1,5 @@
 #!/bin/bash
-conda activate stmod
+conda activate dev
 cd $GIT_STMOD/src/Mpipelines
 #
 python AGN_pipeline_grahsp.py z0p02 LC0002  1.0 10

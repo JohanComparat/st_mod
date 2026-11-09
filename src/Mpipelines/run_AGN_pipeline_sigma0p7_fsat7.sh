@@ -1,5 +1,5 @@
 #!/bin/bash
-conda activate stmod
+conda activate dev
 cd $GIT_STMOD/src/Mpipelines
 #
 python AGN_pipeline.py z0p02 LC0002  0.7 0 # DONE
@@ -109,7 +109,7 @@ python AGN_pipeline.py z1p77 LC1800  0.7 0 # TODO
 python AGN_pipeline.py z1p90 LC1800  0.7 0 # TODO
 python AGN_pipeline.py z2p03 LC1800  0.7 0 # TODO
 
-conda activate stmod
+conda activate dev
 cd $GIT_STMOD/src/Mpipelines
 
 nohup python AGN_pipeline.py z0p00 FullSky 0.7 0 > logs/testz0p00.log & # DONE

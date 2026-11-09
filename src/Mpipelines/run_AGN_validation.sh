@@ -1,5 +1,5 @@
 #!/bin/bash
-conda activate stmod
+conda activate dev
 cd $GIT_STMOD/src/Mpipelines
 # A minimum of 3GB memory (so 2 CPU per task) is required to load observed catalogues
 # all below worked and finished :
@@ -42,7 +42,7 @@ nohup python AGN_validation.py z3p32 FullSky > logs/valid_testz3p32.log & # DONE
 nohup python AGN_validation.py z3p61 FullSky > logs/valid_testz3p61.log & # DONE
 nohup python AGN_validation.py z3p93 FullSky > logs/valid_testz3p93.log & # DONE
 
-conda activate clustering
+conda activate dev
 cd $GIT_STMOD/src/Mpipelines
 python AGN_validation_WPRP.py z0p05 # DONE
 python AGN_validation_WPRP.py z0p09 # DONE
@@ -58,7 +58,7 @@ python AGN_validation_WPRP.py z0p63 # DONE
 python AGN_validation_WPRP.py z0p70 # DONE
 python AGN_validation_WPRP.py z0p78 # DONE
 #
-# conda activate clustering
+# conda activate dev
 # cd $GIT_STMOD/src/Mpipelines
 python AGN_validation_WTH.py z0p05 # DONE
 python AGN_validation_WTH.py z0p09 # DONE

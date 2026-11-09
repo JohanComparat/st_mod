@@ -6,7 +6,7 @@ Computes the Host Mvir for the galaxies in the light cone.
  * for a central galaxy: CENTRAL_Mvir = Mvir
  * for a satellite galaxy, CENTRAL_Mvir = Mvir of the host halo found by matching upid with id
 
-conda activate stmod
+conda activate dev
 cd $GIT_STMOD/src/lightcones/uchuu
 nohup python compute_HOD.py z0p00 > logs/log_computeHOD_uchuu_z0p00.log & # DONE
 nohup python compute_HOD.py z0p02 > logs/log_computeHOD_uchuu_z0p02.log & # DONE
