@@ -3,7 +3,7 @@ HAM procedure for Uchuu between tabulated AGN files and the light cone
 
 
 # testing commands
-conda activate stmod
+conda activate dev
 cd $GIT_STMOD/src/Mpipelines
 
 python AGN_pipeline.py z0p30 LC0002  0.8 8

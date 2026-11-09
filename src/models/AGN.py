@@ -330,7 +330,7 @@ class AGN:
         self.AGN['LX_soft'] = self.AGN['LX_hard'] + np.log10(percent_observed_H_S)
         self.AGN['FX_soft'] = self.AGN['LX_soft'] - np.log10(4 * np.pi) - 2*np.log10(dl_cm)
         self.AGN['LX_soft_MWattenuated'] = self.AGN['LX_hard'] + np.log10(percent_observed_H_S_galNH)
-        self.AGN['FX_soft_MWattenuated'] = self.AGN['LX_soft'] - np.log10(4 * np.pi) - 2*np.log10(dl_cm)
+        self.AGN['FX_soft_MWattenuated'] = self.AGN['LX_soft_MWattenuated'] - np.log10(4 * np.pi) - 2*np.log10(dl_cm)
         print(self.AGN)
 
     def compute_agn_type(self, z, lx, logNH):

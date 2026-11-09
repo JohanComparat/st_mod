@@ -18,7 +18,7 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
     str_field = str(srv_val).zfill(6)
     t_in = Table.read( os.path.join(os.environ['UCHUU'], LC_dir, str_field, 'AGN_list_sigma_0.8_fsat_8.0.fits') )
     print(len(t_in))
-    t_in = t_in[(t_in['FX_soft']>-15.7)&(np.log10(t_in['obs_sm'])>10)&(np.log10(t_in['obs_sm'])<11.9)&(t_in['Mvir']<1e14)]
+    t_in = t_in[(t_in['FX_soft_MWattenuated']>-15.7)&(np.log10(t_in['obs_sm'])>10)&(np.log10(t_in['obs_sm'])<11.9)&(t_in['Mvir']<1e14)]
     print(len(t_in), 'after FX, M*, Mhalo cuts')
     #t_in["SPECTRUM"]
 
@@ -37,7 +37,7 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
     n_total = int(512e6)  # /(1.1*N_pixels))
     n_allowed = (n_total / n_e_bins).astype('int')[::-1] - 100
 
-    FX_array = t_in['FX_soft']
+    FX_array = t_in['FX_soft_MWattenuated']
 
     fbins = np.arange(-FX_array.max() - 0.1, - FX_array.min() + 0.1, 0.01)
     xf = fbins[:-1] + 0.01 / 2
@@ -88,7 +88,7 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
         fits.Column(name="DEC",     format='D',    unit='deg', array=t_in["DEC"]),
         fits.Column(name="E_MIN",   format='D',    unit='keV', array=np.ones(N_agn_all) * 0.5),
         fits.Column(name="E_MAX",   format='D',    unit='keV', array=np.ones(N_agn_all) * 2.0),
-        fits.Column(name="FLUX",    format='D',    unit='erg/s/cm**2', array=10**t_in["FX_soft"]),
+        fits.Column(name="FLUX",    format='D',    unit='erg/s/cm**2', array=10**t_in["FX_soft_MWattenuated"]),
         fits.Column(name="SPECTRUM",format='256A', unit='', array=t_in["SPECTRUM"])
     ])
     hdu = fits.BinTableHDU.from_columns(hdu_cols)

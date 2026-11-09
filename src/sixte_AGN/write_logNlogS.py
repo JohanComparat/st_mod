@@ -37,7 +37,7 @@ for srv_val in sky_map_hdu['SRVMAP'][(sky_map_hdu['OWNER']==2)|(sky_map_hdu['OWN
         z = AGN['redshift_S']
         #dl2_cm = np.log10(dl_itp(z)) * 2 + np.log10(4*np.pi)
         # fx_hard = AGN['FX_hard'] #- dl2_cm
-        fx_soft = AGN['FX_soft'] #- dl2_cm
+        fx_soft = AGN['FX_soft_MWattenuated'] #- dl2_cm
         t_out = Table()
         t_out['FX_lo'] = fbins[:-1]
         t_out['FX_hi'] = fbins[1:]
