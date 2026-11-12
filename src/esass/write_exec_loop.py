@@ -37,7 +37,7 @@ writetype = sys.argv[2] #total or batch
 
 #Cluster seed list
 cluseed_e4 = [0]
-cluseed_e5 = [0]
+cluseed_e5 = [62,63,70,71,72,73,74,75,76,77,78,80,81,89,90,91,92,93,94]
 agnseed_e4 = []
 for cs in cluseed_e4:
     tas = cs%9
