@@ -5,24 +5,24 @@ from select import select
 
 # Start two subprocesses
 procs = [
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0005.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0010.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0015.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0020.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0025.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0030.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0035.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0040.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed009_SimBKG_CLUseed063_processing_0045.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed007_SimBKG_CLUseed070_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed007_SimBKG_CLUseed070_processing_0005.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed007_SimBKG_CLUseed070_processing_0010.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed007_SimBKG_CLUseed070_processing_0015.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed007_SimBKG_CLUseed070_processing_0020.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed007_SimBKG_CLUseed070_processing_0025.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed007_SimBKG_CLUseed070_processing_0030.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
-    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed007_SimBKG_CLUseed070_processing_0035.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed062_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed062_processing_0002.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed071_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed071_processing_0002.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed071_processing_0004.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed071_processing_0006.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed005_SimBKG_CLUseed077_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed005_SimBKG_CLUseed077_processing_0002.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed005_SimBKG_CLUseed077_processing_0004.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed006_SimBKG_CLUseed078_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed006_SimBKG_CLUseed078_processing_0002.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed006_SimBKG_CLUseed078_processing_0004.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed080_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed080_processing_0002.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed089_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e5_merge_AGNseed008_SimBKG_CLUseed089_processing_0002.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e4_merge_AGNseed007_SimBKG_CLUseed052_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
+    subprocess.Popen(["bash", "/home/idies/workspace/erosim/runs/GE_e4_merge_AGNseed001_SimBKG_CLUseed073_processing_0000.sh"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True, close_fds=True),
 ]
 
 # Continuously monitor output
@@ -47,3 +47,6 @@ while procs:
             # Identify which process produced this
             pid = next(p.pid for p in procs if p.stdout is pipe)
             print(f"[PID {pid}]: {line}", end='')
+
+
+
